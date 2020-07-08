@@ -7,11 +7,9 @@ import ProductDetail from "../screens/ProductDetail";
 
 const HomeStack = createStackNavigator();
 
-const HomeStackNavigator = ({ route }) => {
-	console.log(route)
-	
+const HomeStackNavigator = () => {
 	return (
-		<HomeStack.Navigator>
+		<HomeStack.Navigator mode="modal">
 			<HomeStack.Screen
 				name="Home"
 				component={Home}
@@ -20,7 +18,7 @@ const HomeStackNavigator = ({ route }) => {
 			<HomeStack.Screen
 				name="ProductDetail"
 				component={ProductDetail}
-				options={({ route} ) => ({ title: route.params.title })}
+				options={({ route }) => ({ title: route.params.routeName , headerShown: false})}
 			/>
 		</HomeStack.Navigator>
 	);

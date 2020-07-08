@@ -1,19 +1,114 @@
+// @ts-nocheck
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	Image,
+	Dimensions,
+	Button,
+	TouchableWithoutFeedback,
+} from "react-native";
+import { Feather } from "@expo/vector-icons";
+import colors from "../config/colors";
+import AppButton from "../components/AppButton";
 
-const ProductDetail = () => {
+const heigth = Dimensions.get("screen").height;
+
+const ProductDetail = ({ route, navigation }) => {
+	const { item } = route.params;
+	console.log(item);
 	return (
 		<View style={styles.screen}>
-			<Text>Product Details</Text>
+			<View>
+				<Image style={styles.image} source={{ uri: item.imageUrl }} />
+				<TouchableWithoutFeedback
+					onPress={() => {
+						navigation.goBack();
+					}}
+				>
+					<View style={styles.back}>
+						<Feather
+							name="x"
+							style={{ fontWeight: "700" }}
+							size={24}
+							color="black"
+						/>
+					</View>
+				</TouchableWithoutFeedback>
+				<View style={styles.details}>
+					<Text style={styles.name}>{item.name}</Text>
+					<Text style={styles.price}>${item.price}</Text>
+				</View>
+			</View>
+
+			<View style={styles.buttonView}>
+				<AppButton title="add to cart" onPress={() => {console.log("PESSED")}} />
+			</View>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-	screen: {
-		flex: 1,
+	back: {
+		position: "absolute",
+		top: 50,
+		left: 10,
+		width: 30,
+		height: 30,
+		borderRadius: 50,
+		zIndex: 3,
+		backgroundColor: "#eee",
 		alignItems: "center",
 		justifyContent: "center",
+	},
+	buttonView: {
+		height: 50,
+		width: "100%",
+		justifyContent: "center",
+		alignItems: "center",
+		alignSelf: 'center',
+		paddingHorizontal: 10,
+		marginBottom: 8,
+	},
+	buttonText: {
+		fontSize: 20,
+		fontWeight: "600",
+		letterSpacing: 1.1,
+		alignItems: "center",
+		display: "flex",
+		justifyContent: "center",
+		backgroundColor: colors.secondary,
+
+		marginRight: 20,
+		borderRadius: 30,
+	},
+
+	screen: {
+		flex: 1,
+		justifyContent: "space-between",
+	},
+	image: {
+		width: "100%",
+		height: heigth * 0.5,
+		borderBottomLeftRadius: 50,
+		borderBottomRightRadius: 50,
+		marginBottom: 20,
+		zIndex: 1,
+	},
+	details: {
+		padding: 12,
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+	},
+	name: {
+		fontSize: 28,
+		textTransform: "capitalize",
+	},
+	price: {
+		fontSize: 28,
+		fontWeight: "700",
 	},
 });
 

@@ -1,11 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import Screen from "../components/Screen";
 
 const Restaurants = () => {
 	return (
-		<View style={styles.screen}>
+		<Screen style={styles.screen}>
 			<Text>Restaurants</Text>
-		</View>
+		</Screen>
 	);
 };
 
