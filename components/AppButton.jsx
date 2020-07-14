@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	text: {
-		color: colors.primary,
+		color: '#fff',
 		fontWeight: "700",
 		textTransform: "uppercase",
 		fontSize: 20,

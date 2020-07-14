@@ -28,6 +28,7 @@ const ItemsState = (props) => {
 
 	const getItems = async () => {
 		try {
+			console.log("getting items");
 			setLoading();
 			const snapshot = await db
 				.collection("items")
@@ -48,7 +49,6 @@ const ItemsState = (props) => {
 		}
 	};
 	const filterItemsByCategory = (text) => {
-		
 		setLoading();
 		dispatch({ type: FILTER_ITEMS_BY_CATEGORY, payload: text });
 	};

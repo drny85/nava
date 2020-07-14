@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		display: 'flex',
 		flexDirection: 'row',
-		width: "95%",
+		 width: "95%",
 		height: height * 0.3,
 		margin: 10,
 		borderRadius: 15,

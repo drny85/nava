@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from "react";
+import React, { useContext } from "react";
 import {
 	View,
 	Text,
@@ -8,16 +8,19 @@ import {
 	Dimensions,
 	Button,
 	TouchableWithoutFeedback,
+	ScrollView,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import colors from "../config/colors";
 import AppButton from "../components/AppButton";
+import cartContext from "../context/cart/cartContext";
 
 const heigth = Dimensions.get("screen").height;
 
 const ProductDetail = ({ route, navigation }) => {
 	const { item } = route.params;
-	console.log(item);
+	const { addToCart} = useContext(cartContext);
+
 	return (
 		<View style={styles.screen}>
 			<View>
@@ -36,14 +39,21 @@ const ProductDetail = ({ route, navigation }) => {
 						/>
 					</View>
 				</TouchableWithoutFeedback>
-				<View style={styles.details}>
-					<Text style={styles.name}>{item.name}</Text>
-					<Text style={styles.price}>${item.price}</Text>
-				</View>
+				<ScrollView style={styles.scrollView}>
+					<View style={styles.details}>
+						<Text style={styles.name}>{item.name}</Text>
+						<Text style={styles.price}>${item.price}</Text>
+					</View>
+				</ScrollView>
 			</View>
 
 			<View style={styles.buttonView}>
-				<AppButton title="add to cart" onPress={() => {console.log("PESSED")}} />
+				<AppButton
+					title="add to cart"
+					onPress={() => addToCart(item)
+						
+					}
+				/>
 			</View>
 		</View>
 	);
@@ -67,7 +77,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		justifyContent: "center",
 		alignItems: "center",
-		alignSelf: 'center',
+		alignSelf: "center",
 		paddingHorizontal: 10,
 		marginBottom: 8,
 	},
@@ -83,7 +93,9 @@ const styles = StyleSheet.create({
 		marginRight: 20,
 		borderRadius: 30,
 	},
-
+	scrollView: {
+		
+	},
 	screen: {
 		flex: 1,
 		justifyContent: "space-between",

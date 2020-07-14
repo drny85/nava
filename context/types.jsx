@@ -44,3 +44,6 @@ export const CLEAR_ADDON_ERROR = "CLEAR_ADDON_ERROR";
 export const CLEAR_ADDON = "CLEAR_ADDON";
 export const UPDATE_ADDON = "UPDATE_ADDON";
 export const SET_ADDON = "SET_ADDON";
+export const ADD_TO_CART = "ADD_TO_CART";
+export const CLEAR_CART = "CLEAR_CART";
+export const GET_CART_ITEMS = "GET_CART_ITEMS";

@@ -10,12 +10,12 @@ import {
 import constants from "../config/constants";
 import colors from "../config/colors";
 
-
 const { width } = Dimensions.get("screen");
 
-const CategoryTile = ({ name, onPress }) => {
+const CategoryTile = ({ name, onPress , style}) => {
+	console.log(name)
 	return (
-		<TouchableOpacity  style={styles.container} onPress={onPress}>
+		<TouchableOpacity style={[styles.container, style]} onPress={onPress}>
 			<Text style={styles.text}>{name}</Text>
 		</TouchableOpacity>
 	);
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 	container: {
 		height: constants.categoriTileHeigth,
 		width: width * 0.4,
-		backgroundColor: colors.card,
+		backgroundColor: colors.primary,
 		borderRadius: 50,
 		alignItems: "center",
 		justifyContent: "center",

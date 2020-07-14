@@ -8,27 +8,29 @@ import {
 	FlatList,
 	ActivityIndicator,
 } from "react-native";
+
 import Card from "../components/Card";
 
 import Screen from "../components/Screen";
-import { db } from "../services/database";
 import Loader from "../components/Loader";
 import ItemsContext from "../context/items/itemsContext";
 import CategoryContext from "../context/category/categoryContext";
 import CategoryTile from "../components/CategoryTile";
 
+import ListCategoryItems from "../components/ListCategoryItems";
+
 const Home = ({ navigation }) => {
-	// const [items, setItems] = useState([]);
-	const [isRefreshing, setIsRefreshing] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 	const itemsContext = useContext(ItemsContext);
 	const categoryContext = useContext(CategoryContext);
+
 	const {
 		items,
 		getItems,
 		loading,
 		filterItemsByCategory,
 		filtered,
-		current,
+		clearItemsFilters,
 	} = itemsContext;
 	const { categories, getCategories } = categoryContext;
 
@@ -41,44 +43,16 @@ const Home = ({ navigation }) => {
 		return <Loader />;
 	}
 
-
-	console.log('ITEMS',filtered)
-
 	return (
 		<Screen style={styles.screen}>
-			<View style={styles.categoryView}>
-				<FlatList
-					horizontal
-					data={categories}
-					renderItem={({ item }) => {
-						return (
-							<CategoryTile
-								name={item.name}
-								onPress={() => filterItemsByCategory(item.name)}
-							/>
-						);
-					}}
-				/>
+			<View style={styles.headerView}>
+				<Text style={styles.headerText}>What are you craving for today?</Text>
 			</View>
-			<FlatList
-				onRefresh={() => getItems}
-				refreshing={isRefreshing}
-				data={items}
-				renderItem={({ item }) => {
-					return (
-						<Card
-							name={item.name}
-							price={item.price}
-							imageUrl={item.imageUrl}
-							onPress={() =>
-								navigation.navigate("ProductDetail", {
-									item,
-									routeName: "Details",
-								})
-							}
-						/>
-					);
-				}}
+			<ListCategoryItems
+				categories={categories}
+				items={items}
+				onRefresh={getItems}
+				isRefreshing={refreshing}
 			/>
 		</Screen>
 	);
@@ -87,9 +61,15 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
+		marginTop: 20,
 	},
-	categoryView: {
-		height: 80,
+	headerText: {
+		fontSize: 26,
+		fontWeight: "700",
+		fontStyle: "italic",
+	},
+	headerView: {
+		padding: 15,
 	},
 });
 
