@@ -60,6 +60,37 @@ const CartState = (props) => {
 		}
 	};
 
+	const deleteFromCart = async (item) => {
+		try {
+			const data = await AsyncStorage.getItem(CART_ID);
+			const id = JSON.parse(data);
+			const { items, quantity, total } = (await CART_REF.doc(id).get()).data();
+			const found = items[item.id];
+			if (found.quantity > 1) {
+				--found.quantity;
+
+				await CART_REF.doc(id).update({
+					items: { ...items, [item.id]: found },
+					quantity: quantity - 1,
+					total: (total - item.price).toFixed(2),
+				});
+				getCartItems()
+			} else {
+				console.log("less");
+				delete items[item.id];
+				await CART_REF.doc(id).update({
+					items: { ...items },
+					quantity: quantity - 1,
+					total: total - item.price,
+				});
+
+				getCartItems()
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const getCartItems = async () => {
 		setLoading();
 		const id = await getCartId();
@@ -125,6 +156,7 @@ const CartState = (props) => {
 				addToCart,
 				clearCart,
 				getCartItems,
+				deleteFromCart,
 			}}
 		>
 			{props.children}

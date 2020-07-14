@@ -28,6 +28,7 @@ export default (state, action) => {
 				loading: false,
 				cartItems: [],
 				itemCounts: 0,
+				cartTotal: 0,
 			};
 
 		default:
