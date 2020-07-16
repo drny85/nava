@@ -10,6 +10,8 @@ import RestaurantStackNavigator from "./RestaurantStackNavigator";
 import CartNavigator from "./CartNavigator";
 import colors from "../config/colors";
 import cartContext from "../context/cart/cartContext";
+import Profile from "../screens/Profile";
+import { EvilIcons } from '@expo/vector-icons';
 
 const BottomTabs = createBottomTabNavigator();
 
@@ -58,9 +60,10 @@ const AppNavigator = () => {
 					tabBarIcon: ({ color, size }) => (
 						<View style={styles.cartIcon}>
 							<MaterialCommunityIcons name="cart" color={color} size={30} />
-							<View style={styles.badge}>
+							{itemCounts > 0 && (<View style={styles.badge}>
 								<Text style={{ fontWeight: "700" }}>{itemCounts}</Text>
-							</View>
+							</View>)}
+							
 						</View>
 					),
 				}}
@@ -74,7 +77,18 @@ const AppNavigator = () => {
 					),
 				}}
 			/>
+				<BottomTabs.Screen
+				name="Profile"
+				component={Profile}
+				options={{
+					tabBarIcon: ({ color, size }) => (
+						<EvilIcons name="user" size={30} color={color} />
+					),
+					title: 'Me'
+				}}
+			/>
 		</BottomTabs.Navigator>
+		
 	);
 };
 

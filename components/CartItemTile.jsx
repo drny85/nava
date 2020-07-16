@@ -41,7 +41,7 @@ const CartItemTile = ({ item, onLongPress, onAddMore, onRemove }) => {
 							</TouchableOpacity>
 						</View>
 						<View style={styles.priceView}>
-							<Text style={styles.price}>${item.price * item.quantity}</Text>
+							<Text style={styles.price}>${(item.price * item.quantity).toFixed(2)}</Text>
 						</View>
 					</View>
 				</View>

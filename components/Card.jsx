@@ -15,7 +15,7 @@ const { height } = Dimensions.get("screen");
 const Card = ({ name, imageUrl, price, onPress }) => {
 	return (
 		<TouchableOpacity style={styles.card} onPress={onPress}>
-			<View style={{height: '100%', width: '100%'}}>
+			<View style={{ height: "100%", width: "100%" }}>
 				<View>
 					<Image style={styles.image} source={{ uri: imageUrl }} />
 				</View>
@@ -30,11 +30,11 @@ const Card = ({ name, imageUrl, price, onPress }) => {
 
 const styles = StyleSheet.create({
 	card: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		display: 'flex',
-		flexDirection: 'row',
-		 width: "95%",
+		alignItems: "center",
+		justifyContent: "center",
+		display: "flex",
+		flexDirection: "row",
+		width: "95%",
 		height: height * 0.3,
 		margin: 10,
 		borderRadius: 15,
@@ -52,22 +52,22 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: "100%",
 
-		borderRadius: 15
+		borderRadius: 15,
 	},
 	details: {
 		padding: 12,
-		position: 'absolute',
+		position: "absolute",
 		bottom: 0,
-		overflow: 'hidden',
+		overflow: "hidden",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
 		width: "100%",
-		height: 'auto',
-		backgroundColor: 'black',
+		height: "auto",
+		backgroundColor: "black",
 		opacity: 0.5,
 		borderBottomRightRadius: 15,
-		borderBottomLeftRadius: 15
+		borderBottomLeftRadius: 15,
 	},
 	name: {
 		fontSize: 22,
@@ -75,12 +75,12 @@ const styles = StyleSheet.create({
 		fontWeight: "600",
 		letterSpacing: 1.1,
 		textTransform: "capitalize",
-		color: 'white'
+		color: "white",
 	},
 	price: {
 		fontSize: 24,
 		fontWeight: "600",
-		color: 'white'
+		color: "white",
 	},
 });
 

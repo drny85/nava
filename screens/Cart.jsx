@@ -1,5 +1,11 @@
 import React, { useContext, useEffect } from "react";
-import { View, StyleSheet, Text, FlatList } from "react-native";
+import {
+	View,
+	StyleSheet,
+	Text,
+	FlatList,
+	TouchableWithoutFeedback,
+} from "react-native";
 import AppButton from "../components/AppButton";
 import cartContext from "../context/cart/cartContext";
 import colors from "../config/colors";
@@ -14,7 +20,8 @@ const Cart = ({ navigation }) => {
 		loading,
 		addToCart,
 		cartTotal,
-		deleteFromCart
+		itemCounts,
+		deleteFromCart,
 	} = useContext(cartContext);
 
 	useEffect(() => {
@@ -51,9 +58,17 @@ const Cart = ({ navigation }) => {
 			)}
 
 			{cartTotal > 0 && (
-				<View style={styles.cartTotalView}>
-					<Text style={styles.text}>Cart Total: ${cartTotal}</Text>
-				</View>
+				<TouchableWithoutFeedback
+					onPress={() =>
+						navigation.navigate("Checkout", {
+							cart: { cartItems, cartTotal, itemCounts },
+						})
+					}
+				>
+					<View style={styles.cartTotalView}>
+						<Text style={styles.text}>Checkout: ${cartTotal}</Text>
+					</View>
+				</TouchableWithoutFeedback>
 			)}
 		</View>
 	);
@@ -72,7 +87,7 @@ const styles = StyleSheet.create({
 	cartTotalView: {
 		height: 60,
 		width: "100%",
-		backgroundColor: "beige",
+		backgroundColor: "#2ecc71",
 		justifyContent: "center",
 		alignItems: "center",
 	},

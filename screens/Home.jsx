@@ -20,7 +20,6 @@ import CategoryTile from "../components/CategoryTile";
 import ListCategoryItems from "../components/ListCategoryItems";
 
 const Home = ({ navigation }) => {
-	const [refreshing, setRefreshing] = useState(false);
 	const itemsContext = useContext(ItemsContext);
 	const categoryContext = useContext(CategoryContext);
 
@@ -52,7 +51,6 @@ const Home = ({ navigation }) => {
 				categories={categories}
 				items={items}
 				onRefresh={getItems}
-				isRefreshing={refreshing}
 			/>
 		</Screen>
 	);
@@ -67,9 +65,11 @@ const styles = StyleSheet.create({
 		fontSize: 26,
 		fontWeight: "700",
 		fontStyle: "italic",
+		
 	},
 	headerView: {
 		padding: 15,
+		
 	},
 });
 

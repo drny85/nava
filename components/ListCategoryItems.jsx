@@ -4,13 +4,16 @@ import { View, StyleSheet, Text, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Card from "./Card";
 
-const ListCategoryItems = ({ categories, items, onRefresh, refreshing }) => {
+const ListCategoryItems = ({ categories, items, onRefresh }) => {
 	const navigation = useNavigation();
+	const [refreshing, setRefreshing] = React.useState(false);
 
 	return (
 		<View style={styles.container}>
 			<FlatList
 				data={categories}
+				onRefresh={onRefresh}
+				refreshing={refreshing}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => {
 					return (
@@ -21,8 +24,6 @@ const ListCategoryItems = ({ categories, items, onRefresh, refreshing }) => {
 								)}
 								data={items.filter((i) => i.category === item.id)}
 								keyExtractor={(item) => item.id}
-								onRefresh={onRefresh}
-								refreshing={refreshing}
 								renderItem={({ item }) => {
 									return (
 										<Card
@@ -52,10 +53,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	text: {
-		fontSize: 26,
-		fontWeight: "700",
+		fontSize: 30,
+		fontWeight: "800",
 		textTransform: "capitalize",
 		marginLeft: 12,
+		color: 'gray'
 	},
 });
 

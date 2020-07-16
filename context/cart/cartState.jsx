@@ -49,7 +49,7 @@ const CartState = (props) => {
 				await CART_REF.doc(cartId).update({
 					items: newItems,
 					quantity: quantity + 1,
-					total: +(total + item.price).toFixed(2),
+					total: +(total + +item.price).toFixed(2),
 				});
 			}
 
@@ -72,19 +72,18 @@ const CartState = (props) => {
 				await CART_REF.doc(id).update({
 					items: { ...items, [item.id]: found },
 					quantity: quantity - 1,
-					total: (total - item.price).toFixed(2),
+					total: +(total - item.price).toFixed(2),
 				});
-				getCartItems()
+				getCartItems();
 			} else {
-				console.log("less");
 				delete items[item.id];
 				await CART_REF.doc(id).update({
 					items: { ...items },
 					quantity: quantity - 1,
-					total: total - item.price,
+					total: +(total - item.price).toFixed(2),
 				});
 
-				getCartItems()
+				getCartItems();
 			}
 		} catch (error) {
 			console.log(error);
