@@ -7,9 +7,9 @@ import cartContext from "../context/cart/cartContext";
 const Checkout = ({ route }) => {
 	const {
 		cart: { cartItems, cartTotal, itemCounts },
-    } = route.params;
-    
-    const {clearCart} =useContext(cartContext);
+	} = route.params;
+
+	const { clearCart } = useContext(cartContext);
 
 	const handleCheckOut = async () => {
 		const data = await db.collection("orders").add({
@@ -33,9 +33,9 @@ const Checkout = ({ route }) => {
 		});
 
 		if (data.id) {
-            console.log('clearCart');
-            clearCart();
-        }
+			console.log("clearCart");
+			clearCart();
+		}
 	};
 
 	return (

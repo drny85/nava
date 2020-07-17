@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, FlatList } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import Card from "./Card";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ListCategoryItems = ({ categories, items, onRefresh }) => {
 	const navigation = useNavigation();
@@ -17,30 +18,31 @@ const ListCategoryItems = ({ categories, items, onRefresh }) => {
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => {
 					return (
-						<View>
-							<FlatList
-								ListHeaderComponent={(props) => (
-									<Text style={styles.text}>{item.name}</Text>
-								)}
-								data={items.filter((i) => i.category === item.id)}
-								keyExtractor={(item) => item.id}
-								renderItem={({ item }) => {
-									return (
-										<Card
-											key={item.id}
-											name={item.name}
-											price={item.price}
-											imageUrl={item.imageUrl}
-											onPress={() =>
-												navigation.navigate("ProductDetail", {
-													item,
-												})
-											}
-										/>
-									);
-								}}
-							/>
-						</View>
+						<>
+							<Text style={styles.text}>{item.name}</Text>
+							<View style={{ flex: 1, width: "100%", flexDirection: "row" }}>
+								<FlatList
+									data={items.filter((i) => i.category === item.id)}
+									keyExtractor={(item) => item.id}
+									renderItem={({ item }) => {
+										return (
+											<Card
+												style={{}}
+												key={item.id}
+												name={item.name}
+												price={item.price}
+												imageUrl={item.imageUrl}
+												onPress={() =>
+													navigation.navigate("ProductDetail", {
+														item,
+													})
+												}
+											/>
+										);
+									}}
+								/>
+							</View>
+						</>
 					);
 				}}
 			/>
@@ -51,13 +53,16 @@ const ListCategoryItems = ({ categories, items, onRefresh }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		width: "100%",
+		flexDirection: "row",
 	},
 	text: {
 		fontSize: 30,
 		fontWeight: "800",
 		textTransform: "capitalize",
 		marginLeft: 12,
-		color: 'gray'
+		color: "gray",
+		marginBottom: 10,
 	},
 });
 

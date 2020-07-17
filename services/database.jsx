@@ -11,7 +11,7 @@ const firebaseConfig = {
 	storageBucket: "grocery-409ef.appspot.com",
 	messagingSenderId: "897113180247",
 	appId: "1:897113180247:web:131d1ce3d7fddaeba13b12",
-	measurementId: "G-FWR2GHNDSM"
+	measurementId: "G-FWR2GHNDSM",
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
