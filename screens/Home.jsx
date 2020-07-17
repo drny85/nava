@@ -1,36 +1,20 @@
 // @ts-nocheck
-import React, { useEffect, useState, useContext } from "react";
-import {
-	View,
-	Text,
-	StyleSheet,
-	Button,
-	FlatList,
-	ActivityIndicator,
-} from "react-native";
-
-import Card from "../components/Card";
+import React, { useEffect, useContext } from "react";
+import { View, Text, StyleSheet } from "react-native";
 
 import Screen from "../components/Screen";
 import Loader from "../components/Loader";
 import ItemsContext from "../context/items/itemsContext";
 import CategoryContext from "../context/category/categoryContext";
-import CategoryTile from "../components/CategoryTile";
 
 import ListCategoryItems from "../components/ListCategoryItems";
+
 
 const Home = ({ navigation }) => {
 	const itemsContext = useContext(ItemsContext);
 	const categoryContext = useContext(CategoryContext);
 
-	const {
-		items,
-		getItems,
-		loading,
-		filterItemsByCategory,
-		filtered,
-		clearItemsFilters,
-	} = itemsContext;
+	const { items, getItems, loading } = itemsContext;
 	const { categories, getCategories } = categoryContext;
 
 	useEffect(() => {
@@ -38,9 +22,11 @@ const Home = ({ navigation }) => {
 		getCategories();
 	}, []);
 
-	if (items.length === 0) {
+	if (items.length === 0 || loading) {
 		return <Loader />;
 	}
+
+
 
 	return (
 		<Screen style={styles.screen}>
@@ -65,11 +51,9 @@ const styles = StyleSheet.create({
 		fontSize: 26,
 		fontWeight: "700",
 		fontStyle: "italic",
-		
 	},
 	headerView: {
 		padding: 15,
-		
 	},
 });
 
