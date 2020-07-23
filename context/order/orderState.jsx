@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useReducer } from "react";
 import OrderReducer from "./orderReducer";
 import OrderContex from "./orderContext";
@@ -14,16 +15,16 @@ const OrdersState = (props) => {
   const [state, dispatch] = useReducer(OrderReducer, initialState);
 
   const getOrders = async () => {
-    const data = await (await db.collection("orders").get()).forEach(
-      (order) => {
+    const data = ( await db.collection( "orders" ).get() ).forEach(
+      ( order ) => {
         let docs = [];
-        if (order.exists) {
-          docs.push({
+        if ( order.exists ) {
+          docs.push( {
             id: order.id,
             ...order.data(),
-          });
+          } );
         }
-        dispatch({ type: GET_ORDERS, payload: docs });
+        dispatch( { type: GET_ORDERS, payload: docs } );
       }
     );
   };

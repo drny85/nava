@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useContext } from "react";
 import {
   StyleSheet,
@@ -22,10 +23,10 @@ const validationSchema = Yup.object().shape({
 
 const Signin = () => {
   const navigation = useNavigation();
-  const { user, signup, error, setUser } = useContext(authContext);
+  const { user, login, setUser } = useContext(authContext);
   const handleSignin = async ({ email, password }) => {
     try {
-      const data = await signup(email, password);
+      const data = await login(email, password);
       if (data.user) {
         setUser({ id: data.user.uid, email: data.user.email });
       }
@@ -41,7 +42,7 @@ const Signin = () => {
   };
 
   React.useEffect(() => {
-    console.log("in");
+   
     return () => {
       console.log("left");
     };
