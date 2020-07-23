@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import cartContext from "../context/cart/cartContext";
 import { Alert } from "react-native";
 import Checkout from "../screens/Checkout";
+import Payment from "../screens/Payment";
 
 const CartStack = createStackNavigator();
 
@@ -48,6 +49,7 @@ const CartStackNavigator = () => {
 				component={Checkout}
 				options={{ title: "Check Out" }}
 			/>
+			<CartStack.Screen name="Payment" component={Payment} />
 		</CartStack.Navigator>
 	);
 };

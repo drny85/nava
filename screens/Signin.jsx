@@ -26,6 +26,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Signin = () => {
+	
 	const navigation = useNavigation();
 	const { user, login, setUser } = useContext(authContext);
 	const handleSignin = async ({ email, password }) => {
