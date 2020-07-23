@@ -6,7 +6,6 @@ import AuthContext from "./authContext";
 import { auth, db } from "../../services/database";
 import { SET_LOADING, SIGNUP, LOGOUT } from "../types";
 
-
 const AuthState = (props) => {
 	const initialState = {
 		user: null,
@@ -20,17 +19,28 @@ const AuthState = (props) => {
 		return await auth.createUserWithEmailAndPassword(email, password);
 	};
 
+	const createUser = async (id, name, lastName, phone) => {
+		try {
+			const data = await db.collection("appUser").doc(id).update({
+				lastName: lastName,
+				phone: phone,
+				name: name,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const login = async (email, password) => {
 		return await auth.signInWithEmailAndPassword(email, password);
 	};
 
-	const setUser = async (userInfo) => {
+	const setUser = async (userId) => {
 		try {
-			const data = db
-				.collection("appUser")
-				.doc(userInfo.id)
-				.set({ ...userInfo, createdAt: new Date().toISOString() });
-			dispatch({ type: SIGNUP, payload: userInfo });
+			const data = await db.collection("appUser").doc(userId).get();
+			console.log("USER DATA", data.data());
+
+			dispatch({ type: SIGNUP, payload: data.data() });
 		} catch (error) {
 			console.log(error.message);
 		}
@@ -46,10 +56,7 @@ const AuthState = (props) => {
 		try {
 			auth.onAuthStateChanged((user) => {
 				if (user) {
-					setUser({
-						id: user.uid,
-						email: user.email,
-					});
+					setUser(user.uid);
 				} else {
 					logout();
 				}
@@ -72,6 +79,7 @@ const AuthState = (props) => {
 				setUser,
 				login,
 				getCurrentUser,
+				createUser,
 			}}
 		>
 			{props.children}

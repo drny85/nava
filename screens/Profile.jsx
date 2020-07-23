@@ -16,7 +16,7 @@ const Profile = () => {
     //getOrders();
   }, []);
 
-  console.log(user);
+  console.log('USER',user);
 
   if (!user) {
     return <Signin />;
@@ -32,7 +32,9 @@ const Profile = () => {
           resizeMode="contain"
         />
       </View>
-      <View></View>
+      <View>
+        <Text>{user.name}</Text>
+      </View>
     </Screen>
   );
 };

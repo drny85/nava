@@ -21,18 +21,22 @@ import authContext from "../context/auth/authContext";
 import colors from "../config/colors";
 
 const validationSchema = Yup.object().shape({
+	name: Yup.string().required().min(3).label("First Name"),
+	lastName: Yup.string().required().min(3).label("Last Name"),
+	phone: Yup.string().required().min(9).label("Phone"),
 	email: Yup.string().required().email().label("Email"),
 	password: Yup.string().required().min(6).label("Password"),
 });
 
-const Signin = () => {
+const Signup = () => {
 	const navigation = useNavigation();
-	const { user, login, setUser } = useContext(authContext);
-	const handleSignin = async ({ email, password }) => {
+	const { user, signup, setUser, createUser } = useContext(authContext);
+	const handleSignup = async (values) => {
 		try {
-			const data = await login(email, password);
+			const data = await signup(values.email, values.password);
 			if (data.user) {
-				setUser(data.user.uid);
+				// setUser({ id: data.user.uid, email: data.user.email });
+				createUser(data.user.uid, values.name, values.lastName, values.phone);
 				navigation.navigate("Profile");
 			}
 		} catch (error) {
@@ -59,12 +63,37 @@ const Signin = () => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"}
 			>
 				<AppForm
-					initialValues={{ email: "", password: "" }}
-					onSubmit={handleSignin}
+					initialValues={{
+						name: "",
+						lastName: "",
+						phone: "",
+						email: "",
+						password: "",
+					}}
+					onSubmit={handleSignup}
 					validationSchema={validationSchema}
 				>
 					<AppFormField
 						autoFocus={true}
+						placeholder="Name"
+						icon="account-badge-horizontal"
+						name="name"
+						autoCorrect={false}
+					/>
+					<AppFormField
+						placeholder="Last Name"
+						icon="account-badge-horizontal"
+						name="lastName"
+						autoCorrect={false}
+					/>
+					<AppFormField
+						placeholder="Phone"
+						icon="phone"
+						name="phone"
+						keyboardType="phone-pad"
+						autoCorrect={false}
+					/>
+					<AppFormField
 						placeholder="Email"
 						keyboardType="email-address"
 						icon="email"
@@ -83,12 +112,12 @@ const Signin = () => {
 						textContentType="password"
 					/>
 
-					<AppSubmitButton title="Login" />
+					<AppSubmitButton title="Sign Up" />
 				</AppForm>
 				<View style={styles.account}>
-					<Text style={styles.text}>Don't have an account?</Text>
-					<TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-						<Text style={styles.signupText}>Sign Up</Text>
+					<Text style={styles.text}>Already have an account?</Text>
+					<TouchableOpacity onPress={() => navigation.navigate("Signin")}>
+						<Text style={styles.signupText}>Sign In</Text>
 					</TouchableOpacity>
 				</View>
 			</KeyboardAvoidingView>
@@ -124,4 +153,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Signin;
+export default Signup;
