@@ -7,8 +7,17 @@ import CategoryState from "./context/category/categoryState";
 import CartState from "./context/cart/cartState";
 import OrdersState from "./context/order/orderState";
 import AuthState from "./context/auth/authState";
+import { AppLoading } from "expo";
 
 export default function App() {
+  const [isReady, setIsReady] = React.useState(false);
+  const logingUser = () => {
+    console.log("Logging IN");
+  };
+  if (!isReady)
+    return (
+      <AppLoading startAsync={logingUser} onFinish={() => setIsReady(true)} />
+    );
   return (
     <AuthState>
       <ItemsState>
