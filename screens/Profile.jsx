@@ -4,15 +4,19 @@ import Screen from "../components/Screen";
 import ordersContext from "../context/order/orderContext";
 
 import constants from "../config/constants";
+import Signin from "./Signin";
 
 const Profile = () => {
   const { orders, getOrders } = useContext(ordersContext);
+  const user = false;
 
   useEffect(() => {
     //getOrders();
   }, []);
 
-  console.log(orders);
+  if (!user) {
+    return <Signin />;
+  }
   return (
     <Screen style={styles.container}>
       <View style={styles.imageView}>
