@@ -5,18 +5,24 @@ import ordersContext from "../context/order/orderContext";
 
 import constants from "../config/constants";
 import Signin from "./Signin";
+import authContext from "../context/auth/authContext";
+import Loader from "../components/Loader";
 
 const Profile = () => {
   const { orders, getOrders } = useContext(ordersContext);
-  const user = false;
+  const { user, loading } = useContext(authContext);
 
   useEffect(() => {
     //getOrders();
   }, []);
 
+  console.log(user);
+
   if (!user) {
     return <Signin />;
   }
+
+  if (loading) return <Loader />;
   return (
     <Screen style={styles.container}>
       <View style={styles.imageView}>

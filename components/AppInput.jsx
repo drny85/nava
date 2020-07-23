@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 
-const AppInput = ({ icon, ...otherProps }) => {
+const AppInput = ({ icon, autoFocus = false, ...otherProps }) => {
   return (
     <View style={styles.container}>
       {icon && (
@@ -14,7 +14,7 @@ const AppInput = ({ icon, ...otherProps }) => {
           name={icon}
         />
       )}
-      <TextInput style={styles.input} {...otherProps} />
+      <TextInput autoFocus={autoFocus} style={styles.input} {...otherProps} />
     </View>
   );
 };
@@ -22,9 +22,10 @@ const AppInput = ({ icon, ...otherProps }) => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    height: 50,
 
     marginVertical: 12,
-    padding: 10,
+    padding: 8,
     borderRadius: 25,
     alignItems: "center",
     backgroundColor: colors.card,
@@ -35,8 +36,9 @@ const styles = StyleSheet.create({
   },
   input: {
     color: "black",
-    fontSize: 18,
-    padding: 2,
+    fontSize: 20,
+    paddingLeft: 5,
+    height: "100%",
   },
 });
 

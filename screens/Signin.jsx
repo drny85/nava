@@ -1,12 +1,19 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import Screen from "../components/Screen";
-import { Formik } from "formik";
-import * as Yup from "yup";
+import React, { useContext } from "react";
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-import AppInput from "../components/AppInput";
-import AppButton from "../components/AppButton";
-import AppErrorMessage from "../components/AppErrorMessage";
+import * as Yup from "yup";
+import Screen from "../components/Screen";
+import AppFormField from "../components/AppFormField";
+import AppSubmitButton from "../components/AppSubmitButton";
+import AppForm from "../components/AppForm";
+
+import authContext from "../context/auth/authContext";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -14,58 +21,83 @@ const validationSchema = Yup.object().shape({
 });
 
 const Signin = () => {
+  const navigation = useNavigation();
+  const { user, signup, error, setUser } = useContext(authContext);
+  const handleSignin = async ({ email, password }) => {
+    try {
+      const data = await signup(email, password);
+      if (data.user) {
+        setUser({ id: data.user.uid, email: data.user.email });
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert(
+        "Error",
+        error.message,
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        { cancelable: false }
+      );
+    }
+  };
+
+  React.useEffect(() => {
+    console.log("in");
+    return () => {
+      console.log("left");
+    };
+  }, []);
+
+  if (user) {
+    navigation.navigate("Profile");
+  }
   return (
-    <Screen style={styles.container}>
-      <Formik
-        initialValues={{ email: "", password: "" }}
-        onSubmit={(values) => console.log(values)}
-        validationSchema={validationSchema}
+    <Screen>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
       >
-        {({ errors, touched, handleChange, handleSubmit, setFieldTouched }) => (
-          <>
-            <AppInput
-              placeholder="Email"
-              keyboardType="email-address"
-              icon="email"
-              onBlur={() => setFieldTouched("email")}
-              onChangeText={handleChange("email")}
-              autoCorrect={false}
-              autoCapitalize="none"
-            />
-            <AppErrorMessage error={errors.email} visible={touched.email} />
-            <AppInput
-              placeholder="Password"
-              onChangeText={handleChange("password")}
-              onBlur={() => setFieldTouched("password")}
-              secureTextEntry={true}
-              autoCorrect={false}
-              icon="lock-open"
-              textContentType="password"
-            />
-            <AppErrorMessage
-              error={errors.password}
-              visible={touched.password}
-            />
-            <AppButton
-              style={styles.btn}
-              title="Login"
-              onPress={handleSubmit}
-            />
-          </>
-        )}
-      </Formik>
+        <AppForm
+          initialValues={{ email: "", password: "" }}
+          onSubmit={handleSignin}
+          validationSchema={validationSchema}
+        >
+          <AppFormField
+            autoFocus={true}
+            placeholder="Email"
+            keyboardType="email-address"
+            icon="email"
+            name="email"
+            autoCorrect={false}
+            autoCapitalize="none"
+            textContentType="emailAddress"
+          />
+
+          <AppFormField
+            placeholder="Password"
+            name="password"
+            secureTextEntry={true}
+            autoCorrect={false}
+            icon="lock-open"
+            textContentType="password"
+          />
+
+          <AppSubmitButton title="Login" />
+        </AppForm>
+      </KeyboardAvoidingView>
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: 8,
   },
   btn: {
-    marginTop: 20,
+    marginTop: 25,
+    paddingTop: 10,
   },
 });
 
