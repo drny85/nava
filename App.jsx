@@ -9,6 +9,7 @@ import OrdersState from "./context/order/orderState";
 import AuthState from "./context/auth/authState";
 import { AppLoading } from "expo";
 import authContext from "./context/auth/authContext";
+import SettingsState from "./context/settings/settingsState";
 
 const App = () => {
 	const [isReady, setIsReady] = React.useState(false);
@@ -23,15 +24,17 @@ const App = () => {
 		);
 	return (
 		<ItemsState>
-			<CategoryState>
-				<CartState>
-					<OrdersState>
-						<NavigationContainer>
-							<AppNavigator />
-						</NavigationContainer>
-					</OrdersState>
-				</CartState>
-			</CategoryState>
+			<SettingsState>
+				<CategoryState>
+					<CartState>
+						<OrdersState>
+							<NavigationContainer>
+								<AppNavigator />
+							</NavigationContainer>
+						</OrdersState>
+					</CartState>
+				</CategoryState>
+			</SettingsState>
 		</ItemsState>
 	);
 };

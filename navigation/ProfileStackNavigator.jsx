@@ -8,26 +8,40 @@ import colors from "../config/colors";
 import authContext from "../context/auth/authContext";
 import Signup from "../screens/Signup";
 import Signin from "../screens/Signin";
+import settingsContext from "../context/settings/settingsContext";
 
 const ProfileStack = createStackNavigator();
 
 const ProfileStackNavigator = () => {
 	const { logout, user } = React.useContext(authContext);
+	const { clearSettings } = React.useContext(settingsContext);
+
+	const handleLogout = () => {
+		logout();
+		clearSettings();
+	};
 	return (
 		<ProfileStack.Navigator>
-            <ProfileStack.Screen name="Profile" component={Profile} options={{
+			<ProfileStack.Screen
+				name="Profile"
+				component={Profile}
+				options={{
 					headerRight: () => (
-						<TouchableOpacity style={{ marginRight: 10 }} onPress={logout}>
-							{user && <Text style={{ color: colors.secondary, fontWeight: '700' }}>Log Out</Text>}
+						<TouchableOpacity
+							style={{ marginRight: 10 }}
+							onPress={handleLogout}
+						>
+							{user && (
+								<Text style={{ color: colors.secondary, fontWeight: "700" }}>
+									Log Out
+								</Text>
+							)}
 						</TouchableOpacity>
 					),
 					headerShown: user && true,
-				}} />
-			<ProfileStack.Screen
-				name="Signin"
-				component={Signin}
-				
+				}}
 			/>
+			<ProfileStack.Screen name="Signin" component={Signin} />
 			<ProfileStack.Screen name="Signup" component={Signup} />
 		</ProfileStack.Navigator>
 	);

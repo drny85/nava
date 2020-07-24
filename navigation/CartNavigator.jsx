@@ -8,6 +8,7 @@ import cartContext from "../context/cart/cartContext";
 import { Alert } from "react-native";
 import Checkout from "../screens/Checkout";
 import Payment from "../screens/Payment";
+import ProfileStackNavigator from "./ProfileStackNavigator";
 
 const CartStack = createStackNavigator();
 
@@ -50,6 +51,7 @@ const CartStackNavigator = () => {
 				options={{ title: "Check Out" }}
 			/>
 			<CartStack.Screen name="Payment" component={Payment} />
+			<CartStack.Screen name="ProfileStack" component={ProfileStackNavigator} options={{headerShown: false}} />
 		</CartStack.Navigator>
 	);
 };

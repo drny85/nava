@@ -19,6 +19,7 @@ import AppForm from "../components/AppForm";
 
 import authContext from "../context/auth/authContext";
 import colors from "../config/colors";
+import settingsContext from "../context/settings/settingsContext";
 
 const validationSchema = Yup.object().shape({
 	email: Yup.string().required().email().label("Email"),
@@ -26,14 +27,19 @@ const validationSchema = Yup.object().shape({
 });
 
 const Signin = () => {
-	
 	const navigation = useNavigation();
 	const { user, login, setUser } = useContext(authContext);
+	const { previewRoute } = useContext(settingsContext);
+
 	const handleSignin = async ({ email, password }) => {
 		try {
 			const data = await login(email, password);
 			if (data.user) {
 				setUser(data.user.uid);
+				if (previewRoute) {
+					navigation.navigate(previewRoute);
+					return;
+				}
 				navigation.navigate("Profile");
 			}
 		} catch (error) {

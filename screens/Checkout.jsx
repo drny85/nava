@@ -12,47 +12,27 @@ import cartContext from "../context/cart/cartContext";
 import colors from "../config/colors";
 import { color } from "react-native-reanimated";
 import authContext from "../context/auth/authContext";
+import settingsContext from "../context/settings/settingsContext";
 
 const Checkout = ({ route, navigation }) => {
 	const {
 		cart: { cartItems, cartTotal, itemCounts },
 	} = route.params;
 	const { user } = useContext(authContext);
+	const { setRoute, setDeliveryMethod, deliveryMethod } = useContext(settingsContext);
 
-	const [deliveryOption, setDeliveryOption] = useState("delivery");
+	const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
 
 	const { clearCart } = useContext(cartContext);
 
 	const continueToPayment = () => {
 		if (!user) {
-			navigation.navigate("Profile", { deliveryMethod: deliveryOption });
+			setRoute("Payment");
+			setDeliveryMethod(deliveryOption);
+			navigation.navigate("ProfileStack");
 			return;
 		}
 		navigation.navigate("Payment", { deliveryMethod: deliveryOption });
-		// const data = await db.collection("orders").add({
-		// 	customer: {
-		// 		address: {
-		// 			street: "1830 morris ave",
-		// 			apt: "6c",
-		// 			city: "bronx",
-		// 			zipcode: "10456",
-		// 		},
-		// 		email: "maria.m@aol.com",
-		// 		name: "joel",
-		// 		lastName: "lopez",
-		// 		phone: "347-222-2222",
-		// 	},
-		// 	items: [...cartItems],
-		// 	orderPlaced: new Date().toISOString(),
-		// 	status: "new",
-		// 	totalAmount: cartTotal,
-		// 	orderNumber: 3,
-		// });
-
-		// if (data.id) {
-		// 	console.log("clearCart");
-		// 	clearCart();
-		// }
 	};
 
 	console.log(deliveryOption);

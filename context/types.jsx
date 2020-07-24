@@ -48,3 +48,6 @@ export const SET_ADDON = "SET_ADDON";
 export const ADD_TO_CART = "ADD_TO_CART";
 export const CLEAR_CART = "CLEAR_CART";
 export const GET_CART_ITEMS = "GET_CART_ITEMS";
+export const SET_DELIVERY = "SET_DELIVERY";
+export const SET_REDIRECT = "SET_REDIRECT";
+export const CLEAR_SETTINGS = "CLEAR_SETTINGS";

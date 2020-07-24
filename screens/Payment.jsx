@@ -1,15 +1,17 @@
 import React, { useContext } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import authContext from "../context/auth/authContext";
+import settingsContext from "../context/settings/settingsContext";
 
-const Payment = ({ route, navigation }) => {
+const Payment = ({ navigation }) => {
 	const { user } = useContext(authContext);
-	const deliveryMethod = route.params.deliveryMethod;
+	const { deliveryMethod } = useContext(settingsContext);
+
+	console.log(deliveryMethod);
 
 	if (!user) {
 		navigation.navigate("Profile", {
 			previewRoute: "Payment",
-			deliveryMethod,
 		});
 	}
 
