@@ -3,18 +3,18 @@ import { View, Text, StyleSheet, TextInput } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 
-const AppInput = ({ icon, autoFocus = false, ...otherProps }) => {
+const AppInput = ({ iconName, focus = false, ...otherProps }) => {
   return (
     <View style={styles.container}>
-      {icon && (
+      {iconName && (
         <MaterialCommunityIcons
           style={styles.icon}
           size={24}
           color={colors.ascent}
-          name={icon}
+          name={iconName}
         />
       )}
-      <TextInput autoFocus={autoFocus} style={styles.input} {...otherProps} />
+      <TextInput autoFocus={focus} style={styles.input} {...otherProps} />
     </View>
   );
 };

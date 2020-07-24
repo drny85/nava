@@ -5,6 +5,7 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import AppButton from "../components/AppButton";
 import { db } from "../services/database";
@@ -14,6 +15,14 @@ import { color } from "react-native-reanimated";
 import authContext from "../context/auth/authContext";
 import settingsContext from "../context/settings/settingsContext";
 import Pick from "../components/Pick";
+import { ScrollView } from "react-native-gesture-handler";
+import AppForm from "../components/AppForm";
+import AppFormField from "../components/AppFormField";
+import * as Yup from "yup";
+
+const pickUpSchema = Yup.object().shape({
+  name: Yup.string().required().label("First Name"),
+});
 
 const Checkout = ({ route, navigation }) => {
   const {
@@ -29,6 +38,8 @@ const Checkout = ({ route, navigation }) => {
 
   const { clearCart } = useContext(cartContext);
 
+  const handlePickup = () => {};
+
   const continueToPayment = () => {
     if (!user) {
       setRoute("Payment");
@@ -39,72 +50,122 @@ const Checkout = ({ route, navigation }) => {
     navigation.navigate("Payment", { deliveryMethod: deliveryOption });
   };
 
-  console.log(paymentOption);
+  console.log(paymentOption, deliveryOption);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.summary}>Order Summary</Text>
-      <View style={styles.view}>
-        <Text style={styles.qty}>Items Quantity: {itemCounts}</Text>
-        <Text style={styles.total}>Order Tortal: ${cartTotal}</Text>
-      </View>
-      <View style={styles.delivery}>
-        <TouchableOpacity
-          onPress={() => setDeliveryOption("delivery")}
-          style={{
-            height: "100%",
-            backgroundColor:
-              deliveryOption === "delivery" ? colors.primary : colors.tile,
-            width: "50%",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "row",
-          }}
-        >
-          <View>
-            <Text style={styles.option}>Delivery</Text>
+      <ScrollView
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={styles.summary}>Order Summary</Text>
+        <View style={styles.view}>
+          <Text style={styles.qty}>Items Quantity: {itemCounts}</Text>
+          <Text style={styles.total}>Order Tortal: ${cartTotal}</Text>
+        </View>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text style={{ marginTop: 10, fontWeight: "700" }}>
+            Delivery Option
+          </Text>
+          <View style={styles.delivery}>
+            <TouchableOpacity
+              onPress={() => setDeliveryOption("delivery")}
+              style={{
+                height: "100%",
+                backgroundColor:
+                  deliveryOption === "delivery" ? colors.primary : colors.tile,
+                width: "50%",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+              }}
+            >
+              <View>
+                <Text style={styles.option}>Delivery</Text>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.divider}></View>
+            <TouchableOpacity
+              onPress={() => setDeliveryOption("pickup")}
+              style={{
+                height: "100%",
+                backgroundColor:
+                  deliveryOption === "pickup" ? colors.primary : colors.tile,
+                width: "50%",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+              }}
+            >
+              <View>
+                <Text style={styles.option}>Pick up</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <View style={styles.divider}></View>
-        <TouchableOpacity
-          onPress={() => setDeliveryOption("pickup")}
-          style={{
-            height: "100%",
-            backgroundColor:
-              deliveryOption === "pickup" ? colors.primary : colors.tile,
-            width: "50%",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "row",
-          }}
-        >
-          <View>
-            <Text style={styles.option}>Pick up</Text>
+        </View>
+        <View style={{ alignItems: "center" }}>
+          <Text style={{ fontWeight: "700" }}>Payment Option</Text>
+          <View style={styles.delivery}>
+            {deliveryOption === "delivery" ? (
+              <>
+                <Pick
+                  title="credit"
+                  type={paymentOption}
+                  onPress={() => setPaymentOption("credit")}
+                />
+                <View style={styles.divider}></View>
+                <Pick
+                  title="cash"
+                  type={paymentOption}
+                  onPress={() => setPaymentOption("cash")}
+                />
+              </>
+            ) : (
+              <>
+                <Pick
+                  title="credit"
+                  type={paymentOption}
+                  onPress={() => setPaymentOption("credit")}
+                />
+                <View style={styles.divider}></View>
+                <Pick
+                  title="in store"
+                  type={paymentOption}
+                  onPress={() => setPaymentOption("in store")}
+                />
+              </>
+            )}
           </View>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.delivery}>
-        <Pick
-          title="credit"
-          type={paymentOption}
-          onPress={() => setPaymentOption("credit")}
-          width="33%"
-        />
-        <View style={styles.divider}></View>
-        <Pick
-          title="cash"
-          type={paymentOption}
-          onPress={() => setPaymentOption("cash")}
-          width="33%"
-        />
-        <View style={styles.divider}></View>
-        <Pick
-          title="in store"
-          type={paymentOption}
-          onPress={() => setPaymentOption("in store")}
-          width="33%"
-        />
-      </View>
+        </View>
+        <KeyboardAvoidingView
+          style={styles.form}
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        >
+          {deliveryOption === "pickup" && paymentOption !== null && (
+            <View style={styles.form}>
+              <Text style={{ fontWeight: "700", marginTop: 5 }}>
+                Person Picking Up
+              </Text>
+              <AppForm
+                initialValues={{ name: "", lastName: "", phone: "" }}
+                onSubmit={handlePickup}
+                validationSchema={pickUpSchema}
+              >
+                <AppFormField name="name" placeholder="First Name" />
+                <AppFormField name="lastName" placeholder="Last Name" />
+                <AppFormField
+                  name="phone"
+                  placeholder="Phone"
+                  keyboardType="number-pad"
+                />
+              </AppForm>
+            </View>
+          )}
+        </KeyboardAvoidingView>
+      </ScrollView>
+
       <AppButton
         style={styles.btn}
         title="Check Out"
@@ -117,22 +178,25 @@ const Checkout = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     alignItems: "center",
     marginTop: 10,
+    justifyContent: "center",
   },
   btn: {
     width: "95%",
     marginTop: 20,
+    position: "absolute",
+    bottom: 5,
+    backgroundColor: colors.secondary,
   },
 
   delivery: {
     overflow: "hidden",
     width: "95%",
-    height: Dimensions.get("screen").height * 0.07,
+    height: Dimensions.get("screen").height * 0.06,
     borderRadius: 50,
     backgroundColor: colors.tile,
-    marginVertical: 20,
+    marginVertical: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -154,8 +218,13 @@ const styles = StyleSheet.create({
     width: 2,
     backgroundColor: "grey",
   },
+
+  form: {
+    width: "100%",
+    alignItems: "center",
+  },
   summary: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "700",
     paddingBottom: 20,
   },
@@ -163,7 +232,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "95%",
-    height: Dimensions.get("screen").height * 0.3,
+    height: Dimensions.get("screen").height * 0.15,
     elevation: 10,
     borderRadius: 5,
     shadowColor: "grey",
