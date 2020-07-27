@@ -41,13 +41,16 @@ const Checkout = ({ route, navigation }) => {
   const handlePickup = () => {};
 
   const continueToPayment = () => {
-    if (!user) {
+    if (!user && deliveryOption !== "pickup") {
       setRoute("OrderSummary");
       setDeliveryMethod(deliveryOption);
       navigation.navigate("Profile");
       return;
     }
-    navigation.navigate("OrderSummary", { deliveryMethod: deliveryOption });
+    navigation.navigate("OrderSummary", {
+      deliveryMethod: deliveryOption,
+      cart: { cartItems, cartTotal, itemCounts },
+    });
   };
 
   console.log(paymentOption, deliveryOption);
