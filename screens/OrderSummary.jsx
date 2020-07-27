@@ -44,14 +44,12 @@ const Payment = ({ navigation }) => {
           validationSchema={validationSchema}
         >
           <AppFormField
-            value={user.name}
             autoFocus={true}
             placeholder="Name"
             name="name"
             autoCorrect={false}
           />
           <AppFormField
-            value={user.lastName}
             placeholder="Last Name"
             name="lastName"
             autoCorrect={false}

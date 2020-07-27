@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 
-const AppInput = ({ iconName, focus = false, ...otherProps }) => {
+const AppInput = ({ iconName, focus = false, style, ...otherProps }) => {
   return (
     <View style={styles.container}>
       {iconName && (
@@ -14,7 +14,11 @@ const AppInput = ({ iconName, focus = false, ...otherProps }) => {
           name={iconName}
         />
       )}
-      <TextInput autoFocus={focus} style={styles.input} {...otherProps} />
+      <TextInput
+        autoFocus={focus}
+        style={[styles.input, style]}
+        {...otherProps}
+      />
     </View>
   );
 };

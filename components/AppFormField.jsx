@@ -6,7 +6,7 @@ import { useFormikContext } from "formik";
 import AppInput from "./AppInput";
 import AppErrorMessage from "./AppErrorMessage";
 
-const AppFormField = ({ name, data, autoFocus, ...otherProps }) => {
+const AppFormField = ({ name, autoFocus, ...otherProps }) => {
   const {
     errors,
     touched,
@@ -18,7 +18,6 @@ const AppFormField = ({ name, data, autoFocus, ...otherProps }) => {
   return (
     <>
       <AppInput
-        value={() => setFieldValue(name, data)}
         autoFocus={autoFocus}
         onBlur={() => setFieldTouched(name)}
         onChangeText={handleChange(name)}

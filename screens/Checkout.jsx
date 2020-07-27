@@ -42,12 +42,12 @@ const Checkout = ({ route, navigation }) => {
 
   const continueToPayment = () => {
     if (!user) {
-      setRoute("Payment");
+      setRoute("OrderSummary");
       setDeliveryMethod(deliveryOption);
       navigation.navigate("Profile");
       return;
     }
-    navigation.navigate("Payment", { deliveryMethod: deliveryOption });
+    navigation.navigate("OrderSummary", { deliveryMethod: deliveryOption });
   };
 
   console.log(paymentOption, deliveryOption);
@@ -60,7 +60,6 @@ const Checkout = ({ route, navigation }) => {
           alignItems: "center",
         }}
       >
-        <Text style={styles.summary}>Order Summary</Text>
         <View style={styles.view}>
           <Text style={styles.qty}>Items Quantity: {itemCounts}</Text>
           <Text style={styles.total}>Order Tortal: ${cartTotal}</Text>
@@ -157,6 +156,7 @@ const Checkout = ({ route, navigation }) => {
                 <AppFormField name="lastName" placeholder="Last Name" />
                 <AppFormField
                   name="phone"
+                  icon="phone"
                   placeholder="Phone"
                   keyboardType="number-pad"
                 />
