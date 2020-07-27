@@ -9,6 +9,7 @@ import { Alert } from "react-native";
 import Checkout from "../screens/Checkout";
 import OrderSummary from "../screens/OrderSummary";
 import ProfileStackNavigator from "./ProfileStackNavigator";
+import OrderConfirmation from "../screens/OrderConfirmation";
 
 const CartStack = createStackNavigator();
 
@@ -59,6 +60,10 @@ const CartStackNavigator = () => {
         name="ProfileStack"
         component={ProfileStackNavigator}
         options={{ headerShown: false }}
+      />
+      <CartStack.Screen
+        name="OrderConfirmation"
+        component={OrderConfirmation}
       />
     </CartStack.Navigator>
   );

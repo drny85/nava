@@ -1,10 +1,18 @@
 class Order {
-  constructor(items = [], customer, type, total, placedOn) {
+  constructor(
+    items = [],
+    customer,
+    type,
+    totalAmount,
+    paymentMethod,
+    status = "new"
+  ) {
     (this.items = items),
       (this.customer = customer),
       (this.type = type),
-      (this.total = total),
-      (this.placedOn = placedOn);
+      (this.totalAmount = totalAmount),
+      (this.paymentMethod = paymentMethod),
+      (this.status = status);
   }
 }
 

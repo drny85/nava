@@ -5,8 +5,8 @@ import AppButton from "./AppButton";
 
 const AppSubmitButton = ({ title }) => {
   const { handleSubmit, isValid } = useFormikContext();
-  console.log(isValid);
-  return <AppButton title={title} disable={isValid} onPress={handleSubmit} />;
+  console.log("DISABLE", isValid);
+  return <AppButton title={title} onPress={handleSubmit} />;
 };
 
 export default AppSubmitButton;

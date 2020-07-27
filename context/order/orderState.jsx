@@ -14,21 +14,45 @@ const OrdersState = (props) => {
 
   const [state, dispatch] = useReducer(OrderReducer, initialState);
 
-  const getOrders = async () => {
-    const data = ( await db.collection( "orders" ).get() ).forEach(
-      ( order ) => {
-        let docs = [];
-        if ( order.exists ) {
-          docs.push( {
-            id: order.id,
-            ...order.data(),
-          } );
-        }
-        dispatch( { type: GET_ORDERS, payload: docs } );
-      }
-    );
+  const placeOrder = async (orderInfo) => {
+    try {
+      //setLoading();
+      console.log("PLACED");
+      const newOrder = {
+        items: orderInfo.items,
+        customer: orderInfo.customer,
+        orderPlaced: orderInfo.orderPlaced,
+        totalAmount: orderInfo.totalAmount,
+        orderType: orderInfo.type,
+        status: orderInfo.status,
+        paymentMethod: orderInfo.paymentMethod,
+        orderPlaced: new Date().toISOString(),
+      };
+      return await db.collection("orders").add(newOrder);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  const getOrders = async () => {
+    try {
+      setLoading();
+      const data = (await db.collection("orders").get()).forEach((order) => {
+        let docs = [];
+        if (order.exists) {
+          docs.push({
+            id: order.id,
+            ...order.data(),
+          });
+        }
+        dispatch({ type: GET_ORDERS, payload: docs });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const setLoading = () => dispatch({ type: SET_LOADING });
   return (
     <OrderContex.Provider
       value={{
@@ -36,6 +60,7 @@ const OrdersState = (props) => {
         order: state.order,
         loading: state.loading,
         getOrders,
+        placeOrder,
       }}
     >
       {props.children}

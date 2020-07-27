@@ -19,7 +19,7 @@ const heigth = Dimensions.get("screen").height;
 
 const ProductDetail = ({ route, navigation }) => {
   const { item } = route.params;
-  const { addToCart } = useContext(cartContext);
+  const { addToCart, cartItems, totalCounts } = useContext(cartContext);
 
   const handleAddToCart = () => {
     addToCart(item);

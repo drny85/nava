@@ -4,6 +4,8 @@ import {
   StyleSheet,
   Text,
   Dimensions,
+  Platform,
+  ScrollView,
   TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
@@ -15,19 +17,20 @@ import { color } from "react-native-reanimated";
 import authContext from "../context/auth/authContext";
 import settingsContext from "../context/settings/settingsContext";
 import Pick from "../components/Pick";
-import { ScrollView } from "react-native-gesture-handler";
+
 import AppForm from "../components/AppForm";
 import AppFormField from "../components/AppFormField";
+
 import * as Yup from "yup";
+import AppSubmitButton from "../components/AppSubmitButton";
 
 const pickUpSchema = Yup.object().shape({
   name: Yup.string().required().label("First Name"),
+  lastName: Yup.string().required().label("Last Name"),
+  phone: Yup.string().required().min(10).label("Phone"),
 });
 
 const Checkout = ({ route, navigation }) => {
-  const {
-    cart: { cartItems, cartTotal, itemCounts },
-  } = route.params;
   const { user } = useContext(authContext);
   const [paymentOption, setPaymentOption] = useState("credit");
   const { setRoute, setDeliveryMethod, deliveryMethod } = useContext(
@@ -36,11 +39,14 @@ const Checkout = ({ route, navigation }) => {
 
   const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
 
-  const { clearCart } = useContext(cartContext);
+  const { clearCart, cartItems, cartTotal, itemCounts } = useContext(
+    cartContext
+  );
 
   const handlePickup = () => {};
 
-  const continueToPayment = () => {
+  const continueToPayment = (values) => {
+    console.log("VALUES", values);
     if (!user && deliveryOption !== "pickup") {
       setRoute("OrderSummary");
       setDeliveryMethod(deliveryOption);
@@ -49,14 +55,16 @@ const Checkout = ({ route, navigation }) => {
     }
     navigation.navigate("OrderSummary", {
       deliveryMethod: deliveryOption,
-      cart: { cartItems, cartTotal, itemCounts },
+      paymentMethod: paymentOption,
+      customer: values,
     });
   };
 
-  console.log(paymentOption, deliveryOption);
-
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+    >
       <ScrollView
         contentContainerStyle={{
           justifyContent: "center",
@@ -141,10 +149,7 @@ const Checkout = ({ route, navigation }) => {
             )}
           </View>
         </View>
-        <KeyboardAvoidingView
-          style={styles.form}
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-        >
+        <View style={styles.form}>
           {deliveryOption === "pickup" && paymentOption !== null && (
             <View style={styles.form}>
               <Text style={{ fontWeight: "700", marginTop: 5 }}>
@@ -152,29 +157,26 @@ const Checkout = ({ route, navigation }) => {
               </Text>
               <AppForm
                 initialValues={{ name: "", lastName: "", phone: "" }}
-                onSubmit={handlePickup}
+                onSubmit={continueToPayment}
                 validationSchema={pickUpSchema}
               >
                 <AppFormField name="name" placeholder="First Name" />
                 <AppFormField name="lastName" placeholder="Last Name" />
                 <AppFormField
                   name="phone"
-                  icon="phone"
+                  iconName="phone"
                   placeholder="Phone"
                   keyboardType="number-pad"
                 />
+                <View style={{ marginTop: 20, width: "100%" }}>
+                  <AppSubmitButton title="Check Out" />
+                </View>
               </AppForm>
             </View>
           )}
-        </KeyboardAvoidingView>
+        </View>
       </ScrollView>
-
-      <AppButton
-        style={styles.btn}
-        title="Check Out"
-        onPress={continueToPayment}
-      />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
