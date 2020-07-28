@@ -9,7 +9,6 @@ import CategoryContext from "../context/category/categoryContext";
 
 import ListCategoryItems from "../components/ListCategoryItems";
 
-
 const Home = ({ navigation }) => {
 	const itemsContext = useContext(ItemsContext);
 	const categoryContext = useContext(CategoryContext);
@@ -25,8 +24,6 @@ const Home = ({ navigation }) => {
 	if (items.length === 0 || loading) {
 		return <Loader />;
 	}
-
-
 
 	return (
 		<Screen style={styles.screen}>
@@ -45,10 +42,9 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
-		marginTop: 20,
 	},
 	headerText: {
-		fontSize: 26,
+		fontSize: 24,
 		fontWeight: "700",
 		fontStyle: "italic",
 	},

@@ -6,6 +6,8 @@ import Home from "../screens/Home";
 import ProductDetail from "../screens/ProductDetail";
 import colors from "../config/colors";
 
+import Constants from 'expo-constants';
+
 import cartContext from "../context/cart/cartContext";
 
 const HomeStack = createStackNavigator();
@@ -23,7 +25,8 @@ const HomeStackNavigator = () => {
 				component={Home}
 				options={{
 					title: null,
-					headerShown: null,
+					
+					headerBackground : () => <View style={{backgroundColor: colors.primary, height: Constants.statusBarHeight}}></View>
 				}}
 			/>
 			<HomeStack.Screen

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useContext, useEffect } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import Screen from "../components/Screen";
@@ -18,7 +19,6 @@ const Profile = ({ route }) => {
 		//getOrders();
 	}, []);
 
-	console.log("USER", user);
 
 	if (!user) {
 		return <Signin />;
