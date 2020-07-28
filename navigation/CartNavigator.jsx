@@ -25,15 +25,20 @@ const CartStackNavigator = () => {
   };
 
   return (
-    <CartStack.Navigator>
+    <CartStack.Navigator
+      screenOptions={{
+        headerTintColor: colors.secondary,
+        headerStyle: {
+          backgroundColor: colors.primary,
+        },
+      }}
+    >
       <CartStack.Screen
         name="CartStacks"
         component={Cart}
         options={{
           title: "My Cart",
-          headerStyle: {
-            backgroundColor: colors.primary,
-          },
+
           headerRight: () =>
             cartItems.length > 0 && (
               <MaterialCommunityIcons
@@ -64,6 +69,7 @@ const CartStackNavigator = () => {
       <CartStack.Screen
         name="OrderConfirmation"
         component={OrderConfirmation}
+        options={{ headerShown: null }}
       />
     </CartStack.Navigator>
   );

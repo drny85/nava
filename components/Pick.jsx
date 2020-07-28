@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, StyleSheet, View, Text } from "react-native";
 import colors from "../config/colors";
 
-const Pick = ({ onPress, width = "50%", title, type }) => {
+const Pick = ({ onPress, width = "50%", title, type, style }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -16,7 +16,7 @@ const Pick = ({ onPress, width = "50%", title, type }) => {
       }}
     >
       <View>
-        <Text style={styles.option}>{title}</Text>
+        <Text style={[styles.option, style]}>{title}</Text>
       </View>
     </TouchableOpacity>
   );

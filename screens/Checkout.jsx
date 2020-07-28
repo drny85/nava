@@ -93,7 +93,18 @@ const Checkout = ({ route, navigation }) => {
               }}
             >
               <View>
-                <Text style={styles.option}>Delivery</Text>
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontWeight: "700",
+                    color:
+                      deliveryOption === "delivery"
+                        ? colors.secondary
+                        : "black",
+                  }}
+                >
+                  Delivery
+                </Text>
               </View>
             </TouchableOpacity>
             <View style={styles.divider}></View>
@@ -110,7 +121,16 @@ const Checkout = ({ route, navigation }) => {
               }}
             >
               <View>
-                <Text style={styles.option}>Pick up</Text>
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontWeight: "700",
+                    color:
+                      deliveryOption === "pickup" ? colors.secondary : "black",
+                  }}
+                >
+                  Pick up
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -123,11 +143,19 @@ const Checkout = ({ route, navigation }) => {
                 <Pick
                   title="credit"
                   type={paymentOption}
+                  style={{
+                    color:
+                      paymentOption === "credit" ? colors.secondary : "black",
+                  }}
                   onPress={() => setPaymentOption("credit")}
                 />
                 <View style={styles.divider}></View>
                 <Pick
                   title="cash"
+                  style={{
+                    color:
+                      paymentOption === "cash" ? colors.secondary : "black",
+                  }}
                   type={paymentOption}
                   onPress={() => setPaymentOption("cash")}
                 />
@@ -136,12 +164,20 @@ const Checkout = ({ route, navigation }) => {
               <>
                 <Pick
                   title="credit"
+                  style={{
+                    color:
+                      paymentOption === "credit" ? colors.secondary : "black",
+                  }}
                   type={paymentOption}
                   onPress={() => setPaymentOption("credit")}
                 />
                 <View style={styles.divider}></View>
                 <Pick
                   title="in store"
+                  style={{
+                    color:
+                      paymentOption === "in store" ? colors.secondary : "black",
+                  }}
                   type={paymentOption}
                   onPress={() => setPaymentOption("in store")}
                 />
@@ -160,8 +196,16 @@ const Checkout = ({ route, navigation }) => {
                 onSubmit={continueToPayment}
                 validationSchema={pickUpSchema}
               >
-                <AppFormField name="name" placeholder="First Name" />
-                <AppFormField name="lastName" placeholder="Last Name" />
+                <AppFormField
+                  name="name"
+                  iconName="account-badge-horizontal"
+                  placeholder="First Name"
+                />
+                <AppFormField
+                  name="lastName"
+                  iconName="account-badge-horizontal"
+                  placeholder="Last Name"
+                />
                 <AppFormField
                   name="phone"
                   iconName="phone"
@@ -259,10 +303,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     padding: 10,
-  },
-  option: {
-    fontSize: 24,
-    fontWeight: "700",
   },
 });
 

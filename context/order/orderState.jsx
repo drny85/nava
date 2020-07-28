@@ -15,23 +15,19 @@ const OrdersState = (props) => {
   const [state, dispatch] = useReducer(OrderReducer, initialState);
 
   const placeOrder = async (orderInfo) => {
-    try {
-      //setLoading();
-      console.log("PLACED");
-      const newOrder = {
-        items: orderInfo.items,
-        customer: orderInfo.customer,
-        orderPlaced: orderInfo.orderPlaced,
-        totalAmount: orderInfo.totalAmount,
-        orderType: orderInfo.type,
-        status: orderInfo.status,
-        paymentMethod: orderInfo.paymentMethod,
-        orderPlaced: new Date().toISOString(),
-      };
-      return await db.collection("orders").add(newOrder);
-    } catch (error) {
-      console.log(error);
-    }
+    //setLoading();
+    console.log("PLACED");
+    const newOrder = {
+      items: orderInfo.items,
+      customer: orderInfo.customer,
+      orderPlaced: orderInfo.orderPlaced,
+      totalAmount: orderInfo.totalAmount,
+      orderType: orderInfo.type,
+      status: orderInfo.status,
+      paymentMethod: orderInfo.paymentMethod,
+      orderPlaced: new Date().toISOString(),
+    };
+    return await db.collection("orders").add(newOrder);
   };
 
   const getOrders = async () => {

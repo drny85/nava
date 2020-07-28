@@ -27,6 +27,7 @@ const CartState = (props) => {
     const cartId = await getCartId();
 
     try {
+      setLoading();
       const { items, quantity, total } = (
         await CART_REF.doc(cartId).get()
       ).data();

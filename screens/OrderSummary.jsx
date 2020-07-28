@@ -1,5 +1,14 @@
-import React, { useContext } from "react";
-import { View, StyleSheet, Text, FlatList, Dimensions } from "react-native";
+import React, { useContext, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  FlatList,
+  Alert,
+  Modal,
+  ScrollView,
+  Dimensions,
+} from "react-native";
 import * as Yup from "yup";
 
 import authContext from "../context/auth/authContext";
@@ -17,6 +26,7 @@ import OrdersState from "../context/order/orderState";
 import ordersContext from "../context/order/orderContext";
 import AppButton from "../components/AppButton";
 import { CLEAR_CART } from "../context/types";
+import Loader from "../components/Loader";
 
 // const validationSchema = Yup.object().shape({
 //   name: Yup.string().required().label("Name"),
@@ -29,14 +39,13 @@ import { CLEAR_CART } from "../context/types";
 
 const Payment = ({ navigation, route }) => {
   const { user } = useContext(authContext);
+  const [isVisible, setIsVisible] = useState(false);
   const { placeOrder } = useContext(ordersContext);
-  const { cartItems, cartTotal, itemCounts, clearCart } = useContext(
+  const { cartItems, cartTotal, itemCounts, clearCart, loading } = useContext(
     cartContext
   );
   //const { deliveryMethod } = useContext(settingsContext);
   const { deliveryMethod, customer, paymentMethod } = route.params;
-
-  console.log("SUMMARY", deliveryMethod, customer, paymentMethod);
 
   if (!user) {
     navigation.navigate("Profile", {
@@ -53,21 +62,46 @@ const Payment = ({ navigation, route }) => {
         cartTotal,
         paymentMethod
       );
-      const newOrder = await placeOrder(order);
-      console.log(newOrder);
-      if (newOrder) {
-        console.log(newOrder);
+      if (cartItems.length > 0) {
+        await placeOrder(order);
+
         clearCart();
-        navigation.replace("OrderConfirmation");
+        setIsVisible(true);
+        //navigation.replace("OrderConfirmation");
+      } else {
+        Alert.alert("Empty Cart", "Cart is empty", [
+          { text: "OK", style: "cancel" },
+        ]);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
+  console.log("METHOD", deliveryMethod);
+
   return (
     <Screen style={styles.container}>
-      <View style={{ height: Dimensions.get("screen").height * 0.4 }}>
+      <Modal
+        visible={isVisible}
+        animationType="slide"
+        transparent={true}
+        onDismiss={() => navigation.navigate("Home")}
+      >
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            flex: 1,
+            backgroundColor: "grey",
+          }}
+        >
+          <Text>Your order has been placed</Text>
+          <AppButton title="Close" onPress={() => setIsVisible(false)} />
+        </View>
+      </Modal>
+
+      <View style={styles.listView}>
         <FlatList
           data={cartItems}
           keyExtractor={(item) => item.id}
@@ -81,7 +115,19 @@ const Payment = ({ navigation, route }) => {
           )}
         />
       </View>
-      <AppButton title="Place Order" onPress={handlePayment} />
+      <ScrollView style={styles.details}>
+        {deliveryMethod === "pickup" ? (
+          <Text>You will be picking up this order</Text>
+        ) : (
+          <>
+            <Text>You will be delivered to this address</Text>
+            <Text>Place holder for address</Text>
+          </>
+        )}
+      </ScrollView>
+      <View style={{ position: "absolute", bottom: 5, width: "100%" }}>
+        <AppButton title="Place Order" onPress={handlePayment} />
+      </View>
 
       {/* <ScrollView>
         <AppForm
@@ -130,10 +176,18 @@ const Payment = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginTop: 20,
+    backgroundColor: "red",
 
     marginHorizontal: 10,
+  },
+  listView: {
+    backgroundColor: "blue",
+    maxHeight: Dimensions.get("screen").height * 0.3,
+  },
+  details: {
+    flex: 2,
+    backgroundColor: "grey",
   },
 });
 
