@@ -138,7 +138,10 @@ const Payment = ({ navigation, route }) => {
 					</>
 				)}
 				{paymentMethod === "cash" && deliveryMethod === "pickup" && (
-					<Text>Here</Text>
+					<Text>Handle cash pickup</Text>
+				)}
+        	{paymentMethod === "credit" && deliveryMethod === "pickup" && (
+					<Text>Handle credit pickup</Text>
 				)}
 				{paymentMethod === "in store" && deliveryMethod === "pickup" && (
 					<View style={styles.pickup}>
