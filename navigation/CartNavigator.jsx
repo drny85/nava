@@ -66,11 +66,6 @@ const CartStackNavigator = () => {
         component={ProfileStackNavigator}
         options={{ headerShown: false }}
       />
-      <CartStack.Screen
-        name="OrderConfirmation"
-        component={OrderConfirmation}
-        options={{ headerShown: null }}
-      />
     </CartStack.Navigator>
   );
 };

@@ -5,16 +5,17 @@ import {
   Text,
   FlatList,
   TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 import AppButton from "../components/AppButton";
 import cartContext from "../context/cart/cartContext";
 import colors from "../config/colors";
 import CartItemTile from "../components/CartItemTile";
 import Loader from "../components/Loader";
+import authContext from "../context/auth/authContext";
 
 const Cart = ({ navigation }) => {
   const {
-    clearCart,
     cartItems,
     getCartItems,
     loading,
@@ -23,12 +24,33 @@ const Cart = ({ navigation }) => {
     itemCounts,
     deleteFromCart,
   } = useContext(cartContext);
+  const { user } = useContext(authContext);
+
+  const continueToCheckOut = () => {
+    if (cartTotal < 5) {
+      Alert.alert(
+        "Opsss",
+        `Please make a purchase greater than $5.00. You are just $${(
+          5 - cartTotal
+        ).toFixed(2)} away`,
+        [{ text: "OK", style: "cancel" }]
+      );
+
+      return;
+    }
+    if (!user) {
+      navigation.replace("Profile", { screen: "Login", params: "Checkout" });
+      return;
+    }
+    navigation.navigate("Checkout", {
+      cart: { cartItems, cartTotal, itemCounts },
+    });
+  };
 
   useEffect(() => {
     getCartItems();
+    console.log("CART");
   }, []);
-
-  console.log(loading);
 
   return (
     <View style={styles.container}>
@@ -59,13 +81,7 @@ const Cart = ({ navigation }) => {
       )}
 
       {cartTotal > 0 && (
-        <TouchableWithoutFeedback
-          onPress={() =>
-            navigation.navigate("Checkout", {
-              cart: { cartItems, cartTotal, itemCounts },
-            })
-          }
-        >
+        <TouchableWithoutFeedback onPress={continueToCheckOut}>
           <View style={styles.cartTotalView}>
             <Text style={styles.text}>Checkout: ${cartTotal}</Text>
           </View>

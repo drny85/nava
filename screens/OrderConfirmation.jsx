@@ -5,7 +5,7 @@ import Screen from "../components/Screen";
 const OrderConfirmation = () => {
   return (
     <Screen style={styles.screen}>
-      <Text>Order Confirmation</Text>
+      <Text>Your order has been placed</Text>
     </Screen>
   );
 };

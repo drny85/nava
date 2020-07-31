@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import colors from "../config/colors";
-import constants from "../config/constants";
 
 import { Feather } from "@expo/vector-icons";
 
@@ -112,7 +111,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   price: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     color: colors.secondary,
   },
