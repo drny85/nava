@@ -3,7 +3,8 @@ import React, { useReducer } from "react";
 import OrderReducer from "./orderReducer";
 import OrderContex from "./orderContext";
 import { db } from "../../services/database";
-import { GET_ORDERS } from "../types";
+import { GET_ORDERS, SET_LOADING } from "../types";
+import { diffClamp } from "react-native-reanimated";
 
 const OrdersState = (props) => {
 	const initialState = {
@@ -15,11 +16,12 @@ const OrdersState = (props) => {
 	const [state, dispatch] = useReducer(OrderReducer, initialState);
 
 	const placeOrder = async (orderInfo) => {
-		//setLoading();
-		console.log("ORR", orderInfo);
+		setLoading();
+
 		let newOrder;
 		if (orderInfo.type === "pickup") {
 			newOrder = {
+				userId: orderInfo.userId,
 				items: orderInfo.items,
 				customer: {
 					address: {
@@ -43,6 +45,7 @@ const OrdersState = (props) => {
 			};
 		} else {
 			newOrder = {
+				userId: orderInfo.userId,
 				items: orderInfo.items,
 				customer: {
 					address: {
@@ -68,18 +71,25 @@ const OrdersState = (props) => {
 		return await db.collection("orders").add(newOrder);
 	};
 
-	const getOrders = async () => {
+	const getOrders = async (userId) => {
 		try {
 			setLoading();
-			const data = (await db.collection("orders").get()).forEach((order) => {
-				let docs = [];
-				if (order.exists) {
-					docs.push({
-						id: order.id,
-						...order.data(),
+			let Orders = [];
+			const data = await db
+				.collection("orders")
+				.where("userId", "==", userId)
+				.orderBy("orderPlaced", "desc")
+				.get();
+
+			data.forEach((doc) => {
+				if (doc.exists) {
+					Orders.push({
+						id: doc.id,
+						...doc.data(),
 					});
 				}
-				dispatch({ type: GET_ORDERS, payload: docs });
+
+				dispatch({ type: GET_ORDERS, payload: Orders });
 			});
 		} catch (error) {
 			console.log(error);

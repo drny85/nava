@@ -9,7 +9,7 @@ import {
 	Alert,
 	TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import * as Yup from "yup";
 import Screen from "../components/Screen";
@@ -29,7 +29,8 @@ const validationSchema = Yup.object().shape({
 const Signin = () => {
 	const navigation = useNavigation();
 	const { user, login, setUser } = useContext(authContext);
-	const { previewRoute } = useContext(settingsContext);
+	const { previewRoute, clearSettings } = useContext(settingsContext);
+	console.log(previewRoute);
 
 	const handleSignin = async ({ email, password }) => {
 		try {
@@ -38,6 +39,8 @@ const Signin = () => {
 				setUser(data.user.uid);
 				if (previewRoute) {
 					navigation.navigate(previewRoute);
+					clearSettings();
+
 					return;
 				}
 				navigation.navigate("Profile");
@@ -57,7 +60,7 @@ const Signin = () => {
 		return () => {
 			console.log("left");
 		};
-	}, []);
+	}, [user]);
 
 	return (
 		<Screen>

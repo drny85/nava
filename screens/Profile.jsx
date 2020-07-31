@@ -1,6 +1,14 @@
 // @ts-nocheck
 import React, { useContext, useEffect } from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import {
+	View,
+	StyleSheet,
+	Text,
+	Image,
+	ScrollView,
+	TouchableWithoutFeedback,
+} from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Screen from "../components/Screen";
 import ordersContext from "../context/order/orderContext";
 
@@ -8,17 +16,16 @@ import constants from "../config/constants";
 import Signin from "./Signin";
 import authContext from "../context/auth/authContext";
 import Loader from "../components/Loader";
+import colors from "../config/colors";
+import ProfileItem from "../components/profile/ProfileItem";
 
-const Profile = ({ route }) => {
+const Profile = ({ route, navigation }) => {
 	const { orders, getOrders } = useContext(ordersContext);
 	const { user, loading } = useContext(authContext);
-	const previewRoute = route;
-	console.log('PRE',previewRoute);
 
 	useEffect(() => {
 		//getOrders();
 	}, []);
-
 
 	if (!user) {
 		return <Signin />;
@@ -31,12 +38,13 @@ const Profile = ({ route }) => {
 				<Image
 					style={styles.img}
 					source={require("../assets/images/profile.jpg")}
-					resizeMode="contain"
+					resizeMode="cover"
 				/>
 			</View>
-			<View>
-				<Text>{user.name}</Text>
-			</View>
+
+			<ScrollView style={{ width: "100%", marginTop: 10 }}>
+				<ProfileItem onPress={() => navigation.navigate("MyOrders")} />
+			</ScrollView>
 		</Screen>
 	);
 };
@@ -44,6 +52,7 @@ const Profile = ({ route }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		width: "100%",
 
 		alignItems: "center",
 	},
