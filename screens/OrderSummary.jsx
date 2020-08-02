@@ -51,11 +51,11 @@ const Payment = ({ navigation, route }) => {
 				paymentMethod
 			);
 			if (cartItems.length > 0) {
-				await placeOrder(order);
+				//await placeOrder(order);
 
-				clearCart();
-				setIsVisible(true);
-				//navigation.replace("OrderConfirmation");
+				//clearCart();
+				//setIsVisible(true);
+				navigation.navigate("Profile", { screen: "Profile", params: order });
 			} else {
 				Alert.alert("Empty Cart", "Cart is empty", [
 					{ text: "OK", style: "cancel" },

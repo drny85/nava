@@ -14,22 +14,37 @@ admin.initializeApp();
 //  response.send("Hello from Firebase!");
 // });
 
-exports.makePayment = functions.https.onRequest(async (request, result) => {
+exports.makePayment = functions.https.onRequest(async (req, res) => {
+	res.set("Access-Control-Allow-Origin", "*");
+	res.set("Access-Control-Allow-Methods", "GET, POST");
 	try {
-		const paymentIntent = await stripe.paymentIntents.create({
+		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ["card"],
-			amount: 1000,
-			currency: "usd"
+			customer_email: "rabin@aol.com",
+
+			line_items: [
+				{
+					price_data: {
+						currency: "usd",
+						product_data: {
+							name: "Jose Mendez",
+						},
+						unit_amount: 2600,
+					},
+					quantity: 1,
+				},
+			],
+			mode: "payment",
+			success_url:
+				"https://example.com/success?session_id={CHECKOUT_SESSION_ID}",
+			cancel_url: "https://example.com/cancel",
 		});
-        const { client_secret } = paymentIntent;
-        
-        const confirmPayment = await stripe.paymentIntent.confirm({
-            client_secret,
-            {payment_method: 'card'}
-        })
-		return result.status(200).send({ client_secret });
+
+		console.log(session.id);
+
+		return res.status(200).json({ session_id: session.id });
 	} catch (error) {
-		console.log(error);
-		return result.status(500).send({ error: "opsss" });
+		console.log(error.message || error);
+		return res.status(500).send("an error occured");
 	}
 });
