@@ -5,7 +5,7 @@ import { STRIPE } from "../config/stripeSettings";
  *
  * @returns {String}
  */
-export function stripeCheckoutRedirectHTML(order) {
+export function stripeCheckoutRedirectHTML(order, items) {
 	if (!order) {
 		return;
 	}
@@ -14,7 +14,10 @@ export function stripeCheckoutRedirectHTML(order) {
   <body>
   <!-- Load Stripe.js on your website. -->
   <script src="https://js.stripe.com/v3"></script>
-  <h1 id="heading">Loading...</h1>
+  <div style="padding: 0 auto; position: absolute; top: 50%;left: 50%;transform: translate(-50%, -50%);">
+     <h1 id="heading">Loading...</h1>
+  </div>
+  
   <div id="error-message"></div>
   <script>
       ( function () {
@@ -31,9 +34,9 @@ export function stripeCheckoutRedirectHTML(order) {
 
                   },
                   body: JSON.stringify( {
-                      amount: '${order.totalAmount}',
-                      name: "Apple",
-                      email: ""${order.customer.email},
+                      amount: "${order.totalAmount}",
+                      items: ${items},
+                      email: "${order.customer.email}",
                       customer: {
                           name: "${order.customer.name} ${order.customer.lastName}"
                       },

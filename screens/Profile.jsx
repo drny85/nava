@@ -28,10 +28,9 @@ const Profile = ({ route, navigation }) => {
 	const { orders, getOrders } = useContext(ordersContext);
 	const { user, loading } = useContext(authContext);
 	const order = route.params;
-	console.log("ORDER: ", order.totalAmount.toString());
+	const items = JSON.stringify(order.items);
 
 	const handlePayment = async () => {};
-	console.log("again");
 
 	if (!user) {
 		return <Signin />;
@@ -40,15 +39,14 @@ const Profile = ({ route, navigation }) => {
 	if (loading) return <Loader />;
 
 	// TODO: this should come from some service/state store
-	const secrect = { id: "someID" };
 
 	const onSuccessHandler = () => {
-		console.log("YES");
-		navigation.navigate("OrderConfirmation");
+		navigation.replace("OrderConfirmation");
 		/* TODO: do something */
 	};
 	const onCanceledHandler = () => {
 		/* TODO: do something */
+		console.log("CANCELED");
 	};
 
 	// Called everytime the URL stats to load in the webview
@@ -62,6 +60,11 @@ const Profile = ({ route, navigation }) => {
 		if (nativeEvent.url === STRIPE.CANCELED_URL) {
 			onCanceledHandler();
 		}
+
+		// if (nativeEvent.url == "about:blank") {
+		// 	console.log("BLANK");
+		// 	navigation.goBack();
+		// }
 	};
 
 	// Render
@@ -69,19 +72,10 @@ const Profile = ({ route, navigation }) => {
 		return null;
 	}
 
-	// if (order.totalAmount) {
-	// 	return (
-	// 		<View>
-	// 			<AppButton title="Go BAck" onPress={() => navigation.goBack()} />
-	// 			<Text>No Order</Text>
-	// 		</View>
-	// 	);
-	// }
-
 	return (
 		<WebView
 			originWhitelist={["*"]}
-			source={{ html: stripeCheckoutRedirectHTML(order) }}
+			source={{ html: stripeCheckoutRedirectHTML(order, items) }}
 			onLoadStart={onLoadStart}
 		/>
 	);

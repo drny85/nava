@@ -28,6 +28,7 @@ const pickUpSchema = Yup.object().shape({
 	name: Yup.string().required().label("First Name"),
 	lastName: Yup.string().required().label("Last Name"),
 	phone: Yup.string().required().min(10).label("Phone"),
+	email: Yup.string().email().required().label("Email"),
 });
 
 const deliverySchema = Yup.object().shape({
@@ -244,6 +245,15 @@ const Checkout = ({ route, navigation }) => {
 										placeholder="Phone"
 										maxLength={10}
 										keyboardType="number-pad"
+									/>
+									<AppFormField
+										name="email"
+										placeholder="Email"
+										iconName="email"
+										autoCorrect={false}
+										autoCapitalize="none"
+										keyboardType="email-address"
+										textContentType="emailAddress"
 									/>
 									<View style={{ marginTop: 20, width: "100%" }}>
 										<AppSubmitButton title="Check Out" />
