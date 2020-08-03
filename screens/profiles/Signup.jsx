@@ -12,13 +12,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import * as Yup from "yup";
-import Screen from "../components/Screen";
-import AppFormField from "../components/AppFormField";
-import AppSubmitButton from "../components/AppSubmitButton";
-import AppForm from "../components/AppForm";
+import Screen from "../../components/Screen";
+import AppFormField from "../../components/AppFormField";
+import AppSubmitButton from "../../components/AppSubmitButton";
+import AppForm from "../../components/AppForm";
 
-import authContext from "../context/auth/authContext";
-import colors from "../config/colors";
+import authContext from "../../context/auth/authContext";
+import colors from "../../config/colors";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(3).label("First Name"),

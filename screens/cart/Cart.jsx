@@ -7,13 +7,13 @@ import {
 	TouchableWithoutFeedback,
 	Alert,
 } from "react-native";
-import AppButton from "../components/AppButton";
-import cartContext from "../context/cart/cartContext";
-import colors from "../config/colors";
-import CartItemTile from "../components/CartItemTile";
+import AppButton from "../../components/AppButton";
+import cartContext from "../../context/cart/cartContext";
+import colors from "../../config/colors";
+import CartItemTile from "../../components/CartItemTile";
 
-import authContext from "../context/auth/authContext";
-import settingsContext from "../context/settings/settingsContext";
+import authContext from "../../context/auth/authContext";
+import settingsContext from "../../context/settings/settingsContext";
 
 const Cart = ({ navigation }) => {
 	const {
@@ -55,6 +55,10 @@ const Cart = ({ navigation }) => {
 		getCartItems();
 		console.log("CART");
 	}, []);
+	if (cartItems.length === 0) {
+		console.log("Empty");
+		navigation.replace("Cart");
+	}
 
 	return (
 		<View style={styles.container}>

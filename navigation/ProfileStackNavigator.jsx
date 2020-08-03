@@ -2,14 +2,15 @@ import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import Profile from "../screens/Profile";
 import colors from "../config/colors";
 import authContext from "../context/auth/authContext";
-import Signup from "../screens/Signup";
-import Signin from "../screens/Signin";
+
 import settingsContext from "../context/settings/settingsContext";
-import OrderConfirmation from "../screens/OrderConfirmation";
-import MyOrders from "../screens/MyOrders";
+import OrderConfirmation from "../screens/orders/OrderConfirmation";
+import MyOrders from "../screens/orders/MyOrders";
+import Signin from "../screens/profiles/Signin";
+import Signup from "../screens/profiles/Signup";
+import Profile from "../screens/profiles/Profile";
 
 const ProfileStack = createStackNavigator();
 

@@ -21,10 +21,10 @@ export function stripeCheckoutRedirectHTML(order, items) {
   <div id="error-message"></div>
   <script>
       ( function () {
-          var stripe = Stripe( 'pk_test_TiDXL9oIM686kqlByJgE4P5x' );
+          var stripe = Stripe( '${STRIPE.PUBLIC_KEY}' );
           window.onload = function () {
               document.getElementById( 'heading' ).innerText = "Loaded"
-              fetch( 'https://bce69664d9ee.ngrok.io/charges', {
+              fetch( '${STRIPE.DB_URL}', {
                   method: 'POST',
                   headers: {
                       'Accept': 'application/json',

@@ -12,17 +12,17 @@ import {
 } from "react-native";
 import LottieView from "lottie-react-native";
 
-import authContext from "../context/auth/authContext";
-import Screen from "../components/Screen";
+import authContext from "../../context/auth/authContext";
+import Screen from "../../components/Screen";
 
-import Order from "../models/Order";
+import Order from "../../models/Order";
 
-import ListItem from "../components/ListItem";
+import ListItem from "../../components/ListItem";
 
-import cartContext from "../context/cart/cartContext";
+import cartContext from "../../context/cart/cartContext";
 
-import ordersContext from "../context/order/orderContext";
-import AppButton from "../components/AppButton";
+import ordersContext from "../../context/order/orderContext";
+import AppButton from "../../components/AppButton";
 
 const Payment = ({ navigation, route }) => {
 	const { user } = useContext(authContext);
@@ -52,10 +52,20 @@ const Payment = ({ navigation, route }) => {
 			);
 			if (cartItems.length > 0) {
 				//await placeOrder(order);
-
 				//clearCart();
 				//setIsVisible(true);
-				navigation.navigate("Profile", { screen: "Profile", params: order });
+				//check order type before continuing
+				if (paymentMethod === "credit") {
+					navigation.navigate("MyOrders", {
+						screen: "OrderVerification",
+						params: { order, paymentMethod },
+					});
+				} else {
+					//handle payment iwth cash
+					await placeOrder(order);
+					clearCart();
+					setIsVisible(true);
+				}
 			} else {
 				Alert.alert("Empty Cart", "Cart is empty", [
 					{ text: "OK", style: "cancel" },
@@ -72,7 +82,10 @@ const Payment = ({ navigation, route }) => {
 				visible={isVisible}
 				animationType="slide"
 				onDismiss={() =>
-					navigation.navigate("Profile", { screen: "OrderConfirmation" })
+					navigation.navigate("Orders", {
+						screen: "OrderConfirmation",
+						params: { paymentMethod },
+					})
 				}
 			>
 				<LottieView
@@ -80,7 +93,7 @@ const Payment = ({ navigation, route }) => {
 					autoPlay
 					colorFilters={[{ keypath: "Sending Loader", color: "#6D042A" }]}
 					onAnimationFinish={() => setIsVisible(false)}
-					source={require("../assets/animations/done.json")}
+					source={require("../../assets/animations/done.json")}
 				/>
 			</Modal>
 

@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import Screen from "../components/Screen";
-import authContext from "../context/auth/authContext";
-import ordersContext from "../context/order/orderContext";
-import Loader from "../components/Loader";
+import Screen from "../../components/Screen";
+import authContext from "../../context/auth/authContext";
+import ordersContext from "../../context/order/orderContext";
+import Loader from "../../components/Loader";
 
 const MyOrders = () => {
 	const { user } = useContext(authContext);

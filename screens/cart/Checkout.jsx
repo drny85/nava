@@ -11,18 +11,18 @@ import {
 	Alert,
 } from "react-native";
 
-import cartContext from "../context/cart/cartContext";
-import colors from "../config/colors";
-import authContext from "../context/auth/authContext";
-import settingsContext from "../context/settings/settingsContext";
-import Pick from "../components/Pick";
+import cartContext from "../../context/cart/cartContext";
+import colors from "../../config/colors";
+import authContext from "../../context/auth/authContext";
+import settingsContext from "../../context/settings/settingsContext";
+import Pick from "../../components/Pick";
 
-import AppForm from "../components/AppForm";
-import AppFormField from "../components/AppFormField";
+import AppForm from "../../components/AppForm";
+import AppFormField from "../../components/AppFormField";
 
 import * as Yup from "yup";
-import AppSubmitButton from "../components/AppSubmitButton";
-import Screen from "../components/Screen";
+import AppSubmitButton from "../../components/AppSubmitButton";
+import Screen from "../../components/Screen";
 
 const pickUpSchema = Yup.object().shape({
 	name: Yup.string().required().label("First Name"),

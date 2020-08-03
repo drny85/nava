@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Ionicons, Fontisto } from "@expo/vector-icons";
 
-import Settings from "../screens/Settings";
+import Settings from "../screens/profiles/Settings";
 import HomeStackNavigator from "./HomeStackNavigator";
 
 import CartNavigator from "./CartNavigator";
@@ -12,6 +12,7 @@ import cartContext from "../context/cart/cartContext";
 
 import { EvilIcons } from "@expo/vector-icons";
 import ProfileStackNavigator from "./ProfileStackNavigator";
+import OrderNavigator from "./OrderNavigator";
 
 const BottomTabs = createBottomTabNavigator();
 
@@ -44,6 +45,15 @@ const AppNavigator = () => {
 					),
 				}}
 			/>
+			<BottomTabs.Screen
+				name="Orders"
+				component={OrderNavigator}
+				options={{
+					tabBarIcon: ({ color, size }) => (
+						<Fontisto name="shopping-package" size={30} color={color} />
+					),
+				}}
+			/>
 
 			<BottomTabs.Screen
 				name="Cart"
@@ -63,6 +73,7 @@ const AppNavigator = () => {
 					),
 				}}
 			/>
+
 			<BottomTabs.Screen
 				name="Settings"
 				component={Settings}
