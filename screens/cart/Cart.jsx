@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import {
-	View,
-	StyleSheet,
-	Text,
-	FlatList,
-	TouchableWithoutFeedback,
-	Alert,
+  View,
+  StyleSheet,
+  Text,
+  FlatList,
+  TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 import AppButton from "../../components/AppButton";
 import cartContext from "../../context/cart/cartContext";
@@ -16,116 +16,112 @@ import authContext from "../../context/auth/authContext";
 import settingsContext from "../../context/settings/settingsContext";
 
 const Cart = ({ navigation }) => {
-	const {
-		cartItems,
-		getCartItems,
-		loading,
-		addToCart,
-		cartTotal,
-		itemCounts,
-		deleteFromCart,
-	} = useContext(cartContext);
-	const { user } = useContext(authContext);
-	const { setRoute, clearSettings } = useContext(settingsContext);
+  const {
+    cartItems,
+    getCartItems,
+    loading,
+    addToCart,
+    cartTotal,
+    itemCounts,
+    deleteFromCart,
+  } = useContext(cartContext);
+  const { user } = useContext(authContext);
+  const { setRoute, clearSettings } = useContext(settingsContext);
 
-	const continueToCheckOut = () => {
-		if (cartTotal < 5) {
-			Alert.alert(
-				"Opsss",
-				`Please make a purchase greater than $5.00. You are just $${(
-					5 - cartTotal
-				).toFixed(2)} away`,
-				[{ text: "OK", style: "cancel" }]
-			);
+  const continueToCheckOut = () => {
+    if (cartTotal < 5) {
+      Alert.alert(
+        "Opsss",
+        `Please make a purchase greater than $5.00. You are just $${(
+          5 - cartTotal
+        ).toFixed(2)} away`,
+        [{ text: "OK", style: "cancel" }]
+      );
 
-			return;
-		}
-		if (!user) {
-			setRoute("Checkout");
-			navigation.navigate("Profile", { screen: "Login" });
-			return;
-		}
+      return;
+    }
+    if (!user) {
+      setRoute("Checkout");
+      navigation.navigate("Profile", { screen: "Login" });
+      return;
+    }
 
-		navigation.navigate("Checkout", {
-			cart: { cartItems, cartTotal, itemCounts },
-		});
-	};
+    navigation.navigate("Checkout", {
+      cart: { cartItems, cartTotal, itemCounts },
+    });
+  };
 
-	useEffect(() => {
-		getCartItems();
-		console.log("CART");
-	}, []);
-	if (cartItems.length === 0) {
-		console.log("Empty");
-		navigation.replace("Cart");
-	}
+  useEffect(() => {
+    getCartItems();
+    console.log("CART");
+  }, [cartItems.length]);
 
-	return (
-		<View style={styles.container}>
-			{cartItems.length > 0 ? (
-				<FlatList
-					style={{ flex: 1, marginTop: 10 }}
-					data={cartItems}
-					keyExtractor={(item) => item.id}
-					renderItem={({ item }) => (
-						<CartItemTile
-							isDisable={loading}
-							onRemove={() => deleteFromCart(item)}
-							onAddMore={() => addToCart(item)}
-							item={item}
-							onLongPress={() => navigation.navigate("ProductDetail", { item })}
-						/>
-					)}
-				/>
-			) : (
-				<View style={styles.noItems}>
-					<Text>No Items in cart</Text>
-					<AppButton
-						title="Start Shopping"
-						style={{ marginTop: 20 }}
-						onPress={() => navigation.navigate("Home")}
-					/>
-				</View>
-			)}
+  return (
+    <View style={styles.container}>
+      {cartItems.length > 0 ? (
+        <FlatList
+          style={{ flex: 1, marginTop: 10 }}
+          data={cartItems}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <CartItemTile
+              isDisable={loading}
+              onRemove={() => deleteFromCart(item)}
+              onAddMore={() => addToCart(item)}
+              item={item}
+              onLongPress={() => navigation.navigate("ProductDetail", { item })}
+            />
+          )}
+        />
+      ) : (
+        <View style={styles.noItems}>
+          <Text>No Items in cart</Text>
+          <AppButton
+            title="Start Shopping"
+            style={{ marginTop: 20 }}
+            onPress={() => navigation.navigate("Home")}
+          />
+        </View>
+      )}
 
-			{cartTotal > 0 && (
-				<TouchableWithoutFeedback onPress={continueToCheckOut}>
-					<View style={styles.cartTotalView}>
-						<Text style={styles.text}>Checkout: ${cartTotal}</Text>
-					</View>
-				</TouchableWithoutFeedback>
-			)}
-		</View>
-	);
+      {cartTotal > 0 && (
+        <TouchableWithoutFeedback onPress={continueToCheckOut}>
+          <View style={styles.cartTotalView}>
+            <Text style={styles.text}>Checkout: ${cartTotal}</Text>
+          </View>
+        </TouchableWithoutFeedback>
+      )}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	btn: {
-		backgroundColor: colors.primary,
-	},
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  btn: {
+    backgroundColor: colors.primary,
+  },
 
-	cartTotalView: {
-		height: 60,
-		width: "100%",
-		backgroundColor: colors.ascent,
-		justifyContent: "center",
-		alignItems: "center",
-	},
+  cartTotalView: {
+    height: 60,
+    width: "100%",
+    backgroundColor: colors.ascent,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 
-	text: {
-		fontSize: 28,
-		fontWeight: "bold",
-		color: colors.secondary,
-	},
-	noItems: {
-		justifyContent: "center",
-		alignItems: "center",
-	},
+  text: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: colors.secondary,
+  },
+  noItems: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default Cart;

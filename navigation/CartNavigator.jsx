@@ -34,7 +34,7 @@ const CartStackNavigator = () => {
       }}
     >
       <CartStack.Screen
-        name="CartStacks"
+        name="Cart"
         component={Cart}
         options={{
           title: "My Cart",
@@ -55,16 +55,6 @@ const CartStackNavigator = () => {
         name="Checkout"
         component={Checkout}
         options={{ title: "Check Out" }}
-      />
-      <CartStack.Screen
-        name="OrderSummary"
-        component={OrderSummary}
-        options={{ title: null }}
-      />
-      <CartStack.Screen
-        name="ProfileStack"
-        component={ProfileStackNavigator}
-        options={{ headerShown: false }}
       />
     </CartStack.Navigator>
   );

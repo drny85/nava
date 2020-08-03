@@ -11,9 +11,9 @@ import {
   ScrollView,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import colors from "../config/colors";
-import AppButton from "../components/AppButton";
-import cartContext from "../context/cart/cartContext";
+import colors from "../../config/colors";
+import AppButton from "../../components/AppButton";
+import cartContext from "../../context/cart/cartContext";
 
 const heigth = Dimensions.get("screen").height;
 
