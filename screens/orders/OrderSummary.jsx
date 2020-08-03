@@ -24,7 +24,7 @@ import cartContext from "../../context/cart/cartContext";
 import ordersContext from "../../context/order/orderContext";
 import AppButton from "../../components/AppButton";
 
-const Payment = ({ navigation, route }) => {
+const OrderSummary = ({ navigation, route }) => {
 	const { user } = useContext(authContext);
 	const [isVisible, setIsVisible] = useState(false);
 	const { placeOrder } = useContext(ordersContext);
@@ -241,4 +241,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Payment;
+export default OrderSummary;

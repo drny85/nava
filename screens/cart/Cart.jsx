@@ -55,11 +55,7 @@ const Cart = ({ navigation }) => {
 		getCartItems();
 		console.log("CART");
 	}, []);
-	if (cartItems.length === 0) {
-		console.log("Empty");
-		navigation.replace("Cart");
-	}
-
+``
 	return (
 		<View style={styles.container}>
 			{cartItems.length > 0 ? (
