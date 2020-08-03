@@ -2,28 +2,29 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
 
-import OrderConfirmation from "../screens/orders/OrderConfirmation";
-import MyOrders from "../screens/orders/MyOrders";
-import OrderVerification from "../screens/orders/OrderVerification";
 import colors from "../config/colors";
+
+import MyOrders from "../screens/orders/MyOrders";
+import OrderConfirmation from "../screens/orders/OrderConfirmation";
 import OrderSummary from "../screens/orders/OrderSummary";
+import OrderVerification from "../screens/orders/OrderVerification";
 
 const OrdersStack = createStackNavigator();
 
-const OrderNavigator = () => {
+const OrdersStackNavigator = () => {
   return (
     <OrdersStack.Navigator>
       <OrdersStack.Screen
         name="MyOrders"
         component={MyOrders}
-        options={({ route }) => ({ title: "My Orders" })}
+        options={{ title: "My Orders" }}
       />
       <OrdersStack.Screen
         name="OrderConfirmation"
         component={OrderConfirmation}
         options={{ title: "Confirmation" }}
       />
-      <CartStack.Screen
+      <OrdersStack.Screen
         name="OrderSummary"
         component={OrderSummary}
         options={{ title: null }}
@@ -32,7 +33,7 @@ const OrderNavigator = () => {
         name="OrderVerification"
         component={OrderVerification}
         options={{
-          title: null,
+          title: "Verification",
           headerLeft: () => <Ionicons color={colors.primary} size={30} />,
         }}
       />
@@ -40,4 +41,4 @@ const OrderNavigator = () => {
   );
 };
 
-export default OrderNavigator;
+export default OrdersStackNavigator;

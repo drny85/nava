@@ -8,6 +8,7 @@ import authContext from "../context/auth/authContext";
 import Signup from "../screens/profiles/Signup";
 import Signin from "../screens/profiles/Signin";
 import settingsContext from "../context/settings/settingsContext";
+import Profile from "../screens/profiles/Profile";
 
 const ProfileStack = createStackNavigator();
 
@@ -48,3 +49,4 @@ const ProfileStackNavigator = () => {
 };
 
 export default ProfileStackNavigator;
+ß;

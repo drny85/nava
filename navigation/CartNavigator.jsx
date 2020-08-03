@@ -7,9 +7,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import cartContext from "../context/cart/cartContext";
 import { Alert } from "react-native";
 import Checkout from "../screens/cart/Checkout";
-import OrderSummary from "../screens/orders/OrderSummary";
-import ProfileStackNavigator from "./ProfileStackNavigator";
-import OrderConfirmation from "../screens/orders/OrderConfirmation";
 
 const CartStack = createStackNavigator();
 

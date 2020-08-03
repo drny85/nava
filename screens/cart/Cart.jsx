@@ -53,7 +53,6 @@ const Cart = ({ navigation }) => {
 
   useEffect(() => {
     getCartItems();
-    console.log("CART");
   }, [cartItems.length]);
 
   return (
