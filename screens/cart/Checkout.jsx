@@ -63,10 +63,13 @@ const Checkout = ({ route, navigation }) => {
 			return;
 		}
 
-		navigation.navigate("OrderSummary", {
-			deliveryMethod: deliveryOption,
-			paymentMethod: paymentOption,
-			customer: pickupInfo,
+		navigation.navigate("Orders", {
+			screen: "OrderSummary",
+			params: {
+				deliveryMethod: deliveryOption,
+				paymentMethod: paymentOption,
+				customer: pickupInfo,
+			},
 		});
 	};
 
@@ -78,16 +81,15 @@ const Checkout = ({ route, navigation }) => {
 			return;
 		}
 
-		navigation.navigate("OrderSummary", {
-			deliveryMethod: deliveryOption,
-			paymentMethod: paymentOption,
-			customer: deliveryInfo,
+		navigation.navigate("Orders", {
+			screen: "OrderSummary",
+			params: {
+				deliveryMethod: deliveryOption,
+				paymentMethod: paymentOption,
+				customer: deliveryInfo,
+			},
 		});
 	};
-
-	//   if (cartItems.length === 0) {
-	//     navigation.navigate("Home");
-	//   }
 
 	return (
 		<Screen>

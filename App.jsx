@@ -10,39 +10,40 @@ import AuthState from "./context/auth/authState";
 import { AppLoading } from "expo";
 import authContext from "./context/auth/authContext";
 import SettingsState from "./context/settings/settingsState";
+import colors from "./config/colors";
 
 const App = () => {
-	const [isReady, setIsReady] = React.useState(false);
-	const { getCurrentUser } = React.useContext(authContext);
+  const [isReady, setIsReady] = React.useState(false);
+  const { getCurrentUser } = React.useContext(authContext);
 
-	if (!isReady)
-		return (
-			<AppLoading
-				startAsync={getCurrentUser}
-				onFinish={() => setIsReady(true)}
-			/>
-		);
-	return (
-		<ItemsState>
-			<SettingsState>
-				<CategoryState>
-					<CartState>
-						<OrdersState>
-							<NavigationContainer>
-								<AppNavigator />
-							</NavigationContainer>
-						</OrdersState>
-					</CartState>
-				</CategoryState>
-			</SettingsState>
-		</ItemsState>
-	);
+  if (!isReady)
+    return (
+      <AppLoading
+        startAsync={getCurrentUser}
+        onFinish={() => setIsReady(true)}
+      />
+    );
+  return (
+    <ItemsState>
+      <SettingsState>
+        <CategoryState>
+          <CartState>
+            <OrdersState>
+              <NavigationContainer>
+                <AppNavigator />
+              </NavigationContainer>
+            </OrdersState>
+          </CartState>
+        </CategoryState>
+      </SettingsState>
+    </ItemsState>
+  );
 };
 
 export default () => {
-	return (
-		<AuthState>
-			<App />
-		</AuthState>
-	);
+  return (
+    <AuthState>
+      <App />
+    </AuthState>
+  );
 };

@@ -12,12 +12,14 @@ import cartContext from "../context/cart/cartContext";
 
 import { EvilIcons } from "@expo/vector-icons";
 import ProfileStackNavigator from "./ProfileStackNavigator";
-import OrderNavigator from "./OrderNavigator";
+import OrdersStackNavigator from "./OrdersStackNavigator";
+import authContext from "../context/auth/authContext";
 
 const BottomTabs = createBottomTabNavigator();
 
 const AppNavigator = () => {
 	const { cartItems, itemCounts } = useContext(cartContext);
+	const { user } = useContext(authContext);
 
 	return (
 		<BottomTabs.Navigator
@@ -45,15 +47,17 @@ const AppNavigator = () => {
 					),
 				}}
 			/>
-			<BottomTabs.Screen
-				name="Orders"
-				component={OrderNavigator}
-				options={{
-					tabBarIcon: ({ color, size }) => (
-						<Fontisto name="shopping-package" size={30} color={color} />
-					),
-				}}
-			/>
+			{user && (
+				<BottomTabs.Screen
+					name="Orders"
+					component={OrdersStackNavigator}
+					options={{
+						tabBarIcon: ({ color, size }) => (
+							<Fontisto name="shopping-package" size={30} color={color} />
+						),
+					}}
+				/>
+			)}
 
 			<BottomTabs.Screen
 				name="Cart"

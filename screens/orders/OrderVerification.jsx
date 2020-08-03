@@ -8,10 +8,11 @@ import { STRIPE } from "../../config/stripeSettings";
 import { WebView } from "react-native-webview";
 import { stripeCheckoutRedirectHTML } from "../StripeCheckout";
 import Signin from "../profiles/Signin";
-
+import cartContext from "../../context/cart/cartContext";
 
 const OrderVerification = ({ navigation, route }) => {
-	const { orders, getOrders } = useContext(ordersContext);
+	const { orders, getOrders, placeOrder } = useContext(ordersContext);
+	const { clearCart } = useContext(cartContext);
 	const { user, loading } = useContext(authContext);
 	const { order, paymentMethod } = route.params;
 	const items = JSON.stringify(order.items);
@@ -26,8 +27,10 @@ const OrderVerification = ({ navigation, route }) => {
 
 	// TODO: this should come from some service/state store
 
-	const onSuccessHandler = () => {
-		navigation.replace("OrderConfirmation", { params: { paymentMethod } });
+	const onSuccessHandler = async () => {
+		await placeOrder(order);
+		clearCart();
+		navigation.navigate("OrderConfirmation", { params: { paymentMethod } });
 		/* TODO: do something */
 	};
 	const onCanceledHandler = () => {

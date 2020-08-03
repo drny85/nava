@@ -1,6 +1,8 @@
+// @ts-nocheck
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Screen from "../../components/Screen";
+import AppButton from "../../components/AppButton";
 
 const OrderConfirmation = ({ navigation, route }) => {
 	const paymentMethod = route.params;
@@ -8,7 +10,7 @@ const OrderConfirmation = ({ navigation, route }) => {
 	const checkPaymentMethod = () => {
 		if (paymentMethod === "credit") {
 			setTimeout(() => {
-				navigation.navigate("MyOrders");
+				navigation.popToTop();
 			}, 3000);
 		}
 	};
@@ -18,6 +20,10 @@ const OrderConfirmation = ({ navigation, route }) => {
 	return (
 		<Screen style={styles.screen}>
 			<Text>Your order has been placed</Text>
+			<AppButton
+				title="Go to my Orders"
+				onPress={() => navigation.navigate("Orders", { screen: "MyOrders" })}
+			/>
 		</Screen>
 	);
 };
