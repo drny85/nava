@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import ordersContext from "../../context/order/orderContext";
 import authContext from "../../context/auth/authContext";
@@ -17,6 +17,8 @@ const OrderVerification = ({ navigation, route }) => {
 	const { order, paymentMethod } = route.params;
 	const items = JSON.stringify(order.items);
 
+	const webRef = useRef(null);
+
 	const handlePayment = async () => {};
 
 	if (!user) {
@@ -31,14 +33,21 @@ const OrderVerification = ({ navigation, route }) => {
 		const data = await placeOrder(order);
 
 		clearCart();
-		navigation.navigate("OrderConfirmation", {
-			params: { paymentMethod, order: data },
-		});
+		navigation.navigate("OrderConfirmation", { paymentMethod, order: data });
 		/* TODO: do something */
 	};
 	const onCanceledHandler = () => {
 		/* TODO: do something */
 		navigation.goBack();
+	};
+
+	const handleChange = (newState) => {
+		const { url } = newState;
+		if (url.includes("/success")) {
+			console.log(url);
+			webRef.current.stopLoading();
+			// maybe close this view?
+		}
 	};
 
 	// Called everytime the URL stats to load in the webview
@@ -66,9 +75,11 @@ const OrderVerification = ({ navigation, route }) => {
 
 	return (
 		<WebView
+			ref={webRef}
 			originWhitelist={["*"]}
 			source={{ html: stripeCheckoutRedirectHTML(order, items) }}
 			onLoadStart={onLoadStart}
+			onNavigationStateChange={handleChange}
 		/>
 	);
 };

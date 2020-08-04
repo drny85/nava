@@ -8,8 +8,6 @@ import ListItem from "../../components/ListItem";
 
 const OrderDeatails = ({ route }) => {
 	const { order } = route.params;
-	console.log(route.params);
-	console.log("FROM DEtails", order);
 
 	return (
 		<Screen style={styles.container}>

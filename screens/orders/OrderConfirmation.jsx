@@ -6,7 +6,7 @@ import AppButton from "../../components/AppButton";
 import LottieView from "lottie-react-native";
 
 const OrderConfirmation = ({ navigation, route }) => {
-	const { paymentMethod, order } = route.params.params;
+	const { paymentMethod, order } = route.params;
 	const [isVisible, setIsVisible] = useState(true);
 
 	return (
@@ -19,7 +19,12 @@ const OrderConfirmation = ({ navigation, route }) => {
 			<Modal
 				visible={isVisible}
 				animationType="slide"
-				onDismiss={() => navigation.navigate("OrderDetails", { order })}
+				onDismiss={() =>
+					navigation.navigate("MyOrders", {
+						screen: "OrderDetails",
+						params: { order },
+					})
+				}
 			>
 				<LottieView
 					loop={false}
