@@ -42,7 +42,7 @@ const MyOrders = ({ navigation }) => {
 
 	return (
 		<Screen style={styles.container}>
-			<View>
+			<View style={{marginTop: 5}}>
 				<FlatList
 					showsVerticalScrollIndicator={false}
 					data={orders}

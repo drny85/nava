@@ -26,11 +26,12 @@ const ItemsState = (props) => {
 
 	const [state, dispatch] = useReducer(ItemsReducer, initialState);
 
+	let itemsSubcription;
+
 	const getItems = async () => {
 		try {
-			console.log("getting items");
 			setLoading();
-			const snapshot = await db
+			itemsSubcription = db
 				.collection("items")
 				.where("available", "==", true)
 				.onSnapshot((values) => {
@@ -84,6 +85,8 @@ const ItemsState = (props) => {
 		}
 	};
 
+	const unsubcribeFromItems = () => itemsSubcription();
+
 	// @ts-ignore
 	const setLoading = () => dispatch({ type: SET_LOADING });
 
@@ -103,6 +106,7 @@ const ItemsState = (props) => {
 				setCurrent,
 				clearCurrent,
 				changeAvailability,
+				unsubcribeFromItems,
 			}}
 		>
 			{props.children}

@@ -10,47 +10,54 @@ import CategoryContext from "../../context/category/categoryContext";
 import ListCategoryItems from "../../components/ListCategoryItems";
 
 const Home = ({ navigation }) => {
-  const itemsContext = useContext(ItemsContext);
-  const categoryContext = useContext(CategoryContext);
+	const itemsContext = useContext(ItemsContext);
+	const categoryContext = useContext(CategoryContext);
 
-  const { items, getItems, loading } = itemsContext;
-  const { categories, getCategories } = categoryContext;
+	const { items, getItems, loading, unsubcribeFromItems } = itemsContext;
+	const { categories, getCategories } = categoryContext;
 
-  useEffect(() => {
-    getItems();
-    getCategories();
-  }, []);
+	useEffect(() => {
+		getItems();
+		getCategories();
 
-  if (items.length === 0 || loading) {
-    return <Loader />;
-  }
+		return () => {
+			unsubcribeFromItems();
+		};
+	}, []);
 
-  return (
-    <Screen style={styles.screen}>
-      <View style={styles.headerView}>
-        <Text style={styles.headerText}>What are you craving for today?</Text>
-      </View>
-      <ListCategoryItems
-        categories={categories}
-        items={items}
-        onRefresh={getItems}
-      />
-    </Screen>
-  );
+	if (items.length === 0 || loading) {
+		return <Loader />;
+	}
+
+	return (
+		<Screen style={styles.screen}>
+			<View style={styles.headerView}>
+				<Text style={styles.headerText}>What are you craving for today?</Text>
+			</View>
+     
+    	<ListCategoryItems
+				categories={categories}
+				items={items}
+				onRefresh={getItems}
+			/>
+
+		
+		</Screen>
+	);
 };
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: "700",
-    fontStyle: "italic",
-  },
-  headerView: {
-    padding: 15,
-  },
+	screen: {
+		flex: 1,
+	},
+	headerText: {
+		fontSize: 24,
+		fontWeight: "700",
+		fontStyle: "italic",
+	},
+	headerView: {
+		padding: 15,
+	},
 });
 
 export default Home;

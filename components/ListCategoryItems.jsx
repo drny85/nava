@@ -1,32 +1,40 @@
 import React from "react";
-import { View, StyleSheet, Text, FlatList } from "react-native";
+import { View, StyleSheet, Text, FlatList, ScrollView } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import Card from "./Card";
-import { ScrollView } from "react-native-gesture-handler";
 
 const ListCategoryItems = ({ categories, items, onRefresh }) => {
 	const navigation = useNavigation();
 	const [refreshing, setRefreshing] = React.useState(false);
 
 	return (
-		<View style={styles.container}>
-			<FlatList
-				data={categories}
-				onRefresh={onRefresh}
-				refreshing={refreshing}
-				keyExtractor={(item) => item.id}
-				renderItem={({ item }) => {
-					return (
-						<>
-							<Text style={styles.text}>{item.name}</Text>
-							<View style={{ flex: 1, width: "100%", flexDirection: "row" }}>
-								<FlatList
-									data={items.filter((i) => i.category === item.id)}
-									keyExtractor={(item) => item.id}
-									renderItem={({ item }) => {
-										return (
-											<Card
+		<FlatList
+			data={categories}
+			onRefresh={onRefresh}
+			refreshing={refreshing}
+			keyExtractor={(item) => item.id}
+			renderItem={({ item }) => {
+				return (
+					<>
+						<Text style={styles.text}>{item.name}</Text>
+						<View style={{ flex: 1, width: "100%", flexDirection: "row" }}>
+							<FlatList
+								horizontal
+								data={items.filter((i) => i.category === item.id)}
+								keyExtractor={(item) => item.id}
+								renderItem={({ item }) => {
+									return (
+										<ScrollView
+											style={{
+												width: "100%",
+												backgroundColor: "red",
+												height: 200,
+												borderColor: "black",
+												borderWidth: 1.0,
+											}}
+										>
+											{/* <Card
 												style={{}}
 												key={item.id}
 												name={item.name}
@@ -37,16 +45,16 @@ const ListCategoryItems = ({ categories, items, onRefresh }) => {
 														item,
 													})
 												}
-											/>
-										);
-									}}
-								/>
-							</View>
-						</>
-					);
-				}}
-			/>
-		</View>
+											/> */}
+										</ScrollView>
+									);
+								}}
+							/>
+						</View>
+					</>
+				);
+			}}
+		/>
 	);
 };
 
@@ -54,7 +62,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		width: "100%",
-		flexDirection: "row",
+		// flexDirection: "row",
 	},
 	text: {
 		fontSize: 30,

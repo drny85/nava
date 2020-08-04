@@ -18,14 +18,14 @@ const OrderTile = ({ order, index, onPress }) => {
 			style={[
 				styles.container,
 				{
-					backgroundColor: order.status === "new" ? colors.ascent : colors.tile,
+					backgroundColor: order.status === "new" ? colors.card : colors.tile,
 				},
 			]}
 		>
             <View style={{flexDirection: 'row', }}>
             <Text style={styles.text}>{index}</Text>
 			{order.status === "new" ? (
-				<Text>Order processing</Text>
+				<Text>Order In Progress</Text>
 			) : (
 				<Text>
 					{moment(order.orderPlaced).format("MMMM Do YYYY, h:mm:ss a")}
