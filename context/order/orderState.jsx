@@ -72,25 +72,26 @@ const OrdersState = (props) => {
 	};
 
 	const getOrders = async (userId) => {
+		console.log(userId);
 		try {
 			setLoading();
-			let Orders = [];
-			const data = await db
+
+			const snapshot = db
 				.collection("orders")
 				.where("userId", "==", userId)
 				.orderBy("orderPlaced", "desc")
-				.get();
-
-			data.forEach((doc) => {
-				if (doc.exists) {
-					Orders.push({
-						id: doc.id,
-						...doc.data(),
+				.onSnapshot((values) => {
+					let data = [];
+					values.forEach((doc) => {
+						let d = {
+							id: doc.id,
+							...doc.data(),
+						};
+						data.push(d);
 					});
-				}
-
-				dispatch({ type: GET_ORDERS, payload: Orders });
-			});
+					dispatch({ type: GET_ORDERS, payload: data });
+				});
+			dispatch({ type: GET_ORDERS, payload: Orders });
 		} catch (error) {
 			console.log(error);
 		}

@@ -1,13 +1,15 @@
 import React, { useContext, useEffect } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, FlatList } from "react-native";
 import Screen from "../../components/Screen";
 import authContext from "../../context/auth/authContext";
 import ordersContext from "../../context/order/orderContext";
 import Loader from "../../components/Loader";
+import OrderTile from "../../components/OrderTile";
 
 const MyOrders = () => {
 	const { user } = useContext(authContext);
 	const { orders, getOrders, loading } = useContext(ordersContext);
+	console.log(loading);
 
 	useEffect(() => {
 		console.log("gettings orders");
@@ -18,7 +20,13 @@ const MyOrders = () => {
 
 	return (
 		<Screen style={styles.container}>
-			<Text>My Orders {orders.length}</Text>
+			<FlatList
+				data={orders}
+				keyExtractor={(item) => item.id}
+				renderItem={({ item, index }) => (
+					<OrderTile index={index + 1} order={item} />
+				)}
+			/>
 		</Screen>
 	);
 };

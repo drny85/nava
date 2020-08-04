@@ -16,7 +16,7 @@ const OrdersStack = createStackNavigator();
 const OrdersStackNavigator = () => {
 	const navigation = useNavigation();
 	return (
-		<OrdersStack.Navigator>
+	<OrdersStack.Navigator>
 			<OrdersStack.Screen
 				name="MyOrders"
 				component={MyOrders}
@@ -36,6 +36,7 @@ const OrdersStackNavigator = () => {
 				name="OrderVerification"
 				component={OrderVerification}
 				options={{
+					
 					title: "Verification",
 					headerLeft: () => (
 						<TouchableWithoutFeedback
