@@ -11,9 +11,10 @@ import moment from "moment";
 
 import colors from "../config/colors";
 
-const OrderTile = ({ order, index }) => {
+const OrderTile = ({ order, index, onPress }) => {
 	return (
 		<TouchableOpacity
+        onPress={onPress}
 			style={[
 				styles.container,
 				{
@@ -21,7 +22,8 @@ const OrderTile = ({ order, index }) => {
 				},
 			]}
 		>
-			<Text style={{ fontWeight: "600" }}>{index}</Text>
+            <View style={{flexDirection: 'row', }}>
+            <Text style={styles.text}>{index}</Text>
 			{order.status === "new" ? (
 				<Text>Order processing</Text>
 			) : (
@@ -29,6 +31,8 @@ const OrderTile = ({ order, index }) => {
 					{moment(order.orderPlaced).format("MMMM Do YYYY, h:mm:ss a")}
 				</Text>
 			)}
+            </View>
+		
 
 			<Text style={{ fontWeight: "600" }}>Total: ${order.totalAmount}</Text>
 			<EvilIcons name="chevron-right" size={35} color={colors.ascent} />
@@ -46,11 +50,13 @@ const styles = StyleSheet.create({
 		shadowColor: colors.primary,
 		shadowOffset: { width: 3, height: 3 },
 		shadowOpacity: 0.7,
-		justifyContent: "space-evenly",
+		justifyContent: 'space-between',
 		alignItems: "center",
 		flexDirection: "row",
-		paddingHorizontal: 15,
-	},
+		paddingHorizontal: 10,
+    },
+    
+    text : { fontWeight: "600", marginRight: 8, }
 });
 
 export default OrderTile;

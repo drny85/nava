@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import ordersContext from "../../context/order/orderContext";
 import authContext from "../../context/auth/authContext";
 
@@ -28,9 +28,12 @@ const OrderVerification = ({ navigation, route }) => {
 	// TODO: this should come from some service/state store
 
 	const onSuccessHandler = async () => {
-		await placeOrder(order);
+		const data = await placeOrder(order);
+
 		clearCart();
-		navigation.navigate("OrderConfirmation", { params: { paymentMethod } });
+		navigation.navigate("OrderConfirmation", {
+			params: { paymentMethod, order: data },
+		});
 		/* TODO: do something */
 	};
 	const onCanceledHandler = () => {

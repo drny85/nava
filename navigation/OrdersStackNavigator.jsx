@@ -10,13 +10,14 @@ import OrderConfirmation from "../screens/orders/OrderConfirmation";
 import OrderSummary from "../screens/orders/OrderSummary";
 import OrderVerification from "../screens/orders/OrderVerification";
 import { useNavigation } from "@react-navigation/native";
+import OrderDetails from "../screens/orders/OrderDetails";
 
 const OrdersStack = createStackNavigator();
 
 const OrdersStackNavigator = () => {
 	const navigation = useNavigation();
 	return (
-	<OrdersStack.Navigator>
+		<OrdersStack.Navigator>
 			<OrdersStack.Screen
 				name="MyOrders"
 				component={MyOrders}
@@ -33,10 +34,14 @@ const OrdersStackNavigator = () => {
 				options={{ title: "Order Summary" }}
 			/>
 			<OrdersStack.Screen
+				name="OrderDetails"
+				component={OrderDetails}
+				options={{ title: "Order Details" }}
+			/>
+			<OrdersStack.Screen
 				name="OrderVerification"
 				component={OrderVerification}
 				options={{
-					
 					title: "Verification",
 					headerLeft: () => (
 						<TouchableWithoutFeedback

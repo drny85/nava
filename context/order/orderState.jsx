@@ -16,67 +16,74 @@ const OrdersState = (props) => {
 	const [state, dispatch] = useReducer(OrderReducer, initialState);
 
 	const placeOrder = async (orderInfo) => {
-		setLoading();
-
-		let newOrder;
-		if (orderInfo.type === "pickup") {
-			newOrder = {
-				userId: orderInfo.userId,
-				items: orderInfo.items,
-				customer: {
-					address: {
-						street: null,
-						apt: null,
-						city: null,
-						zipcode: null,
-					},
-					phone: orderInfo.customer.phone,
-					name: orderInfo.customer.name,
-					lastName: orderInfo.customer.lastName,
-					email: null,
-				},
-
-				orderPlaced: orderInfo.orderPlaced,
-				totalAmount: orderInfo.totalAmount,
-				orderType: orderInfo.type,
-				status: orderInfo.status,
-				paymentMethod: orderInfo.paymentMethod,
-				orderPlaced: new Date().toISOString(),
-			};
-		} else {
-			newOrder = {
-				userId: orderInfo.userId,
-				items: orderInfo.items,
-				customer: {
-					address: {
-						street: orderInfo.customer.address,
-						apt: orderInfo.customer.apt,
-						city: orderInfo.customer.city,
-						zipcode: orderInfo.customer.zipcode,
-					},
-					phone: orderInfo.customer.phone,
-					name: orderInfo.customer.name,
-					lastName: orderInfo.customer.lastName,
-					email: orderInfo.customer.email,
-				},
-				orderPlaced: orderInfo.orderPlaced,
-				totalAmount: orderInfo.totalAmount,
-				orderType: orderInfo.type,
-				status: orderInfo.status,
-				paymentMethod: orderInfo.paymentMethod,
-				orderPlaced: new Date().toISOString(),
-			};
-		}
-
-		return await db.collection("orders").add(newOrder);
-	};
-
-	const getOrders = async (userId) => {
-		console.log(userId);
 		try {
 			setLoading();
 
-			const snapshot = db
+			let newOrder;
+			if (orderInfo.type === "pickup") {
+				newOrder = {
+					userId: orderInfo.userId,
+					items: orderInfo.items,
+					customer: {
+						address: {
+							street: null,
+							apt: null,
+							city: null,
+							zipcode: null,
+						},
+						phone: orderInfo.customer.phone,
+						name: orderInfo.customer.name,
+						lastName: orderInfo.customer.lastName,
+						email: null,
+					},
+
+					orderPlaced: orderInfo.orderPlaced,
+					totalAmount: orderInfo.totalAmount,
+					orderType: orderInfo.type,
+					status: orderInfo.status,
+					paymentMethod: orderInfo.paymentMethod,
+					orderPlaced: new Date().toISOString(),
+				};
+			} else {
+				newOrder = {
+					userId: orderInfo.userId,
+					items: orderInfo.items,
+					customer: {
+						address: {
+							street: orderInfo.customer.address,
+							apt: orderInfo.customer.apt,
+							city: orderInfo.customer.city,
+							zipcode: orderInfo.customer.zipcode,
+						},
+						phone: orderInfo.customer.phone,
+						name: orderInfo.customer.name,
+						lastName: orderInfo.customer.lastName,
+						email: orderInfo.customer.email,
+					},
+					orderPlaced: orderInfo.orderPlaced,
+					totalAmount: orderInfo.totalAmount,
+					orderType: orderInfo.type,
+					status: orderInfo.status,
+					paymentMethod: orderInfo.paymentMethod,
+					orderPlaced: new Date().toISOString(),
+				};
+			}
+
+			const result = await db.collection("orders").add(newOrder);
+			const data = (await result.get()).data();
+			return { id: result.id, ...data };
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	let ordersSubscrition;
+
+	const getOrders = async (userId) => {
+		try {
+			setLoading();
+
+			ordersSubscrition = db
 				.collection("orders")
 				.where("userId", "==", userId)
 				.orderBy("orderPlaced", "desc")
@@ -91,10 +98,14 @@ const OrdersState = (props) => {
 					});
 					dispatch({ type: GET_ORDERS, payload: data });
 				});
-			dispatch({ type: GET_ORDERS, payload: Orders });
+			//dispatch({ type: GET_ORDERS, payload: data });
 		} catch (error) {
 			console.log(error);
 		}
+	};
+
+	const Unsubscribe = () => {
+		ordersSubscrition();
 	};
 
 	const setLoading = () => dispatch({ type: SET_LOADING });
@@ -106,6 +117,7 @@ const OrdersState = (props) => {
 				loading: state.loading,
 				getOrders,
 				placeOrder,
+				Unsubscribe,
 			}}
 		>
 			{props.children}

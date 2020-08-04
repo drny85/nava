@@ -3,5 +3,5 @@ export const STRIPE = {
 	PLAN_NAME: "Antojito",
 	SUCCESS_URL: "https://example.com/success",
 	CANCELED_URL: "https://example.com/cancel",
-	DB_URL: "https://4af7a0c01bc7.ngrok.io/charges",
+	DB_URL: "https://2eac32ddf1d9.ngrok.io/charges",
 };
