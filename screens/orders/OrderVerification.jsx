@@ -44,9 +44,9 @@ const OrderVerification = ({ navigation, route }) => {
 	const handleChange = (newState) => {
 		const { url } = newState;
 		if (url.includes("/success")) {
-			console.log(url);
 			webRef.current.stopLoading();
-			// maybe close this view?
+			//resetCartNavigation();
+			//maybe close this view?
 		}
 	};
 

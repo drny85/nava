@@ -6,8 +6,9 @@ import Screen from "../../components/Screen";
 import colors from "../../config/colors";
 import ListItem from "../../components/ListItem";
 
-const OrderDeatails = ({ route }) => {
+const OrderDetails = ({ route }) => {
 	const { order } = route.params;
+	
 
 	return (
 		<Screen style={styles.container}>
@@ -21,7 +22,7 @@ const OrderDeatails = ({ route }) => {
 				<Text style={styles.text}>Order Type: {order.orderType}</Text>
 				<Text style={styles.text}>Payment Method: {order.paymentMethod}</Text>
 				<Text style={styles.text}>
-					{order.orderType === "pickup" ? (
+					{order.orderType === "pickup" || order.type === "pickup" ? (
 						`Person Picking Up: ${order.customer.name}`
 					) : (
 						<Text numberOfLines={1} style={styles.text}>
@@ -91,4 +92,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default OrderDeatails;
+export default OrderDetails;

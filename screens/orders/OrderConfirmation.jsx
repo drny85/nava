@@ -1,6 +1,10 @@
 // @ts-nocheck
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Modal } from "react-native";
+
+import { CommonActions } from "@react-navigation/native";
+
+
 import Screen from "../../components/Screen";
 import AppButton from "../../components/AppButton";
 import LottieView from "lottie-react-native";
@@ -8,6 +12,19 @@ import LottieView from "lottie-react-native";
 const OrderConfirmation = ({ navigation, route }) => {
 	const { paymentMethod, order } = route.params;
 	const [isVisible, setIsVisible] = useState(true);
+
+	const resetCartNavigation = () => {
+		navigation.dispatch(
+			CommonActions.reset({
+				index: 2,
+				routes: [{ name: "Cart" }],
+			})
+		);
+		navigation.navigate("Orders", {
+			screen: "OrderDetails",
+			params: { order },
+		});
+	};
 
 	return (
 		<Screen style={styles.screen}>
@@ -19,11 +36,7 @@ const OrderConfirmation = ({ navigation, route }) => {
 			<Modal
 				visible={isVisible}
 				animationType="slide"
-				onDismiss={() =>
-					navigation.navigate("MyOrders", {
-						screen: "OrderDetails",
-						params: { order },
-					})
+				onDismiss={resetCartNavigation
 				}
 			>
 				<LottieView
