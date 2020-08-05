@@ -11,81 +11,81 @@ import Signin from "../profiles/Signin";
 import cartContext from "../../context/cart/cartContext";
 
 const OrderVerification = ({ navigation, route }) => {
-	const { orders, getOrders, placeOrder } = useContext(ordersContext);
-	const { clearCart } = useContext(cartContext);
-	const { user, loading } = useContext(authContext);
-	const { order, paymentMethod } = route.params;
-	const items = JSON.stringify(order.items);
+  const { orders, getOrders, placeOrder } = useContext(ordersContext);
+  const { clearCart } = useContext(cartContext);
+  const { user, loading } = useContext(authContext);
+  const { newOrder, paymentMethod } = route.params;
+  const items = JSON.stringify(order.items);
 
-	const webRef = useRef(null);
+  const webRef = useRef(null);
 
-	const handlePayment = async () => {};
+  const handlePayment = async () => {};
 
-	if (!user) {
-		return <Signin />;
-	}
+  if (!user) {
+    return <Signin />;
+  }
 
-	if (loading) return <Loader />;
+  if (loading) return <Loader />;
 
-	// TODO: this should come from some service/state store
+  // TODO: this should come from some service/state store
 
-	const onSuccessHandler = async () => {
-		const data = await placeOrder(order);
+  const onSuccessHandler = async () => {
+    const data = await placeOrder(newOrder);
 
-		clearCart();
-		navigation.navigate("OrderConfirmation", { paymentMethod, order: data });
-		/* TODO: do something */
-	};
-	const onCanceledHandler = () => {
-		/* TODO: do something */
-		navigation.goBack();
-	};
+    clearCart();
+    navigation.navigate("OrderConfirmation", { paymentMethod, order: data });
+    /* TODO: do something */
+  };
+  const onCanceledHandler = () => {
+    /* TODO: do something */
+    navigation.goBack();
+  };
 
-	const handleChange = (newState) => {
-		const { url } = newState;
-		if (url.includes("/success")) {
-			webRef.current.stopLoading();
-			//resetCartNavigation();
-			//maybe close this view?
-		}
-	};
+  const handleChange = (newState) => {
+    const { url } = newState;
+    if (url.includes("/success")) {
+      webRef.current.stopLoading();
+      //resetCartNavigation();
+      //maybe close this view?
+    }
+  };
 
-	// Called everytime the URL stats to load in the webview
-	const onLoadStart = (syntheticEvent) => {
-		const { nativeEvent } = syntheticEvent;
-		console.log("event", nativeEvent);
-		if (nativeEvent.url === STRIPE.SUCCESS_URL) {
-			onSuccessHandler();
-			return;
-		}
-		if (nativeEvent.url === STRIPE.CANCELED_URL) {
-			onCanceledHandler();
-		}
+  // Called everytime the URL stats to load in the webview
+  const onLoadStart = (syntheticEvent) => {
+    const { nativeEvent } = syntheticEvent;
+    console.log("event", nativeEvent);
+    if (nativeEvent.url === STRIPE.SUCCESS_URL) {
+      onSuccessHandler();
+      return;
+    }
+    if (nativeEvent.url === STRIPE.CANCELED_URL) {
+      onCanceledHandler();
+    }
 
-		// if (nativeEvent.url == "about:blank") {
-		// 	console.log("BLANK");
-		// 	navigation.goBack();
-		// }
-	};
+    // if (nativeEvent.url == "about:blank") {
+    // 	console.log("BLANK");
+    // 	navigation.goBack();
+    // }
+  };
 
-	// Render
-	if (!user) {
-		return null;
-	}
+  // Render
+  if (!user) {
+    return null;
+  }
 
-	return (
-		<WebView
-			ref={webRef}
-			originWhitelist={["*"]}
-			source={{ html: stripeCheckoutRedirectHTML(order, items) }}
-			onLoadStart={onLoadStart}
-			onNavigationStateChange={handleChange}
-		/>
-	);
+  return (
+    <WebView
+      ref={webRef}
+      originWhitelist={["*"]}
+      source={{ html: stripeCheckoutRedirectHTML(order, items) }}
+      onLoadStart={onLoadStart}
+      onNavigationStateChange={handleChange}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
-	container: {},
+  container: {},
 });
 
 export default OrderVerification;

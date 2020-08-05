@@ -1,4 +1,4 @@
-import { GET_ORDERS, GET_ORDER } from "../types";
+import { GET_ORDERS, GET_ORDER, SET_LOADING } from "../types";
 
 export default (state, action) => {
   switch (action.type) {
@@ -14,6 +14,12 @@ export default (state, action) => {
         ///send id with the payload
         order: state.orders.find((order) => order.id === action.payload),
         loading: false,
+      };
+
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true,
       };
 
     default:

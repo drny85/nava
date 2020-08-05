@@ -6,7 +6,6 @@ import {
   Text,
   FlatList,
   Alert,
-  Modal,
   ScrollView,
   Dimensions,
 } from "react-native";
@@ -23,10 +22,10 @@ import cartContext from "../../context/cart/cartContext";
 
 import ordersContext from "../../context/order/orderContext";
 import AppButton from "../../components/AppButton";
+import CardSummaryItem from "../../components/CardSummaryItem";
 
 const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
-  const [isVisible, setIsVisible] = useState(false);
   const { placeOrder } = useContext(ordersContext);
   const { cartItems, cartTotal, itemCounts, clearCart, loading } = useContext(
     cartContext
@@ -42,7 +41,7 @@ const OrderSummary = ({ navigation, route }) => {
 
   const handlePayment = async () => {
     try {
-      const order = new Order(
+      const newOrder = new Order(
         user.id,
         cartItems,
         customer,
@@ -51,21 +50,22 @@ const OrderSummary = ({ navigation, route }) => {
         paymentMethod
       );
       if (cartItems.length > 0) {
-        //await placeOrder(order);
-        //clearCart();
-        //setIsVisible(true);
-        //check order type before continuing
+        //handle payment with credit
         if (paymentMethod === "credit") {
           navigation.navigate("Orders", {
             screen: "OrderVerification",
 
-            params: { order, paymentMethod },
+            params: { newOrder, paymentMethod },
           });
         } else {
-          //handle payment iwth cash
-          await placeOrder(order);
+          //handle payment with cash
+          const order = await placeOrder(newOrder);
           clearCart();
-          setIsVisible(true);
+          navigation.navigate("Orders", {
+            screen: "OrderConfirmation",
+
+            params: { order, paymentMethod },
+          });
         }
       } else {
         Alert.alert("Empty Cart", "Cart is empty", [
@@ -79,25 +79,6 @@ const OrderSummary = ({ navigation, route }) => {
 
   return (
     <Screen style={styles.container}>
-      <Modal
-        visible={isVisible}
-        animationType="slide"
-        onDismiss={() =>
-          navigation.navigate("Orders", {
-            screen: "OrderConfirmation",
-            params: { paymentMethod },
-          })
-        }
-      >
-        <LottieView
-          loop={false}
-          autoPlay
-          colorFilters={[{ keypath: "Sending Loader", color: "#6D042A" }]}
-          onAnimationFinish={() => setIsVisible(false)}
-          source={require("../../assets/animations/done.json")}
-        />
-      </Modal>
-
       <View style={styles.listView}>
         <FlatList
           data={cartItems}
@@ -132,21 +113,18 @@ const OrderSummary = ({ navigation, route }) => {
         ) : (
           <>
             <View>
-              <Text style={styles.title}>
-                Your order will be delivered to this address:
-              </Text>
-
-              <View style={styles.addressView}>
-                <Text style={styles.address}>
-                  {customer.address} {customer.apt ? customer.apt : null}
-                </Text>
-                <Text style={styles.address}>
-                  {customer.city}, {customer.zipcode}
-                </Text>
-                <Text style={styles.title}>You might be contacted at:</Text>
-                <Text style={styles.address}>Phone: {customer.phone}</Text>
-                <Text style={styles.address}>Email: {customer.email}</Text>
-              </View>
+              <CardSummaryItem
+                title="Your order will be delivered to:"
+                subtitle={`${customer.address} ${
+                  customer.apt ? customer.apt : null
+                }`}
+                misc={`${customer.city}, ${customer.zipcode}`}
+              />
+              <CardSummaryItem
+                title="You might be contacted at:"
+                subtitle={`Phone: ${customer.phone}`}
+                misc={`Email: ${customer.email}`}
+              />
             </View>
           </>
         )}
@@ -186,9 +164,7 @@ const OrderSummary = ({ navigation, route }) => {
       </ScrollView>
       <View style={{ position: "absolute", bottom: 5, width: "100%" }}>
         <AppButton
-          title={
-            paymentMethod === "credit" ? "Continue to Payment" : "Place Order"
-          }
+          title={paymentMethod === "credit" ? "Pay Now" : "Place Order"}
           onPress={handlePayment}
         />
       </View>
@@ -202,7 +178,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   listView: {
-    backgroundColor: "blue",
     maxHeight: Dimensions.get("screen").height * 0.3,
   },
   details: {

@@ -9,62 +9,66 @@ import OrderTile from "../../components/OrderTile";
 import AppButton from "../../components/AppButton";
 
 const MyOrders = ({ navigation }) => {
-	const { user } = useContext(authContext);
-	const { orders, getOrders, loading, Unsubscribe } = useContext(ordersContext);
+  const { user } = useContext(authContext);
+  const { orders, getOrders, loading, Unsubscribe } = useContext(ordersContext);
 
-	const goToOrderDetails = (order) => {
-		navigation.navigate("OrderDetails", { order });
-	};
+  const goToOrderDetails = (order) => {
+    navigation.navigate("OrderDetails", { order });
+  };
 
-	useEffect(() => {
-		getOrders(user.id);
+  useEffect(() => {
+    console.log("getting orders");
+    getOrders(user.id);
 
-		return () => {
-			console.log("Unsubscribe");
-			Unsubscribe();
-		};
-	}, []);
+    return () => {
+      console.log("Unsubscribe from My Orders");
+      Unsubscribe();
+    };
+  }, []);
 
-	if (loading) return <Loader />;
+  if (loading) {
+    console.log("from MyOrders", loading);
+    <Loader />;
+  }
 
-	if (orders.length === 0) {
-		return (
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-				<Text style={{fontSize: 20, marginBottom: 20}}>No Orders Found</Text>
-				<AppButton
-				style={{width: '90%'}}
-					title="Place My First Order"
-					onPress={() => navigation.navigate("Home")}
-				/>
-			</View>
-		);
-	}
+  if (orders.length === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 20, marginBottom: 20 }}>No Orders Found</Text>
+        <AppButton
+          style={{ width: "90%" }}
+          title="Place My First Order"
+          onPress={() => navigation.navigate("Home")}
+        />
+      </View>
+    );
+  }
 
-	return (
-		<Screen style={styles.container}>
-			<View style={{marginTop: 5}}>
-				<FlatList
-					showsVerticalScrollIndicator={false}
-					data={orders}
-					keyExtractor={(item) => item.id}
-					renderItem={({ item, index }) => (
-						<OrderTile
-							onPress={() => goToOrderDetails(item)}
-							index={index + 1}
-							order={item}
-						/>
-					)}
-				/>
-			</View>
-		</Screen>
-	);
+  return (
+    <Screen style={styles.container}>
+      <View style={{ marginTop: 5 }}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={orders}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => (
+            <OrderTile
+              onPress={() => goToOrderDetails(item)}
+              index={index + 1}
+              order={item}
+            />
+          )}
+        />
+      </View>
+    </Screen>
+  );
 };
 
 const styles = StyleSheet.create({
-	container: {
-		justifyContent: "center",
-		alignItems: "center",
-	},
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default MyOrders;
