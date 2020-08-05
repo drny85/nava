@@ -1,50 +1,51 @@
 // @ts-nocheck
+// // @ts-nocheck
 const functions = require("firebase-functions");
+// // The Firebase Admin SDK to access Cloud Firestore.
+const admin = require("firebase-admin");
+admin.initializeApp();
+const express = require("express");
+const app = express();
+const cors = require("cors");
 const Stripe = require("stripe");
 const stripe = Stripe("sk_test_3XShaHWNu48XiJcCo0OPgNls");
 
-// The Firebase Admin SDK to access Cloud Firestore.
-const admin = require("firebase-admin");
-admin.initializeApp();
+app.use(cors());
+app.use(express.json());
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
-exports.makePayment = functions.https.onRequest(async (req, res) => {
-	res.set("Access-Control-Allow-Origin", "*");
-	res.set("Access-Control-Allow-Methods", "GET, POST");
+app.post("/payment", async (req, res) => {
+	
 	try {
+		const { items, email } = req.body;
+		const newItems = items.map((item) => {
+			return {
+				price_data: {
+					currency: "usd",
+					product_data: {
+						name: item.name,
+					},
+					unit_amount: item.price * 100,
+				},
+				quantity: item.quantity,
+			};
+		});
+
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ["card"],
-			customer_email: "rabin@aol.com",
-
-			line_items: [
-				{
-					price_data: {
-						currency: "usd",
-						product_data: {
-							name: "Jose Mendez",
-						},
-						unit_amount: 2600,
-					},
-					quantity: 1,
-				},
-			],
+			customer_email: email.toLowerCase(),
+			line_items: newItems,
 			mode: "payment",
-			success_url:
-				"https://example.com/success?session_id={CHECKOUT_SESSION_ID}",
+			success_url: "https://example.com/success",
 			cancel_url: "https://example.com/cancel",
 		});
 
-		console.log(session.id);
-
-		return res.status(200).json({ session_id: session.id });
+		return res.status(200).send({
+			session_id: session.id,
+		});
 	} catch (error) {
-		console.log(error.message || error);
-		return res.status(500).send("an error occured");
+		console.log("ERROR", error);
+		return res.status(500).send(error.message);
 	}
 });
+
+exports.makePayment = functions.https.onRequest(app);
