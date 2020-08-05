@@ -52,9 +52,11 @@ const AuthState = (props) => {
     dispatch({ type: LOGOUT });
   };
 
+  let authUnsubcribe;
+
   const getCurrentUser = async () => {
     try {
-      auth.onAuthStateChanged((user) => {
+      authUnsubcribe = auth.onAuthStateChanged((user) => {
         if (user) {
           setUser(user.uid);
         }
@@ -78,6 +80,7 @@ const AuthState = (props) => {
         login,
         getCurrentUser,
         createUser,
+        authUnsubcribe,
       }}
     >
       {props.children}

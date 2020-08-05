@@ -94,9 +94,7 @@ const CartState = (props) => {
   const getCartItems = async () => {
     setLoading();
     const id = await getCartId();
-    const { items, total, quantity } = await (
-      await CART_REF.doc(id).get()
-    ).data();
+    const { items, total, quantity } = (await CART_REF.doc(id).get()).data();
 
     const data = transforItems(items);
     dispatch({

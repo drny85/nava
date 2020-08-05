@@ -43,7 +43,6 @@ const deliverySchema = Yup.object().shape({
 });
 
 const Checkout = ({ route, navigation }) => {
-  const { user } = useContext(authContext);
   const [paymentOption, setPaymentOption] = useState("credit");
   const { setRoute, setDeliveryMethod, deliveryMethod } = useContext(
     settingsContext
@@ -51,10 +50,7 @@ const Checkout = ({ route, navigation }) => {
 
   const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
 
-  const { clearCart, cartItems, cartTotal, itemCounts } = useContext(
-    cartContext
-  );
-  console.log("Chekout");
+  const { cartTotal, itemCounts } = useContext(cartContext);
 
   const handlePickup = (pickupInfo) => {
     if (paymentOption === "cash") {

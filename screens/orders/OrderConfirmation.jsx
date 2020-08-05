@@ -28,11 +28,6 @@ const OrderConfirmation = ({ navigation, route }) => {
 
   return (
     <Screen style={styles.screen}>
-      {/* <Text>Your order has been placed</Text>
-			<AppButton
-				title="Go to my Orders"
-				onPress={() => navigation.navigate("Orders", { screen: "MyOrders" })}
-			/> */}
       <Modal
         visible={isVisible}
         animationType="slide"

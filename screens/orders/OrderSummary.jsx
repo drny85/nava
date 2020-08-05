@@ -60,6 +60,7 @@ const OrderSummary = ({ navigation, route }) => {
         } else {
           //handle payment with cash
           const order = await placeOrder(newOrder);
+          console.log("Order", order);
           clearCart();
           navigation.navigate("Orders", {
             screen: "OrderConfirmation",

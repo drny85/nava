@@ -14,7 +14,7 @@ import colors from "./config/colors";
 
 const App = () => {
   const [isReady, setIsReady] = React.useState(false);
-  const { getCurrentUser } = React.useContext(authContext);
+  const { getCurrentUser, authUnsubcribe } = React.useContext(authContext);
 
   if (!isReady)
     return (
@@ -23,6 +23,7 @@ const App = () => {
         onFinish={() => setIsReady(true)}
       />
     );
+
   return (
     <ItemsState>
       <SettingsState>
@@ -41,6 +42,11 @@ const App = () => {
 };
 
 export default () => {
+  React.useEffect(() => {
+    return () => {
+      authUnsubcribe();
+    };
+  }, []);
   return (
     <AuthState>
       <App />

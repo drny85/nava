@@ -11,15 +11,13 @@ import Signin from "../profiles/Signin";
 import cartContext from "../../context/cart/cartContext";
 
 const OrderVerification = ({ navigation, route }) => {
-  const { orders, getOrders, placeOrder } = useContext(ordersContext);
+  const { placeOrder } = useContext(ordersContext);
   const { clearCart } = useContext(cartContext);
   const { user, loading } = useContext(authContext);
   const { newOrder, paymentMethod } = route.params;
-  const items = JSON.stringify(order.items);
+  const items = JSON.stringify(newOrder.items);
 
   const webRef = useRef(null);
-
-  const handlePayment = async () => {};
 
   if (!user) {
     return <Signin />;
@@ -77,7 +75,7 @@ const OrderVerification = ({ navigation, route }) => {
     <WebView
       ref={webRef}
       originWhitelist={["*"]}
-      source={{ html: stripeCheckoutRedirectHTML(order, items) }}
+      source={{ html: stripeCheckoutRedirectHTML(newOrder, items) }}
       onLoadStart={onLoadStart}
       onNavigationStateChange={handleChange}
     />
