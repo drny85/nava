@@ -19,6 +19,7 @@ import AppForm from "../../components/AppForm";
 
 import authContext from "../../context/auth/authContext";
 import colors from "../../config/colors";
+import useNotifications from "../../hooks/useNotifications";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(3).label("First Name"),
@@ -29,16 +30,29 @@ const validationSchema = Yup.object().shape({
 });
 
 const Signup = () => {
+  const { pushToken, saveToken } = useNotifications();
+
+  console.log("SIGNUP TOKEN", pushToken);
   const navigation = useNavigation();
-  const { user, signup, setUser, createUser } = useContext(authContext);
+  const { signup, createUser } = useContext(authContext);
   const handleSignup = async (values) => {
     try {
       const data = await signup(values.email, values.password);
-      if (data.user) {
-        // setUser({ id: data.user.uid, email: data.user.email });
-        createUser(data.user.uid, values.name, values.lastName, values.phone);
-        navigation.navigate("Profile");
-      }
+      if (!data) return;
+
+      // setUser({ id: data.user.uid, email: data.user.email });
+      await createUser(
+        data.user.uid,
+        values.name,
+        values.lastName,
+        values.email,
+        values.phone,
+        pushToken
+      );
+
+      // await saveToken(pushToken);
+
+      navigation.navigate("Profile");
     } catch (error) {
       console.log(error);
       Alert.alert(
@@ -76,7 +90,7 @@ const Signup = () => {
           <AppFormField
             autoFocus={true}
             placeholder="Name"
-            iconNane="account-badge-horizontal"
+            iconName="account-badge-horizontal"
             name="name"
             autoCorrect={false}
           />
@@ -90,6 +104,7 @@ const Signup = () => {
             placeholder="Phone"
             iconName="phone"
             name="phone"
+            maxLength={10}
             keyboardType="phone-pad"
             autoCorrect={false}
           />
