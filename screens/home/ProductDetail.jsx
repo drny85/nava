@@ -19,20 +19,20 @@ import { CheckBox } from "react-native-elements";
 import colors from "../../config/colors";
 import AppButton from "../../components/AppButton";
 import cartContext from "../../context/cart/cartContext";
+import { Alert } from "react-native";
 
 const heigth = Dimensions.get("screen").height;
 const SIZES = ["small", "medium", "large"];
 
 const ProductDetail = ({ route, navigation }) => {
+	const sizes = [];
 	const { item } = route.params;
 	const [instruction, setIntruction] = useState(null);
 	const { addToCart, cartItems, totalCounts } = useContext(cartContext);
 	const [checked, setChecked] = useState(false);
-	const itemCheck = new Set();
-	const sizes = [];
-	console.log(checked);
 
 	const handleCheck = (item) => {
+		//add size to the array just once;
 		const found = sizes.find((i) => i === item);
 		if (found) return;
 		const index = sizes.findIndex((i) => i === item);
@@ -43,6 +43,12 @@ const ProductDetail = ({ route, navigation }) => {
 	};
 
 	const handleAddToCart = () => {
+		if (checked === false) {
+			Alert.alert("Size Matter", `Please pick a size for your ${item.name}`, [
+				{ text: "OK", style: "cancel" },
+			]);
+			return;
+		}
 		item.size = checked;
 		item.instruction = instruction;
 		addToCart(item);
@@ -94,6 +100,8 @@ const ProductDetail = ({ route, navigation }) => {
 										<CheckBox
 											key={i}
 											center
+											textStyle={{ textTransform: "capitalize" }}
+											checkedColor={colors.primary}
 											containerStyle={{ backgroundColor: colors.tile }}
 											checkedIcon="dot-circle-o"
 											uncheckedIcon="circle-o"

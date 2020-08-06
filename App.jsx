@@ -13,43 +13,42 @@ import SettingsState from "./context/settings/settingsState";
 import colors from "./config/colors";
 
 const App = () => {
-  const [isReady, setIsReady] = React.useState(false);
-  const { getCurrentUser, authUnsubcribe } = React.useContext(authContext);
+	const [isReady, setIsReady] = React.useState(false);
+	const { getCurrentUser, authUnsubcribe } = React.useContext(authContext);
 
-  if (!isReady)
-    return (
-      <AppLoading
-        startAsync={getCurrentUser}
-        onFinish={() => setIsReady(true)}
-      />
-    );
+	React.useEffect(() => {
+		return () => {};
+	}, []);
 
-  return (
-    <ItemsState>
-      <SettingsState>
-        <CategoryState>
-          <CartState>
-            <OrdersState>
-              <NavigationContainer>
-                <AppNavigator />
-              </NavigationContainer>
-            </OrdersState>
-          </CartState>
-        </CategoryState>
-      </SettingsState>
-    </ItemsState>
-  );
+	if (!isReady)
+		return (
+			<AppLoading
+				startAsync={getCurrentUser}
+				onFinish={() => setIsReady(true)}
+			/>
+		);
+
+	return (
+		<ItemsState>
+			<SettingsState>
+				<CategoryState>
+					<CartState>
+						<OrdersState>
+							<NavigationContainer>
+								<AppNavigator />
+							</NavigationContainer>
+						</OrdersState>
+					</CartState>
+				</CategoryState>
+			</SettingsState>
+		</ItemsState>
+	);
 };
 
 export default () => {
-  React.useEffect(() => {
-    return () => {
-      authUnsubcribe();
-    };
-  }, []);
-  return (
-    <AuthState>
-      <App />
-    </AuthState>
-  );
+	return (
+		<AuthState>
+			<App />
+		</AuthState>
+	);
 };

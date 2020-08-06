@@ -65,6 +65,8 @@ const AuthState = (props) => {
 		}
 	};
 
+	
+
 	const setLoading = () => dispatch({ type: SET_LOADING });
 
 	return (
