@@ -11,6 +11,7 @@ import OrderSummary from "../screens/orders/OrderSummary";
 import OrderVerification from "../screens/orders/OrderVerification";
 import { useNavigation } from "@react-navigation/native";
 import OrderDetails from "../screens/orders/OrderDetails";
+import OrderInTheMaking from "../screens/orders/OrderInTheMaking";
 
 const OrdersStack = createStackNavigator();
 
@@ -32,6 +33,11 @@ const OrdersStackNavigator = () => {
 				name="OrderSummary"
 				component={OrderSummary}
 				options={{ title: "Order Summary" }}
+			/>
+			<OrdersStack.Screen
+				name="OrderInTheMaking"
+				component={OrderInTheMaking}
+				options={{ headerShown: false }}
 			/>
 			<OrdersStack.Screen
 				name="OrderDetails"

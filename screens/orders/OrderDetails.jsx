@@ -1,14 +1,19 @@
 import React from "react";
 import { View, StyleSheet, Text, FlatList } from "react-native";
-import LottieView from "lottie-react-native";
+
 import moment from "moment";
 
 import Screen from "../../components/Screen";
 import colors from "../../config/colors";
 import ListItem from "../../components/ListItem";
 
-const OrderDetails = ({ route }) => {
+const OrderDetails = ({ route, navigation }) => {
 	const { order } = route.params;
+	
+
+	if (order.status !== "delivered") {
+		navigation.navigate("OrderInTheMaking");
+	}
 
 	return (
 		<Screen style={styles.container}>
@@ -63,16 +68,6 @@ const OrderDetails = ({ route }) => {
 					)}
 				/>
 			</View>
-			{order.status !== "delivered" && (
-				<LottieView
-					style={{ height: 200, width: "100%", bottom: 1, flex: 1 }}
-					loop
-					resizeMode="center"
-					autoPlay
-					// colorFilters={[{ keypath: "Sending Loader", color: "#6D042A" }]}
-					source={require("../../assets/animations/cooking.json")}
-				/>
-			)}
 		</Screen>
 	);
 };
