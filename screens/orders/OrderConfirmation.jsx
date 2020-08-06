@@ -1,15 +1,15 @@
 // @ts-nocheck
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Modal } from "react-native";
+import { StyleSheet, Modal } from "react-native";
 
 import { CommonActions } from "@react-navigation/native";
 
 import Screen from "../../components/Screen";
-import AppButton from "../../components/AppButton";
+
 import LottieView from "lottie-react-native";
 
 const OrderConfirmation = ({ navigation, route }) => {
-  const { paymentMethod, order } = route.params;
+  const { order } = route.params;
   console.log(order);
   const [isVisible, setIsVisible] = useState(true);
 

@@ -15,7 +15,7 @@ export function stripeCheckoutRedirectHTML(order, items) {
   <!-- Load Stripe.js on your website. -->
   <script src="https://js.stripe.com/v3"></script>
   <div style="padding: 0 auto; position: absolute; top: 50%;left: 50%;transform: translate(-50%, -50%);">
-     <h1 id="heading">Loading...</h1>
+    <img src="https://www.clearsmilealigner.com/wp-content/plugins/ias-fad-wp-plugin/img/preloader.gif" alt="loading" />
   </div>
   
   <div id="error-message"></div>
@@ -23,7 +23,7 @@ export function stripeCheckoutRedirectHTML(order, items) {
       ( function () {
           var stripe = Stripe( '${STRIPE.PUBLIC_KEY}' );
           window.onload = function () {
-              document.getElementById( 'heading' ).innerText = "Loaded"
+             
               fetch( '${STRIPE.DB_URL}', {
                   method: 'POST',
                   headers: {
