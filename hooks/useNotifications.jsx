@@ -20,19 +20,13 @@ export default useNotification = () => {
 
   const registerForNotification = async () => {
     try {
-      let permision;
-      const { granted } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-      permision = granted;
-      console.log("P", permision);
-      if (!permision) {
-        const updated = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        console.log("UPDATED", updated);
-        permision = updated.granted;
-        console.log("UP", permision);
+      let statusObj = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+
+      if (statusObj.status !== "granted") {
+        statusObj = await Permissions.askAsync(Permissions.NOTIFICATIONS);
       }
 
-      console.log("GRANTED", permision);
-      if (!permision) return;
+      if (statusObj.status !== "granted") return;
       console.log("continue");
       pushToken = (await Notifications.getExpoPushTokenAsync()).data;
       console.log("TK", pushToken);
