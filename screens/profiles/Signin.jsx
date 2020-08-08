@@ -9,7 +9,7 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 import * as Yup from "yup";
 import Screen from "../../components/Screen";
@@ -20,7 +20,6 @@ import AppForm from "../../components/AppForm";
 import authContext from "../../context/auth/authContext";
 import colors from "../../config/colors";
 import settingsContext from "../../context/settings/settingsContext";
-import useNotifications from "../../hooks/useNotifications";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
