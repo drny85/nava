@@ -86,6 +86,7 @@ const OrderSummary = ({ navigation, route }) => {
 					keyExtractor={(item) => item.id}
 					renderItem={({ item }) => (
 						<ListItem
+							sizes={item.sizes}
 							name={item.name}
 							imageUrl={item.imageUrl}
 							qty={item.quantity}
@@ -115,6 +116,7 @@ const OrderSummary = ({ navigation, route }) => {
 					<>
 						<View>
 							<CardSummaryItem
+								onPress={() => navigation.goBack()}
 								title="Your order will be delivered to:"
 								subtitle={`${customer.address} ${
 									customer.apt ? customer.apt : null
@@ -122,6 +124,7 @@ const OrderSummary = ({ navigation, route }) => {
 								misc={`${customer.city}, ${customer.zipcode}`}
 							/>
 							<CardSummaryItem
+								onPress={() => navigation.goBack()}
 								title="You might be contacted at:"
 								subtitle={`Phone: ${customer.phone}`}
 								misc={`Email: ${customer.email}`}

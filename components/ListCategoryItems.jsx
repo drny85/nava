@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet, Text, FlatList, Dimensions } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import Card from "./Card";
+import itemsContext from "../context/items/itemsContext";
 
 const ListCategoryItems = ({ categories, items, onRefresh }) => {
 	const navigation = useNavigation();
 	const [refreshing, setRefreshing] = React.useState(false);
+	const { setCurrent } = useContext(itemsContext);
 
 	return (
 		<FlatList
@@ -36,12 +38,11 @@ const ListCategoryItems = ({ categories, items, onRefresh }) => {
 										key={item.id}
 										name={item.name}
 										price={item.price}
+										sizes={item.sizes}
 										imageUrl={item.imageUrl}
-										onPress={() =>
-											navigation.navigate("ProductDetail", {
-												item,
-											})
-										}
+										onPress={() => {
+											navigation.navigate("ProductDetail", { id: item.id });
+										}}
 									/>
 								);
 							}}

@@ -27,7 +27,7 @@ const Home = () => {
 	}, []);
 
 	if (items.length === 0 || loading) {
-		return <Loader />;
+		return <Loader size="large" />;
 	}
 
 	return (

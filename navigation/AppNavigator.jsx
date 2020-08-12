@@ -15,11 +15,30 @@ import ProfileStackNavigator from "./ProfileStackNavigator";
 import OrdersStackNavigator from "./OrdersStackNavigator";
 import authContext from "../context/auth/authContext";
 
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+	handleNotification: async () => ({
+		shouldShowAlert: true,
+		shouldPlaySound: true,
+		shouldSetBadge: false,
+	}),
+});
+
 const BottomTabs = createBottomTabNavigator();
 
 const AppNavigator = () => {
 	const { cartItems, itemCounts } = useContext(cartContext);
 	const { user } = useContext(authContext);
+
+	React.useEffect(() => {
+		const subscription = Notifications.addNotificationReceivedListener(
+			(notification) => {
+				console.log("NOT", notification);
+			}
+		);
+		return () => subscription.remove();
+	}, []);
 
 	return (
 		<BottomTabs.Navigator

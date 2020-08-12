@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -18,15 +18,32 @@ import colors from "../../config/colors";
 import AppButton from "../../components/AppButton";
 import cartContext from "../../context/cart/cartContext";
 import { Alert } from "react-native";
+import itemsContext from "../../context/items/itemsContext";
+import Loader from "../../components/Loader";
 
 const heigth = Dimensions.get("screen").height;
 
 const ProductDetail = ({ route, navigation }) => {
 	const sizes = [];
-	const { item } = route.params;
+	const { id } = route.params;
+	const { current, clearCurrent, setCurrent, loading } = useContext(
+		itemsContext
+	);
 	const [instruction, setIntruction] = useState(null);
 	const { addToCart, cartItems, totalCounts } = useContext(cartContext);
 	const [checked, setChecked] = useState(false);
+	const item = current;
+
+	const priceRange = () => {
+		if (item.sizes) {
+			const index = item.sizes.length;
+			const last = item.price[item.sizes[index - 1]];
+			const first = item.price[item.sizes[0]];
+			return `${first} - $${last}`;
+		} else {
+			return item.price;
+		}
+	};
 
 	const handleCheck = (item) => {
 		//add size to the array just once;
@@ -46,11 +63,24 @@ const ProductDetail = ({ route, navigation }) => {
 			]);
 			return;
 		}
-		item.size = checked;
+		item.size = checked ? checked : "regular";
+		item.price = item.sizes ? item.price[checked] : item.price;
 		item.instruction = instruction;
 		await addToCart(item);
 		navigation.pop();
 	};
+
+	console.log("CURRENT", current);
+
+	useEffect(() => {
+		setCurrent(id);
+		return () => {
+			clearCurrent();
+			setChecked(false);
+		};
+	}, [id]);
+
+	if (!item) return <Loader />;
 
 	return (
 		<View style={styles.screen}>
@@ -59,7 +89,7 @@ const ProductDetail = ({ route, navigation }) => {
 				keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
 			>
 				<View>
-					<Image style={styles.image} source={{ uri: item.imageUrl }} />
+					<Image style={styles.image} source={{ uri: item && item.imageUrl }} />
 					<TouchableWithoutFeedback
 						onPress={() => {
 							navigation.goBack();
@@ -77,7 +107,16 @@ const ProductDetail = ({ route, navigation }) => {
 					<ScrollView style={styles.scrollView}>
 						<View style={styles.details}>
 							<Text style={styles.name}>{item.name}</Text>
-							<Text style={styles.price}>${item.price}</Text>
+							{/* <Text style={styles.price}>${item.sizes ? item.price[checked] : item.price}</Text> */}
+							<Text style={styles.price}>
+								{item.sizes && checked ? `$${item.price[checked]}` : null}
+								{item.sizes && !checked
+									? `$${item.price[item.sizes[0]]} - $${
+											item.price[item.sizes[item.sizes.length - 1]]
+									  }`
+									: null}
+								{!item.sizes && `$${item.price}`}
+							</Text>
 						</View>
 						{item.sizes && item.sizes.length > 0 && (
 							<View style={{ marginVertical: 10 }}>
@@ -205,7 +244,7 @@ const styles = StyleSheet.create({
 		textTransform: "capitalize",
 	},
 	price: {
-		fontSize: 24,
+		fontSize: 20,
 		fontWeight: "700",
 	},
 });

@@ -18,7 +18,7 @@ const OrdersStack = createStackNavigator();
 const OrdersStackNavigator = () => {
 	const navigation = useNavigation();
 	return (
-		<OrdersStack.Navigator>
+		<OrdersStack.Navigator mode="modal">
 			<OrdersStack.Screen
 				name="MyOrders"
 				component={MyOrders}

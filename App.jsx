@@ -11,22 +11,16 @@ import { AppLoading } from "expo";
 import authContext from "./context/auth/authContext";
 import SettingsState from "./context/settings/settingsState";
 import colors from "./config/colors";
-import * as Notifications from "expo-notifications";
-
-Notifications.setNotificationHandler({
-	handleNotification: async () => ({
-		shouldShowAlert: true,
-		shouldPlaySound: true,
-		shouldSetBadge: false,
-	}),
-});
 
 const App = () => {
 	const [isReady, setIsReady] = React.useState(false);
 	const { getCurrentUser, authUnsubcribe } = React.useContext(authContext);
 
 	React.useEffect(() => {
-		return () => {};
+		return () => {
+			console.log("Unsubcribing user");
+			authUnsubcribe();
+		};
 	}, []);
 
 	if (!isReady)

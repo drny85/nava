@@ -12,7 +12,7 @@ import colors from "../config/colors";
 
 const { height } = Dimensions.get("screen");
 
-const Card = ({ name, imageUrl, price, onPress, style }) => {
+const Card = ({ name, imageUrl, price, sizes, onPress, style }) => {
 	return (
 		<TouchableOpacity style={[styles.card, style]} onPress={onPress}>
 			<View style={{ height: "100%", width: "100%" }}>
@@ -21,7 +21,7 @@ const Card = ({ name, imageUrl, price, onPress, style }) => {
 				</View>
 				<View style={styles.details}>
 					<Text style={styles.name}>{name}</Text>
-					<Text style={styles.price}>${price}</Text>
+					<Text style={styles.price}>${sizes ? price[sizes[0]] : price}</Text>
 				</View>
 			</View>
 		</TouchableOpacity>

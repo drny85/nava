@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    color: colors.secondary,
+    color: colors.primary,
     fontSize: 18,
   },
   signupText: {

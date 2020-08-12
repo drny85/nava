@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import cartContext from "../context/cart/cartContext";
 import { Alert } from "react-native";
 import Checkout from "../screens/cart/Checkout";
+import OrderSummary from "../screens/orders/OrderSummary";
 
 const CartStack = createStackNavigator();
 
@@ -21,40 +22,45 @@ const CartStackNavigator = () => {
 		//clearCart();
 	};
 
-  return (
-    <CartStack.Navigator
-      screenOptions={{
-        headerTintColor: colors.secondary,
-        headerStyle: {
-          backgroundColor: colors.primary,
-        },
-      }}
-    >
-      <CartStack.Screen
-        name="Cart"
-        component={Cart}
-        options={{
-          title: "My Cart",
+	return (
+		<CartStack.Navigator
+			screenOptions={{
+				headerTintColor: colors.secondary,
+				headerStyle: {
+					backgroundColor: colors.primary,
+				},
+			}}
+		>
+			<CartStack.Screen
+				name="Cart"
+				component={Cart}
+				options={{
+					title: "My Cart",
 
-          headerRight: () =>
-            cartItems.length > 0 && (
-              <MaterialCommunityIcons
-                onPress={emptyCart}
-                style={{ marginRight: 8 }}
-                name="delete"
-                size={30}
-                color={colors.ascent}
-              />
-            ),
-        }}
-      />
-      <CartStack.Screen
-        name="Checkout"
-        component={Checkout}
-        options={{ title: "Check Out" }}
-      />
-    </CartStack.Navigator>
-  );
+					headerRight: () =>
+						cartItems.length > 0 && (
+							<MaterialCommunityIcons
+								onPress={emptyCart}
+								style={{ marginRight: 8 }}
+								name="delete"
+								size={30}
+								color={colors.ascent}
+							/>
+						),
+				}}
+			/>
+			<CartStack.Screen
+				name="OrderSumaary"
+				component={OrderSummary}
+				options={{ title: "Order Summary" }}
+			/>
+			<CartStack.Screen
+				name="Checkout"
+				component={Checkout}
+				options={{ title: "Check Out" }}
+			/>
+		</CartStack.Navigator>
+	);
 };
 
 export default CartStackNavigator;
