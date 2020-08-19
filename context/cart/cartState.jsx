@@ -17,8 +17,6 @@ const CartState = (props) => {
     itemCounts: 0,
   };
 
-  const CART_REF = db.collection("carts");
-
   const CART_ID = "cartId";
 
   const [state, dispatch] = useReducer(CartReducer, initialState);
@@ -27,57 +25,56 @@ const CartState = (props) => {
     try {
       setLoading();
       const cartId = await getCartId();
+
       const { items, quantity, total } = (
         await db.collection("carts").doc(cartId).get()
       ).data();
 
       const found = items[item.id];
-      console.log("F", found);
-
-      if (item.size) {
-        item.price = item.price[item.size];
-      }
-      console.log(item);
-      //console.log(found !== null && item.size === found.size);
-
       if (found !== undefined) {
-        if (found.size) {
-          if (found.size === item.size) console.log("FOUND different Size");
-          found.quantity += 1;
-          await db
-            .collection("carts")
-            .doc(cartId)
-            .update({
-              items: {
-                ...items,
-                [item.id]: found,
-              },
-              total: +(total + +item.price).toFixed(2),
-              quantity: quantity + 1,
-            });
+        console.log("ITEM FOUND");
+        if (item.size) {
+          //item in cart and comes in sizes;
         } else {
-          const newItems = { ...items, [item.id]: item };
+          //item in cart but does not come in sizes;
+          found.quantity++;
+
+          const newItem = { ...items, [item.id]: found };
           await db
             .collection("carts")
             .doc(cartId)
             .update({
-              items: newItems,
+              items: newItem,
               quantity: quantity + 1,
               total: +(total + +item.price).toFixed(2),
             });
         }
       } else {
-        console.log("ELSE");
-        //item not in cart -- add new item
-        const newItems = { ...items, [item.id]: item };
-        await db
-          .collection("carts")
-          .doc(cartId)
-          .update({
-            items: newItems,
-            quantity: quantity + 1,
-            total: +(total + +item.price).toFixed(2),
-          });
+        // item not in cart
+        console.log("NO ITEM");
+        if (item.size) {
+          //item not in cart and come in sizes
+          item.prices = { [item.size]: item.price[item.size] };
+          const newItem = { ...items, [item.id]: item };
+          await db
+            .collection("carts")
+            .doc(cartId)
+            .update({
+              items: newItem,
+              quantity: quantity + 1,
+              total: +(total + +item.price).toFixed(2),
+            });
+        } else {
+          //item not in cart and does not come in sizes
+          await db
+            .collection("carts")
+            .doc(cartId)
+            .set({
+              items: { [item.id]: item },
+              quantity: 1,
+              total: item.price,
+            });
+        }
       }
 
       const data = transforItems(items);
@@ -127,7 +124,9 @@ const CartState = (props) => {
     try {
       setLoading();
       const id = await getCartId();
-      const { items, total, quantity } = (await CART_REF.doc(id).get()).data();
+      const { items, total, quantity } = (
+        await db.collection("carts").doc(id).get()
+      ).data();
 
       const data = transforItems(items);
       dispatch({
