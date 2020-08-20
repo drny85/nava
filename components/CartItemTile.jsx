@@ -31,7 +31,10 @@ const CartItemTile = ({
           <View>
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.qty}>
-              {item.quantity} x ${item.price}
+              {item.quantity} x $
+              {typeof item.price === "object"
+                ? parseFloat(item.price[item.size]).toFixed(2)
+                : parseFloat(item.price).toFixed(2)}
             </Text>
           </View>
           <View style={styles.totalView}>
@@ -47,7 +50,10 @@ const CartItemTile = ({
             </View>
             <View style={styles.priceView}>
               <Text style={styles.price}>
-                ${(item.price * item.quantity).toFixed(2)}
+                $
+                {typeof item.price === "object"
+                  ? parseFloat(item.price[item.size] * item.quantity).toFixed(2)
+                  : parseFloat(item.price * item.quantity).toFixed(2)}
               </Text>
             </View>
           </View>

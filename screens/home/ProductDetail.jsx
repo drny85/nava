@@ -60,18 +60,20 @@ const ProductDetail = ({ route, navigation }) => {
       ]);
       return;
     }
+
     item.size = checked ? checked : null;
-    item.price = item.checked ? item.price[checked] : item.price;
+    item.price = item.size === null ? item.price : item.price[checked];
     item.instruction = instruction;
+
     await addToCart(item);
     navigation.pop();
   };
 
   useEffect(() => {
     return () => {
-      setChecked(false);
+      //setChecked(false);
     };
-  }, [item.price]);
+  }, []);
 
   if (!item) return <Loader />;
 

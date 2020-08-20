@@ -53,7 +53,7 @@ const Cart = ({ navigation }) => {
 
   useEffect(() => {
     getCartItems();
-  }, [cartItems.length]);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -61,7 +61,7 @@ const Cart = ({ navigation }) => {
         <FlatList
           style={{ flex: 1, marginTop: 10 }}
           data={cartItems}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <CartItemTile
               isDisable={loading}
