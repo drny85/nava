@@ -30,12 +30,25 @@ const CartItemTile = ({
         <View style={styles.details}>
           <View>
             <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.qty}>
-              {item.quantity} x $
-              {typeof item.price === "object"
-                ? parseFloat(item.price[item.size]).toFixed(2)
-                : parseFloat(item.price).toFixed(2)}
-            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.qty}>
+                {item.quantity} x $
+                {typeof item.price === "object"
+                  ? parseFloat(item.price[item.size]).toFixed(2)
+                  : parseFloat(item.price).toFixed(2)}
+              </Text>
+              {item.size ? (
+                <Text
+                  style={{
+                    paddingLeft: 20,
+                    color: colors.tile,
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {item.size}
+                </Text>
+              ) : null}
+            </View>
           </View>
           <View style={styles.totalView}>
             <View style={styles.mini}>
