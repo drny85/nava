@@ -5,9 +5,13 @@ import CartContext from "./cartContext";
 
 import AsyncStorage from "@react-native-community/async-storage";
 import { db } from "../../services/database";
-import { SET_LOADING, ADD_TO_CART, CLEAR_CART, GET_CART_ITEMS } from "../types";
-import ShoppingCart from "../../models/ShoppingCart";
-import CarItem from "../../models/CartItem";
+import {
+  SET_LOADING,
+  ADD_TO_CART,
+  CLEAR_CART,
+  GET_CART_ITEMS,
+  REMOVE_FROM_CART,
+} from "../types";
 
 const CartState = (props) => {
   const initialState = {
@@ -37,7 +41,6 @@ const CartState = (props) => {
         );
 
         if (itemSizeFound) {
-          console.log("item found");
           //item found with same size -- update quntity
           const index = items.findIndex(
             (i) => i.id === item.id && i.size === item.size
@@ -46,6 +49,14 @@ const CartState = (props) => {
           const newItems = [...items];
           newItems[index].quantity = itemSizeFound.quantity + 1;
 
+          dispatch({
+            type: ADD_TO_CART,
+            payload: {
+              items: newItems,
+              quantity: quantity + 1,
+              total: +(total + +item.price).toFixed(2),
+            },
+          });
           await db
             .collection("carts")
             .doc(cartId)
@@ -55,7 +66,14 @@ const CartState = (props) => {
               total: +(total + +item.price).toFixed(2),
             });
         } else {
-          console.log("item not found");
+          dispatch({
+            type: ADD_TO_CART,
+            payload: {
+              items: [...items, item],
+              quantity: quantity + 1,
+              total: +(total + +item.price).toFixed(2),
+            },
+          });
           await db
             .collection("carts")
             .doc(cartId)
@@ -96,7 +114,7 @@ const CartState = (props) => {
         }
       }
 
-      getCartItems();
+      //getCartItems();
     } catch (error) {
       console.log("Error Adding to Cart", error);
     }

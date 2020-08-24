@@ -1,5 +1,6 @@
 export const ADD_ITEM = "ADD_ITEM";
 export const GET_ITEMS = "GET_ITEMS";
+export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 export const GET_ITEM = "GET_ITEM";
 export const SET_LOADING = "SET_LOADING";
 export const ADD_CATEGORY = "ADD_CATEGORY";
