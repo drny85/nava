@@ -5,9 +5,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   View,
+  Keyboard,
   Text,
   Alert,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -30,7 +32,6 @@ const Signin = () => {
   const navigation = useNavigation();
   const { user, login, setUser } = useContext(authContext);
   const { previewRoute, clearSettings } = useContext(settingsContext);
-  console.log(previewRoute);
 
   const handleSignin = async ({ email, password }) => {
     try {
@@ -64,44 +65,46 @@ const Signin = () => {
 
   return (
     <Screen>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-      >
-        <AppForm
-          initialValues={{ email: "", password: "" }}
-          onSubmit={handleSignin}
-          validationSchema={validationSchema}
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
-          <AppFormField
-            autoFocus={true}
-            placeholder="Email"
-            keyboardType="email-address"
-            icon="email"
-            name="email"
-            autoCorrect={false}
-            autoCapitalize="none"
-            textContentType="emailAddress"
-          />
+          <AppForm
+            initialValues={{ email: "", password: "" }}
+            onSubmit={handleSignin}
+            validationSchema={validationSchema}
+          >
+            <AppFormField
+              autoFocus={true}
+              placeholder="Email"
+              keyboardType="email-address"
+              icon="email"
+              name="email"
+              autoCorrect={false}
+              autoCapitalize="none"
+              textContentType="emailAddress"
+            />
 
-          <AppFormField
-            placeholder="Password"
-            name="password"
-            secureTextEntry={true}
-            autoCorrect={false}
-            icon="lock-open"
-            textContentType="password"
-          />
+            <AppFormField
+              placeholder="Password"
+              name="password"
+              secureTextEntry={true}
+              autoCorrect={false}
+              icon="lock-open"
+              textContentType="password"
+            />
 
-          <AppSubmitButton title="Login" />
-        </AppForm>
-        <View style={styles.account}>
-          <Text style={styles.text}>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-            <Text style={styles.signupText}>Sign Up</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+            <AppSubmitButton title="Login" />
+          </AppForm>
+          <View style={styles.account}>
+            <Text style={styles.text}>Don't have an account?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+              <Text style={styles.signupText}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </Screen>
   );
 };

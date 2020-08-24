@@ -12,6 +12,8 @@ import {
   GET_CART_ITEMS,
   REMOVE_FROM_CART,
 } from "../types";
+import ShoppingCart from "../../models/ShoppingCart";
+import CarItem from "../../models/CartItem";
 
 const CartState = (props) => {
   const initialState = {
@@ -57,6 +59,7 @@ const CartState = (props) => {
               total: +(total + +item.price).toFixed(2),
             },
           });
+
           await db
             .collection("carts")
             .doc(cartId)
@@ -93,6 +96,15 @@ const CartState = (props) => {
           const newItems = [...items];
           newItems[index].quantity = itemFound.quantity + 1;
 
+          dispatch({
+            type: ADD_TO_CART,
+            payload: {
+              items: newItems,
+              quantity: quantity + 1,
+              total: +(total + +item.price).toFixed(2),
+            },
+          });
+
           await db
             .collection("carts")
             .doc(cartId)
@@ -103,6 +115,14 @@ const CartState = (props) => {
             });
         } else {
           //item no found -- add
+          dispatch({
+            type: ADD_TO_CART,
+            payload: {
+              items: [...items, item],
+              quantity: quantity + 1,
+              total: +(total + +item.price).toFixed(2),
+            },
+          });
           await db
             .collection("carts")
             .doc(cartId)
@@ -114,7 +134,7 @@ const CartState = (props) => {
         }
       }
 
-      //getCartItems();
+      // getCartItems();
     } catch (error) {
       console.log("Error Adding to Cart", error);
     }
@@ -146,6 +166,15 @@ const CartState = (props) => {
             const updatedItems = [...items];
             updatedItems[index].quantity = itemFoundWithSize.quantity - 1;
 
+            dispatch({
+              type: REMOVE_FROM_CART,
+              payload: {
+                items: updatedItems,
+                quantity: quantity - 1,
+                total: +(total - +item.price).toFixed(2),
+              },
+            });
+
             await db
               .collection("carts")
               .doc(id)
@@ -157,10 +186,19 @@ const CartState = (props) => {
           } else {
             // remove from cart
             const index = items.findIndex(
-              (i) => i.id === item.id && i.size === size
+              (i) => i.id === item.id && i.size === item.size
             );
             const updatedItems = [...items];
             updatedItems.splice(index, 1);
+
+            dispatch({
+              type: REMOVE_FROM_CART,
+              payload: {
+                items: updatedItems,
+                quantity: quantity - 1,
+                total: +(total - +item.price).toFixed(2),
+              },
+            });
 
             await db
               .collection("carts")
@@ -175,7 +213,7 @@ const CartState = (props) => {
           throw new Error("item not found in cart");
         }
 
-        getCartItems();
+        //getCartItems();
       } else {
         //item has no size -- delete one and update
 
@@ -187,6 +225,15 @@ const CartState = (props) => {
             const index = items.findIndex((i) => i.id === item.id);
             const updatedItems = [...items];
             updatedItems[index].quantity = itemFound.quantity - 1;
+
+            dispatch({
+              type: REMOVE_FROM_CART,
+              payload: {
+                items: updatedItems,
+                quantity: quantity - 1,
+                total: +(total - +item.price).toFixed(2),
+              },
+            });
 
             await db
               .collection("carts")
@@ -203,6 +250,15 @@ const CartState = (props) => {
             const updatedItems = [...items];
             updatedItems.splice(index, 1);
 
+            dispatch({
+              type: REMOVE_FROM_CART,
+              payload: {
+                items: updatedItems,
+                quantity: quantity - 1,
+                total: +(total - +item.price).toFixed(2),
+              },
+            });
+
             await db
               .collection("carts")
               .doc(id)
@@ -213,7 +269,7 @@ const CartState = (props) => {
               });
           }
 
-          getCartItems();
+          //getCartItems();
         } else {
           throw new Error("Item not found in cart");
         }
@@ -243,6 +299,7 @@ const CartState = (props) => {
     }
   };
 
+  //--------------------------
   const isAlreadyInCart = async (item) => {
     try {
       const id = await getCartId();

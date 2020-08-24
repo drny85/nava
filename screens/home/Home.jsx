@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "700",
     fontStyle: "italic",
+    fontFamily: "montserrat-bold-italic",
   },
   headerView: {
     padding: 10,

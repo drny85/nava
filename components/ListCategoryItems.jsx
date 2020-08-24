@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 30,
     fontWeight: "800",
+    fontFamily: "montserrat-bold",
     textTransform: "capitalize",
     marginLeft: 12,
     color: "gray",
