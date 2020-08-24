@@ -15,6 +15,7 @@ const CartState = (props) => {
 		cartTotal: 0,
 		loading: false,
 		itemCounts: 0,
+		InCart: false,
 	};
 
 	const CART_ID = "cartId";
@@ -221,6 +222,28 @@ const CartState = (props) => {
 		}
 	};
 
+	const isAlreadyInCart = async (item) => {
+		try {
+			const id = await getCartId();
+			const { items } = (await db.collection("carts").doc(id).get()).data();
+			if (item.size) {
+				if (items.find((i) => i.id === item.id && i.size === item.size)) {
+					dispatch({ type: "IN_CART", payload: true });
+				} else {
+					dispatch({ type: "IN_CART", payload: false });
+				}
+			} else {
+				if (items.find((i) => i.id === item.id)) {
+					dispatch({ type: "IN_CART", payload: true });
+				} else {
+					dispatch({ type: "IN_CART", payload: false });
+				}
+			}
+		} catch (error) {
+			console.log("Error getting item form cart", error);
+		}
+	};
+
 	const clearCart = async () => {
 		try {
 			setLoading();
@@ -275,10 +298,12 @@ const CartState = (props) => {
 				loading: state.loading,
 				cartTotal: state.cartTotal,
 				itemCounts: state.itemCounts,
+				InCart: state.InCart,
 				addToCart,
 				clearCart,
 				getCartItems,
 				deleteFromCart,
+				isAlreadyInCart,
 			}}
 		>
 			{props.children}

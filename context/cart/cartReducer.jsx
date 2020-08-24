@@ -17,6 +17,13 @@ export default (state, action) => {
 				loading: false,
 			};
 
+		case "IN_CART":
+			return {
+				...state,
+				loading: false,
+				InCart: action.payload,
+			};
+
 		case SET_LOADING:
 			return {
 				...state,

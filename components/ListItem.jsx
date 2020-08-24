@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import colors from "../config/colors";
 
-const ListItem = ({ name, imageUrl, price, qty }) => {
+const ListItem = ({ name, imageUrl, price, qty, size }) => {
 
 	return (
 		<View style={styles.container}>
@@ -10,10 +10,15 @@ const ListItem = ({ name, imageUrl, price, qty }) => {
 				<Image style={styles.img} source={{ uri: imageUrl }} />
 				<View style={styles.firstView}>
 					<Text style={styles.name}>{name}</Text>
-					<View style={{flexDirection: 'row'}}>
-          <Text style={styles.qty}>
+					<View style={{ flexDirection: "row" }}>
+						<Text style={styles.qty}>
 							{qty} x {price}
-					</Text>
+						</Text>
+						{size && (
+							<Text style={{ marginLeft: 8, textTransform: "capitalize" }}>
+								{size}
+							</Text>
+						)}
 					</View>
 				</View>
 			</View>

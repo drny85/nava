@@ -90,6 +90,7 @@ const OrderSummary = ({ navigation, route }) => {
 							name={item.name}
 							imageUrl={item.imageUrl}
 							qty={item.quantity}
+							size={item.size}
 							price={item.price}
 						/>
 					)}
