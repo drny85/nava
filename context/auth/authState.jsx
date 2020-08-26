@@ -5,6 +5,9 @@ import AuthContext from "./authContext";
 
 import { auth, db } from "../../services/database";
 import { SET_LOADING, SIGNUP, LOGOUT } from "../types";
+import "react-native-get-random-values";
+import uuid from "uuid";
+import { add } from "react-native-reanimated";
 
 const AuthState = (props) => {
 	const initialState = {
@@ -29,8 +32,6 @@ const AuthState = (props) => {
 				email: email,
 				imageUrl: null,
 			});
-
-			console.log("DATA", data);
 		} catch (error) {
 			console.log(error);
 		}
@@ -62,6 +63,7 @@ const AuthState = (props) => {
 		try {
 			authUnsubcribe = auth.onAuthStateChanged((user) => {
 				if (user) {
+					console.log("Settingup user");
 					setUser(user.uid);
 				}
 			});
@@ -76,6 +78,56 @@ const AuthState = (props) => {
 			await db.collection("appUser").doc(userId).update({ pushToken: token });
 		} catch (error) {
 			console.log("ERROR SETIING TOKEN", error);
+		}
+	};
+
+	const saveDeliveryAddress = async (address) => {
+		try {
+			address.id = new Date().getTime();
+
+			const result = await db.collection("appUser").doc(address.userId).get();
+
+			const data = result.data();
+
+			if (data.deliveryAddresses) {
+				const found = data.deliveryAddresses.find(
+					(a) =>
+						a.street.toLowerCase().trim() ===
+							address.street.toLowerCase().trim() &&
+						a.apt.toLowerCase() === address.apt.toLowerCase() &&
+						a.zipcode.trim() === address.zipcode.trim()
+				);
+
+				if (found) return { message: "Address already exist" };
+
+				const newAddress = [...data.deliveryAddresses, address];
+				console.log("NEW ADDRESS", newAddress);
+				const newinfo = await db
+					.collection("appUser")
+					.doc(address.userId)
+					.update({
+						deliveryAddresses: newAddress,
+					});
+
+				setUser(address.userId);
+			} else {
+				console.log("no address found");
+				const info = await db
+					.collection("appUser")
+					.doc(address.userId)
+					.update({
+						deliveryAddresses: [address],
+					});
+
+				console.log("DATA", info);
+
+				setUser(address.userId);
+			}
+
+			return { message: true };
+		} catch (error) {
+			console.log("Error saving delivery address", error);
+			return { message: "There was an error" };
 		}
 	};
 
@@ -95,6 +147,7 @@ const AuthState = (props) => {
 				createUser,
 				authUnsubcribe,
 				saveExpoPushToken,
+				saveDeliveryAddress,
 			}}
 		>
 			{props.children}

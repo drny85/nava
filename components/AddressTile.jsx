@@ -16,7 +16,7 @@ const AddressTile = ({ address }) => {
 			<View style={styles.container}>
 				<View>
 					<Text style={styles.text}>
-						{address.address} {address.apt ? address.apt : null}
+						{address.street} {address.apt ? address.apt : null}
 					</Text>
 					<Text style={styles.text}>
 						{address.city}, {address.zipcode}

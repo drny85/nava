@@ -37,9 +37,17 @@ const Profile = ({ navigation }) => {
 		try {
 			const { uri } = result;
 			const ext = uri.split(".").pop();
-			const filename = new Date().getTime() + "." + ext;
+			const filename = user.id + "-profile" + "." + ext;
 			const response = await fetch(uri);
 			const blob = await response.blob();
+
+			if (user.imageUrl) {
+				const ref = storage.ref(`profile/${filename}`);
+				if (ref) {
+					console.log("YES");
+					await ref.delete();
+				}
+			}
 
 			const ref = storage
 				.ref(`profile/${filename}`)
@@ -97,7 +105,6 @@ const Profile = ({ navigation }) => {
 	};
 
 	useEffect(() => {
-		console.log("Image");
 		if (user.imageUrl) {
 			setImage(user.imageUrl);
 		}
