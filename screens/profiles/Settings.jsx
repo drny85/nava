@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import * as Notifications from "expo-notifications";

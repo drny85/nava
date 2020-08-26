@@ -27,6 +27,7 @@ const AuthState = (props) => {
 				phone: phone,
 				name: name,
 				email: email,
+				imageUrl: null,
 			});
 
 			console.log("DATA", data);
