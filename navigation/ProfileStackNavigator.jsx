@@ -26,6 +26,7 @@ const ProfileStackNavigator = () => {
         name="Profile"
         component={Profile}
         options={{
+          headerTitleStyle: { fontFamily: "montserrat-bold" },
           headerRight: () => (
             <TouchableOpacity
               style={{ marginRight: 10 }}
@@ -49,4 +50,3 @@ const ProfileStackNavigator = () => {
 };
 
 export default ProfileStackNavigator;
-

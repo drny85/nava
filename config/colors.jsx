@@ -4,4 +4,5 @@ export default {
   ascent: "#DA6844",
   card: "#bdc3c7",
   tile: "#ecf0f1",
+  white: "#f7f7f7",
 };

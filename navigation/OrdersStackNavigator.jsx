@@ -16,56 +16,66 @@ import OrderInTheMaking from "../screens/orders/OrderInTheMaking";
 const OrdersStack = createStackNavigator();
 
 const OrdersStackNavigator = () => {
-	const navigation = useNavigation();
-	return (
-		<OrdersStack.Navigator mode="modal">
-			<OrdersStack.Screen
-				name="MyOrders"
-				component={MyOrders}
-				options={{ title: "My Orders", headerLeft: null }}
-			/>
-			<OrdersStack.Screen
-				name="OrderConfirmation"
-				component={OrderConfirmation}
-				options={{ title: "Confirmation", headerLeft: null }}
-			/>
-			<OrdersStack.Screen
-				name="OrderSummary"
-				component={OrderSummary}
-				options={{ title: "Order Summary" }}
-			/>
-			<OrdersStack.Screen
-				name="OrderInTheMaking"
-				component={OrderInTheMaking}
-				options={{ headerShown: false }}
-			/>
-			<OrdersStack.Screen
-				name="OrderDetails"
-				component={OrderDetails}
-				options={{ title: "Order Details" }}
-			/>
-			<OrdersStack.Screen
-				name="OrderVerification"
-				component={OrderVerification}
-				options={{
-					title: "Verification",
-					headerLeft: () => (
-						<TouchableWithoutFeedback
-							onPress={() => navigation.goBack()}
-							style={{ marginLeft: 10 }}
-						>
-							<Ionicons
-								style={{ marginLeft: 10 }}
-								name="md-arrow-back"
-								color={colors.primary}
-								size={30}
-							/>
-						</TouchableWithoutFeedback>
-					),
-				}}
-			/>
-		</OrdersStack.Navigator>
-	);
+  const navigation = useNavigation();
+  return (
+    <OrdersStack.Navigator mode="modal">
+      <OrdersStack.Screen
+        name="MyOrders"
+        component={MyOrders}
+        options={{ title: "My Orders", headerLeft: null }}
+      />
+      <OrdersStack.Screen
+        name="OrderConfirmation"
+        component={OrderConfirmation}
+        options={{ title: "Confirmation", headerLeft: null }}
+      />
+      <OrdersStack.Screen
+        name="OrderSummary"
+        component={OrderSummary}
+        options={{
+          title: "Order Summary",
+          headerTitleStyle: { fontFamily: "montserrat-bold" },
+        }}
+      />
+      <OrdersStack.Screen
+        name="OrderInTheMaking"
+        component={OrderInTheMaking}
+        options={{
+          headerShown: false,
+          headerTitleStyle: { fontFamily: "montserrat-bold" },
+        }}
+      />
+      <OrdersStack.Screen
+        name="OrderDetails"
+        component={OrderDetails}
+        options={{
+          title: "Order Details",
+          headerTitleStyle: { fontFamily: "montserrat-bold" },
+        }}
+      />
+      <OrdersStack.Screen
+        name="OrderVerification"
+        component={OrderVerification}
+        options={{
+          title: "Verification",
+          headerTitleStyle: { fontFamily: "montserrat-bold" },
+          headerLeft: () => (
+            <TouchableWithoutFeedback
+              onPress={() => navigation.goBack()}
+              style={{ marginLeft: 10 }}
+            >
+              <Ionicons
+                style={{ marginLeft: 10 }}
+                name="md-arrow-back"
+                color={colors.primary}
+                size={30}
+              />
+            </TouchableWithoutFeedback>
+          ),
+        }}
+      />
+    </OrdersStack.Navigator>
+  );
 };
 
 export default OrdersStackNavigator;

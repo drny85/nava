@@ -11,6 +11,7 @@ import { AppLoading } from "expo";
 import authContext from "./context/auth/authContext";
 import SettingsState from "./context/settings/settingsState";
 import * as Font from "expo-font";
+import navigationTheme from "./navigation/navigationTheme";
 
 const loadFonts = () => {
   return Font.loadAsync({
@@ -47,7 +48,7 @@ const App = () => {
         <CategoryState>
           <CartState>
             <OrdersState>
-              <NavigationContainer>
+              <NavigationContainer theme={navigationTheme}>
                 <AppNavigator />
               </NavigationContainer>
             </OrdersState>
