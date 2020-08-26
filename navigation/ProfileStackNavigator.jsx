@@ -29,6 +29,7 @@ const ProfileStackNavigator = () => {
 				options={{
 					headerTitleStyle: { fontFamily: "montserrat-bold" },
 					title: user ? user.name : "Profile",
+
 					headerRight: () => (
 						<TouchableOpacity
 							style={{ marginRight: 10 }}
@@ -47,7 +48,7 @@ const ProfileStackNavigator = () => {
 			<ProfileStack.Screen
 				name="MyAddress"
 				component={MyAddress}
-				options={{ title: "My Address" }}
+				options={{ title: "My Address", headerBackTitle: "Profile" }}
 			/>
 			<ProfileStack.Screen name="Signin" component={Signin} />
 			<ProfileStack.Screen name="Signup" component={Signup} />

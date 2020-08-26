@@ -24,10 +24,7 @@ const MyAddress = () => {
 		},
 	]);
 
-	const setPreferred = () => {
-		console.log("Pres");
-	};
-
+	
 	return (
 		<Screen style={styles.container}>
 			<AppButton
@@ -48,7 +45,7 @@ const MyAddress = () => {
 						data={addresses}
 						key={({ item }) => item.id}
 						renderItem={({ item }) => (
-							<AddressTile address={item} setPreferred={setPreferred} />
+							<AddressTile address={item} />
 						)}
 					/>
 				</View>

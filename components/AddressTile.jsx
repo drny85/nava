@@ -9,7 +9,6 @@ const AddressTile = ({ address }) => {
 	const [preferred, setPreferred] = useState(false);
 
 	const togglePreferred = () => {
-		console.log(preferred);
 		setPreferred(!preferred);
 	};
 	return (
@@ -29,7 +28,7 @@ const AddressTile = ({ address }) => {
 							style={{ paddingRight: 10 }}
 							name="checkcircleo"
 							size={24}
-							color="green"
+							color={colors.primary}
 						/>
 					)}
 				</View>
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		borderTopColor: colors.secondary,
 		borderBottomColor: colors.secondary,
-		borderWidth: 1,
+		borderWidth: 1.5,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
