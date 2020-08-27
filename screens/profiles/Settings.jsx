@@ -1,9 +1,10 @@
 // @ts-nocheck
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import AppButton from "../../components/AppButton";
+import Swipeable from "react-native-gesture-handler/Swipeable";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -21,8 +22,17 @@ const Settings = () => {
   };
   return (
     <View style={styles.screen}>
-      <Text>Settings</Text>
-      <AppButton title="Press Me" onPress={showNotification} />
+      <Swipeable
+        renderRightActions={({ interpolate }) => (
+          <View
+            style={{ width: 70, height: 100, backgroundColor: "red" }}
+          ></View>
+        )}
+      >
+        <View style={styles.view}>
+          <Text>Settings</Text>
+        </View>
+      </Swipeable>
     </View>
   );
 };
@@ -32,6 +42,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  view: {
+    backgroundColor: "green",
+    width: Dimensions.get("screen").width,
+    height: 100,
   },
 });
 
