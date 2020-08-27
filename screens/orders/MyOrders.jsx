@@ -49,7 +49,7 @@ const MyOrders = ({ navigation }) => {
 				<FlatList
 					showsVerticalScrollIndicator={false}
 					data={orders}
-					keyExtractor={(item) => item.id}
+					keyExtractor={(item, index) => (item.id + index.toString())}
 					renderItem={({ item, index }) => (
 						<OrderTile
 							onPress={() => goToOrderDetails(item)}

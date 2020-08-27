@@ -32,8 +32,7 @@ const OrderSummary = ({ navigation, route }) => {
 	);
 	//const { deliveryMethod } = useContext(settingsContext);
 	const { deliveryMethod, customer, paymentMethod } = route.params;
-	console.log("CUS", customer);
-
+	
 	if (!user) {
 		navigation.navigate("Profile", {
 			previewRoute: "Payment",
@@ -84,7 +83,7 @@ const OrderSummary = ({ navigation, route }) => {
 			<View style={styles.listView}>
 				<FlatList
 					data={cartItems}
-					keyExtractor={(item) => item.id}
+					keyExtractor={(item, index) => (item.id + index.toString())}
 					renderItem={({ item }) => (
 						<ListItem
 							sizes={item.sizes}
