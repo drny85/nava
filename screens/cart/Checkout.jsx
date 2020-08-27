@@ -10,6 +10,7 @@ import {
 	KeyboardAvoidingView,
 	Alert,
 	Platform,
+	TouchableWithoutFeedback,
 } from "react-native";
 
 import cartContext from "../../context/cart/cartContext";
@@ -19,10 +20,13 @@ import Pick from "../../components/Pick";
 
 import AppForm from "../../components/AppForm";
 import AppFormField from "../../components/AppFormField";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import * as Yup from "yup";
 import AppSubmitButton from "../../components/AppSubmitButton";
 import Screen from "../../components/Screen";
+import authContext from "../../context/auth/authContext";
+import { useEffect } from "react";
 
 const pickUpSchema = Yup.object().shape({
 	name: Yup.string().required().label("First Name"),
@@ -31,22 +35,25 @@ const pickUpSchema = Yup.object().shape({
 	email: Yup.string().email().required().label("Email"),
 });
 
-const deliverySchema = Yup.object().shape({
-	name: Yup.string().required().label("First Name"),
-	lastName: Yup.string().required().label("Last Name"),
-	phone: Yup.string().required().min(10).label("Phone"),
-	address: Yup.string().required().label("Address"),
-	apt: Yup.string().label("Apt or Floor"),
-	city: Yup.string().required().label("City"),
-	zipcode: Yup.string().required().min(5).label("Zip code"),
-	email: Yup.string().email().required().label("Email"),
-});
+// const deliverySchema = Yup.object().shape({
+// 	name: Yup.string().required().label("First Name"),
+// 	lastName: Yup.string().required().label("Last Name"),
+// 	phone: Yup.string().required().min(10).label("Phone"),
+// 	address: Yup.string().required().label("Address"),
+// 	apt: Yup.string().label("Apt or Floor"),
+// 	city: Yup.string().required().label("City"),
+// 	zipcode: Yup.string().required().min(5).label("Zip code"),
+// 	email: Yup.string().email().required().label("Email"),
+// });
 
 const Checkout = ({ route, navigation }) => {
 	const [paymentOption, setPaymentOption] = useState("credit");
 	const { deliveryMethod } = useContext(settingsContext);
+	const { user } = useContext(authContext);
+	const { previous } = route.params;
 
 	const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
+	const [deliveryAddress, setDeliveryAddress] = useState(null);
 
 	const { cartTotal, itemCounts } = useContext(cartContext);
 
@@ -76,15 +83,23 @@ const Checkout = ({ route, navigation }) => {
 			return;
 		}
 
+		let customer = { ...deliveryInfo };
+		customer.address = { ...previous };
+
 		navigation.navigate("Orders", {
 			screen: "OrderSummary",
 			params: {
 				deliveryMethod: deliveryOption,
 				paymentMethod: paymentOption,
-				customer: deliveryInfo,
+				customer: customer,
 			},
 		});
 	};
+
+	useEffect(() => {
+		console.log("Checkout Mounted");
+		if (previous) setDeliveryAddress(previous);
+	}, [previous]);
 
 	return (
 		<KeyboardAvoidingView
@@ -102,9 +117,7 @@ const Checkout = ({ route, navigation }) => {
 					<Text style={styles.total}>Order Tortal: ${cartTotal}</Text>
 				</View>
 				<View style={{ justifyContent: "center", alignItems: "center" }}>
-					<Text style={{ marginTop: 10, fontWeight: "700" }}>
-						Delivery Option
-					</Text>
+					<Text style={styles.title}>Delivery Option</Text>
 					<View style={styles.delivery}>
 						<TouchableOpacity
 							onPress={() => setDeliveryOption("delivery")}
@@ -162,7 +175,7 @@ const Checkout = ({ route, navigation }) => {
 					</View>
 				</View>
 				<View style={{ alignItems: "center" }}>
-					<Text style={{ fontWeight: "700" }}>Payment Option</Text>
+					<Text style={styles.title}>Payment Option</Text>
 					<View style={styles.delivery}>
 						{deliveryOption === "delivery" ? (
 							<>
@@ -219,7 +232,7 @@ const Checkout = ({ route, navigation }) => {
 								Person Picking Up
 							</Text>
 							<AppForm
-								initialValues={{ name: "", lastName: "", phone: "" }}
+								initialValues={{ name: "", lastName: "", phone: "", email: "" }}
 								onSubmit={handlePickup}
 								validationSchema={pickUpSchema}
 							>
@@ -259,10 +272,81 @@ const Checkout = ({ route, navigation }) => {
 
 				{deliveryOption === "delivery" && (
 					<View style={styles.addressView}>
-						<Text style={{ fontWeight: "700", marginTop: 5 }}>
-							Delivery Information
-						</Text>
-						<AppForm
+						<Text style={styles.title}>Delivery Information</Text>
+						<TouchableWithoutFeedback
+							onPress={() =>
+								navigation.navigate("MyAddress", { previous: "Checkout" })
+							}
+						>
+							<View style={styles.pickAddress}>
+								<View>
+									<Text style={styles.deliveryTitle}>
+										{previous ? `Delivery Address` : `Pick an address`}
+									</Text>
+									<View style={{ padding: 10 }}>
+										{deliveryAddress ? (
+											<>
+												<Text style={styles.deliveryText}>
+													{deliveryAddress.street}{" "}
+													{deliveryAddress.apt
+														? `, Apt ${deliveryAddress.apt}`
+														: null}
+												</Text>
+												<Text style={styles.deliveryText}>
+													{deliveryAddress.city}, {deliveryAddress.zipcode}
+												</Text>
+											</>
+										) : null}
+									</View>
+								</View>
+								<View>
+									<MaterialCommunityIcons
+										style={styles.icon}
+										name="chevron-right"
+										size={24}
+										color="black"
+									/>
+								</View>
+							</View>
+						</TouchableWithoutFeedback>
+						<View style={styles.form}>
+							<AppForm
+								initialValues={{ name: "", lastName: "", phone: "", email: "" }}
+								onSubmit={handleDelivery}
+								validationSchema={pickUpSchema}
+							>
+								<AppFormField
+									name="name"
+									iconName="account-badge-horizontal"
+									placeholder="First Name"
+								/>
+								<AppFormField
+									name="lastName"
+									iconName="account-badge-horizontal"
+									placeholder="Last Name"
+								/>
+								<AppFormField
+									name="phone"
+									iconName="phone"
+									placeholder="Phone"
+									maxLength={10}
+									keyboardType="number-pad"
+								/>
+								<AppFormField
+									name="email"
+									placeholder="Email"
+									iconName="email"
+									autoCorrect={false}
+									autoCapitalize="none"
+									keyboardType="email-address"
+									textContentType="emailAddress"
+								/>
+								<View style={{ marginTop: 20, width: "100%" }}>
+									<AppSubmitButton title="Check Out" />
+								</View>
+							</AppForm>
+						</View>
+						{/* <AppForm
 							onSubmit={handleDelivery}
 							initialValues={{
 								name: "",
@@ -307,7 +391,7 @@ const Checkout = ({ route, navigation }) => {
 							<View style={{ width: "100%", marginTop: 20 }}>
 								<AppSubmitButton title="Check Out" />
 							</View>
-						</AppForm>
+						</AppForm> */}
 						<View style={{ height: 80 }}></View>
 					</View>
 				)}
@@ -358,6 +442,11 @@ const styles = StyleSheet.create({
 		borderColor: "grey",
 		borderWidth: 0.5,
 	},
+	deliveryTitle: {
+		fontFamily: "montserrat-bold",
+		paddingHorizontal: 10,
+		fontSize: 14,
+	},
 	divider: {
 		height: "100%",
 		width: 2,
@@ -399,6 +488,35 @@ const styles = StyleSheet.create({
 		fontSize: 28,
 		fontWeight: "bold",
 		padding: 10,
+	},
+	pickAddress: {
+		width: Dimensions.get("screen").width,
+		height: Dimensions.get("screen").height * 0.1,
+		borderTopWidth: 2,
+		borderBottomWidth: 2,
+		borderTopColor: colors.secondary,
+		borderBottomColor: colors.secondary,
+		justifyContent: "space-between",
+		flexDirection: "row",
+		alignItems: "center",
+		flex: 1,
+		marginBottom: 10,
+	},
+
+	icon: {
+		marginRight: 10,
+	},
+	deliveryText: {
+		fontFamily: "montserrat",
+		fontSize: 14,
+		paddingBottom: 4,
+	},
+
+	title: {
+		fontWeight: "700",
+		marginTop: 5,
+		fontFamily: "montserrat-bold",
+		fontSize: 16,
 	},
 });
 

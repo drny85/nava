@@ -32,6 +32,7 @@ const OrderSummary = ({ navigation, route }) => {
 	);
 	//const { deliveryMethod } = useContext(settingsContext);
 	const { deliveryMethod, customer, paymentMethod } = route.params;
+	console.log("CUS", customer);
 
 	if (!user) {
 		navigation.navigate("Profile", {
@@ -119,10 +120,10 @@ const OrderSummary = ({ navigation, route }) => {
 							<CardSummaryItem
 								onPress={() => navigation.goBack()}
 								title="Your order will be delivered to:"
-								subtitle={`${customer.address} ${
-									customer.apt ? customer.apt : null
+								subtitle={`${customer.address.street} ${
+									customer.address.apt ? customer.address.apt : null
 								}`}
-								misc={`${customer.city}, ${customer.zipcode}`}
+								misc={`${customer.address.city}, ${customer.address.zipcode}`}
 							/>
 							<CardSummaryItem
 								onPress={() => navigation.goBack()}

@@ -136,7 +136,7 @@ const Profile = ({ navigation }) => {
 				/>
 				<ProfileItem
 					text="My Delivery Address"
-					onPress={() => navigation.navigate("MyAddress")}
+					onPress={() => navigation.navigate("MyAddress", { previous: null })}
 				/>
 			</View>
 		</Screen>

@@ -31,12 +31,18 @@ const addressSchema = Yup.object().shape({
 	zipcode: Yup.string().required().min(5).label("Zip code"),
 });
 
-const MyAddress = ({ navigation }) => {
+const MyAddress = ({ navigation, route }) => {
 	const { user, saveDeliveryAddress } = useContext(authContext);
 	const [address, setAddres] = useState(null);
 	const [visible, setVisible] = useState(false);
 	const [addresses, setAddresses] = useState([]);
 	const { deliveryAddresses } = user;
+
+	const { previous } = route.params;
+
+	const handleAddressPress = (item) => {
+		navigation.navigate("Checkout", { previous: item });
+	};
 
 	const addNewAddress = async (address) => {
 		try {
@@ -76,8 +82,13 @@ const MyAddress = ({ navigation }) => {
 				<View style={styles.mainView}>
 					<FlatList
 						data={addresses}
-						key={({ item }) => item.id.toString()}
-						renderItem={({ item }) => <AddressTile address={item} />}
+						keyExtractor={(item) => item.id.toString()}
+						renderItem={({ item }) => (
+							<AddressTile
+								address={item}
+								onPress={() => (previous ? handleAddressPress(item) : null)}
+							/>
+						)}
 					/>
 				</View>
 			)}

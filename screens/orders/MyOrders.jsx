@@ -27,7 +27,7 @@ const MyOrders = ({ navigation }) => {
 	}, []);
 
 	if (loading) {
-		<Loader />;
+		return <Loader />;
 	}
 
 	if (orders.length === 0) {

@@ -5,14 +5,14 @@ import colors from "../config/colors";
 import { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 
-const AddressTile = ({ address }) => {
+const AddressTile = ({ address, onPress }) => {
 	const [preferred, setPreferred] = useState(false);
 
-	const togglePreferred = () => {
+	const togglePreferred = (preferred) => {
 		setPreferred(!preferred);
 	};
 	return (
-		<TouchableWithoutFeedback onPress={togglePreferred}>
+		<TouchableWithoutFeedback onPress={onPress}>
 			<View style={styles.container}>
 				<View>
 					<Text style={styles.text}>

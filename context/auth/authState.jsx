@@ -5,9 +5,6 @@ import AuthContext from "./authContext";
 
 import { auth, db } from "../../services/database";
 import { SET_LOADING, SIGNUP, LOGOUT } from "../types";
-import "react-native-get-random-values";
-import uuid from "uuid";
-import { add } from "react-native-reanimated";
 
 const AuthState = (props) => {
 	const initialState = {
@@ -101,7 +98,7 @@ const AuthState = (props) => {
 				if (found) return { message: "Address already exist" };
 
 				const newAddress = [...data.deliveryAddresses, address];
-				console.log("NEW ADDRESS", newAddress);
+
 				const newinfo = await db
 					.collection("appUser")
 					.doc(address.userId)
@@ -111,15 +108,12 @@ const AuthState = (props) => {
 
 				setUser(address.userId);
 			} else {
-				console.log("no address found");
 				const info = await db
 					.collection("appUser")
 					.doc(address.userId)
 					.update({
 						deliveryAddresses: [address],
 					});
-
-				console.log("DATA", info);
 
 				setUser(address.userId);
 			}
