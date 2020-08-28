@@ -27,7 +27,7 @@ import { Alert } from "react-native";
 const addressSchema = Yup.object().shape({
 	street: Yup.string().required().label("Street"),
 	apt: Yup.string(),
-	city: Yup.string().required().label("Street"),
+	city: Yup.string().required().label("City"),
 	zipcode: Yup.string().required().min(5).label("Zip code"),
 });
 

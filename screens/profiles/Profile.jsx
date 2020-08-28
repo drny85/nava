@@ -1,12 +1,6 @@
 // @ts-nocheck
 import React, { useContext, useEffect, useState } from "react";
-import {
-	View,
-	StyleSheet,
-	Text,
-	Image,
-	TouchableWithoutFeedback,
-} from "react-native";
+import { View, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 import Screen from "../../components/Screen";
 import authContext from "../../context/auth/authContext";
 import Signin from "./Signin";
@@ -14,6 +8,7 @@ import useNotifications from "../../hooks/useNotifications";
 import { Dimensions } from "react-native";
 import ProfileItem from "../../components/ProfileItem";
 import * as ImagePicker from "expo-image-picker";
+import { Image } from "react-native-expo-image-cache";
 
 import { Alert } from "react-native";
 
@@ -116,12 +111,12 @@ const Profile = ({ navigation }) => {
 				<TouchableWithoutFeedback onPress={requestPermission}>
 					<Image
 						style={styles.img}
-						source={{
-							uri:
-								image === ""
-									? "https://lh3.googleusercontent.com/proxy/Y91ry80ZazcGvn0nVsDFO255xsRi9IVfxPsFOkZ7sMmp_TkKmMUCGusktzItJkWhjvoWuOJZcjqta9s8cx6u03HDvmkDAjwT6i0Mu8iPTm0HnjRbpQel"
-									: image,
-						}}
+						tint="light"
+						uri={
+							image === ""
+								? "https://lh3.googleusercontent.com/proxy/Y91ry80ZazcGvn0nVsDFO255xsRi9IVfxPsFOkZ7sMmp_TkKmMUCGusktzItJkWhjvoWuOJZcjqta9s8cx6u03HDvmkDAjwT6i0Mu8iPTm0HnjRbpQel"
+								: image
+						}
 					/>
 				</TouchableWithoutFeedback>
 			</View>

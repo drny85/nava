@@ -4,11 +4,12 @@ import {
 	View,
 	Text,
 	StyleSheet,
-	Image,
 	TouchableOpacity,
 	Dimensions,
 } from "react-native";
 import colors from "../config/colors";
+
+import { Image } from "react-native-expo-image-cache";
 
 const { height } = Dimensions.get("screen");
 
@@ -17,7 +18,7 @@ const Card = ({ name, imageUrl, price, sizes, onPress, style }) => {
 		<TouchableOpacity style={[styles.card, style]} onPress={onPress}>
 			<View style={{ height: "100%", width: "100%" }}>
 				<View>
-					<Image style={styles.image} source={{ uri: imageUrl }} />
+					<Image tint="light" style={styles.image} uri={imageUrl} />
 				</View>
 				<View style={styles.details}>
 					<Text style={styles.name}>{name}</Text>
