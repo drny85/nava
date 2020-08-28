@@ -78,6 +78,34 @@ const AuthState = (props) => {
 		}
 	};
 
+	const deleteUserAddress = async (add) => {
+		try {
+			const addresses = (
+				await db.collection("appUser").doc(add.userId).get()
+			).data().deliveryAddresses;
+			const found = addresses.find((address) => address.id === add.id);
+			if (found) {
+				const newAddresses = [...addresses];
+				const index = newAddresses.findIndex(
+					(address) => address.id === add.id && address.userId === add.userId
+				);
+				newAddresses.splice(index, 1);
+				await db.collection("appUser").doc(add.userId).update({
+					deliveryAddresses: newAddresses,
+				});
+
+				setUser(add.userId);
+
+				return { message: true };
+			}
+
+			return { message: false };
+		} catch (error) {
+			console.log("Error deleteting address", error);
+			return { message: false };
+		}
+	};
+
 	const saveDeliveryAddress = async (address) => {
 		try {
 			address.id = new Date().getTime();
@@ -141,6 +169,7 @@ const AuthState = (props) => {
 				createUser,
 				authUnsubcribe,
 				saveExpoPushToken,
+				deleteUserAddress,
 				saveDeliveryAddress,
 			}}
 		>
