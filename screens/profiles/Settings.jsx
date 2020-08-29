@@ -5,6 +5,7 @@ import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import AppButton from "../../components/AppButton";
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import colors from "../../config/colors";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -23,10 +24,27 @@ const Settings = () => {
   return (
     <View style={styles.screen}>
       <Swipeable
+        overshootRight={false}
         renderRightActions={({ interpolate }) => (
-          <View
-            style={{ width: 70, height: 100, backgroundColor: "red" }}
-          ></View>
+          <View style={styles.views}>
+            <View
+              style={{ width: "33%", height: "100%", backgroundColor: "red" }}
+            ></View>
+            <View
+              style={{
+                width: "33%",
+                height: "100%",
+                backgroundColor: "yellow",
+              }}
+            ></View>
+            <View
+              style={{
+                width: "33%",
+                height: "100%",
+                backgroundColor: "blue",
+              }}
+            ></View>
+          </View>
         )}
       >
         <View style={styles.view}>
@@ -44,9 +62,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   view: {
-    backgroundColor: "green",
+    backgroundColor: colors.card,
     width: Dimensions.get("screen").width,
-    height: 100,
+    height: 80,
+  },
+  views: {
+    width: Dimensions.get("screen").width / 2,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
 });
 

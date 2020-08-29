@@ -2,13 +2,12 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { Dimensions } from "react-native";
 import colors from "../config/colors";
-import { useState } from "react";
-import { AntDesign } from "@expo/vector-icons";
+
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
 const AddressTile = ({ address, onPress, renderRightActions }) => {
   return (
-    <Swipeable renderRightActions={renderRightActions}>
+    <Swipeable renderRightActions={renderRightActions} overshootRight={false}>
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={styles.container}>
           <View>

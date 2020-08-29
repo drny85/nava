@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import {
   StyleSheet,
   KeyboardAvoidingView,
@@ -57,7 +57,7 @@ const Signin = () => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       console.log("left");
     };

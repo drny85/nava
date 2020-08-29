@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import Screen from "../../components/Screen";
 import authContext from "../../context/auth/authContext";
 import Signin from "./Signin";
@@ -15,150 +15,151 @@ import { Alert } from "react-native";
 import { storage, db } from "../../services/database";
 
 const Profile = ({ navigation }) => {
-	const { user } = useContext(authContext);
-	const [image, setImage] = useState("");
-	if (!user) return <Signin />;
-	user.pushToken ? null : useNotifications();
-	const [hasPermission, setHasPermission] = useState(false);
+  const [image, setImage] = useState("");
+  const [hasPermission, setHasPermission] = useState(false);
+  const { user } = useContext(authContext);
 
-	const requestPermission = async () => {
-		const { granted } = await ImagePicker.requestCameraPermissionsAsync();
-		if (!granted) alert("We need you camera permission");
-		setHasPermission(granted);
-		await handleImagePicker();
-	};
+  if (!user) return <Signin />;
+  user.pushToken ? null : useNotifications();
 
-	const saveOrChangeImageToDatabase = async (result) => {
-		try {
-			const { uri } = result;
-			const ext = uri.split(".").pop();
-			const filename = user.id + "-profile" + "." + ext;
-			const response = await fetch(uri);
-			const blob = await response.blob();
+  const requestPermission = async () => {
+    const { granted } = await ImagePicker.requestCameraPermissionsAsync();
+    if (!granted) alert("We need you camera permission");
+    setHasPermission(granted);
+    await handleImagePicker();
+  };
 
-			if (user.imageUrl) {
-				const ref = storage.ref(`profile/${filename}`);
-				if (ref) {
-					console.log("YES");
-					await ref.delete();
-				}
-			}
+  const saveOrChangeImageToDatabase = async (result) => {
+    try {
+      const { uri } = result;
+      const ext = uri.split(".").pop();
+      const filename = user.id + "-profile" + "." + ext;
+      const response = await fetch(uri);
+      const blob = await response.blob();
 
-			const ref = storage
-				.ref(`profile/${filename}`)
-				.put(blob, { contentType: "image/jpeg" });
+      if (user.imageUrl) {
+        const ref = storage.ref(`profile/${filename}`);
+        if (ref) {
+          console.log("YES");
+          await ref.delete();
+        }
+      }
 
-			ref.on(
-				"state_changed",
-				(s) => {
-					let progress = (s.bytesTransferred / s.totalBytes) * 100;
-				},
-				(error) => {
-					console.log(error);
-				},
-				async () => {
-					const imageUrl = await ref.snapshot.ref.getDownloadURL();
-					if (imageUrl) {
-						try {
-							await db.collection("appUser").doc(user.id).update({ imageUrl });
-						} catch (error) {
-							console.log("error saving image to user", error);
-						}
-					}
-				}
-			);
-		} catch (error) {
-			console.log("Error from saving image", error);
-		}
-	};
+      const ref = storage
+        .ref(`profile/${filename}`)
+        .put(blob, { contentType: "image/jpeg" });
 
-	const handleImagePicker = async () => {
-		try {
-			const result = await ImagePicker.launchImageLibraryAsync({
-				mediaTypes: ImagePicker.MediaTypeOptions.Images,
-				quality: 0.6,
+      ref.on(
+        "state_changed",
+        (s) => {
+          let progress = (s.bytesTransferred / s.totalBytes) * 100;
+        },
+        (error) => {
+          console.log(error);
+        },
+        async () => {
+          const imageUrl = await ref.snapshot.ref.getDownloadURL();
+          if (imageUrl) {
+            try {
+              await db.collection("appUser").doc(user.id).update({ imageUrl });
+            } catch (error) {
+              console.log("error saving image to user", error);
+            }
+          }
+        }
+      );
+    } catch (error) {
+      console.log("Error from saving image", error);
+    }
+  };
 
-				allowsEditing: true,
-			});
-			if (!result.cancelled) {
-				setImage(result.uri);
-				Alert.alert(
-					"Do you want to change?",
-					"Are you happy with this image?",
-					[
-						{
-							text: "Save it",
-							onPress: () => saveOrChangeImageToDatabase(result),
-						},
-						{ text: "No", style: "cancel" },
-					]
-				);
-			}
-		} catch (error) {
-			console.log("ERROR", error);
-		}
-	};
+  const handleImagePicker = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.6,
 
-	useEffect(() => {
-		if (user.imageUrl) {
-			setImage(user.imageUrl);
-		}
-	}, [user]);
+        allowsEditing: true,
+      });
+      if (!result.cancelled) {
+        setImage(result.uri);
+        Alert.alert(
+          "Do you want to change?",
+          "Are you happy with this image?",
+          [
+            {
+              text: "Save it",
+              onPress: () => saveOrChangeImageToDatabase(result),
+            },
+            { text: "No", style: "cancel" },
+          ]
+        );
+      }
+    } catch (error) {
+      console.log("ERROR", error);
+    }
+  };
 
-	return (
-		<Screen style={styles.container}>
-			<View style={styles.image_view}>
-				<TouchableWithoutFeedback onPress={requestPermission}>
-					<Image
-						style={styles.img}
-						tint="light"
-						uri={
-							image === ""
-								? "https://lh3.googleusercontent.com/proxy/Y91ry80ZazcGvn0nVsDFO255xsRi9IVfxPsFOkZ7sMmp_TkKmMUCGusktzItJkWhjvoWuOJZcjqta9s8cx6u03HDvmkDAjwT6i0Mu8iPTm0HnjRbpQel"
-								: image
-						}
-					/>
-				</TouchableWithoutFeedback>
-			</View>
-			<View style={styles.profile_view}>
-				<ProfileItem
-					text="my orders"
-					onPress={() => navigation.navigate("Orders")}
-				/>
-				<ProfileItem
-					text="Personal Info"
-					onPress={() => console.log("go to my personal info")}
-				/>
-				<ProfileItem
-					text="My Delivery Address"
-					onPress={() => navigation.navigate("MyAddress", { previous: null })}
-				/>
-			</View>
-		</Screen>
-	);
+  useEffect(() => {
+    if (user.imageUrl) {
+      setImage(user.imageUrl);
+    }
+  }, []);
+
+  return (
+    <Screen style={styles.container}>
+      <View style={styles.image_view}>
+        <TouchableWithoutFeedback onPress={requestPermission}>
+          <Image
+            style={styles.img}
+            tint="light"
+            uri={
+              image === ""
+                ? "https://lh3.googleusercontent.com/proxy/Y91ry80ZazcGvn0nVsDFO255xsRi9IVfxPsFOkZ7sMmp_TkKmMUCGusktzItJkWhjvoWuOJZcjqta9s8cx6u03HDvmkDAjwT6i0Mu8iPTm0HnjRbpQel"
+                : image
+            }
+          />
+        </TouchableWithoutFeedback>
+      </View>
+      <View style={styles.profile_view}>
+        <ProfileItem
+          text="my orders"
+          onPress={() => navigation.navigate("Orders")}
+        />
+        <ProfileItem
+          text="Personal Info"
+          onPress={() => console.log("go to my personal info")}
+        />
+        <ProfileItem
+          text="My Delivery Address"
+          onPress={() => navigation.navigate("MyAddress", { previous: null })}
+        />
+      </View>
+    </Screen>
+  );
 };
 
 const styles = StyleSheet.create({
-	container: {
-		alignItems: "center",
-	},
-	img: {
-		width: "100%",
-		height: "100%",
-		resizeMode: "cover",
-		borderRadius: Dimensions.get("screen").height / 2,
-	},
-	image_view: {
-		width: Dimensions.get("screen").height * 0.3,
-		height: Dimensions.get("screen").height * 0.3,
-		borderRadius: Dimensions.get("screen").height / 2,
-		marginVertical: 10,
-	},
-	profile_view: {
-		flex: 1,
-		height: "100%",
-		width: "100%",
-	},
+  container: {
+    alignItems: "center",
+  },
+  img: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+    borderRadius: Dimensions.get("screen").height / 2,
+  },
+  image_view: {
+    width: Dimensions.get("screen").height * 0.3,
+    height: Dimensions.get("screen").height * 0.3,
+    borderRadius: Dimensions.get("screen").height / 2,
+    marginVertical: 10,
+  },
+  profile_view: {
+    flex: 1,
+    height: "100%",
+    width: "100%",
+  },
 });
 
 export default Profile;

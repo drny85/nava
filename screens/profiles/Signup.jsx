@@ -1,9 +1,8 @@
 // @ts-nocheck
-import React, { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import {
   StyleSheet,
   KeyboardAvoidingView,
-  Platform,
   TouchableWithoutFeedback,
   View,
   Keyboard,
@@ -62,7 +61,7 @@ const Signup = () => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       console.log("left");
     };
