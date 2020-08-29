@@ -48,7 +48,7 @@ const ProfileStackNavigator = () => {
 			<ProfileStack.Screen
 				name="MyAddress"
 				component={MyAddress}
-				options={{ title: "My Address", headerBackTitle: "Profile" }}
+				options={{ title: "My Addresses", headerBackTitle: "Profile" }}
 			/>
 			<ProfileStack.Screen name="Signin" component={Signin} />
 			<ProfileStack.Screen name="Signup" component={Signup} />

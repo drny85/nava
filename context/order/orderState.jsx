@@ -70,10 +70,11 @@ const OrdersState = (props) => {
 			}
 
 			const result = await db.collection("orders").add(newOrder);
-			const data = (await result.get()).data();
-			return { id: result.id, ...data };
+			const res = (await result.get()).data();
+			return { data: { id: result.id, ...res }, error: false };
 		} catch (error) {
 			console.log(error);
+			return { error: true, msg: error };
 		}
 	};
 

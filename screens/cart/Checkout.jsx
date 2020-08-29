@@ -35,17 +35,6 @@ const pickUpSchema = Yup.object().shape({
 	email: Yup.string().email().required().label("Email"),
 });
 
-// const deliverySchema = Yup.object().shape({
-// 	name: Yup.string().required().label("First Name"),
-// 	lastName: Yup.string().required().label("Last Name"),
-// 	phone: Yup.string().required().min(10).label("Phone"),
-// 	address: Yup.string().required().label("Address"),
-// 	apt: Yup.string().label("Apt or Floor"),
-// 	city: Yup.string().required().label("City"),
-// 	zipcode: Yup.string().required().min(5).label("Zip code"),
-// 	email: Yup.string().email().required().label("Email"),
-// });
-
 const Checkout = ({ route, navigation }) => {
 	const [paymentOption, setPaymentOption] = useState("credit");
 	const { deliveryMethod } = useContext(settingsContext);

@@ -134,7 +134,7 @@ const Profile = ({ navigation }) => {
 					onPress={() => console.log("go to my personal info")}
 				/>
 				<ProfileItem
-					text="My Delivery Address"
+					text="My Delivery Addresses"
 					onPress={() => navigation.navigate("MyAddress", { previous: null })}
 				/>
 			</View>

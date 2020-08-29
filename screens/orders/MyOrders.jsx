@@ -17,11 +17,9 @@ const MyOrders = ({ navigation }) => {
 	};
 
 	useEffect(() => {
-		console.log("getting orders");
 		getOrders(user.id);
 
 		return () => {
-			console.log("Unsubscribe from My Orders");
 			Unsubscribe();
 		};
 	}, []);
@@ -49,7 +47,7 @@ const MyOrders = ({ navigation }) => {
 				<FlatList
 					showsVerticalScrollIndicator={false}
 					data={orders}
-					keyExtractor={(item, index) => (item.id + index.toString())}
+					keyExtractor={(item, index) => item.id + index.toString()}
 					renderItem={({ item, index }) => (
 						<OrderTile
 							onPress={() => goToOrderDetails(item)}
