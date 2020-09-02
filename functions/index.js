@@ -14,38 +14,37 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/payment", async (req, res) => {
-	
-	try {
-		const { items, email } = req.body;
-		const newItems = items.map((item) => {
-			return {
-				price_data: {
-					currency: "usd",
-					product_data: {
-						name: item.name,
-					},
-					unit_amount: item.price * 100,
-				},
-				quantity: item.quantity,
-			};
-		});
+  try {
+    const { items, email } = req.body;
+    const newItems = items.map((item) => {
+      return {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: item.name,
+          },
+          unit_amount: parseInt(item.price) * 100,
+        },
+        quantity: item.quantity,
+      };
+    });
 
-		const session = await stripe.checkout.sessions.create({
-			payment_method_types: ["card"],
-			customer_email: email.toLowerCase(),
-			line_items: newItems,
-			mode: "payment",
-			success_url: "https://example.com/success",
-			cancel_url: "https://example.com/cancel",
-		});
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      customer_email: email.toLowerCase(),
+      line_items: newItems,
+      mode: "payment",
+      success_url: "https://example.com/success",
+      cancel_url: "https://example.com/cancel",
+    });
 
-		return res.status(200).send({
-			session_id: session.id,
-		});
-	} catch (error) {
-		console.log("ERROR", error);
-		return res.status(500).send(error.message);
-	}
+    return res.status(200).send({
+      session_id: session.id,
+    });
+  } catch (error) {
+    console.log("ERROR", error);
+    return res.status(500).send(error.message);
+  }
 });
 
 exports.makePayment = functions.https.onRequest(app);

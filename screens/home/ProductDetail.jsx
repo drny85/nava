@@ -62,7 +62,10 @@ const ProductDetail = ({ route, navigation }) => {
     }
 
     item.size = checked ? checked : null;
-    item.price = item.size === null ? item.price : item.price[checked];
+    item.price =
+      item.size === null
+        ? parseFloat(item.price)
+        : parseFloat(item.price[checked]);
     item.instruction = instruction;
 
     await addToCart(item);

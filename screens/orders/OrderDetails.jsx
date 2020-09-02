@@ -8,109 +8,110 @@ import colors from "../../config/colors";
 import ListItem from "../../components/ListItem";
 
 const OrderDetails = ({ route, navigation }) => {
-	const { order } = route.params;
+  const { order } = route.params;
+  console.log(order);
 
-	if (order.status !== "delivered") {
-		navigation.navigate("OrderInTheMaking");
-	}
+  if (order.status !== "delivered") {
+    navigation.navigate("OrderInTheMaking");
+  }
 
-	return (
-		<Screen style={styles.container}>
-			<View style={styles.orderInfo}>
-				<Text style={styles.text}>
-					Date: {moment(order.orderPlaced).format("LL")}{" "}
-				</Text>
-				<Text style={styles.text}>
-					Customer: {order.customer.name} {order.customer.lastName}
-				</Text>
-				<Text style={styles.text}>Order Type: {order.orderType}</Text>
-				<Text style={styles.text}>Payment Method: {order.paymentMethod}</Text>
-				<Text style={styles.text}>
-					{order.orderType === "pickup" || order.type === "pickup" ? (
-						`Person Picking Up: ${order.customer.name}`
-					) : (
-						<Text numberOfLines={1} style={styles.text}>
-							Delivered to: {order.customer.address.street},{" "}
-							{order.customer.address.city}
-						</Text>
-					)}
-				</Text>
-			</View>
-			<View
-				style={{
-					flexDirection: "row",
-					width: "100%",
-					justifyContent: "space-around",
-					marginVertical: 10,
-					alignItems: "center",
-				}}
-			>
-				<Text
-					style={{
-						fontSize: 20,
-						fontWeight: "700",
-						fontFamily: "montserrat-bold",
-					}}
-				>
-					Items: {order.items.length}
-				</Text>
-				<Text
-					style={{
-						fontSize: 20,
-						fontWeight: "700",
-						marginVertical: 10,
-						fontFamily: "montserrat-bold",
-					}}
-				>
-					Amount: ${order.totalAmount}
-				</Text>
-			</View>
+  return (
+    <Screen style={styles.container}>
+      <View style={styles.orderInfo}>
+        <Text style={styles.text}>
+          Date: {moment(order.orderPlaced).format("LL")}{" "}
+        </Text>
+        <Text style={styles.text}>
+          Customer: {order.customer.name} {order.customer.lastName}
+        </Text>
+        <Text style={styles.text}>Order Type: {order.orderType}</Text>
+        <Text style={styles.text}>Payment Method: {order.paymentMethod}</Text>
+        <Text style={styles.text}>
+          {order.orderType === "pickup" || order.type === "pickup" ? (
+            `Person Picking Up: ${order.customer.name}`
+          ) : (
+            <Text numberOfLines={1} style={styles.text}>
+              Delivered to: {order.customer.address.street},{" "}
+              {order.customer.address.city}
+            </Text>
+          )}
+        </Text>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          width: "100%",
+          justifyContent: "space-around",
+          marginVertical: 10,
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "700",
+            fontFamily: "montserrat-bold",
+          }}
+        >
+          Items: {order.items.length}
+        </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "700",
+            marginVertical: 10,
+            fontFamily: "montserrat-bold",
+          }}
+        >
+          Amount: ${order.totalAmount}
+        </Text>
+      </View>
 
-			<View style={{ width: "100%", marginTop: 5, flex: 1 }}>
-				<FlatList
-					data={order.items}
-					keyExtractor={(item, index) => item.id + index.toString()}
-					renderItem={({ item }) => (
-						<ListItem
-							name={item.name}
-							imageUrl={item.imageUrl}
-							qty={item.quantity}
-							price={item.price}
-							size={item.size}
-						/>
-					)}
-				/>
-			</View>
-		</Screen>
-	);
+      <View style={{ width: "100%", marginTop: 5, flex: 1 }}>
+        <FlatList
+          data={order.items}
+          keyExtractor={(item, index) => item.id + index.toString()}
+          renderItem={({ item }) => (
+            <ListItem
+              name={item.name}
+              imageUrl={item.imageUrl}
+              qty={item.quantity}
+              price={item.price}
+              size={item.size}
+            />
+          )}
+        />
+      </View>
+    </Screen>
+  );
 };
 
 const styles = StyleSheet.create({
-	container: {
-		alignItems: "center",
-		//fontFamily: "montserrat",
-	},
-	orderInfo: {
-		marginTop: 3,
-		padding: 10,
+  container: {
+    alignItems: "center",
+    //fontFamily: "montserrat",
+  },
+  orderInfo: {
+    marginTop: 3,
+    padding: 10,
 
-		paddingVertical: 10,
-		elevation: 10,
-		backgroundColor: colors.tile,
-		shadowOpacity: 0.7,
-		shadowOffset: { width: 5, height: 3 },
-		shadowColor: colors.primary,
-		width: "98%",
-		justifyContent: "center",
-		fontFamily: "montserrat",
-	},
-	text: {
-		fontSize: 18,
-		fontWeight: "500",
-		paddingBottom: 8,
-		textTransform: "capitalize",
-		fontFamily: "montserrat",
-	},
+    paddingVertical: 10,
+    elevation: 10,
+    backgroundColor: colors.tile,
+    shadowOpacity: 0.7,
+    shadowOffset: { width: 5, height: 3 },
+    shadowColor: colors.primary,
+    width: "98%",
+    justifyContent: "center",
+    fontFamily: "montserrat",
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: "500",
+    paddingBottom: 8,
+    textTransform: "capitalize",
+    fontFamily: "montserrat",
+  },
 });
 
 export default OrderDetails;
