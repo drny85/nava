@@ -76,15 +76,16 @@ const Cart = ({ navigation }) => {
 					)}
 				/>
 			) : (
-				<View style={styles.noItems}>
-					<Text>No Items in cart</Text>
-					<AppButton
-						title="Start Shopping"
-						style={{ marginTop: 20 }}
-						onPress={() => navigation.navigate("Home")}
-					/>
-				</View>
-			)}
+					<View style={styles.noItems}>
+						<Text>No Items in cart</Text>
+						<AppButton
+							title="Start Shopping"
+							style={{ marginTop: 20, paddingHorizontal: 20 }}
+							textStyle={{ fontSize: 16, fontWeight: "600", }}
+							onPress={() => navigation.navigate("Home")}
+						/>
+					</View>
+				)}
 
 			{cartTotal > 0 && (
 				// <TouchableWithoutFeedback onPress={continueToCheckOut}>
@@ -114,6 +115,7 @@ const styles = StyleSheet.create({
 	},
 	btn: {
 		backgroundColor: colors.primary,
+
 	},
 
 	cartTotalView: {

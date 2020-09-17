@@ -14,7 +14,7 @@ import colors from "../config/colors";
 const OrderTile = ({ order, index, onPress }) => {
 	return (
 		<TouchableOpacity
-        onPress={onPress}
+			onPress={onPress}
 			style={[
 				styles.container,
 				{
@@ -22,19 +22,19 @@ const OrderTile = ({ order, index, onPress }) => {
 				},
 			]}
 		>
-            <View style={{flexDirection: 'row', }}>
-            <Text style={styles.text}>{index}</Text>
-			{order.status === "new" ? (
-				<Text>Order In Progress</Text>
-			) : (
-				<Text>
-					{moment(order.orderPlaced).format("MMMM Do YYYY, h:mm:ss a")}
-				</Text>
-			)}
-            </View>
-		
+			<View style={{ flexDirection: 'row', }}>
+				<Text style={styles.text}>{index}</Text>
+				{order.status === "new" ? (
+					<Text>Order In Progress</Text>
+				) : (
+						<Text>
+							{moment(order.orderPlaced).format("MMMM Do YYYY, h:mm:ss a")}
+						</Text>
+					)}
+			</View>
 
-			<Text style={{ fontWeight: "600" }}>Total: ${order.totalAmount}</Text>
+
+			<Text style={{ fontWeight: "600" }}>Total: ${order.totalAmount.toFixed(2)}</Text>
 			<EvilIcons name="chevron-right" size={35} color={colors.ascent} />
 		</TouchableOpacity>
 	);
@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		flexDirection: "row",
 		paddingHorizontal: 10,
-    },
-    
-    text : { fontWeight: "600", marginRight: 8, }
+	},
+
+	text: { fontWeight: "600", marginRight: 8, }
 });
 
 export default OrderTile;

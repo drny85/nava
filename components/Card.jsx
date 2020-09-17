@@ -21,7 +21,7 @@ const Card = ({ name, imageUrl, price, sizes, onPress, style }) => {
 					<Image tint="light" style={styles.image} uri={imageUrl} />
 				</View>
 				<View style={styles.details}>
-					<Text style={styles.name}>{name}</Text>
+					<Text numberOfLines={1} ellipsizeMode='tail' style={styles.name}>{name}</Text>
 					<Text style={styles.price}>${sizes ? price[sizes[0]] : price}</Text>
 				</View>
 			</View>
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
 		letterSpacing: 1.1,
 		textTransform: "capitalize",
 		color: "white",
+
 	},
 	price: {
 		fontSize: 24,

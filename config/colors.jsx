@@ -5,4 +5,5 @@ export default {
   card: "#bdc3c7",
   tile: "#ecf0f1",
   white: "#f7f7f7",
+  text: "#555B5D",
 };

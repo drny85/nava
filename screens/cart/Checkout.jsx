@@ -39,7 +39,7 @@ const Checkout = ({ route, navigation }) => {
 	const [paymentOption, setPaymentOption] = useState("credit");
 	const { deliveryMethod } = useContext(settingsContext);
 	const { user } = useContext(authContext);
-	const { previous } = route.params;
+	const previous = route.params?.previous;
 
 	const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
 	const [deliveryAddress, setDeliveryAddress] = useState(null);
@@ -103,7 +103,7 @@ const Checkout = ({ route, navigation }) => {
 			>
 				<View style={styles.view}>
 					<Text style={styles.qty}>Total Items: {itemCounts}</Text>
-					<Text style={styles.total}>Order Total: ${cartTotal}</Text>
+					<Text style={styles.total}>Order Total: ${cartTotal.toFixed(2)}</Text>
 				</View>
 				<View style={{ justifyContent: "center", alignItems: "center" }}>
 					<Text style={styles.title}>Delivery Option</Text>
@@ -189,28 +189,28 @@ const Checkout = ({ route, navigation }) => {
 								/>
 							</>
 						) : (
-							<>
-								<Pick
-									title="credit"
-									style={{
-										color:
-											paymentOption === "credit" ? colors.secondary : "black",
-									}}
-									type={paymentOption}
-									onPress={() => setPaymentOption("credit")}
-								/>
-								<View style={styles.divider}></View>
-								<Pick
-									title="in store"
-									style={{
-										color:
-											paymentOption === "in store" ? colors.secondary : "black",
-									}}
-									type={paymentOption}
-									onPress={() => setPaymentOption("in store")}
-								/>
-							</>
-						)}
+								<>
+									<Pick
+										title="credit"
+										style={{
+											color:
+												paymentOption === "credit" ? colors.secondary : "black",
+										}}
+										type={paymentOption}
+										onPress={() => setPaymentOption("credit")}
+									/>
+									<View style={styles.divider}></View>
+									<Pick
+										title="in store"
+										style={{
+											color:
+												paymentOption === "in store" ? colors.secondary : "black",
+										}}
+										type={paymentOption}
+										onPress={() => setPaymentOption("in store")}
+									/>
+								</>
+							)}
 					</View>
 				</View>
 
@@ -330,57 +330,12 @@ const Checkout = ({ route, navigation }) => {
 									keyboardType="email-address"
 									textContentType="emailAddress"
 								/>
-								<View style={{ marginTop: 20, width: "100%" }}>
+								<View style={{ marginTop: 20, width: "90%" }}>
 									<AppSubmitButton title="Check Out" />
 								</View>
 							</AppForm>
 						</View>
-						{/* <AppForm
-							onSubmit={handleDelivery}
-							initialValues={{
-								name: "",
-								lastName: "",
-								address: "",
-								apt: "",
-								city: "",
-								zipcode: "",
-								phone: "",
-								email: "",
-							}}
-							validationSchema={deliverySchema}
-						>
-							<AppFormField
-								name="name"
-								textContentType="name"
-								placeholder="First Name"
-							/>
-							<AppFormField
-								name="lastName"
-								textContentType="familyName"
-								placeholder="Last Name"
-							/>
-							<AppFormField name="address" placeholder="Address" />
-							<AppFormField name="apt" placeholder="Apt or Floor" />
-							<AppFormField name="city" placeholder="City" />
-							<AppFormField name="zipcode" placeholder="Zip Code" />
-							<AppFormField
-								name="phone"
-								placeholder="Phone"
-								keyboardType="phone-pad"
-								maxLength={10}
-							/>
-							<AppFormField
-								name="email"
-								placeholder="Email"
-								autoCorrect={false}
-								autoCapitalize="none"
-								keyboardType="email-address"
-								textContentType="emailAddress"
-							/>
-							<View style={{ width: "100%", marginTop: 20 }}>
-								<AppSubmitButton title="Check Out" />
-							</View>
-						</AppForm> */}
+
 						<View style={{ height: 80 }}></View>
 					</View>
 				)}
@@ -474,7 +429,7 @@ const styles = StyleSheet.create({
 		padding: 5,
 	},
 	total: {
-		fontSize: 28,
+		fontSize: 22,
 		fontWeight: "bold",
 		padding: 10,
 	},

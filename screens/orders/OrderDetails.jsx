@@ -30,11 +30,11 @@ const OrderDetails = ({ route, navigation }) => {
           {order.orderType === "pickup" || order.type === "pickup" ? (
             `Person Picking Up: ${order.customer.name}`
           ) : (
-            <Text numberOfLines={1} style={styles.text}>
-              Delivered to: {order.customer.address.street},{" "}
-              {order.customer.address.city}
-            </Text>
-          )}
+              <Text numberOfLines={1} style={styles.text}>
+                Delivered to: {order.customer.address.street},{" "}
+                {order.customer.address.city}
+              </Text>
+            )}
         </Text>
       </View>
       <View
@@ -63,7 +63,7 @@ const OrderDetails = ({ route, navigation }) => {
             fontFamily: "montserrat-bold",
           }}
         >
-          Amount: ${order.totalAmount}
+          Amount: ${order.totalAmount.toFixed(2)}
         </Text>
       </View>
 
