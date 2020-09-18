@@ -31,7 +31,6 @@ const OrderVerification = ({ navigation, route }) => {
     try {
       const { data, error } = await placeOrder(newOrder);
 
-
       if (error) return;
 
       clearCart();
@@ -48,7 +47,7 @@ const OrderVerification = ({ navigation, route }) => {
 
   const handleChange = (newState) => {
     const { url } = newState;
-    console.log(url);
+
     if (url.includes("/success")) {
       webRef.current.stopLoading();
       //resetCartNavigation();
@@ -61,7 +60,7 @@ const OrderVerification = ({ navigation, route }) => {
   // Called everytime the URL stats to load in the webview
   const onLoadStart = (syntheticEvent) => {
     const { nativeEvent } = syntheticEvent;
-    console.log("event", nativeEvent);
+
     if (nativeEvent.url === STRIPE.SUCCESS_URL) {
       onSuccessHandler();
       return;

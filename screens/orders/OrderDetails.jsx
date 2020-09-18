@@ -9,7 +9,6 @@ import ListItem from "../../components/ListItem";
 
 const OrderDetails = ({ route, navigation }) => {
   const { order } = route.params;
-  console.log(order);
 
   if (order.status !== "delivered") {
     navigation.navigate("OrderInTheMaking");
@@ -30,11 +29,11 @@ const OrderDetails = ({ route, navigation }) => {
           {order.orderType === "pickup" || order.type === "pickup" ? (
             `Person Picking Up: ${order.customer.name}`
           ) : (
-              <Text numberOfLines={1} style={styles.text}>
-                Delivered to: {order.customer.address.street},{" "}
-                {order.customer.address.city}
-              </Text>
-            )}
+            <Text numberOfLines={1} style={styles.text}>
+              Delivered to: {order.customer.address.street},{" "}
+              {order.customer.address.city}
+            </Text>
+          )}
         </Text>
       </View>
       <View

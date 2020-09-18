@@ -109,10 +109,18 @@ const ProductDetail = ({ route, navigation }) => {
               <Text style={styles.price}>
                 {item.sizes && checked ? `$${item.price[checked]}` : null}
                 {item.sizes && !checked
-                  ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
-                  }`
+                  ? `$${item.price[item.sizes[0]]} - $${
+                      item.price[item.sizes[item.sizes.length - 1]]
+                    }`
                   : null}
                 {!item.sizes && `$${item.price}`}
+              </Text>
+            </View>
+            <View style={styles.descriptionView}>
+              <Text
+                style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}
+              >
+                {item.description}
               </Text>
             </View>
             {item.sizes && item.sizes.length > 0 && (
@@ -168,7 +176,11 @@ const ProductDetail = ({ route, navigation }) => {
       </KeyboardAvoidingView>
 
       <View style={styles.buttonView}>
-        <AppButton style={{ backgroundColor: colors.primary }} title="add to cart" onPress={handleAddToCart} />
+        <AppButton
+          style={{ backgroundColor: colors.primary }}
+          title="add to cart"
+          onPress={handleAddToCart}
+        />
       </View>
     </View>
   );
@@ -208,6 +220,14 @@ const styles = StyleSheet.create({
     marginRight: 20,
     borderRadius: 30,
   },
+  descriptionView: {
+    backgroundColor: colors.secondary,
+    height: "auto",
+    maxHeight: 80,
+    padding: 10,
+    fontSize: 16,
+    borderRadius: 10,
+  },
   instruction: {
     backgroundColor: colors.secondary,
     height: 100,
@@ -215,7 +235,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderRadius: 10,
   },
-  scrollView: {},
+
   screen: {
     flex: 1,
     justifyContent: "space-between",
