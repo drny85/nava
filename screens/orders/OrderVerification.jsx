@@ -30,7 +30,7 @@ const OrderVerification = ({ navigation, route }) => {
   const onSuccessHandler = async () => {
     try {
       const { data, error } = await placeOrder(newOrder);
-      console.log("here");
+
 
       if (error) return;
 

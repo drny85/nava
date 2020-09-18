@@ -109,9 +109,8 @@ const ProductDetail = ({ route, navigation }) => {
               <Text style={styles.price}>
                 {item.sizes && checked ? `$${item.price[checked]}` : null}
                 {item.sizes && !checked
-                  ? `$${item.price[item.sizes[0]]} - $${
-                      item.price[item.sizes[item.sizes.length - 1]]
-                    }`
+                  ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
+                  }`
                   : null}
                 {!item.sizes && `$${item.price}`}
               </Text>
@@ -169,7 +168,7 @@ const ProductDetail = ({ route, navigation }) => {
       </KeyboardAvoidingView>
 
       <View style={styles.buttonView}>
-        <AppButton title="add to cart" onPress={handleAddToCart} />
+        <AppButton style={{ backgroundColor: colors.primary }} title="add to cart" onPress={handleAddToCart} />
       </View>
     </View>
   );

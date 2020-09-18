@@ -72,7 +72,7 @@ const AuthState = (props) => {
 		try {
 			authUnsubcribe = auth.onAuthStateChanged((user) => {
 				if (user) {
-					console.log("Settingup user");
+					console.log("Setting up user");
 					setUser(user.uid);
 				}
 			});
@@ -132,7 +132,7 @@ const AuthState = (props) => {
 				const found = data.deliveryAddresses.find(
 					(a) =>
 						a.street.toLowerCase().trim() ===
-							address.street.toLowerCase().trim() &&
+						address.street.toLowerCase().trim() &&
 						a.apt.toLowerCase() === address.apt.toLowerCase() &&
 						a.zipcode.trim() === address.zipcode.trim()
 				);

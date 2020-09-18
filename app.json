@@ -34,6 +34,7 @@
     },
     "android": {
       "useNextNotificationsApi": true
-    }
+    },
+    "description": ""
   }
 }

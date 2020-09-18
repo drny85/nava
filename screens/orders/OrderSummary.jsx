@@ -32,7 +32,7 @@ const OrderSummary = ({ navigation, route }) => {
 	);
 	//const { deliveryMethod } = useContext(settingsContext);
 	const { deliveryMethod, customer, paymentMethod } = route.params;
-	
+
 	if (!user) {
 		navigation.navigate("Profile", {
 			previewRoute: "Payment",
@@ -60,7 +60,7 @@ const OrderSummary = ({ navigation, route }) => {
 				} else {
 					//handle payment with cash
 					const order = await placeOrder(newOrder);
-					console.log("Order", order);
+
 					clearCart();
 					navigation.navigate("Orders", {
 						screen: "OrderConfirmation",
@@ -114,25 +114,24 @@ const OrderSummary = ({ navigation, route }) => {
 						</Text>
 					</>
 				) : (
-					<>
-						<View>
-							<CardSummaryItem
-								onPress={() => navigation.goBack()}
-								title="Your order will be delivered to:"
-								subtitle={`${customer.address.street} ${
-									customer.address.apt ? customer.address.apt : null
-								}`}
-								misc={`${customer.address.city}, ${customer.address.zipcode}`}
-							/>
-							<CardSummaryItem
-								onPress={() => navigation.goBack()}
-								title="You might be contacted at:"
-								subtitle={`Phone: ${customer.phone}`}
-								misc={`Email: ${customer.email}`}
-							/>
-						</View>
-					</>
-				)}
+						<>
+							<View>
+								<CardSummaryItem
+									onPress={() => navigation.goBack()}
+									title="Your order will be delivered to:"
+									subtitle={`${customer.address.street} ${customer.address.apt ? customer.address.apt : null
+										}`}
+									misc={`${customer.address.city}, ${customer.address.zipcode}`}
+								/>
+								<CardSummaryItem
+									onPress={() => navigation.goBack()}
+									title="You might be contacted at:"
+									subtitle={`Phone: ${customer.phone}`}
+									misc={`Email: ${customer.email}`}
+								/>
+							</View>
+						</>
+					)}
 				{paymentMethod === "cash" && deliveryMethod === "pickup" && (
 					<Text>Handle cash pickup</Text>
 				)}

@@ -99,7 +99,7 @@ const Cart = ({ navigation }) => {
 						width: "95%",
 						backgroundColor: colors.primary,
 					}}
-					title={`Checkout: $${cartTotal}`}
+					title={`Checkout: $${cartTotal.toFixed(2)}`}
 					onPress={continueToCheckOut}
 				/>
 			)}
