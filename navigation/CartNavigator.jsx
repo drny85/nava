@@ -16,7 +16,7 @@ const CartStackNavigator = () => {
 	const { clearCart, cartItems } = useContext(cartContext);
 
 	const emptyCart = () => {
-		Alert.alert("Are yuo sure?", "You want to empty cart", [
+		Alert.alert("Are you sure?", "You want to empty the cart", [
 			{ text: "Cancel", style: "cancel" },
 			{ text: "Yes", onPress: () => clearCart(), style: "default" },
 		]);
