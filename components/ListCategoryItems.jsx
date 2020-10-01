@@ -61,13 +61,13 @@ const styles = StyleSheet.create({
     // flexDirection: "row",
   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "700",
     fontFamily: "montserrat-bold",
     textTransform: "capitalize",
     marginLeft: 12,
     color: colors.text,
-    textTransform: "uppercase",
+    textTransform: 'capitalize',
     marginBottom: 10,
   },
 });

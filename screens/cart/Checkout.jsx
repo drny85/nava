@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -24,9 +24,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import * as Yup from "yup";
 import AppSubmitButton from "../../components/AppSubmitButton";
-import Screen from "../../components/Screen";
 import authContext from "../../context/auth/authContext";
-import { useEffect } from "react";
+
+
+const zipCodes = ['10452', '10451', '10453', '10456', '10457']
+
 
 const pickUpSchema = Yup.object().shape({
   name: Yup.string().required().label("First Name"),
@@ -38,7 +40,10 @@ const pickUpSchema = Yup.object().shape({
 const MINIMUM_DELIVERY = 10;
 
 const Checkout = ({ route, navigation }) => {
+
+
   const [paymentOption, setPaymentOption] = useState("credit");
+  const [canContinue, setCanContinue] = useState(false);
   const { deliveryMethod } = useContext(settingsContext);
   const { user } = useContext(authContext);
   const previous = route.params?.previous;
@@ -96,8 +101,7 @@ const Checkout = ({ route, navigation }) => {
       console.log("minimun delivery");
       Alert.alert(
         "Minimum Delivery",
-        `Please spend at least $${
-          MINIMUM_DELIVERY - cartTotal
+        `Please spend at least $${MINIMUM_DELIVERY - cartTotal
         } more to be eligible for delivery`,
         [{ text: "OK", style: "cancel" }]
       );
@@ -117,9 +121,37 @@ const Checkout = ({ route, navigation }) => {
     });
   };
 
+  const checkDeliveryAddress = () => {
+    if (previous) {
+      setDeliveryAddress(previous);
+      const zip = previous.zipcode
+      if (zipCodes.includes(zip)) {
+        setCanContinue(true)
+
+
+      } else {
+        setCanContinue(false)
+        Alert.alert(
+          "Not Delivery Available",
+          "Please select a vew delivery address",
+          [
+            {
+              text: "Add Address",
+              onPress: () =>
+                navigation.navigate("MyAddress", { previous: "Checkout" }),
+            },
+            { text: "Cancel", style: "cancel" },
+          ]
+        );
+        return;
+      }
+
+    }
+  }
+
   useEffect(() => {
     console.log("Checkout Mounted");
-    if (previous) setDeliveryAddress(previous);
+    checkDeliveryAddress()
   }, [previous]);
 
   return (
@@ -221,28 +253,28 @@ const Checkout = ({ route, navigation }) => {
                 />
               </>
             ) : (
-              <>
-                <Pick
-                  title="credit"
-                  style={{
-                    color:
-                      paymentOption === "credit" ? colors.secondary : "black",
-                  }}
-                  type={paymentOption}
-                  onPress={() => setPaymentOption("credit")}
-                />
-                <View style={styles.divider}></View>
-                <Pick
-                  title="in store"
-                  style={{
-                    color:
-                      paymentOption === "in store" ? colors.secondary : "black",
-                  }}
-                  type={paymentOption}
-                  onPress={() => setPaymentOption("in store")}
-                />
-              </>
-            )}
+                <>
+                  <Pick
+                    title="credit"
+                    style={{
+                      color:
+                        paymentOption === "credit" ? colors.secondary : "black",
+                    }}
+                    type={paymentOption}
+                    onPress={() => setPaymentOption("credit")}
+                  />
+                  <View style={styles.divider}></View>
+                  <Pick
+                    title="in store"
+                    style={{
+                      color:
+                        paymentOption === "in store" ? colors.secondary : "black",
+                    }}
+                    type={paymentOption}
+                    onPress={() => setPaymentOption("in store")}
+                  />
+                </>
+              )}
           </View>
         </View>
 
@@ -363,7 +395,7 @@ const Checkout = ({ route, navigation }) => {
                   textContentType="emailAddress"
                 />
                 <View style={{ marginTop: 20, width: "90%" }}>
-                  <AppSubmitButton title="Check Out" />
+                  <AppSubmitButton disabled={!canContinue} title="Check Out" />
                 </View>
               </AppForm>
             </View>
@@ -467,13 +499,14 @@ const styles = StyleSheet.create({
   },
   pickAddress: {
     width: Dimensions.get("screen").width,
-    height: Dimensions.get("screen").height * 0.1,
+    height: Dimensions.get("screen").height * 0.13,
     borderTopWidth: 2,
     borderBottomWidth: 2,
     borderTopColor: colors.secondary,
     borderBottomColor: colors.secondary,
     justifyContent: "space-between",
     flexDirection: "row",
+
     alignItems: "center",
     flex: 1,
     marginBottom: 10,

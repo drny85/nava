@@ -1,20 +1,36 @@
 // @ts-nocheck
-import React, { useEffect, useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect, useContext, useState } from "react";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal } from "react-native";
+
 
 import Screen from "../../components/Screen";
 import Loader from "../../components/Loader";
 import ItemsContext from "../../context/items/itemsContext";
 import CategoryContext from "../../context/category/categoryContext";
 
+import call from 'react-native-phone-call';
+
 import ListCategoryItems from "../../components/ListCategoryItems";
+import FloatingButton from "../../components/FloatingButton";
+import RestaurantInfo from "../../components/RestaurantInfo";
+
+
 
 const Home = () => {
   const itemsContext = useContext(ItemsContext);
   const categoryContext = useContext(CategoryContext);
+  const [visible, setVisible] = useState(false)
 
   const { items, getItems, loading, unsubcribeFromItems } = itemsContext;
   const { categories, getCategories } = categoryContext;
+
+  const makeCall = async () => {
+    try {
+      await call({ number: '646-574-0089', prompt: false })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     console.log("getting items");
@@ -32,9 +48,21 @@ const Home = () => {
 
   return (
     <Screen style={styles.screen}>
+      <View style={styles.top}>
+        <FloatingButton iconName='info' onPress={() => setVisible(true)} />
+        <Text style={styles.name}>Antojito Restaurant</Text>
+        <FloatingButton iconName='phone' onPress={makeCall} />
+
+      </View>
+      <Modal visible={visible} animationType='slide'>
+        <RestaurantInfo onPress={() => setVisible(false)} />
+      </Modal>
       <View style={styles.headerView}>
+
         <Text style={styles.headerText}>What are you craving for today?</Text>
       </View>
+
+
 
       <ListCategoryItems
         categories={categories}
@@ -48,10 +76,10 @@ const Home = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    paddingTop: 5,
+
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "700",
     fontStyle: "italic",
     fontFamily: "montserrat-bold-italic",
@@ -59,6 +87,12 @@ const styles = StyleSheet.create({
   headerView: {
     padding: 10,
   },
+  name: {
+    fontSize: 22,
+    fontFamily: "montserrat",
+  },
+
+  top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, marginHorizontal: 20, },
 });
 
 export default Home;

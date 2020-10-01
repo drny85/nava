@@ -68,8 +68,9 @@ const Signin = () => {
 		<Screen>
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 				<KeyboardAvoidingView
+
 					style={styles.container}
-					behavior={Platform.OS == "ios" ? "padding" : "height"}
+					behavior={Platform.OS === 'ios' ? 'padding' : null} enabled
 				>
 					<AppForm
 						initialValues={{ email: "", password: "" }}

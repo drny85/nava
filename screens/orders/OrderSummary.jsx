@@ -92,6 +92,7 @@ const OrderSummary = ({ navigation, route }) => {
               qty={item.quantity}
               size={item.size}
               price={item.price}
+
             />
           )}
         />
@@ -114,25 +115,24 @@ const OrderSummary = ({ navigation, route }) => {
             </Text>
           </>
         ) : (
-          <>
-            <View>
-              <CardSummaryItem
-                onPress={() => navigation.goBack()}
-                title="Your order will be delivered to:"
-                subtitle={`${customer.address.street} ${
-                  customer.address.apt ? customer.address.apt : null
-                }`}
-                misc={`${customer.address.city}, ${customer.address.zipcode}`}
-              />
-              <CardSummaryItem
-                onPress={() => navigation.goBack()}
-                title="You might be contacted at:"
-                subtitle={`Phone: ${customer.phone}`}
-                misc={`Email: ${customer.email}`}
-              />
-            </View>
-          </>
-        )}
+            <>
+              <View>
+                <CardSummaryItem
+                  onPress={() => navigation.goBack()}
+                  title="Your order will be delivered to:"
+                  subtitle={`${customer.address.street} ${customer.address.apt ? customer.address.apt : null
+                    }`}
+                  misc={`${customer.address.city}, ${customer.address.zipcode}`}
+                />
+                <CardSummaryItem
+                  onPress={() => navigation.goBack()}
+                  title="You might be contacted at:"
+                  subtitle={`Phone: ${customer.phone}`}
+                  misc={`Email: ${customer.email}`}
+                />
+              </View>
+            </>
+          )}
         {paymentMethod === "cash" && deliveryMethod === "pickup" && (
           <Text>Handle cash pickup</Text>
         )}
@@ -172,7 +172,7 @@ const OrderSummary = ({ navigation, route }) => {
           </View>
         )}
         {paymentMethod === "credit" && deliveryMethod === "delivery" && (
-          <Text>Delivery option with credit</Text>
+          <Text style={{ paddingVertical: 20, fontSize: 18, fontFamily: "montserrat", }}>Please click PAY NOW at the bottom to be taken to the payment screen.</Text>
         )}
       </ScrollView>
       <View style={{ position: "absolute", bottom: 5, width: "100%" }}>

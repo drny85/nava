@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from "react";
 import { View, StyleSheet, SafeAreaView } from "react-native";
-import Constants from "expo-constants";
+// import Constants from "expo-constants";
 
 const Screen = ({ children, style }) => {
   return (
@@ -12,7 +12,7 @@ const Screen = ({ children, style }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight,
+    // paddingTop: Constants.statusBarHeight,
   },
 });
 

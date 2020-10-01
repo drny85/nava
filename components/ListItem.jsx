@@ -13,6 +13,7 @@ const ListItem = ({ name, imageUrl, price, qty, size }) => {
             <Text style={styles.qty}>
               {qty} x {price}
             </Text>
+
             {size && (
               <Text
                 style={{
@@ -25,6 +26,8 @@ const ListItem = ({ name, imageUrl, price, qty, size }) => {
               </Text>
             )}
           </View>
+
+
         </View>
       </View>
 
@@ -53,6 +56,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
 
     justifyContent: "center",
+
+
   },
   img: {
     width: 80,
