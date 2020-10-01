@@ -13,6 +13,7 @@ import authContext from "./context/auth/authContext";
 import SettingsState from "./context/settings/settingsState";
 import * as Font from "expo-font";
 import navigationTheme from "./navigation/navigationTheme";
+import StoresState from "./context/stores/storesState";
 
 const loadFonts = () => {
 	return Font.loadAsync({
@@ -44,19 +45,21 @@ const App = () => {
 	}
 
 	return (
-		<ItemsState>
-			<SettingsState>
-				<CategoryState>
-					<CartState>
-						<OrdersState>
-							<NavigationContainer theme={navigationTheme}>
-								<AppNavigator />
-							</NavigationContainer>
-						</OrdersState>
-					</CartState>
-				</CategoryState>
-			</SettingsState>
-		</ItemsState>
+		<StoresState>
+			<ItemsState>
+				<SettingsState>
+					<CategoryState>
+						<CartState>
+							<OrdersState>
+								<NavigationContainer theme={navigationTheme}>
+									<AppNavigator />
+								</NavigationContainer>
+							</OrdersState>
+						</CartState>
+					</CategoryState>
+				</SettingsState>
+			</ItemsState>
+		</StoresState>
 	);
 };
 

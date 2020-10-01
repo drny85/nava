@@ -8,7 +8,7 @@ import { Feather, FontAwesome } from '@expo/vector-icons';
 import call from 'react-native-phone-call';
 
 
-const RestaurantInfo = ({ onPress }) => {
+const RestaurantInfo = ({ restaurant, onPress }) => {
     const [favorite, setFavorite] = useState(false)
     const makeCall = async () => {
         try {
@@ -26,7 +26,7 @@ const RestaurantInfo = ({ onPress }) => {
                 <FloatingButton iconName='x' onPress={onPress} />
             </View>
             <Image resizeMode='cover' style={styles.img} source={{ uri: 'https://img.texasmonthly.com/2020/04/restaurants-covid-19-coronavirus-not-reopening-salome-mcallen.jpg?auto=compress&crop=faces&fit=fit&fm=pjpg&ixlib=php-1.2.1&q=45&w=1100' }} />
-            <Text style={styles.name}>Antojito</Text>
+            <Text style={styles.name}>{restaurant.name}</Text>
             <View style={styles.fav}>
                 {favorite ? (<FontAwesome onPress={() => setFavorite(!favorite)} name="heart" size={40} color="red" />) : (<Feather onPress={() => setFavorite(!favorite)} name="heart" size={40} color="black" />)}
 
@@ -34,8 +34,8 @@ const RestaurantInfo = ({ onPress }) => {
             <View style={styles.details}>
 
                 <View>
-                    <Text style={styles.text}>1420 Clay Ave</Text>
-                    <Text style={styles.text}>Bronx, NY 10456</Text>
+                    <Text style={styles.text}>{restaurant.street}</Text>
+                    <Text style={styles.text}>{restaurant.city}, {restaurant.state} {restaurant.zipcode}</Text>
                 </View>
 
                 <TouchableOpacity style={styles.btn} onPress={makeCall}>
@@ -97,11 +97,13 @@ const styles = StyleSheet.create({
         fontFamily: 'montserrat',
         right: 10,
         top: Dimensions.get('screen').height * 0.5 - 50,
+        textTransform: 'capitalize',
     },
     text: {
         fontSize: 20,
         fontFamily: 'montserrat',
         padding: 5,
+        textTransform: 'capitalize',
     }
 
 })

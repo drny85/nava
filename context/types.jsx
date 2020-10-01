@@ -35,6 +35,7 @@ export const GET_ORDER = "GET_ORDER";
 export const GET_ORDERS = "GET_ORDERS";
 export const FILTER_ORDERS = "FILTER_ORDERS";
 export const GET_NAMES = "GET_NAMES";
+export const GET_STORES = "GET_STORES";
 
 export const REMOVE_NOTICATION = "REMOVE_NOTICATION";
 export const SET_NOTIFICATION = "SET_NOTIFICATION";

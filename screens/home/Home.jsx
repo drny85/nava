@@ -16,33 +16,36 @@ import RestaurantInfo from "../../components/RestaurantInfo";
 
 
 
-const Home = () => {
+const Home = ({ route }) => {
   const itemsContext = useContext(ItemsContext);
   const categoryContext = useContext(CategoryContext);
   const [visible, setVisible] = useState(false)
 
-  const { items, getItems, loading, unsubcribeFromItems } = itemsContext;
+  const { items, getItems, loading } = itemsContext;
   const { categories, getCategories } = categoryContext;
+  const { restaurant } = route.params;
+  console.log(route)
 
   const makeCall = async () => {
     try {
-      await call({ number: '646-574-0089', prompt: false })
+      await call({ number: restaurant.phone, prompt: false })
     } catch (error) {
       console.log(error)
     }
   }
 
   useEffect(() => {
-    console.log("getting items");
-    getItems();
+
+    const { res, uns } = getItems(restaurant?.id)
     getCategories();
 
     return () => {
-      unsubcribeFromItems();
+
+      uns && uns()
     };
   }, []);
 
-  if (items.length === 0 || loading) {
+  if (loading) {
     return <Loader size="large" />;
   }
 
@@ -50,12 +53,12 @@ const Home = () => {
     <Screen style={styles.screen}>
       <View style={styles.top}>
         <FloatingButton iconName='info' onPress={() => setVisible(true)} />
-        <Text style={styles.name}>Antojito Restaurant</Text>
+        <Text style={styles.name}>{restaurant.name}</Text>
         <FloatingButton iconName='phone' onPress={makeCall} />
 
       </View>
       <Modal visible={visible} animationType='slide'>
-        <RestaurantInfo onPress={() => setVisible(false)} />
+        <RestaurantInfo restaurant={restaurant} onPress={() => setVisible(false)} />
       </Modal>
       <View style={styles.headerView}>
 
@@ -90,6 +93,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 22,
     fontFamily: "montserrat",
+    textTransform: 'capitalize',
   },
 
   top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, marginHorizontal: 20, },

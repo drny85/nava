@@ -10,6 +10,7 @@ import Constants from "expo-constants";
 import cartContext from "../context/cart/cartContext";
 import Home from "../screens/home/Home";
 import ProductDetail from "../screens/home/ProductDetail";
+import Restaurants from "../screens/home/Restaurants";
 
 const HomeStack = createStackNavigator();
 
@@ -21,6 +22,7 @@ const HomeStackNavigator = () => {
   }, []);
   return (
     <HomeStack.Navigator mode="modal">
+      <HomeStack.Screen name='Restaurants' component={Restaurants} />
       <HomeStack.Screen
         name="Home"
         component={Home}
@@ -31,7 +33,7 @@ const HomeStackNavigator = () => {
             <View
               style={{
                 backgroundColor: colors.primary,
-                height: Constants.statusBarHeight,
+
               }}
             ></View>
           ),

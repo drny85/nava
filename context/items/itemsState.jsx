@@ -23,14 +23,13 @@ const ItemsState = (props) => {
 
   const [state, dispatch] = useReducer(ItemsReducer, initialState);
 
-  let itemsSubcription;
-
-  const getItems = async () => {
+  const getItems = async (storeId, unsub) => {
     try {
       setLoading();
       itemsSubcription = db
         .collection("items")
         .where("available", "==", true)
+        .where('storeId', '==', storeId)
         .onSnapshot((values) => {
           let data = [];
           values.forEach((doc) => {
@@ -43,9 +42,17 @@ const ItemsState = (props) => {
             }
           });
           dispatch({ type: GET_ITEMS, payload: data });
+
         });
+
+
+      return { res: true, uns: itemsSubcription }
     } catch (error) {
       console.log(error);
+
+
+      dispatch({ type: GET_ITEMS, payload: [] });
+      return false;
     }
   };
   const filterItemsByCategory = (text) => {
@@ -94,7 +101,6 @@ const ItemsState = (props) => {
     }
   };
 
-  const unsubcribeFromItems = () => itemsSubcription();
 
   // @ts-ignore
   const setLoading = () => dispatch({ type: SET_LOADING });
@@ -115,7 +121,7 @@ const ItemsState = (props) => {
         setCurrent,
         clearCurrent,
         changeAvailability,
-        unsubcribeFromItems,
+
       }}
     >
       {props.children}

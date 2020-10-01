@@ -55,15 +55,11 @@ const AppNavigator = () => {
       }}
     >
       <BottomTabs.Screen
-        name="Home"
+        name="Restaurants"
         component={HomeStackNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="home-outline"
-              color={color}
-              size={30}
-            />
+            <Ionicons name="ios-restaurant" size={30} color={color} />
           ),
         }}
       />
@@ -98,15 +94,7 @@ const AppNavigator = () => {
         }}
       />
 
-      <BottomTabs.Screen
-        name="Settings"
-        component={Settings}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="ios-settings" color={color} size={30} />
-          ),
-        }}
-      />
+
       <BottomTabs.Screen
         name="Profile"
         component={ProfileStackNavigator}
