@@ -12,7 +12,7 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
     const [favorite, setFavorite] = useState(false)
     const makeCall = async () => {
         try {
-            await call({ number: '646-574-0089', prompt: false })
+            await call({ number: restaurant.phone, prompt: false })
         } catch (error) {
             console.log(error)
         }
