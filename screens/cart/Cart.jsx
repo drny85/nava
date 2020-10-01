@@ -17,6 +17,8 @@ import authContext from "../../context/auth/authContext";
 import settingsContext from "../../context/settings/settingsContext";
 import Loader from "../../components/Loader";
 
+const MINIMUM = 10
+
 const Cart = ({ navigation }) => {
 	const {
 		cartItems,
@@ -31,11 +33,11 @@ const Cart = ({ navigation }) => {
 	const { setRoute, clearSettings } = useContext(settingsContext);
 
 	const continueToCheckOut = () => {
-		if (cartTotal < 5) {
+		if (cartTotal < MINIMUM) {
 			Alert.alert(
 				"Opsss",
-				`Please make a purchase greater than $5.00. You are just $${(
-					5 - cartTotal
+				`Please make a purchase greater than $${MINIMUM}. You are just $${(
+					MINIMUM - cartTotal
 				).toFixed(2)} away`,
 				[{ text: "OK", style: "cancel" }]
 			);
