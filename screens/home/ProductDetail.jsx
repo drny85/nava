@@ -109,9 +109,8 @@ const ProductDetail = ({ route, navigation }) => {
               <Text style={styles.price}>
                 {item.sizes && checked ? `$${item.price[checked]}` : null}
                 {item.sizes && !checked
-                  ? `$${item.price[item.sizes[0]]} - $${
-                      item.price[item.sizes[item.sizes.length - 1]]
-                    }`
+                  ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
+                  }`
                   : null}
                 {!item.sizes && `$${item.price}`}
               </Text>
@@ -159,7 +158,7 @@ const ProductDetail = ({ route, navigation }) => {
 
             <View style={{ padding: 10 }}>
               <Text style={{ fontSize: 16, paddingLeft: 5, paddingBottom: 5 }}>
-                Special intructions
+                Special instructions
               </Text>
               <TextInput
                 style={styles.instruction}
