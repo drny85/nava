@@ -16,9 +16,9 @@ const StoresState = (props) => {
     const getStores = async () => {
         console.log('getting stores')
         try {
+            const newstore = [];
+            (await db.collection('stores').where('status', '==', 'approved').where('hasItems', '==', true).get()).forEach(doc => {
 
-            (await db.collection('stores').where('status', '==', 'approved').get()).forEach(doc => {
-                const newstore = [];
                 if (doc.exists) {
                     let st = {
                         id: doc.id,
@@ -26,7 +26,9 @@ const StoresState = (props) => {
                     }
 
                     newstore.push(st)
+
                 }
+
                 dispatch({ type: GET_STORES, payload: newstore })
 
             })

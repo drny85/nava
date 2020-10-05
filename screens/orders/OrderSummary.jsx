@@ -23,6 +23,9 @@ import cartContext from "../../context/cart/cartContext";
 import ordersContext from "../../context/order/orderContext";
 import AppButton from "../../components/AppButton";
 import CardSummaryItem from "../../components/CardSummaryItem";
+import { colors } from "react-native-elements";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { TextInput } from "react-native-gesture-handler";
 
 const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
@@ -30,8 +33,11 @@ const OrderSummary = ({ navigation, route }) => {
   const { cartItems, cartTotal, itemCounts, clearCart, loading } = useContext(
     cartContext
   );
+  const [instruction, setInstrction] = useState(null)
   //const { deliveryMethod } = useContext(settingsContext);
   const { deliveryMethod, customer, paymentMethod } = route.params;
+
+  console.log(instruction)
 
   if (!user) {
     navigation.navigate("Profile", {
@@ -47,7 +53,8 @@ const OrderSummary = ({ navigation, route }) => {
         customer,
         deliveryMethod,
         cartTotal,
-        paymentMethod
+        paymentMethod,
+        instruction
       );
       if (cartItems.length > 0) {
         //handle payment with credit
@@ -133,6 +140,10 @@ const OrderSummary = ({ navigation, route }) => {
               </View>
             </>
           )}
+        <View style={styles.deliveryInstruction}>
+          <Text style={{ fontFamily: 'montserrat', fontSize: 16, paddingVertical: 5, }}>Delivery Instructions</Text>
+          <TextInput onChangeText={text => setInstrction(text)} value={instruction} style={styles.input} placeholder='Type any important message for the delivery guy' />
+        </View>
         {paymentMethod === "cash" && deliveryMethod === "pickup" && (
           <Text>Handle cash pickup</Text>
         )}
@@ -171,9 +182,8 @@ const OrderSummary = ({ navigation, route }) => {
             </Text>
           </View>
         )}
-        {paymentMethod === "credit" && deliveryMethod === "delivery" && (
-          <Text style={{ paddingVertical: 20, fontSize: 18, fontFamily: "montserrat", }}>Please click PAY NOW at the bottom to be taken to the payment screen.</Text>
-        )}
+
+
       </ScrollView>
       <View style={{ position: "absolute", bottom: 5, width: "100%" }}>
         <AppButton
@@ -197,8 +207,13 @@ const styles = StyleSheet.create({
     flex: 2,
     padding: 10,
   },
+  deliveryInstruction: {
+    width: '100%',
+    marginVertical: 12,
 
-  addressView: {},
+  },
+
+
 
   title: {
     fontWeight: "600",
@@ -207,6 +222,14 @@ const styles = StyleSheet.create({
   },
   address: {
     fontSize: 16,
+  },
+  input: {
+
+    borderRadius: 10,
+    borderColor: 'grey',
+    borderWidth: 0.4,
+    paddingVertical: 20,
+    paddingHorizontal: 5,
   },
 
   infoView: {
@@ -226,7 +249,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
   },
-  pickup: {},
+
   totalView: {
     padding: 20,
     marginTop: 30,

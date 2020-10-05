@@ -11,7 +11,7 @@ const StoreCard = ({ store, onPress }) => {
     return (
         <TouchableOpacity style={styles.view} onPress={onPress}>
             <Image resizeMode='cover' style={styles.img} source={{ uri: 'https://mk0tarestaurant7omoy.kinstacdn.com/wp-content/uploads/2018/01/premiumforrestaurants_0.jpg' }} />
-            <LinearGradient colors={['rgba(0,0,0,0.8)', 'transparent', '#ecf0f1', '#95a5a6', '#2c3e50', '#0f0f0f']} style={styles.details}>
+            <LinearGradient colors={['rgba(0,0,0,0.8)', 'transparent', '#95a5a6', '#2c3e50',]} start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }} style={styles.details}>
 
 
             </LinearGradient>
@@ -30,19 +30,23 @@ const styles = StyleSheet.create({
     view: {
         width: Dimensions.get('screen').width * 0.9,
         height: Dimensions.get('screen').height * 0.3,
-        backgroundColor: colors.tile,
+
         borderRadius: 15,
         elevation: 10,
-        shadowColor: 'gray',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.4,
+        shadowColor: 'red',
+        shadowOffset: { width: 3, height: 3 },
+        shadowOpacity: 0.7,
         shadowRadius: 15,
+        backgroundColor: colors.white,
+        marginVertical: 8,
+        overflow: 'hidden',
     },
     img: {
         width: '100%',
         height: '100%',
         overflow: 'hidden',
         borderRadius: 15,
+        backgroundColor: colors.white,
     },
     details: {
         position: 'absolute',
@@ -71,9 +75,10 @@ const styles = StyleSheet.create({
     },
     name: {
 
-        fontSize: 28,
+        fontSize: 22,
         fontFamily: 'montserrat-bold',
-        textTransform: 'capitalize',
+        textTransform: 'uppercase',
+        letterSpacing: 1.1,
         paddingLeft: 12,
 
     },

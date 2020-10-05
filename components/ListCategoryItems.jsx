@@ -3,7 +3,7 @@ import { StyleSheet, Text, FlatList, Dimensions } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import Card from "./Card";
-import itemsContext from "../context/items/itemsContext";
+
 import colors from "../config/colors";
 
 const ListCategoryItems = ({ categories, items, onRefresh }) => {

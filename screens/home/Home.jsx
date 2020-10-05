@@ -24,7 +24,7 @@ const Home = ({ route }) => {
   const { items, getItems, loading } = itemsContext;
   const { categories, getCategories } = categoryContext;
   const { restaurant } = route.params;
-  console.log(route)
+
 
   const makeCall = async () => {
     try {

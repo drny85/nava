@@ -84,7 +84,7 @@ const Cart = ({ navigation }) => {
 							title="Start Shopping"
 							style={{ marginTop: 20, paddingHorizontal: 20 }}
 							textStyle={{ fontSize: 16, fontWeight: "600", }}
-							onPress={() => navigation.navigate("Home")}
+							onPress={() => navigation.navigate("Restaurants")}
 						/>
 					</View>
 				)}
