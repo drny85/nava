@@ -20,14 +20,17 @@ import cartContext from "../../context/cart/cartContext";
 import { Alert } from "react-native";
 
 import Loader from "../../components/Loader";
+import storesContext from "../../context/stores/storesContext";
 
 const heigth = Dimensions.get("screen").height;
 
 const ProductDetail = ({ route, navigation }) => {
   const sizes = [];
+  const { current } = useContext(storesContext);
   const { product } = route.params;
   const [instruction, setIntruction] = useState(null);
-  const { addToCart } = useContext(cartContext);
+
+  const { addToCart, cartItems, clearCart } = useContext(cartContext);
   const [checked, setChecked] = useState(false);
   const item = { ...product };
 
@@ -54,6 +57,48 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
   const handleAddToCart = async () => {
+    //check if the item being added is from the same store.
+    const { storeId } = item;
+    const items = [...cartItems];
+    const notEmpty = items.length > 0;
+
+    if (notEmpty) {
+      const found = items.find((i) => i.storeId === storeId);
+      if (!found) {
+        Alert.alert(
+          "Different Store",
+          "You already have an item in the cart from different location",
+          [
+            { text: "Clear Cart", onPress: () => clearCart() },
+            { text: "Cancel", style: "cancel" },
+          ]
+        );
+      } else {
+        console.log("...");
+      }
+
+      return;
+    }
+
+    // if (item.storeId)
+    //   cartItems.forEach((i) => {
+    //     if (i.storeId !== storeId) {
+    //       Alert.alert(
+    //         "Different Store",
+    //         "You already have an item in the cart from different location",
+    //         [
+    //           { text: "Clear Cart", onPress: () => clearCart() },
+    //           { text: "Cancel", style: "cancel" },
+    //         ]
+    //       );
+    //       setGo(false);
+    //       console.log("here");
+    //     } else {
+    //       setGo(true);
+    //       console.log("There");
+    //     }
+    //   });
+
     if (checked === false && item.sizes) {
       Alert.alert("Size Matter", `Please pick a size for your ${item.name}`, [
         { text: "OK", style: "cancel" },
@@ -109,8 +154,9 @@ const ProductDetail = ({ route, navigation }) => {
               <Text style={styles.price}>
                 {item.sizes && checked ? `$${item.price[checked]}` : null}
                 {item.sizes && !checked
-                  ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
-                  }`
+                  ? `$${item.price[item.sizes[0]]} - $${
+                      item.price[item.sizes[item.sizes.length - 1]]
+                    }`
                   : null}
                 {!item.sizes && `$${item.price}`}
               </Text>

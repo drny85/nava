@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text, FlatList, Dimensions } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import Card from "./Card";
 
 import colors from "../config/colors";
+import storesContext from "../context/stores/storesContext";
 
 const ListCategoryItems = ({ categories, items, onRefresh }) => {
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = React.useState(false);
+  const { setCurrentStore } = useContext(storesContext);
 
   return (
     <FlatList
@@ -41,7 +43,10 @@ const ListCategoryItems = ({ categories, items, onRefresh }) => {
                     sizes={item.sizes}
                     imageUrl={item.imageUrl}
                     onPress={() => {
-                      navigation.navigate("ProductDetail", { product: item });
+                      setCurrentStore(item?.storeId);
+                      navigation.navigate("ProductDetail", {
+                        product: item,
+                      });
                     }}
                   />
                 );
@@ -67,7 +72,7 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     marginLeft: 12,
     color: colors.text,
-    textTransform: 'capitalize',
+    textTransform: "capitalize",
     marginBottom: 10,
   },
 });
