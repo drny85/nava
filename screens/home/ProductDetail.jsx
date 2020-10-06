@@ -26,8 +26,7 @@ const heigth = Dimensions.get("screen").height;
 
 const ProductDetail = ({ route, navigation }) => {
   const sizes = [];
-  const { current } = useContext(storesContext);
-  const { product } = route.params;
+  const { product, restaurant } = route.params;
   const [instruction, setIntruction] = useState(null);
 
   const { addToCart, cartItems, clearCart } = useContext(cartContext);
@@ -56,56 +55,8 @@ const ProductDetail = ({ route, navigation }) => {
     setChecked(item);
   };
 
-  const handleAddToCart = async () => {
-    //check if the item being added is from the same store.
-    const { storeId } = item;
-    const items = [...cartItems];
-    const notEmpty = items.length > 0;
-
-    if (notEmpty) {
-      const found = items.find((i) => i.storeId === storeId);
-      if (!found) {
-        Alert.alert(
-          "Different Store",
-          "You already have an item in the cart from different location",
-          [
-            { text: "Clear Cart", onPress: () => clearCart() },
-            { text: "Cancel", style: "cancel" },
-          ]
-        );
-      } else {
-        console.log("...");
-      }
-
-      return;
-    }
-
-    // if (item.storeId)
-    //   cartItems.forEach((i) => {
-    //     if (i.storeId !== storeId) {
-    //       Alert.alert(
-    //         "Different Store",
-    //         "You already have an item in the cart from different location",
-    //         [
-    //           { text: "Clear Cart", onPress: () => clearCart() },
-    //           { text: "Cancel", style: "cancel" },
-    //         ]
-    //       );
-    //       setGo(false);
-    //       console.log("here");
-    //     } else {
-    //       setGo(true);
-    //       console.log("There");
-    //     }
-    //   });
-
-    if (checked === false && item.sizes) {
-      Alert.alert("Size Matter", `Please pick a size for your ${item.name}`, [
-        { text: "OK", style: "cancel" },
-      ]);
-      return;
-    }
-
+  const clearCartAndAddNew = async () => {
+    clearCart();
     item.size = checked ? checked : null;
     item.price =
       item.size === null
@@ -113,8 +64,69 @@ const ProductDetail = ({ route, navigation }) => {
         : parseFloat(item.price[checked]);
     item.instruction = instruction;
 
-    await addToCart(item);
-    navigation.pop();
+
+    await addToCart(item)
+    navigation.goBack()
+  }
+
+  const handleAddToCart = async () => {
+    //check if the item being added is from the same store.
+    const { storeId } = item;
+    const items = [...cartItems];
+    const notEmpty = items.length > 0;
+
+
+    if (notEmpty) {
+      const found = items.find((i) => i.storeId === storeId);
+      if (!found) {
+        Alert.alert(
+          "Different Store",
+          `You already have an item in the cart from a different restaurant`,
+          [
+            { text: "Empty & Add", onPress: clearCartAndAddNew },
+            { text: "Cancel", style: "cancel" },
+          ]
+        );
+      } else {
+
+        if (checked === false && item.sizes) {
+          Alert.alert("Size Matter", `Please pick a size for your ${item.name}`, [
+            { text: "OK", style: "cancel" },
+          ]);
+          return;
+        }
+
+        item.size = checked ? checked : null;
+        item.price =
+          item.size === null
+            ? parseFloat(item.price)
+            : parseFloat(item.price[checked]);
+        item.instruction = instruction;
+
+        await addToCart(item);
+        navigation.pop();
+      }
+
+      return;
+    } else {
+      if (checked === false && item.sizes) {
+        Alert.alert("Size Matter", `Please pick a size for your ${item.name}`, [
+          { text: "OK", style: "cancel" },
+        ]);
+        return;
+      }
+
+      item.size = checked ? checked : null;
+      item.price =
+        item.size === null
+          ? parseFloat(item.price)
+          : parseFloat(item.price[checked]);
+      item.instruction = instruction;
+
+      await addToCart(item);
+      navigation.pop();
+
+    }
   };
 
   useEffect(() => {
@@ -154,9 +166,8 @@ const ProductDetail = ({ route, navigation }) => {
               <Text style={styles.price}>
                 {item.sizes && checked ? `$${item.price[checked]}` : null}
                 {item.sizes && !checked
-                  ? `$${item.price[item.sizes[0]]} - $${
-                      item.price[item.sizes[item.sizes.length - 1]]
-                    }`
+                  ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
+                  }`
                   : null}
                 {!item.sizes && `$${item.price}`}
               </Text>
@@ -275,7 +286,7 @@ const styles = StyleSheet.create({
   },
   instruction: {
     backgroundColor: colors.secondary,
-    height: 100,
+    height: 80,
     padding: 10,
     fontSize: 16,
     borderRadius: 10,
@@ -285,6 +296,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: colors.tile,
+    height: Dimensions.get('screen').height,
   },
   image: {
     width: "100%",

@@ -7,10 +7,9 @@ import Card from "./Card";
 import colors from "../config/colors";
 import storesContext from "../context/stores/storesContext";
 
-const ListCategoryItems = ({ categories, items, onRefresh }) => {
+const ListCategoryItems = ({ categories, items, restaurant, onRefresh }) => {
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = React.useState(false);
-  const { setCurrentStore } = useContext(storesContext);
 
   return (
     <FlatList
@@ -43,9 +42,11 @@ const ListCategoryItems = ({ categories, items, onRefresh }) => {
                     sizes={item.sizes}
                     imageUrl={item.imageUrl}
                     onPress={() => {
-                      setCurrentStore(item?.storeId);
+
                       navigation.navigate("ProductDetail", {
                         product: item,
+                        restaurant
+
                       });
                     }}
                   />

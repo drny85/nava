@@ -35,7 +35,8 @@ const MyOrders = ({ navigation }) => {
 				<AppButton
 					style={{ width: "90%" }}
 					title="Place My First Order"
-					onPress={() => navigation.navigate("Home")}
+					textStyle={{ textTransform: 'capitalize' }}
+					onPress={() => navigation.navigate("Restaurants")}
 				/>
 			</View>
 		);
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
 	container: {
 		justifyContent: "center",
 		alignItems: "center",
+
 	},
 });
 

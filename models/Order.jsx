@@ -6,7 +6,9 @@ class Order {
 		type,
 		totalAmount,
 		paymentMethod,
-		status = "new"
+		status,
+		instruction,
+		restaurant
 	) {
 		(this.userId = userId),
 			(this.items = items),
@@ -14,7 +16,9 @@ class Order {
 			(this.type = type),
 			(this.totalAmount = totalAmount),
 			(this.paymentMethod = paymentMethod),
-			(this.status = status);
+			(this.status = status),
+			(this.instruction = instruction),
+			(this.restaurant = restaurant)
 	}
 }
 

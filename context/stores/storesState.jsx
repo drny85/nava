@@ -40,8 +40,7 @@ const StoresState = (props) => {
     }
   };
 
-  const setCurrentStore = (store) =>
-    dispatch({ type: "SET_STORE", payload: store });
+
 
   return (
     <StoresContext.Provider
@@ -49,7 +48,7 @@ const StoresState = (props) => {
         stores: state.stores,
         loading: state.loading,
         current: state.current,
-        setCurrentStore,
+
         getStores,
       }}
     >

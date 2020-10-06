@@ -18,7 +18,7 @@ const OrderTile = ({ order, index, onPress }) => {
 			style={[
 				styles.container,
 				{
-					backgroundColor: order.status === "new" ? colors.card : colors.tile,
+					backgroundColor: order.status === "new" ? colors.ascent : colors.tile,
 				},
 			]}
 		>

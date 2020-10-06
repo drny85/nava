@@ -157,7 +157,7 @@ const Checkout = ({ route, navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior="position"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 100}
     >
       <ScrollView
         contentContainerStyle={{

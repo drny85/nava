@@ -1,15 +1,16 @@
 // @ts-nocheck
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
   Text,
   FlatList,
   Alert,
-  ScrollView,
   Dimensions,
+  ScrollView,
+  KeyboardAvoidingView
 } from "react-native";
-import LottieView from "lottie-react-native";
+
 
 import authContext from "../../context/auth/authContext";
 import Screen from "../../components/Screen";
@@ -23,21 +24,24 @@ import cartContext from "../../context/cart/cartContext";
 import ordersContext from "../../context/order/orderContext";
 import AppButton from "../../components/AppButton";
 import CardSummaryItem from "../../components/CardSummaryItem";
-import { colors } from "react-native-elements";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+
 import { TextInput } from "react-native-gesture-handler";
+import storesContext from "../../context/stores/storesContext";
 
 const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
   const { placeOrder } = useContext(ordersContext);
-  const { cartItems, cartTotal, itemCounts, clearCart, loading } = useContext(
+  const { cartItems, cartTotal, clearCart, loading } = useContext(
     cartContext
   );
+  const { stores } = useContext(storesContext)
+  const restaurants = [...stores];
+  const restaurant = restaurants.find(s => s.id === cartItems[0]?.storeId)
   const [instruction, setInstrction] = useState(null)
-  //const { deliveryMethod } = useContext(settingsContext);
+
   const { deliveryMethod, customer, paymentMethod } = route.params;
 
-  console.log(instruction)
+
 
   if (!user) {
     navigation.navigate("Profile", {
@@ -54,7 +58,10 @@ const OrderSummary = ({ navigation, route }) => {
         deliveryMethod,
         cartTotal,
         paymentMethod,
-        instruction
+        status = 'new',
+        instruction,
+        restaurant
+
       );
       if (cartItems.length > 0) {
         //handle payment with credit
@@ -85,9 +92,20 @@ const OrderSummary = ({ navigation, route }) => {
     }
   };
 
+
   return (
-    <Screen style={styles.container}>
+    <Screen >
+
       <View style={styles.listView}>
+        <View style={styles.storeInfo}>
+          {restaurant && (
+            <>
+              <Text style={styles.textTitle}>Store Details</Text>
+              <Text style={styles.text}>{restaurant.name}</Text>
+              <Text style={styles.text}>{restaurant.street}, {restaurant.city} {restaurant.zipcode}</Text>
+            </>
+          )}
+        </View>
         <FlatList
           data={cartItems}
           keyExtractor={(item, index) => item.id + index.toString()}
@@ -104,93 +122,96 @@ const OrderSummary = ({ navigation, route }) => {
           )}
         />
       </View>
-      <ScrollView style={styles.details}>
-        {deliveryMethod === "pickup" ? (
-          <>
-            <Text
-              style={{
-                fontSize: 20,
-                fontStyle: "italic",
-                fontWeight: "800",
-                marginBottom: 20,
-              }}
-            >
-              Important information about your order {customer.name}
-            </Text>
-            <Text style={styles.title}>
-              You will be picking up this order at the restaurant
-            </Text>
-          </>
-        ) : (
+      <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={100} behavior='padding'>
+        <ScrollView style={styles.details}>
+          {deliveryMethod === "pickup" ? (
             <>
-              <View>
-                <CardSummaryItem
-                  onPress={() => navigation.goBack()}
-                  title="Your order will be delivered to:"
-                  subtitle={`${customer.address.street} ${customer.address.apt ? customer.address.apt : null
-                    }`}
-                  misc={`${customer.address.city}, ${customer.address.zipcode}`}
-                />
-                <CardSummaryItem
-                  onPress={() => navigation.goBack()}
-                  title="You might be contacted at:"
-                  subtitle={`Phone: ${customer.phone}`}
-                  misc={`Email: ${customer.email}`}
-                />
-              </View>
-            </>
-          )}
-        <View style={styles.deliveryInstruction}>
-          <Text style={{ fontFamily: 'montserrat', fontSize: 16, paddingVertical: 5, }}>Delivery Instructions</Text>
-          <TextInput onChangeText={text => setInstrction(text)} value={instruction} style={styles.input} placeholder='Type any important message for the delivery guy' />
-        </View>
-        {paymentMethod === "cash" && deliveryMethod === "pickup" && (
-          <Text>Handle cash pickup</Text>
-        )}
-        {paymentMethod === "credit" && deliveryMethod === "pickup" && (
-          <View style={{ padding: 12 }}>
-            <Text style={styles.text}>
-              You will pay with debit or credit card, please have it ready.
-            </Text>
-            <Text style={styles.text}>
-              Just click Pay Now at the bottom to enter your card information.
-            </Text>
-          </View>
-        )}
-        {paymentMethod === "in store" && deliveryMethod === "pickup" && (
-          <View style={styles.pickup}>
-            <Text style={styles.title}>
-              You will pay for this order at the store
-            </Text>
-            <Text style={styles.title}>
-              You can pay with cash or credit / debit card
-            </Text>
-            <View style={styles.totalView}>
-              <Text style={styles.title}>Order Total</Text>
-              <Text style={{ fontWeight: "bold", fontSize: 45 }}>
-                ${cartTotal.toFixed(2)}
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontStyle: "italic",
+                  fontWeight: "800",
+                  marginBottom: 20,
+                }}
+              >
+                Important information about your order {customer.name}
               </Text>
-            </View>
+              <Text style={styles.title}>
+                You will be picking up this order at the restaurant
+            </Text>
+            </>
+          ) : (
+              <>
+                <View>
+                  <CardSummaryItem
+                    onPress={() => navigation.goBack()}
+                    title="Your order will be delivered to:"
+                    subtitle={`${customer.address.street} ${customer.address.apt ? customer.address.apt : null
+                      }`}
+                    misc={`${customer.address.city}, ${customer.address.zipcode}`}
+                  />
+                  <CardSummaryItem
+                    onPress={() => navigation.goBack()}
+                    title="You might be contacted at:"
+                    subtitle={`Phone: ${customer.phone}`}
+                    misc={`Email: ${customer.email}`}
+                  />
+                </View>
+              </>
+            )}
+          <View style={styles.deliveryInstruction}>
+            <Text style={{ fontFamily: 'montserrat', fontSize: 16, paddingVertical: 5, }}>Delivery Instructions</Text>
+            <TextInput onChangeText={text => setInstrction(text)} numberOfLines={2} value={instruction} style={styles.input} placeholder='Ex. Ring the bell' />
           </View>
-        )}
-        {paymentMethod === "cash" && deliveryMethod === "delivery" && (
-          <View style={styles.infoView}>
-            <Text style={styles.infotext}>
-              Your order total is ${cartTotal.toFixed(2)}, please have this
+          {paymentMethod === "cash" && deliveryMethod === "pickup" && (
+            <Text>Handle cash pickup</Text>
+          )}
+          {paymentMethod === "credit" && deliveryMethod === "pickup" && (
+            <View style={{ padding: 12 }}>
+              <Text style={styles.text}>
+                You will pay with debit or credit card, please have it ready.
+            </Text>
+              <Text style={styles.text}>
+                Just click Pay Now at the bottom to enter your card information.
+            </Text>
+            </View>
+          )}
+          {paymentMethod === "in store" && deliveryMethod === "pickup" && (
+            <View style={styles.pickup}>
+              <Text style={styles.title}>
+                You will pay for this order at the store
+            </Text>
+              <Text style={styles.title}>
+                You can pay with cash or credit / debit card
+            </Text>
+              <View style={styles.totalView}>
+                <Text style={styles.title}>Order Total</Text>
+                <Text style={{ fontWeight: "bold", fontSize: 45 }}>
+                  ${cartTotal.toFixed(2)}
+                </Text>
+              </View>
+            </View>
+          )}
+          {paymentMethod === "cash" && deliveryMethod === "delivery" && (
+            <View style={styles.infoView}>
+              <Text style={styles.infotext}>
+                Your order total is ${cartTotal.toFixed(2)}, please have this
               amount available in cash. Always be generous and tip the delivery
               guy.
             </Text>
-          </View>
-        )}
+            </View>
+          )}
 
 
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
       <View style={{ position: "absolute", bottom: 5, width: "100%" }}>
         <AppButton
           title={paymentMethod === "credit" ? "Pay Now" : "Place Order"}
           onPress={handlePayment}
         />
       </View>
+
     </Screen>
   );
 };
@@ -199,6 +220,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     marginHorizontal: 10,
+    flex: 1,
   },
   listView: {
     maxHeight: Dimensions.get("screen").height * 0.35,
@@ -261,6 +283,26 @@ const styles = StyleSheet.create({
     fontFamily: "montserrat",
     fontSize: 16,
     marginBottom: 12,
+  },
+  storeInfo: {
+    width: '100%',
+    padding: 5,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  text: {
+    fontFamily: 'montserrat',
+    fontSize: 14,
+    paddingVertical: 2,
+    textTransform: 'capitalize'
+  },
+  textTitle: {
+    fontFamily: 'montserrat-bold',
+    fontSize: 14,
+
+    paddingVertical: 2,
+    textTransform: 'capitalize'
   },
 });
 

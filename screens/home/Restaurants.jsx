@@ -8,17 +8,18 @@ import StoreCard from "../../components/StoreCard";
 import storesContext from "../../context/stores/storesContext";
 
 const Restaurants = ({ navigation }) => {
-  const { stores, getStores, loading } = useContext(storesContext);
+  const { stores, getStores, loading, setCurrentStore } = useContext(storesContext);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchStores = (restaurant) => {
+
     navigation.navigate("Home", { restaurant });
   };
 
   useEffect(() => {
     getStores();
 
-    return () => {};
+    return () => { };
   }, []);
 
   if (loading) return <Loader />;
@@ -30,6 +31,7 @@ const Restaurants = ({ navigation }) => {
         data={stores}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
+
           return <StoreCard store={item} onPress={() => fetchStores(item)} />;
         }}
       />

@@ -25,16 +25,18 @@ const OrderDetails = ({ route, navigation }) => {
         </Text>
         <Text style={styles.text}>Order Type: {order.orderType}</Text>
         <Text style={styles.text}>Payment Method: {order.paymentMethod}</Text>
+        <Text style={styles.text}>Restaurant: {order.restaurant.name}</Text>
         <Text style={styles.text}>
           {order.orderType === "pickup" || order.type === "pickup" ? (
             `Person Picking Up: ${order.customer.name}`
           ) : (
-            <Text numberOfLines={1} style={styles.text}>
-              Delivered to: {order.customer.address.street},{" "}
-              {order.customer.address.city}
-            </Text>
-          )}
+              <Text numberOfLines={1} style={styles.text}>
+                Delivered to: {order.customer.address.street},{" "}
+                {order.customer.address.city}
+              </Text>
+            )}
         </Text>
+        {order.instruction && (<Text style={styles.text}>Note: {order.instruction}</Text>)}
       </View>
       <View
         style={{
@@ -47,7 +49,7 @@ const OrderDetails = ({ route, navigation }) => {
       >
         <Text
           style={{
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: "700",
             fontFamily: "montserrat-bold",
           }}
@@ -56,7 +58,7 @@ const OrderDetails = ({ route, navigation }) => {
         </Text>
         <Text
           style={{
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: "700",
             marginVertical: 10,
             fontFamily: "montserrat-bold",
@@ -90,6 +92,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     //fontFamily: "montserrat",
   },
+
   orderInfo: {
     marginTop: 3,
     padding: 10,
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
     fontFamily: "montserrat",
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "500",
     paddingBottom: 8,
     textTransform: "capitalize",

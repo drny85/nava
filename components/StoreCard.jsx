@@ -7,10 +7,10 @@ import colors from '../config/colors'
 
 const StoreCard = ({ store, onPress }) => {
 
-    const { name, phone, street, city, zipcode } = store;
+    const { name, phone, street, city, zipcode, imageUrl } = store;
     return (
         <TouchableOpacity style={styles.view} onPress={onPress}>
-            <Image resizeMode='cover' style={styles.img} source={{ uri: 'https://mk0tarestaurant7omoy.kinstacdn.com/wp-content/uploads/2018/01/premiumforrestaurants_0.jpg' }} />
+            <Image resizeMode='cover' style={styles.img} source={{ uri: imageUrl ? imageUrl : 'https://mk0tarestaurant7omoy.kinstacdn.com/wp-content/uploads/2018/01/premiumforrestaurants_0.jpg' }} />
             <LinearGradient colors={['rgba(0,0,0,0.8)', 'transparent', '#95a5a6', '#2c3e50',]} start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }} style={styles.details}>
 
 

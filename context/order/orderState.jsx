@@ -18,7 +18,7 @@ const OrdersState = (props) => {
 	const placeOrder = async (orderInfo) => {
 		try {
 			setLoading();
-
+			console.log('Order Info', orderInfo)
 			let newOrder;
 			if (orderInfo.type === "pickup") {
 				newOrder = {
@@ -41,6 +41,8 @@ const OrdersState = (props) => {
 					totalAmount: orderInfo.totalAmount,
 					orderType: orderInfo.type,
 					status: orderInfo.status,
+					instruction: orderInfo.instruction,
+					restaurant: orderInfo.restaurant,
 					paymentMethod: orderInfo.paymentMethod,
 					orderPlaced: new Date().toISOString(),
 				};
@@ -63,6 +65,8 @@ const OrdersState = (props) => {
 					orderPlaced: orderInfo.orderPlaced,
 					totalAmount: orderInfo.totalAmount,
 					orderType: orderInfo.type,
+					instruction: orderInfo.instruction,
+					restaurant: orderInfo.restaurant,
 					status: orderInfo.status,
 					paymentMethod: orderInfo.paymentMethod,
 					orderPlaced: new Date().toISOString(),
