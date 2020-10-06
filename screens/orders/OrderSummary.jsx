@@ -27,13 +27,15 @@ import CardSummaryItem from "../../components/CardSummaryItem";
 
 import { TextInput } from "react-native-gesture-handler";
 import storesContext from "../../context/stores/storesContext";
+import Divider from "../../components/Divider";
 
 const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
   const { placeOrder } = useContext(ordersContext);
-  const { cartItems, cartTotal, clearCart, loading } = useContext(
+  const { cartItems, cartTotal, clearCart } = useContext(
     cartContext
   );
+  const status = 'new';
   const { stores } = useContext(storesContext)
   const restaurants = [...stores];
   const restaurant = restaurants.find(s => s.id === cartItems[0]?.storeId)
@@ -58,11 +60,13 @@ const OrderSummary = ({ navigation, route }) => {
         deliveryMethod,
         cartTotal,
         paymentMethod,
-        status = 'new',
+        status,
         instruction,
         restaurant
 
       );
+
+
       if (cartItems.length > 0) {
         //handle payment with credit
         if (paymentMethod === "credit") {
@@ -73,14 +77,22 @@ const OrderSummary = ({ navigation, route }) => {
           });
         } else {
           //handle payment with cash
-          const order = await placeOrder(newOrder);
 
-          clearCart();
-          navigation.navigate("Orders", {
-            screen: "OrderConfirmation",
+          const { data, error } = await placeOrder(newOrder);
+          if (error) {
+            console.log('Error at Order Summary line 81', error)
+            return;
+          }
+          if (data) {
+            clearCart();
+            navigation.navigate("Orders", {
+              screen: "OrderConfirmation",
 
-            params: { order, paymentMethod },
-          });
+              params: { order: data, paymentMethod },
+            });
+          }
+
+
         }
       } else {
         Alert.alert("Empty Cart", "Cart is empty", [
@@ -88,7 +100,8 @@ const OrderSummary = ({ navigation, route }) => {
         ]);
       }
     } catch (error) {
-      console.log(error);
+
+      console.log('Error catched', error);
     }
   };
 
@@ -157,12 +170,14 @@ const OrderSummary = ({ navigation, route }) => {
                     misc={`Email: ${customer.email}`}
                   />
                 </View>
+                <Divider />
+                <View style={styles.deliveryInstruction}>
+                  <Text style={{ fontFamily: 'montserrat', fontSize: 16, paddingVertical: 5, }}>Delivery Instructions</Text>
+                  <TextInput onChangeText={text => setInstrction(text)} numberOfLines={2} value={instruction} style={styles.input} placeholder='Ex. Ring the bell' />
+                </View>
               </>
             )}
-          <View style={styles.deliveryInstruction}>
-            <Text style={{ fontFamily: 'montserrat', fontSize: 16, paddingVertical: 5, }}>Delivery Instructions</Text>
-            <TextInput onChangeText={text => setInstrction(text)} numberOfLines={2} value={instruction} style={styles.input} placeholder='Ex. Ring the bell' />
-          </View>
+
           {paymentMethod === "cash" && deliveryMethod === "pickup" && (
             <Text>Handle cash pickup</Text>
           )}
@@ -171,6 +186,7 @@ const OrderSummary = ({ navigation, route }) => {
               <Text style={styles.text}>
                 You will pay with debit or credit card, please have it ready.
             </Text>
+              <Divider />
               <Text style={styles.text}>
                 Just click Pay Now at the bottom to enter your card information.
             </Text>

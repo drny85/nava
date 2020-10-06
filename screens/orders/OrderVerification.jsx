@@ -31,7 +31,11 @@ const OrderVerification = ({ navigation, route }) => {
     try {
       const { data, error } = await placeOrder(newOrder);
 
-      if (error) return;
+      if (error) {
+        console.log(error),
+          navigation.goBack()
+        return;
+      }
 
       clearCart();
       navigation.navigate("OrderConfirmation", { paymentMethod, order: data });

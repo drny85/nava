@@ -6,6 +6,7 @@ import { db } from "../../services/database";
 import { GET_ORDERS, SET_LOADING } from "../types";
 import { diffClamp } from "react-native-reanimated";
 
+
 const OrdersState = (props) => {
 	const initialState = {
 		orders: [],
@@ -16,12 +17,23 @@ const OrdersState = (props) => {
 	const [state, dispatch] = useReducer(OrderReducer, initialState);
 
 	const placeOrder = async (orderInfo) => {
+
 		try {
 			setLoading();
-			console.log('Order Info', orderInfo)
+			const restId = orderInfo.restaurant.id;
+			const tem = []
+			const orders = (await db.collection('orders').get()).forEach(doc => {
+				if (doc.exists) {
+					tem.push(doc.data())
+				}
+			})
+
+			const orderCount = tem.filter(order => order.restaurant.id === restId);
+
 			let newOrder;
 			if (orderInfo.type === "pickup") {
 				newOrder = {
+					orderNumber: orderCount.length + 1,
 					userId: orderInfo.userId,
 					items: orderInfo.items,
 					customer: {
@@ -43,12 +55,14 @@ const OrdersState = (props) => {
 					status: orderInfo.status,
 					instruction: orderInfo.instruction,
 					restaurant: orderInfo.restaurant,
+					restaurantId: orderInfo.restaurant.id,
 					paymentMethod: orderInfo.paymentMethod,
 					orderPlaced: new Date().toISOString(),
 				};
 			} else {
 				newOrder = {
 					userId: orderInfo.userId,
+					orderNumber: orderCount.length + 1,
 					items: orderInfo.items,
 					customer: {
 						address: {
@@ -67,6 +81,7 @@ const OrdersState = (props) => {
 					orderType: orderInfo.type,
 					instruction: orderInfo.instruction,
 					restaurant: orderInfo.restaurant,
+					restaurantId: orderInfo.restaurant.id,
 					status: orderInfo.status,
 					paymentMethod: orderInfo.paymentMethod,
 					orderPlaced: new Date().toISOString(),

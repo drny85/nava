@@ -6,7 +6,7 @@ class Order {
 		type,
 		totalAmount,
 		paymentMethod,
-		status,
+		status = 'new',
 		instruction,
 		restaurant
 	) {

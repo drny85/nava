@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import * as Location from 'expo-location';
 
 const zipCodes = ['10452', '10451', '10453', '10456', '10457']
-export default useLocation = () => {
+export const useLocation = () => {
 
-    const [canDelivery, setCanDelivery] = useState(false)
-    const [loading, setLoading] = useState(true)
+    const [address, setAddress] = useState(null)
+    const [isloading, setLoading] = useState(true)
 
     useEffect(() => {
         (async () => {
@@ -15,26 +15,21 @@ export default useLocation = () => {
                     setErrorMsg('Permission to access location was denied');
                 }
 
-                const location = await Location.getCurrentPositionAsync({ accuracy: Location.LocationAccuracy.Highest })
+                const location = await Location.getCurrentPositionAsync({})
                 const { latitude, longitude } = location.coords
                 const myAddress = await Location.reverseGeocodeAsync({ latitude, longitude })
-                const { postalCode } = myAddress[0]
                 setLoading(false)
-                if (zipCodes.includes(postalCode)) {
-                    setCanDelivery(true)
-                } else {
-                    setLoading(false)
-                    setCanDelivery(false)
-                }
+                setAddress(myAddress[0])
+
             } catch (error) {
                 console.log(error)
                 setLoading(false)
-                setCanDelivery(false)
+                setAddress(null)
             }
 
         })();
-    }, [postalCode]);
+    }, []);
 
 
-    return { loading, canDelivery }
+    return { isloading, address }
 }

@@ -1,20 +1,35 @@
 // @ts-nocheck
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, FlatList } from "react-native";
+
 import Loader from "../../components/Loader";
 import Screen from "../../components/Screen";
+import SearchBar from "../../components/SearchBar";
 import StoreCard from "../../components/StoreCard";
+//import { useLocation } from '../../hooks/useLocation'
 
 import storesContext from "../../context/stores/storesContext";
 
+
 const Restaurants = ({ navigation }) => {
-  const { stores, getStores, loading, setCurrentStore } = useContext(storesContext);
+  const { stores, getStores, loading } = useContext(storesContext);
+
   const [refreshing, setRefreshing] = useState(false);
+  const [text, setText] = useState('')
+
+  // const { address, isloading } = useLocation()
+  // console.log(address)
 
   const fetchStores = (restaurant) => {
 
     navigation.navigate("Home", { restaurant });
   };
+  console.log(text)
+
+  const onChange = e => {
+    setText(e)
+    console.log(storesCopy.map(s => s.name.includes(text)))
+  }
 
   useEffect(() => {
     getStores();
@@ -25,6 +40,7 @@ const Restaurants = ({ navigation }) => {
   if (loading) return <Loader />;
   return (
     <Screen style={styles.screen}>
+      <SearchBar text={text} onChange={e => onChange(e)} />
       <FlatList
         onRefresh={getStores}
         refreshing={refreshing}

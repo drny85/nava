@@ -21,6 +21,7 @@ import { Alert } from "react-native";
 
 import Loader from "../../components/Loader";
 import storesContext from "../../context/stores/storesContext";
+import Divider from "../../components/Divider";
 
 const heigth = Dimensions.get("screen").height;
 
@@ -176,9 +177,10 @@ const ProductDetail = ({ route, navigation }) => {
               <Text
                 style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}
               >
-                {item.description}
+                -- {item.description}
               </Text>
             </View>
+            <Divider />
             {item.sizes && item.sizes.length > 0 && (
               <View style={{ marginVertical: 10 }}>
                 <Text
@@ -277,12 +279,13 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   descriptionView: {
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
     height: "auto",
     maxHeight: 80,
     padding: 10,
     fontSize: 16,
     borderRadius: 10,
+    fontFamily: 'montserrat',
   },
   instruction: {
     backgroundColor: colors.secondary,

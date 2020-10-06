@@ -23,6 +23,7 @@ import authContext from "../../context/auth/authContext";
 
 import { Alert } from "react-native";
 import SwipeDelete from "../../components/SwipeDelete";
+import Divider from "../../components/Divider";
 
 const addressSchema = Yup.object().shape({
 	street: Yup.string().required().label("Street"),
@@ -100,6 +101,7 @@ const MyAddress = ({ navigation, route }) => {
 			) : (
 					<View style={styles.mainView}>
 						<FlatList
+							ItemSeparatorComponent={() => <Divider />}
 							data={addresses.sort((a, b) => b.dateAdded > a.dateAdded)}
 							keyExtractor={(item) => item.id.toString()}
 							renderItem={({ item }) => (

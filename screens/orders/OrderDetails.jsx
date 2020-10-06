@@ -10,6 +10,7 @@ import ListItem from "../../components/ListItem";
 const OrderDetails = ({ route, navigation }) => {
   const { order } = route.params;
 
+
   if (order.status !== "delivered") {
     navigation.navigate("OrderInTheMaking");
   }
@@ -47,6 +48,15 @@ const OrderDetails = ({ route, navigation }) => {
           alignItems: "center",
         }}
       >
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "700",
+            fontFamily: "montserrat-bold",
+          }}
+        >
+          Order #: {order.orderNumber}
+        </Text>
         <Text
           style={{
             fontSize: 18,
