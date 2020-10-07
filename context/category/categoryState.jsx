@@ -26,10 +26,10 @@ const CategoryState = (props) => {
 
 	const [state, dispatch] = useReducer(CategoryReducer, initialState);
 
-	const getCategories = async () => {
+	const getCategories = async (storeId) => {
 		try {
 			setLoading();
-			const snapshot = await db.collection("categories").get();
+			const snapshot = await db.collection("categories").doc(storeId).collection('categories').get();
 			const temp = snapshot.docs.map((doc) => {
 				return {
 					id: doc.id,

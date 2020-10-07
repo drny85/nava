@@ -9,13 +9,11 @@ import storesContext from "../context/stores/storesContext";
 
 const ListCategoryItems = ({ categories, items, restaurant, onRefresh }) => {
   const navigation = useNavigation();
-  const [refreshing, setRefreshing] = React.useState(false);
 
   return (
     <FlatList
       data={categories}
-      onRefresh={onRefresh}
-      refreshing={refreshing}
+
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => {
         return (

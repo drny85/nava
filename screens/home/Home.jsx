@@ -39,7 +39,7 @@ const Home = ({ route }) => {
 
   useEffect(() => {
     const { res, uns } = getItems(restaurant?.id);
-    getCategories();
+    getCategories(restaurant?.id);
 
     return () => {
       uns && uns();

@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, FlatList } from "react-native";
+import { StyleSheet, FlatList, Text } from "react-native";
 
 import Loader from "../../components/Loader";
 import Screen from "../../components/Screen";
@@ -24,7 +24,7 @@ const Restaurants = ({ navigation }) => {
 
     navigation.navigate("Home", { restaurant });
   };
-  console.log(text)
+
 
   const onChange = e => {
     setText(e)
@@ -37,7 +37,15 @@ const Restaurants = ({ navigation }) => {
     return () => { };
   }, []);
 
+  console.log(loading)
+
   if (loading) return <Loader />;
+
+  if (stores.length === 0) {
+    return <Screen style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>No Stores Listed</Text>
+    </Screen>
+  }
   return (
     <Screen style={styles.screen}>
       {/* <SearchBar text={text} onChange={e => onChange(e)} /> */}

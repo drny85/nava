@@ -23,13 +23,14 @@ const ItemsState = (props) => {
 
   const [state, dispatch] = useReducer(ItemsReducer, initialState);
 
-  const getItems = async (storeId, unsub) => {
+  const getItems = async (storeId) => {
     try {
       setLoading();
-      itemsSubcription = db
+      const itemsSubcription = db
         .collection("items")
+        .doc(storeId)
+        .collection('items')
         .where("available", "==", true)
-        .where('storeId', '==', storeId)
         .onSnapshot((values) => {
           let data = [];
           values.forEach((doc) => {
@@ -42,6 +43,8 @@ const ItemsState = (props) => {
             }
           });
           dispatch({ type: GET_ITEMS, payload: data });
+
+
 
         });
 

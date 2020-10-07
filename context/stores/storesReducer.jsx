@@ -1,4 +1,4 @@
-import { GET_STORES } from "../types";
+import { GET_STORES, SET_LOADING } from "../types";
 
 export default (state, action) => {
   switch (action.type) {
@@ -15,6 +15,12 @@ export default (state, action) => {
         loading: false,
         current: action.payload,
       };
+
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true,
+      }
 
     default:
       return state;
