@@ -334,7 +334,7 @@ const Checkout = ({ route, navigation }) => {
               <View style={styles.pickAddress}>
                 <View>
                   <Text style={styles.deliveryTitle}>
-                    {previous ? `Delivery Address` : `Pick an address`}
+                    {previous ? `Delivery Address` : `Pick an address *`}
                   </Text>
                   <View style={{ padding: 10 }}>
                     {deliveryAddress ? (

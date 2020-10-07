@@ -31,6 +31,7 @@ const CartState = (props) => {
 	const addToCart = async (item) => {
 		try {
 			//setLoading();
+
 			const cartId = await getCartId();
 
 			const { items, quantity, total } = (
@@ -136,6 +137,7 @@ const CartState = (props) => {
 
 			// getCartItems();
 		} catch (error) {
+
 			console.log("Error Adding to Cart", error);
 		}
 	};
@@ -332,8 +334,11 @@ const CartState = (props) => {
 				await AsyncStorage.removeItem(CART_ID);
 			}
 			dispatch({ type: CLEAR_CART });
+
+			return true;
 		} catch (error) {
 			console.log(error);
+			return false;
 		}
 	};
 

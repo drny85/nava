@@ -221,8 +221,9 @@ const OrderSummary = ({ navigation, route }) => {
 
         </ScrollView>
       </KeyboardAvoidingView>
-      <View style={{ position: "absolute", bottom: 5, width: "100%" }}>
+      <View style={{ position: "absolute", bottom: 5, width: "100%", }}>
         <AppButton
+
           title={paymentMethod === "credit" ? "Pay Now" : "Place Order"}
           onPress={handlePayment}
         />

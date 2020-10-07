@@ -57,17 +57,24 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
   const clearCartAndAddNew = async () => {
-    clearCart();
-    item.size = checked ? checked : null;
-    item.price =
-      item.size === null
-        ? parseFloat(item.price)
-        : parseFloat(item.price[checked]);
-    item.instruction = instruction;
+    const cleared = clearCart();
+    if (cleared) {
+      item.size = checked ? checked : null;
+      item.price =
+        item.size === null
+          ? parseFloat(item.price)
+          : parseFloat(item.price[checked]);
+      item.instruction = instruction;
 
+      console.log(item);
 
-    await addToCart(item)
-    navigation.goBack()
+      await addToCart(item)
+      navigation.goBack()
+    } else {
+      console.log('error deleting and adding to cart')
+
+    }
+
   }
 
   const handleAddToCart = async () => {
@@ -124,6 +131,7 @@ const ProductDetail = ({ route, navigation }) => {
           : parseFloat(item.price[checked]);
       item.instruction = instruction;
 
+
       await addToCart(item);
       navigation.pop();
 
@@ -141,10 +149,11 @@ const ProductDetail = ({ route, navigation }) => {
   return (
     <View style={styles.screen}>
       <KeyboardAvoidingView
+        style={{ flex: 1, justifyContent: 'space-between' }}
         behavior="position"
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
       >
-        <View>
+        <View style={styles.imgView}>
           <Image style={styles.image} source={{ uri: item && item.imageUrl }} />
           <TouchableWithoutFeedback
             onPress={() => {
@@ -160,86 +169,89 @@ const ProductDetail = ({ route, navigation }) => {
               />
             </View>
           </TouchableWithoutFeedback>
-          <ScrollView style={styles.scrollView}>
-            <View style={styles.details}>
-              <Text style={styles.name}>{item.name}</Text>
-              {/* <Text style={styles.price}>${item.sizes ? item.price[checked] : item.price}</Text> */}
-              <Text style={styles.price}>
-                {item.sizes && checked ? `$${item.price[checked]}` : null}
-                {item.sizes && !checked
-                  ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
-                  }`
-                  : null}
-                {!item.sizes && `$${item.price}`}
-              </Text>
-            </View>
-            <View style={styles.descriptionView}>
+        </View>
+        <ScrollView contentContainerStyle={{ paddingVertical: 10, }} style={styles.scrollView}>
+          <View style={styles.details}>
+            <Text style={styles.name}>{item.name}</Text>
+            {/* <Text style={styles.price}>${item.sizes ? item.price[checked] : item.price}</Text> */}
+            <Text style={styles.price}>
+              {item.sizes && checked ? `$${item.price[checked]}` : null}
+              {item.sizes && !checked
+                ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
+                }`
+                : null}
+              {!item.sizes && `$${item.price}`}
+            </Text>
+          </View>
+          <View style={styles.descriptionView}>
+            <Text
+              style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}
+            >
+              -- {item.description}
+            </Text>
+          </View>
+          <Divider />
+          {item.sizes && item.sizes.length > 0 && (
+            <View style={{ marginVertical: 10 }}>
               <Text
-                style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}
+                style={{ paddingLeft: 10, fontSize: 16, fontWeight: "600" }}
               >
-                -- {item.description}
-              </Text>
-            </View>
-            <Divider />
-            {item.sizes && item.sizes.length > 0 && (
-              <View style={{ marginVertical: 10 }}>
-                <Text
-                  style={{ paddingLeft: 10, fontSize: 16, fontWeight: "600" }}
-                >
-                  Pick a size
+                Pick a size
                 </Text>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                  }}
-                >
-                  {item.sizes.map((size, i) => {
-                    return (
-                      <CheckBox
-                        key={i}
-                        center
-                        textStyle={{ textTransform: "capitalize" }}
-                        checkedColor={colors.primary}
-                        containerStyle={{ backgroundColor: colors.tile }}
-                        checkedIcon="dot-circle-o"
-                        uncheckedIcon="circle-o"
-                        title={size}
-                        onPress={() => handleCheck(size)}
-                        checked={checked === size}
-                      />
-                    );
-                  })}
-                </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignItems: "center",
+                }}
+              >
+                {item.sizes.map((size, i) => {
+                  return (
+                    <CheckBox
+                      key={i}
+                      center
+                      textStyle={{ textTransform: "capitalize" }}
+                      checkedColor={colors.primary}
+                      containerStyle={{ backgroundColor: colors.tile }}
+                      checkedIcon="dot-circle-o"
+                      uncheckedIcon="circle-o"
+                      title={size}
+                      onPress={() => handleCheck(size)}
+                      checked={checked === size}
+                    />
+                  );
+                })}
               </View>
-            )}
-
-            <View style={{ padding: 10 }}>
-              <Text style={{ fontSize: 16, paddingLeft: 5, paddingBottom: 5 }}>
-                Special instructions
-              </Text>
-              <TextInput
-                style={styles.instruction}
-                multiline
-                value={instruction}
-                onChangeText={(text) => setIntruction(text)}
-                numberOfLines={3}
-                placeholder="Dressing on the side? any request on this item, please let us know here."
-                placeholderTextColor={"grey"}
-              />
             </View>
-          </ScrollView>
+          )}
+
+          <View style={{ padding: 10 }}>
+            <Text style={{ fontSize: 16, paddingLeft: 5, paddingBottom: 5 }}>
+              Special instructions
+              </Text>
+            <TextInput
+              style={styles.instruction}
+              multiline
+              value={instruction}
+              onChangeText={(text) => setIntruction(text)}
+              numberOfLines={3}
+              placeholder="Dressing on the side? any request on this item, please let us know here."
+              placeholderTextColor={"grey"}
+            />
+          </View>
+
+        </ScrollView>
+
+
+
+        <View style={styles.buttonView}>
+          <AppButton
+            style={{ backgroundColor: colors.primary }}
+            title="add to cart"
+            onPress={handleAddToCart}
+          />
         </View>
       </KeyboardAvoidingView>
-
-      <View style={styles.buttonView}>
-        <AppButton
-          style={{ backgroundColor: colors.primary }}
-          title="add to cart"
-          onPress={handleAddToCart}
-        />
-      </View>
     </View>
   );
 };
@@ -258,13 +270,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   buttonView: {
-    height: 50,
+
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
     paddingHorizontal: 10,
-    marginBottom: 8,
+    marginBottom: 20,
   },
   buttonText: {
     fontSize: 20,
@@ -287,6 +299,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontFamily: 'montserrat',
   },
+  imgView: {
+    height: '40%',
+    marginBottom: 5,
+  },
   instruction: {
     backgroundColor: colors.secondary,
     height: 80,
@@ -294,16 +310,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderRadius: 10,
   },
+  scrollView: {
+    // height: '100%'
+    height: '50%'
+  },
 
   screen: {
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: colors.tile,
-    height: Dimensions.get('screen').height,
+    height: '100%',
   },
   image: {
     width: "100%",
-    height: heigth * 0.4,
+    height: '100%',
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     marginBottom: 20,
