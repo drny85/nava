@@ -23,7 +23,7 @@ export default useNotifications = (notificationListener) => {
 	useEffect(() => {
 		registerForPushNotificationsAsync();
 		if (notificationListener) Notifications.addListener(notificationListener);
-		return () => {};
+		return () => { };
 	}, []);
 
 	const saveToken = async (token) => {
@@ -51,7 +51,7 @@ export default useNotifications = (notificationListener) => {
 				}
 				const token = await Notifications.getExpoPushTokenAsync();
 				const id = auth().currentUser.uid;
-				saveExpoPushToken(id, token.data);
+				saveToken(token.data)
 			} else {
 				alert("Must use physical device for Push Notifications");
 			}

@@ -33,6 +33,7 @@ const StoresState = (props) => {
           newstore.push(st);
         }
 
+
         dispatch({ type: GET_STORES, payload: newstore });
       });
     } catch (error) {

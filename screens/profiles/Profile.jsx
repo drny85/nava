@@ -23,9 +23,10 @@ const Profile = ({ navigation }) => {
 	const [image, setImage] = useState("");
 	const [hasPermission, setHasPermission] = useState(false);
 	const { user, setUser } = useContext(authContext);
+	useNotifications();
+
 
 	if (!user) return <Signin />;
-	//user.pushToken ? null : useNotifications();
 
 	const requestPermission = async () => {
 		const { granted } = await ImagePicker.requestCameraPermissionsAsync();

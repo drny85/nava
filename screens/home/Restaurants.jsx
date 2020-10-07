@@ -40,7 +40,7 @@ const Restaurants = ({ navigation }) => {
   if (loading) return <Loader />;
   return (
     <Screen style={styles.screen}>
-      <SearchBar text={text} onChange={e => onChange(e)} />
+      {/* <SearchBar text={text} onChange={e => onChange(e)} /> */}
       <FlatList
         onRefresh={getStores}
         refreshing={refreshing}
