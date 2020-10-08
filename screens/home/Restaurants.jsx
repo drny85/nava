@@ -33,11 +33,13 @@ const Restaurants = ({ navigation }) => {
 
   useEffect(() => {
     getStores();
+    console.log('stores')
 
-    return () => { };
-  }, []);
+    return () => {
 
-  console.log(loading)
+    };
+  }, [stores.length]);
+
 
   if (loading) return <Loader />;
 
@@ -45,6 +47,11 @@ const Restaurants = ({ navigation }) => {
     return <Screen style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>No Stores Listed</Text>
     </Screen>
+  }
+
+  //check if thee is only a store active and send user to that particular store
+  if (stores.length === 1) {
+    navigation.replace("Home", { restaurant: stores[0] });
   }
   return (
     <Screen style={styles.screen}>

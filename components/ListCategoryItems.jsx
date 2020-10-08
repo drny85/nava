@@ -5,15 +5,14 @@ import { useNavigation } from "@react-navigation/native";
 import Card from "./Card";
 
 import colors from "../config/colors";
-import storesContext from "../context/stores/storesContext";
 
-const ListCategoryItems = ({ categories, items, restaurant, onRefresh }) => {
+
+const ListCategoryItems = ({ categories, items, restaurant }) => {
   const navigation = useNavigation();
 
   return (
     <FlatList
       data={categories}
-
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => {
         return (

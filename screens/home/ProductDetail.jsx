@@ -57,6 +57,12 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
   const clearCartAndAddNew = async () => {
+    if (checked === false && item.sizes) {
+      Alert.alert("Size Matter", `Please pick a size for your ${item.name}`, [
+        { text: "OK", style: "cancel" },
+      ]);
+      return;
+    }
     const cleared = clearCart();
     if (cleared) {
       item.size = checked ? checked : null;
@@ -65,8 +71,6 @@ const ProductDetail = ({ route, navigation }) => {
           ? parseFloat(item.price)
           : parseFloat(item.price[checked]);
       item.instruction = instruction;
-
-      console.log(item);
 
       await addToCart(item)
       navigation.goBack()

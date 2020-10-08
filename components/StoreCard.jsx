@@ -11,13 +11,14 @@ const StoreCard = ({ store, onPress }) => {
     return (
         <TouchableOpacity style={styles.view} onPress={onPress}>
             <Image resizeMode='cover' style={styles.img} source={{ uri: imageUrl ? imageUrl : 'https://mk0tarestaurant7omoy.kinstacdn.com/wp-content/uploads/2018/01/premiumforrestaurants_0.jpg' }} />
-            <LinearGradient colors={['rgba(0,0,0,0.8)', 'transparent', '#95a5a6', '#2c3e50',]} start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }} style={styles.details}>
+            <LinearGradient colors={['rgba(0,0,0,0.8)', 'black']} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} style={styles.details}>
 
 
             </LinearGradient>
             <View style={styles.details2}>
-                <Text style={styles.name}>{name}</Text>
+                <Text numberOfLines={1} style={styles.name}>{name}</Text>
                 <Text style={styles.phone}>{phone}</Text>
+                <Text style={styles.phone}>{street}</Text>
                 <Text style={styles.caption}>{city}, {zipcode}</Text>
             </View>
         </TouchableOpacity>
@@ -66,31 +67,36 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: '100%',
         height: Dimensions.get('screen').height * 0.12,
+        paddingTop: 8,
 
         borderBottomRightRadius: 15,
         borderBottomLeftRadius: 15,
         overflow: 'hidden',
 
 
+
+
     },
     name: {
 
-        fontSize: 22,
+        fontSize: 16,
         fontFamily: 'montserrat-bold',
         textTransform: 'uppercase',
         letterSpacing: 1.1,
         paddingLeft: 12,
+        color: colors.tile,
 
     },
     caption: {
         paddingLeft: 12,
         textTransform: 'capitalize',
         color: colors.tile,
+        fontSize: 14,
     },
     phone: {
         paddingLeft: 12,
         textTransform: 'capitalize',
         color: colors.tile,
-        fontSize: 18,
+        fontSize: 12,
     },
 })

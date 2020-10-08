@@ -19,19 +19,21 @@ const StoresState = (props) => {
 
       setLoading()
 
-      const query = await db
-        .collection("stores")
-        .where("status", "==", "approved")
-        .where("hasItems", "==", true)
-        .get()
+      const snapshot = db.collection('stores').where('status', '==', 'approved').where('hasItems', '==', true).onSnapshot(values => {
+        const allStores = [];
+        values.forEach(doc => {
+          if (doc.exists) {
+            const store = { id: doc.id, ...doc.data() }
+            allStores.push(store)
+          }
+        })
 
+        dispatch({ type: GET_STORES, payload: allStores });
 
-      const allStores = query.docs.map(doc => {
-        return { id: doc.id, ...doc.data() }
       })
 
-      console.log(allStores)
-      dispatch({ type: GET_STORES, payload: allStores });
+      return snapshot;
+
 
     } catch (error) {
       console.log(error);
