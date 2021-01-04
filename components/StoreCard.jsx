@@ -1,8 +1,9 @@
 import React from 'react'
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from '../config/colors'
+import { SIZES } from '../config';
 
 
 const StoreCard = ({ store, onPress }) => {
@@ -29,8 +30,8 @@ export default StoreCard
 
 const styles = StyleSheet.create({
     view: {
-        width: Dimensions.get('screen').width * 0.9,
-        height: Dimensions.get('screen').height * 0.3,
+        width: SIZES.width * 0.9,
+        height: SIZES.height * 0.3,
 
         borderRadius: 15,
         elevation: 10,
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        height: Dimensions.get('screen').height * 0.12,
+        height: SIZES.height * 0.12,
         opacity: 0.5,
         borderBottomRightRadius: 15,
         borderBottomLeftRadius: 15,
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
 
         bottom: 0,
         width: '100%',
-        height: Dimensions.get('screen').height * 0.12,
+        height: SIZES.height * 0.12,
         paddingTop: 8,
 
         borderBottomRightRadius: 15,

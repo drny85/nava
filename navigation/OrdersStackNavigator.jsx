@@ -57,7 +57,7 @@ const OrdersStackNavigator = () => {
         name="OrderVerification"
         component={OrderVerification}
         options={{
-          title: "Verification",
+          title: "Payment",
           headerTitleStyle: { fontFamily: "montserrat-bold" },
           headerLeft: () => (
             <TouchableWithoutFeedback
