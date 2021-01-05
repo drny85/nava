@@ -17,16 +17,18 @@ import ordersContext from "../../context/order/orderContext";
 //import { useLocation } from '../../hooks/useLocation'
 
 import storesContext from "../../context/stores/storesContext";
+import cartContext from "../../context/cart/cartContext";
 
 
 
 const Restaurants = ({ navigation }) => {
 	const { stores, getStores, loading } = useContext(storesContext);
 	const { user } = useContext(authContext)
+	const { addToCart } = useContext(cartContext)
 	const { orders, getOrders } = useContext(ordersContext)
+	const [order, setOrder] = useState(null)
 	const [showModal, setShowModal] = useState(false)
-
-
+	const [restaurant, setRestaurant] = useState(null)
 
 	const [refreshing, setRefreshing] = useState(false);
 	const [text, setText] = useState('')
@@ -42,7 +44,25 @@ const Restaurants = ({ navigation }) => {
 	//handle modal press
 	const modalHandler = (order) => {
 		setShowModal(true)
-		console.log('Modal:', order)
+		setRestaurant(order?.restaurant)
+		setOrder(order)
+
+	}
+
+	const addItemsToCart = async () => {
+		try {
+			for (let index = 0; index < order.items.length; index++) {
+				const element = order.items[index];
+				console.log(element)
+				addToCart(element)
+
+			}
+		} catch (error) {
+			console.log("Error adding items to cart", error)
+		}
+
+
+
 	}
 
 
@@ -56,8 +76,12 @@ const Restaurants = ({ navigation }) => {
 		getStores();
 		getOrders(user?.id)
 
-		return () => {
 
+
+		return () => {
+			setOrder(null)
+			setRestaurant(null)
+			setShowModal(false)
 		};
 	}, [stores.length, user]);
 
@@ -80,10 +104,10 @@ const Restaurants = ({ navigation }) => {
 			{/* <SearchBar text={text} onChange={e => onChange(e)} /> */}
 
 			{user && orders.length > 0 && (
-				<View style={{ justifyContent: 'flex-start', width: SIZES.width, height: SIZES.height * 0.20, padding: SIZES.radius }}>
+				<View style={{ justifyContent: 'flex-start', width: SIZES.width, height: SIZES.height * 0.25, padding: SIZES.radius }}>
 					<Text style={{ paddingLeft: 12, paddingBottom: 5, fontWeight: '600', fontSize: 16 }}>Recent Orders</Text>
 
-					<FlatList showsHorizontalScrollIndicator={false} data={orders} horizontal keyExtractor={item => item.id} renderItem={({ item }) => <RecentOrderCard key={item.id} onPress={() => modalHandler(item)} order={item} />} />
+					<FlatList showsHorizontalScrollIndicator={false} contentContainerStyle={{ height: '100%' }} data={orders} horizontal keyExtractor={item => item.id} renderItem={({ item }) => <RecentOrderCard key={item.id} onPress={() => modalHandler(item)} order={item} />} />
 				</View>
 			)}
 			<FlatList
@@ -102,13 +126,13 @@ const Restaurants = ({ navigation }) => {
 
 
 			<Modal visible={showModal} animationType='slide' transparent presentationStyle='overFullScreen'>
-				<View style={{ position: 'absolute', justifyContent: 'center', bottom: 0, left: 0, right: 0, width: SIZES.width, height: '40%', backgroundColor: COLORS.card, borderTopRightRadius: 30, borderTopLeftRadius: 30, }}>
-					<TouchableOpacity style={{ top: 20, left: 20, width: 30, height: 30, elevation: 10, alignItems: 'center', justifyContent: 'center' }} onPress={() => setShowModal(false)}>
+				<View style={styles.modal}>
+					<TouchableOpacity style={{ top: 5, left: 20, width: 30, height: 30, elevation: 10, alignItems: 'center', justifyContent: 'center' }} onPress={() => setShowModal(false)}>
 						<AntDesign name="close" size={28} color="black" />
 					</TouchableOpacity>
 					{/* express add order */}
 					<View style={{ marginTop: 20, padding: SIZES.padding, }}>
-						<TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginBottom: SIZES.padding * 1.3, borderBottomWidth: 0.4, paddingVertical: 10, }}>
+						<TouchableOpacity style={styles.modalItem}>
 							<Entypo style={{ marginRight: SIZES.padding * 0.5 }} name="flash" size={24} color="black" />
 							<View>
 								<Text>Order Express</Text>
@@ -118,7 +142,7 @@ const Restaurants = ({ navigation }) => {
 						</TouchableOpacity>
 						{/*  add order to cart*/}
 
-						<TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginBottom: SIZES.padding * 1.3, borderBottomWidth: 0.4, paddingVertical: 10, }}>
+						<TouchableOpacity onPress={addItemsToCart} style={styles.modalItem}>
 							<Entypo style={{ marginRight: SIZES.padding * 0.5 }} name="shopping-cart" size={24} color="black" />
 							<View>
 								<Text>Add to cart</Text>
@@ -126,18 +150,19 @@ const Restaurants = ({ navigation }) => {
 							</View>
 
 						</TouchableOpacity>
-						<TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginBottom: SIZES.padding * 1.3, }}>
+						<TouchableOpacity style={styles.modalItem}>
 							<MaterialIcons style={{ marginRight: SIZES.padding * 0.5 }} name="restaurant" size={24} color="black" />
 							<View>
 								<Text>Go to Restaurant</Text>
-								<Text>View restaurant menu and order from there</Text>
+								<Text>View {restaurant?.name}'s menu and order from there</Text>
 							</View>
 
 						</TouchableOpacity>
+						<TouchableOpacity onPress={() => setShowModal(false)} style={{ width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: SIZES.radius * 3, borderColor: COLORS.lightGray, borderWidth: 2 }}>
+							<Text style={{ paddingVertical: 15, textAlign: 'center' }}>Cancel</Text>
+						</TouchableOpacity>
 					</View>
-					<TouchableOpacity onPress={() => setShowModal(false)} style={{ paddingVertical: SIZES.padding * 0.7, marginHorizontal: 20, width: SIZES.width, alignItems: 'center', justifyContent: 'center', borderRadius: SIZES.radius * 3, borderColor: COLORS.lightGray, borderWidth: 2 }}>
-						<Text>Cancel</Text>
-					</TouchableOpacity>
+
 				</View>
 
 			</Modal>
@@ -154,13 +179,12 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	modal: {
-		height: SIZES.height * 0.5,
-		width: SIZES.width,
-		backgroundColor: COLORS.primary
+		position: 'absolute', justifyContent: 'center', bottom: 0, left: 0, right: 0, width: SIZES.width, height: '50%', backgroundColor: COLORS.card, borderTopRightRadius: 30, borderTopLeftRadius: 30,
 
 
 
-	}
+	},
+	modalItem: { flexDirection: 'row', alignItems: 'center', marginBottom: SIZES.padding * 1.3, borderBottomWidth: 0.4, paddingVertical: 10, }
 });
 
 export default Restaurants;
