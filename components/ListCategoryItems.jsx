@@ -13,6 +13,7 @@ const ListCategoryItems = ({ categories, items, restaurant }) => {
   return (
     <FlatList
       data={categories}
+      showsVerticalScrollIndicator={false}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => {
         return (
@@ -27,6 +28,7 @@ const ListCategoryItems = ({ categories, items, restaurant }) => {
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               data={items.filter((i) => i.category === item.id)}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => {

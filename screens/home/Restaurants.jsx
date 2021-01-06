@@ -18,13 +18,14 @@ import ordersContext from "../../context/order/orderContext";
 
 import storesContext from "../../context/stores/storesContext";
 import cartContext from "../../context/cart/cartContext";
+import { Alert } from "react-native";
 
 
 
 const Restaurants = ({ navigation }) => {
 	const { stores, getStores, loading } = useContext(storesContext);
 	const { user } = useContext(authContext)
-	const { addToCart } = useContext(cartContext)
+	const { addToCart, cartItems, clearCart } = useContext(cartContext)
 	const { orders, getOrders } = useContext(ordersContext)
 	const [order, setOrder] = useState(null)
 	const [showModal, setShowModal] = useState(false)
@@ -44,15 +45,14 @@ const Restaurants = ({ navigation }) => {
 
 	//handle modal press
 	const modalHandler = (order) => {
-		console.log(order)
+
 		setShowModal(true)
 		setRestaurant(order?.restaurant)
 		setOrder(order)
 
 	}
 
-	//add all items to cart from selected previous order and go to cart
-	const addItemsToCart = async () => {
+	const addThem = async () => {
 		try {
 			setAdding(true)
 			for (let index = 0; index < order.items.length; index++) {
@@ -67,6 +67,51 @@ const Restaurants = ({ navigation }) => {
 		} catch (error) {
 			console.log("Error adding items to cart", error)
 		}
+	}
+
+	//add all items to cart from selected previous order and go to cart
+	const addItemsToCart = async () => {
+		// check if there ir already items in cart
+		if (cartItems.length > 0) {
+
+			//check if the items in cart are from the same location than the items being added
+			if (cartItems[0].storeId === order?.restaurantId) {
+				//item are from the same location, ask if want to add them too
+
+				Alert.alert('Cart not empty', 'You already have some items in cart from this location. Add these too?', [{ text: 'Add', onPress: addThem }, {
+					text: 'Go to Cart', onPress: () => {
+						setShowModal(false)
+						navigation.navigate('Cart')
+					}
+				}])
+
+				//
+			} else {
+				//items are from different location, ask if want to remove them and add new ones.
+				Alert.alert('Cart not empty', 'You have items in cart not from this location. Empty cart and add these?', [{
+					text: 'Add these', onPress: async () => {
+						setAdding(true)
+						await clearCart()
+						addThem()
+						setAdding(false)
+						setShowModal(false)
+					}
+				}, {
+					text: 'Cancel', style: 'cancel', onPress: () => {
+						setShowModal(false)
+						return
+					}
+				}])
+
+			}
+
+
+		} else {
+
+			addThem()
+
+		}
+
 
 	}
 
@@ -135,7 +180,7 @@ const Restaurants = ({ navigation }) => {
 				</View>
 			)}
 			<FlatList
-
+				showsVerticalScrollIndicator={false}
 				onRefresh={getStores}
 				refreshing={refreshing}
 				data={stores}
