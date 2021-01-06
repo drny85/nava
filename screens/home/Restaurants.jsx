@@ -272,9 +272,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: "center",
 		justifyContent: "center",
+		backgroundColor: COLORS.white,
 	},
 	modal: {
-		position: 'absolute', justifyContent: 'center', bottom: 0, left: 0, right: 0, width: SIZES.width, height: '50%', backgroundColor: COLORS.card, borderTopRightRadius: 30, borderTopLeftRadius: 30,
+		position: 'absolute', justifyContent: 'center', bottom: 0, left: 0, right: 0, width: SIZES.width, height: '50%', backgroundColor: COLORS.secondary, borderTopRightRadius: 30, borderTopLeftRadius: 30,
 
 
 

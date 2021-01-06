@@ -19,6 +19,7 @@ import call from "react-native-phone-call";
 import ListCategoryItems from "../../components/ListCategoryItems";
 import FloatingButton from "../../components/FloatingButton";
 import RestaurantInfo from "../../components/RestaurantInfo";
+import { COLORS } from "../../config";
 
 const Home = ({ route }) => {
   const itemsContext = useContext(ItemsContext);
@@ -80,6 +81,7 @@ const Home = ({ route }) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: COLORS.white,
   },
   headerText: {
     fontSize: 22,

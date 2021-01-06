@@ -11,6 +11,8 @@ import cartContext from "../context/cart/cartContext";
 import Home from "../screens/home/Home";
 import ProductDetail from "../screens/home/ProductDetail";
 import Restaurants from "../screens/home/Restaurants";
+import { COLORS, FONTS, SIZES } from "../config";
+import { Image } from "react-native";
 
 const HomeStack = createStackNavigator();
 
@@ -22,12 +24,13 @@ const HomeStackNavigator = () => {
   }, []);
   return (
     <HomeStack.Navigator mode="modal">
-      <HomeStack.Screen name='Restaurants' component={Restaurants} />
+      <HomeStack.Screen name='Restaurants' options={{ headerTitle: () => <View><Text style={{ fontFamily: 'tangerine', fontSize: 28 }}>My Deli</Text></View> }} component={Restaurants} />
       <HomeStack.Screen
         name="Home"
         component={Home}
         options={{
           title: null,
+
 
           headerBackground: () => (
             <View

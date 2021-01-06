@@ -58,6 +58,7 @@ const AppNavigator = () => {
         name="Restaurants"
         component={HomeStackNavigator}
         options={{
+
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-restaurant" size={30} color={color} />
           ),

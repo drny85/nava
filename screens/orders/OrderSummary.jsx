@@ -28,6 +28,7 @@ import CardSummaryItem from "../../components/CardSummaryItem";
 import { TextInput } from "react-native-gesture-handler";
 import storesContext from "../../context/stores/storesContext";
 import Divider from "../../components/Divider";
+import { FONTS } from "../../config";
 
 const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
@@ -141,9 +142,7 @@ const OrderSummary = ({ navigation, route }) => {
             <>
               <Text
                 style={{
-                  fontSize: 20,
-                  fontStyle: "italic",
-                  fontWeight: "800",
+                  ...FONTS.italic,
                   marginBottom: 20,
                 }}
               >

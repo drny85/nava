@@ -20,8 +20,10 @@ const loadFonts = () => {
 		montserrat: require("./assets/fonts/Montserrat-Regular.ttf"),
 		"montserrat-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
 		"montserrat-bold-italic": require("./assets/fonts/Montserrat-BoldItalic.ttf"),
+		"tangerine": require('./assets/fonts/Tangerine-Regular.ttf'),
+		"tangerine-bold": require('./assets/fonts/Tangerine-Bold.ttf'),
 	});
-};
+}
 
 const App = () => {
 	const [isReady, setIsReady] = React.useState(false);

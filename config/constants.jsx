@@ -46,7 +46,7 @@ export const SIZES = {
 
 export const FONTS = {
   navTitle: { fontFamily: "monserrat-thin", fontSize: SIZES.navTitle },
-  italic: {fontFamily: 'montserrat-bold-italic', fontSize: SIZES.body3},
+  italic: { fontFamily: 'montserrat-bold-italic', fontSize: SIZES.body2 },
   h1: { fontFamily: "montserrat-bold", fontSize: SIZES.h1, lineHeight: 36 },
   h2: { fontFamily: "montserrat-bold", fontSize: SIZES.h2, lineHeight: 30 },
   h3: { fontFamily: "montserrat-bold", fontSize: SIZES.h3, lineHeight: 22 },
