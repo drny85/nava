@@ -99,6 +99,7 @@ const ProductDetail = ({ route, navigation }) => {
             { text: "Cancel", style: "cancel" },
           ]
         );
+        return;
       } else {
 
         if (checked === false && item.sizes) {

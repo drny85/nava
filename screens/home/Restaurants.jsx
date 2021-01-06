@@ -29,6 +29,7 @@ const Restaurants = ({ navigation }) => {
 	const [order, setOrder] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 	const [restaurant, setRestaurant] = useState(null)
+	const [adding, setAdding] = useState(false)
 
 	const [refreshing, setRefreshing] = useState(false);
 	const [text, setText] = useState('')
@@ -43,29 +44,52 @@ const Restaurants = ({ navigation }) => {
 
 	//handle modal press
 	const modalHandler = (order) => {
+		console.log(order)
 		setShowModal(true)
 		setRestaurant(order?.restaurant)
 		setOrder(order)
 
 	}
 
+	//add all items to cart from selected previous order and go to cart
 	const addItemsToCart = async () => {
 		try {
+			setAdding(true)
 			for (let index = 0; index < order.items.length; index++) {
 				const element = order.items[index];
-				console.log(element)
-				addToCart(element)
+
+				await addToCart(element)
 
 			}
+			setShowModal(false)
+			setAdding(false)
+			navigation.navigate('Cart')
 		} catch (error) {
 			console.log("Error adding items to cart", error)
 		}
 
+	}
+
+	// add all items to cart from selected previous order and go right to check out
+	const addToCartAndCheckout = async () => {
+		try {
+			setAdding(true)
+			await addItemsToCart()
+			setAdding(false)
+			navigation.navigate("Orders", {
+				screen: "OrderSummary",
+				params: {
+					deliveryMethod: order?.orderType,
+					paymentMethod: order?.paymentMethod,
+					customer: order?.customer,
+				},
+			});
+		} catch (error) {
+			console.log('Error adding and checking out', error)
+		}
 
 
 	}
-
-
 
 	const onChange = e => {
 		setText(e)
@@ -73,10 +97,10 @@ const Restaurants = ({ navigation }) => {
 	}
 
 	useEffect(() => {
+		//get all stores
 		getStores();
+		//get all orders for a particular user if user is logged in
 		getOrders(user?.id)
-
-
 
 		return () => {
 			setOrder(null)
@@ -86,7 +110,7 @@ const Restaurants = ({ navigation }) => {
 	}, [stores.length, user]);
 
 
-	if (loading) return <Loader />;
+	if (loading || adding) return <Loader />;
 
 	if (stores.length === 0) {
 		return <Screen style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -132,7 +156,7 @@ const Restaurants = ({ navigation }) => {
 					</TouchableOpacity>
 					{/* express add order */}
 					<View style={{ marginTop: 20, padding: SIZES.padding, }}>
-						<TouchableOpacity style={styles.modalItem}>
+						<TouchableOpacity onPress={addToCartAndCheckout} style={styles.modalItem}>
 							<Entypo style={{ marginRight: SIZES.padding * 0.5 }} name="flash" size={24} color="black" />
 							<View>
 								<Text>Order Express</Text>
@@ -150,7 +174,10 @@ const Restaurants = ({ navigation }) => {
 							</View>
 
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.modalItem}>
+						<TouchableOpacity onPress={() => {
+							fetchStores(restaurant)
+							setShowModal(false)
+						}} style={styles.modalItem}>
 							<MaterialIcons style={{ marginRight: SIZES.padding * 0.5 }} name="restaurant" size={24} color="black" />
 							<View>
 								<Text>Go to Restaurant</Text>
