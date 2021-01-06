@@ -85,7 +85,6 @@ const Restaurants = ({ navigation }) => {
 					}
 				}])
 
-				//
 			} else {
 				//items are from different location, ask if want to remove them and add new ones.
 				Alert.alert('Cart not empty', 'You have items in cart not from this location. Empty cart and add these?', [{
@@ -104,31 +103,55 @@ const Restaurants = ({ navigation }) => {
 				}])
 
 			}
-
-
 		} else {
 
 			addThem()
 
 		}
-
-
 	}
 
 	// add all items to cart from selected previous order and go right to check out
 	const addToCartAndCheckout = async () => {
 		try {
-			setAdding(true)
-			await addItemsToCart()
-			setAdding(false)
-			navigation.navigate("Orders", {
-				screen: "OrderSummary",
-				params: {
-					deliveryMethod: order?.orderType,
-					paymentMethod: order?.paymentMethod,
-					customer: order?.customer,
-				},
-			});
+
+			if (cartItems.length > 0) {
+				Alert.alert('Cart not empty', 'All items in cart will be deleted and check out with these', [{
+					text: 'Yes Please', onPress: async () => {
+						setAdding(true)
+						await clearCart()
+						await addThem()
+						setAdding(false)
+						setShowModal(false)
+						navigation.navigate("Orders", {
+							screen: "OrderSummary",
+							params: {
+								deliveryMethod: order?.orderType,
+								paymentMethod: order?.paymentMethod,
+								customer: order?.customer,
+							},
+						});
+					}
+				}, {
+					text: 'Cancel', style: 'cancel', onPress: () => {
+						setShowModal(false)
+						return
+					}
+				}])
+
+
+			} else {
+				setAdding(true)
+				await addItemsToCart()
+				setAdding(false)
+				navigation.navigate("Orders", {
+					screen: "OrderSummary",
+					params: {
+						deliveryMethod: order?.orderType,
+						paymentMethod: order?.paymentMethod,
+						customer: order?.customer,
+					},
+				});
+			}
 		} catch (error) {
 			console.log('Error adding and checking out', error)
 		}
