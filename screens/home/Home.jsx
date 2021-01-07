@@ -19,12 +19,15 @@ import call from "react-native-phone-call";
 import ListCategoryItems from "../../components/ListCategoryItems";
 import FloatingButton from "../../components/FloatingButton";
 import RestaurantInfo from "../../components/RestaurantInfo";
-import { COLORS } from "../../config";
+import { COLORS, FONTS, SIZES } from "../../config";
+import RecentOrderCard from "../../components/RecentOrderCard";
+import MostPouplarItem from "../../components/MostPouplarItem";
 
-const Home = ({ route }) => {
+const Home = ({ route, navigation }) => {
   const itemsContext = useContext(ItemsContext);
   const categoryContext = useContext(CategoryContext);
   const [visible, setVisible] = useState(false);
+  const [mostPopular, setMostPopular] = useState([])
 
   const { items, getItems, loading } = itemsContext;
   const { categories, getCategories } = categoryContext;
@@ -38,9 +41,16 @@ const Home = ({ route }) => {
     }
   };
 
+  const fetchMostPopular = () => {
+    const itemsCopy = [...items]
+    const popular = itemsCopy.sort((a, b) => a.unitSold < b.unitSold).slice(0, 7)
+    setMostPopular(popular)
+  }
+
   useEffect(() => {
     const { res, uns } = getItems(restaurant?.id);
     getCategories(restaurant?.id);
+    fetchMostPopular()
 
     return () => {
       uns && uns();
@@ -50,13 +60,14 @@ const Home = ({ route }) => {
   if (loading) {
     return <Loader size="large" />;
   }
+  console.log(mostPopular.length)
 
   return (
     <Screen style={styles.screen}>
       <View style={styles.top}>
-        <FloatingButton iconName="info" onPress={() => setVisible(true)} />
+        <FloatingButton iconName="arrow-left" onPress={() => navigation.navigate('Restaurants')} />
         <Text style={styles.name}>{restaurant.name}</Text>
-        <FloatingButton iconName="phone" onPress={makeCall} />
+        <FloatingButton iconName="phone" onPress={() => setVisible(true)} />
       </View>
       <Modal visible={visible} animationType="slide">
         <RestaurantInfo
@@ -65,8 +76,16 @@ const Home = ({ route }) => {
         />
       </Modal>
       <View style={styles.headerView}>
-        <Text style={styles.headerText}>What are you craving for today?</Text>
+        <Text style={{ ...FONTS.body2, paddingLeft: 10 }}>What are you craving for today?</Text>
       </View>
+      {mostPopular.length > 0 && (
+        <View style={{ justifyContent: 'flex-start', width: SIZES.width, height: SIZES.height * 0.20, padding: SIZES.radius }}>
+          <Text style={{ paddingLeft: 12, paddingBottom: 5, ...FONTS.body2 }}>Most Popular</Text>
+
+          <FlatList showsHorizontalScrollIndicator={false} contentContainerStyle={{ height: '100%' }} data={mostPopular} horizontal keyExtractor={item => item.id} renderItem={({ item }) => <MostPouplarItem item={item} onPress={() => { }} />} />
+        </View>
+      )}
+
 
       <ListCategoryItems
         categories={categories}

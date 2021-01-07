@@ -2,12 +2,13 @@ import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { Feather } from '@expo/vector-icons';
 import colors from '../config/colors';
+import { COLORS } from '../config';
 
 
 export default function FloatingButton({ iconName, onPress }) {
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
-            <Feather name={iconName} size={24} color="black" />
+            <Feather name={iconName} size={24} color={COLORS.black} />
         </TouchableOpacity>
     )
 }

@@ -16,6 +16,7 @@ import { db } from "../../services/database";
 const ItemsState = (props) => {
   const initialState = {
     items: [],
+
     current: null,
     filtered: null,
     loading: false,
@@ -58,6 +59,7 @@ const ItemsState = (props) => {
       return false;
     }
   };
+
   const filterItemsByCategory = (text) => {
     setLoading();
     dispatch({ type: FILTER_ITEMS_BY_CATEGORY, payload: text });

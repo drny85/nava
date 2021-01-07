@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import Card from "./Card";
 
 import colors from "../config/colors";
+import { FONTS } from "../config";
 
 
 const ListCategoryItems = ({ categories, items, restaurant }) => {
@@ -19,7 +20,7 @@ const ListCategoryItems = ({ categories, items, restaurant }) => {
         return (
           <>
             {items.filter((i) => i.category === item.id).length !== 0 && (
-              <Text style={styles.text}>
+              <Text style={[styles.text, { ...FONTS.body2 }]}>
                 {item.name} (
                 {items.filter((i) => i.category === item.id).length})
               </Text>
@@ -66,14 +67,11 @@ const styles = StyleSheet.create({
     // flexDirection: "row",
   },
   text: {
-    fontSize: 18,
-    fontWeight: "700",
-    fontFamily: "montserrat-bold",
+
     textTransform: "capitalize",
     marginLeft: 12,
     color: colors.text,
-    textTransform: "capitalize",
-    marginBottom: 10,
+
   },
 });
 

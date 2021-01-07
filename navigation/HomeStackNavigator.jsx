@@ -30,6 +30,7 @@ const HomeStackNavigator = () => {
         component={Home}
         options={{
           title: null,
+          headerShown: false,
 
 
           headerBackground: () => (

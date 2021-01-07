@@ -31,7 +31,7 @@ export default StoreCard
 const styles = StyleSheet.create({
     view: {
         width: SIZES.width * 0.9,
-        height: SIZES.height * 0.3,
+        height: SIZES.height * 0.25,
 
         borderRadius: 15,
         elevation: 10,

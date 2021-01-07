@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import { FONTS } from '../config'
+import { FONTS, SIZES, COLORS } from '../config'
 
 const MostPouplarItem = ({ onPress, item }) => {
     return (
@@ -11,7 +11,7 @@ const MostPouplarItem = ({ onPress, item }) => {
 
 
             <View style={styles.bottomView}>
-                <Text style={{ ...FONTS.body4, textTransform: 'capitalize' }}>{item.restaurant}</Text>
+                <Text style={{ ...FONTS.body4, textTransform: 'capitalize' }}>{item.name}</Text>
 
 
             </View>

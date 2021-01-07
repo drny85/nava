@@ -19,11 +19,13 @@ import ordersContext from "../../context/order/orderContext";
 import storesContext from "../../context/stores/storesContext";
 import cartContext from "../../context/cart/cartContext";
 import { Alert } from "react-native";
+import itemsContext from "../../context/items/itemsContext";
 
 
 
 const Restaurants = ({ navigation }) => {
 	const { stores, getStores, loading } = useContext(storesContext);
+	const { items, getItems } = useContext(itemsContext)
 	const { user } = useContext(authContext)
 	const { addToCart, cartItems, clearCart } = useContext(cartContext)
 	const { orders, getOrders } = useContext(ordersContext)
@@ -31,6 +33,7 @@ const Restaurants = ({ navigation }) => {
 	const [showModal, setShowModal] = useState(false)
 	const [restaurant, setRestaurant] = useState(null)
 	const [adding, setAdding] = useState(false)
+
 
 	const [refreshing, setRefreshing] = useState(false);
 	const [text, setText] = useState('')
@@ -169,6 +172,7 @@ const Restaurants = ({ navigation }) => {
 		getStores();
 		//get all orders for a particular user if user is logged in
 		getOrders(user?.id)
+
 
 		return () => {
 			setOrder(null)
