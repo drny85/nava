@@ -140,9 +140,9 @@ const Restaurants = ({ navigation }) => {
 
 
 			} else {
-				setAdding(true)
-				await addItemsToCart()
-				setAdding(false)
+
+				await addThem()
+
 				navigation.navigate("Orders", {
 					screen: "OrderSummary",
 					params: {

@@ -90,6 +90,8 @@ const OrdersState = (props) => {
 
 			const result = await db.collection("orders").add(newOrder);
 			const res = (await result.get()).data();
+
+			updateUnitSold(result?.id, res?.restaurantId)
 			return { data: { id: result.id, ...res }, error: false };
 		} catch (error) {
 			console.log(error);
@@ -123,6 +125,28 @@ const OrdersState = (props) => {
 			console.log(error);
 		}
 	};
+
+	const updateUnitSold = async (orderId, restaurantId) => {
+		const order = (await db.collection('orders').doc(orderId).get())
+		const items = await order.data().items
+
+		items.forEach(async (item) => {
+			try {
+
+
+				const i = (await db.collection('items').doc(restaurantId).collection('items').doc(item.id).get())
+				let unit = i.data().unitSold
+
+
+				const updated = (await db.collection('items').doc(restaurantId).collection('items').doc(item.id))
+				await updated.update({ unitSold: parseInt(unit + item.quantity) })
+
+			} catch (error) {
+				console.error('ER', error)
+			}
+
+		})
+	}
 
 	const Unsubscribe = () => {
 		ordersSubscrition();
