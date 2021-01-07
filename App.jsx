@@ -15,13 +15,15 @@ import * as Font from "expo-font";
 import navigationTheme from "./navigation/navigationTheme";
 import StoresState from "./context/stores/storesState";
 
-const loadFonts = () => {
-	return Font.loadAsync({
+const loadFonts = async () => {
+	return await Font.loadAsync({
 		montserrat: require("./assets/fonts/Montserrat-Regular.ttf"),
+		"monte": require('./assets/fonts/Montez-Regular.ttf'),
 		"montserrat-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
 		"montserrat-bold-italic": require("./assets/fonts/Montserrat-BoldItalic.ttf"),
-		"tangerine": require('./assets/fonts/Tangerine-Regular.ttf'),
-		"tangerine-bold": require('./assets/fonts/Tangerine-Bold.ttf'),
+		"tange": require('./assets/fonts/Tangerine-Regular.ttf'),
+
+
 	});
 }
 

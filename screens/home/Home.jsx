@@ -60,7 +60,6 @@ const Home = ({ route, navigation }) => {
   if (loading) {
     return <Loader size="large" />;
   }
-  console.log(mostPopular.length)
 
   return (
     <Screen style={styles.screen}>
@@ -82,7 +81,7 @@ const Home = ({ route, navigation }) => {
         <View style={{ justifyContent: 'flex-start', width: SIZES.width, height: SIZES.height * 0.20, padding: SIZES.radius }}>
           <Text style={{ paddingLeft: 12, paddingBottom: 5, ...FONTS.body2 }}>Most Popular</Text>
 
-          <FlatList showsHorizontalScrollIndicator={false} contentContainerStyle={{ height: '100%' }} data={mostPopular} horizontal keyExtractor={item => item.id} renderItem={({ item }) => <MostPouplarItem item={item} onPress={() => { }} />} />
+          <FlatList showsHorizontalScrollIndicator={false} contentContainerStyle={{ height: '100%' }} data={mostPopular} horizontal keyExtractor={item => item.id} renderItem={({ item }) => <MostPouplarItem item={item} onPress={() => navigation.navigate('ProductDetail', { product: item, restaurant })} />} />
         </View>
       )}
 

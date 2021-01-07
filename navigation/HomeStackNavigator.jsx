@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useEffect, useContext } from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import colors from "../config/colors";
@@ -14,6 +14,7 @@ import Restaurants from "../screens/home/Restaurants";
 import { COLORS, FONTS, SIZES } from "../config";
 import { Image } from "react-native";
 
+
 const HomeStack = createStackNavigator();
 
 const HomeStackNavigator = () => {
@@ -21,10 +22,11 @@ const HomeStackNavigator = () => {
 
   useEffect(() => {
     getCartItems();
+
   }, []);
   return (
     <HomeStack.Navigator mode="modal">
-      <HomeStack.Screen name='Restaurants' options={{ headerTitle: () => <View><Text style={{ fontSize: 28, fontFamily: 'tangerine' }}>My Deli</Text></View> }} component={Restaurants} />
+      <HomeStack.Screen name='Restaurants' options={{ headerTitle: () => <View><Text style={styles.text}>My Deli</Text></View> }} component={Restaurants} />
       <HomeStack.Screen
         name="Home"
         component={Home}
@@ -51,5 +53,12 @@ const HomeStackNavigator = () => {
     </HomeStack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 28, fontFamily: 'tange'
+  }
+
+})
 
 export default HomeStackNavigator;

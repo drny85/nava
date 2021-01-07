@@ -21,6 +21,7 @@ import AppForm from "../../components/AppForm";
 import authContext from "../../context/auth/authContext";
 import colors from "../../config/colors";
 import useNotifications from "../../hooks/useNotifications";
+import settingsContext from "../../context/settings/settingsContext";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(3).label("First Name"),
@@ -33,6 +34,7 @@ const validationSchema = Yup.object().shape({
 const Signup = () => {
   const navigation = useNavigation();
   const { signup, createUser } = useContext(authContext);
+  const { previewRoute, clearSettings } = useContext(settingsContext);
   const handleSignup = async (values) => {
     try {
       const data = await signup(values.email, values.password);
@@ -48,6 +50,12 @@ const Signup = () => {
       );
 
       // await saveToken(pushToken);
+      if (previewRoute) {
+        navigation.navigate(previewRoute);
+        clearSettings();
+
+        return;
+      }
 
       navigation.navigate("Profile");
     } catch (error) {

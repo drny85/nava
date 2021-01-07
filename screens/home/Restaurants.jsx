@@ -206,6 +206,9 @@ const Restaurants = ({ navigation }) => {
 					<FlatList showsHorizontalScrollIndicator={false} contentContainerStyle={{ height: '100%' }} data={orders} horizontal keyExtractor={item => item.id} renderItem={({ item }) => <RecentOrderCard key={item.id} onPress={() => modalHandler(item)} order={item} />} />
 				</View>
 			)}
+			<View style={{ alignItems: 'flex-start', justifyContent: 'flex-start', width: '100%' }}>
+				<Text style={{ ...FONTS.body2, paddingLeft: 18, }}>Restaurants</Text>
+			</View>
 			<FlatList
 				showsVerticalScrollIndicator={false}
 				onRefresh={getStores}
