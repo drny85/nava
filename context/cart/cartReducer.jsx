@@ -8,6 +8,13 @@ import {
 
 export default (state, action) => {
   switch (action.type) {
+    case 'TOTAL': {
+
+      return {
+        ...state,
+        cartTotal: action.payload
+      }
+    }
     case ADD_TO_CART:
       return {
         ...state,
@@ -17,6 +24,7 @@ export default (state, action) => {
         loading: false,
       };
     case GET_CART_ITEMS:
+
       return {
         ...state,
         cartItems: action.payload.data,

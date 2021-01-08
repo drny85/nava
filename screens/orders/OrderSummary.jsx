@@ -53,6 +53,11 @@ const OrderSummary = ({ navigation, route }) => {
   }
 
   const handlePayment = async () => {
+
+    if (!restaurant.open) {
+      Alert.alert('CLOSED', 'Store already closed', [{ text: 'OK', style: 'cancel' }])
+      return
+    }
     try {
       const newOrder = new Order(
         user.id,

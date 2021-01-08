@@ -9,12 +9,12 @@ import {
   Modal,
 } from "react-native";
 
+
+
 import Screen from "../../components/Screen";
 import Loader from "../../components/Loader";
 import ItemsContext from "../../context/items/itemsContext";
 import CategoryContext from "../../context/category/categoryContext";
-
-import call from "react-native-phone-call";
 
 import ListCategoryItems from "../../components/ListCategoryItems";
 import FloatingButton from "../../components/FloatingButton";
@@ -32,14 +32,6 @@ const Home = ({ route, navigation }) => {
   const { items, getItems, loading } = itemsContext;
   const { categories, getCategories } = categoryContext;
   const { restaurant } = route.params;
-
-  const makeCall = async () => {
-    try {
-      await call({ number: restaurant.phone, prompt: false });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const fetchMostPopular = () => {
     const itemsCopy = [...items]

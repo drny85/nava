@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
 	View,
 	StyleSheet,
@@ -27,9 +27,11 @@ const Cart = ({ navigation }) => {
 		addToCart,
 		cartTotal,
 		itemCounts,
+
 		deleteFromCart,
 	} = useContext(cartContext);
 	const { user } = useContext(authContext);
+
 	const { setRoute, clearSettings } = useContext(settingsContext);
 
 	const continueToCheckOut = () => {
@@ -55,9 +57,18 @@ const Cart = ({ navigation }) => {
 		});
 	};
 
+
+
 	useEffect(() => {
 		getCartItems();
+
+
+		return () => {
+
+		}
+
 	}, []);
+
 
 	if (loading) return <Loader />;
 

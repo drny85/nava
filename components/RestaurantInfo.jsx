@@ -6,6 +6,7 @@ import colors from '../config/colors';
 import { Feather, FontAwesome } from '@expo/vector-icons';
 
 import call from 'react-native-phone-call';
+import { COLORS, FONTS } from '../config';
 
 
 const RestaurantInfo = ({ restaurant, onPress }) => {
@@ -17,8 +18,6 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
             console.log(error)
         }
     }
-
-    console.log(favorite)
 
     return (
         <View style={styles.container}>
@@ -33,14 +32,27 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
             </View>
             <View style={styles.details}>
 
-                <View>
+                <View style={{ paddingBottom: 10 }}>
                     <Text style={styles.text}>{restaurant.street}</Text>
                     <Text style={styles.text}>{restaurant.city}, {restaurant.state} {restaurant.zipcode}</Text>
                 </View>
+                {restaurant.hours && (
+                    <View style={styles.hours}>
+                        <Text style={{ ...FONTS.body2, textDecorationLine: 'underline', textDecorationColor: COLORS.lightGray }}>Business Hours</Text>
+                        <Text style={{ ...FONTS.body4 }}>Sunday: {restaurant.hours.sun}</Text>
+                        <Text style={{ ...FONTS.body4 }}>Monday: {restaurant.hours.mon}</Text>
+                        <Text style={{ ...FONTS.body4 }}>Tuesday: {restaurant.hours.tue}</Text>
+                        <Text style={{ ...FONTS.body4 }}>Wednesday: {restaurant.hours.wed}</Text>
+                        <Text style={{ ...FONTS.body4 }}>Thursday: {restaurant.hours.thu}</Text>
+                        <Text style={{ ...FONTS.body4 }}>Friday: {restaurant.hours.fri}</Text>
+                        <Text style={{ ...FONTS.body4 }}>Saturday: {restaurant.hours.sat}</Text>
+                    </View>
+                )}
+
 
                 <TouchableOpacity style={styles.btn} onPress={makeCall}>
                     <Feather name="phone" size={24} color={colors.tile} />
-                    <Text style={{ marginHorizontal: 8, fontSize: 18, color: colors.tile, }}>Call Antojito</Text>
+                    <Text style={{ marginHorizontal: 8, fontSize: 18, color: colors.tile, }}>Call Restaurant</Text>
 
 
                 </TouchableOpacity>
@@ -64,12 +76,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         zIndex: 1,
+        justifyContent: 'space-around',
+
         position: 'relative'
     },
     closeBtn: { paddingTop: Constants.statusBarHeight, marginLeft: 20, zIndex: 3, position: 'absolute' },
     details: {
         backgroundColor: colors.tile,
-        justifyContent: 'space-evenly',
+
         alignItems: 'center',
         flex: 1,
         flexDirection: 'column',
@@ -84,10 +98,13 @@ const styles = StyleSheet.create({
         padding: 20,
 
     },
+    hours: {
+        padding: 10,
+    },
 
     img: {
         width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height * 0.5,
+        height: Dimensions.get('screen').height * 0.45,
 
     },
     name: {
@@ -96,14 +113,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
         fontFamily: 'montserrat',
         right: 10,
-        top: Dimensions.get('screen').height * 0.5 - 50,
+        top: Dimensions.get('screen').height * 0.45 - 50,
         textTransform: 'capitalize',
     },
     text: {
-        fontSize: 20,
+        fontSize: 18,
         fontFamily: 'montserrat',
         padding: 5,
-        textTransform: 'capitalize',
+        textTransform: 'uppercase',
     }
 
 })

@@ -44,6 +44,16 @@ export const SIZES = {
   height,
 };
 
+export const WEEKDAYS = {
+  1: 'mon',
+  2: 'tue',
+  3: 'wed',
+  4: 'thu',
+  5: 'fri',
+  6: 'sat',
+  7: 'sun'
+}
+
 export const FONTS = {
   navTitle: { fontFamily: "monserrat-thin", fontSize: SIZES.navTitle },
   italic: { fontFamily: 'montserrat-bold-italic', fontSize: SIZES.body2 },
@@ -79,7 +89,7 @@ export const FONTS = {
   },
 };
 
-const appTheme = { COLORS, SIZES, FONTS };
+const appTheme = { COLORS, SIZES, FONTS, WEEKDAYS };
 
 export default appTheme;
 

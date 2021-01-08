@@ -14,7 +14,7 @@ const StoresState = (props) => {
   const [state, dispatch] = useReducer(storesReducer, initialState);
 
   const getStores = async () => {
-    console.log("getting stores");
+
     try {
 
       setLoading()

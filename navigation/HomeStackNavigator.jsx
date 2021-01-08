@@ -31,10 +31,8 @@ const HomeStackNavigator = () => {
         name="Home"
         component={Home}
         options={{
-          title: null,
+
           headerShown: false,
-
-
           headerBackground: () => (
             <View
               style={{

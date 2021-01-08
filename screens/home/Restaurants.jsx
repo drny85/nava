@@ -27,7 +27,7 @@ const Restaurants = ({ navigation }) => {
 	const { stores, getStores, loading } = useContext(storesContext);
 	const { items, getItems } = useContext(itemsContext)
 	const { user } = useContext(authContext)
-	const { addToCart, cartItems, clearCart } = useContext(cartContext)
+	const { addToCart, cartItems, clearCart, calculateCartTotal } = useContext(cartContext)
 	const { orders, getOrders } = useContext(ordersContext)
 	const [order, setOrder] = useState(null)
 	const [showModal, setShowModal] = useState(false)
@@ -42,7 +42,10 @@ const Restaurants = ({ navigation }) => {
 	// console.log(address)
 
 	const fetchStores = (restaurant) => {
-
+		if (!restaurant.open) {
+			Alert.alert('CLOSED', 'Store already closed', [{ text: 'OK', style: 'cancel' }])
+			return;
+		}
 		navigation.navigate("Home", { restaurant });
 	};
 
@@ -62,6 +65,8 @@ const Restaurants = ({ navigation }) => {
 				const element = order.items[index];
 
 				await addToCart(element)
+				calculateCartTotal(order.items)
+
 
 			}
 			setShowModal(false)

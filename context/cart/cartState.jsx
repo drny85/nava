@@ -61,6 +61,7 @@ const CartState = (props) => {
 						},
 					});
 
+
 					await db
 						.collection("carts")
 						.doc(cartId)
@@ -69,6 +70,7 @@ const CartState = (props) => {
 							quantity: quantity + 1,
 							total: +(total + +item.price).toFixed(2),
 						});
+
 				} else {
 					dispatch({
 						type: ADD_TO_CART,
@@ -78,6 +80,7 @@ const CartState = (props) => {
 							total: +(total + +item.price).toFixed(2),
 						},
 					});
+
 					await db
 						.collection("carts")
 						.doc(cartId)
@@ -88,6 +91,7 @@ const CartState = (props) => {
 						});
 
 					//item not found with same size -- add to the array
+
 				}
 			} else {
 				const itemFound = items.find((i) => i.id === item.id);
@@ -105,6 +109,7 @@ const CartState = (props) => {
 							total: +(total + +item.price).toFixed(2),
 						},
 					});
+
 
 					await db
 						.collection("carts")
@@ -124,6 +129,7 @@ const CartState = (props) => {
 							total: +(total + +item.price).toFixed(2),
 						},
 					});
+
 					await db
 						.collection("carts")
 						.doc(cartId)
@@ -132,6 +138,7 @@ const CartState = (props) => {
 							quantity: quantity + 1,
 							total: +(total + +item.price).toFixed(2),
 						});
+
 				}
 			}
 
@@ -141,6 +148,13 @@ const CartState = (props) => {
 			console.log("Error Adding to Cart", error);
 		}
 	};
+
+	const calculateCartTotal = (items) => {
+		const total = items.reduce((current, index) => current + (index.price * index.quantity), 0)
+		dispatch({ type: "TOTAL", payload: total })
+
+		return total
+	}
 
 	const deleteFromCart = async (item) => {
 		try {
@@ -177,6 +191,7 @@ const CartState = (props) => {
 							},
 						});
 
+
 						await db
 							.collection("carts")
 							.doc(id)
@@ -185,6 +200,7 @@ const CartState = (props) => {
 								quantity: quantity - 1,
 								total: +(total - +item.price).toFixed(2),
 							});
+
 					} else {
 						// remove from cart
 						const index = items.findIndex(
@@ -202,6 +218,7 @@ const CartState = (props) => {
 							},
 						});
 
+
 						await db
 							.collection("carts")
 							.doc(id)
@@ -211,6 +228,7 @@ const CartState = (props) => {
 								total: +(total - +item.price).toFixed(2),
 							});
 					}
+
 				} else {
 					throw new Error("item not found in cart");
 				}
@@ -237,6 +255,7 @@ const CartState = (props) => {
 							},
 						});
 
+
 						await db
 							.collection("carts")
 							.doc(id)
@@ -245,6 +264,7 @@ const CartState = (props) => {
 								quantity: quantity - 1,
 								total: +(total - +item.price).toFixed(2),
 							});
+
 					} else {
 						//remove item from array;
 
@@ -261,6 +281,8 @@ const CartState = (props) => {
 							},
 						});
 
+
+
 						await db
 							.collection("carts")
 							.doc(id)
@@ -270,6 +292,7 @@ const CartState = (props) => {
 								total: +(total - +item.price).toFixed(2),
 							});
 					}
+
 
 					//getCartItems();
 				} else {
@@ -282,9 +305,11 @@ const CartState = (props) => {
 	};
 
 	const getCartItems = async () => {
+		console.log('gettings')
 		try {
 			setLoading();
 			const id = await getCartId();
+
 
 			const { items, total, quantity } = (
 				await db.collection("carts").doc(id).get()
@@ -296,6 +321,8 @@ const CartState = (props) => {
 				type: GET_CART_ITEMS,
 				payload: { data, count: quantity, total },
 			});
+
+			calculateCartTotal(items)
 		} catch (error) {
 			console.log("Error from cart", error);
 		}
@@ -400,6 +427,8 @@ const CartState = (props) => {
 				getCartItems,
 				deleteFromCart,
 				isAlreadyInCart,
+				calculateCartTotal,
+
 			}}
 		>
 			{props.children}
