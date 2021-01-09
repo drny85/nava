@@ -60,6 +60,7 @@ const Restaurants = ({ navigation }) => {
 
 	const addThem = async () => {
 		try {
+
 			setAdding(true)
 			for (let index = 0; index < order.items.length; index++) {
 				const element = order.items[index];

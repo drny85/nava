@@ -19,6 +19,8 @@ import Order from "../../models/Order";
 
 import ListItem from "../../components/ListItem";
 
+import { CommonActions } from "@react-navigation/native";
+
 import cartContext from "../../context/cart/cartContext";
 
 import ordersContext from "../../context/order/orderContext";
@@ -29,11 +31,12 @@ import { TextInput } from "react-native-gesture-handler";
 import storesContext from "../../context/stores/storesContext";
 import Divider from "../../components/Divider";
 import { FONTS } from "../../config";
+import Loader from "../../components/Loader";
 
 const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
   const { placeOrder } = useContext(ordersContext);
-  const { cartItems, cartTotal, clearCart } = useContext(
+  const { cartItems, cartTotal, clearCart, loading } = useContext(
     cartContext
   );
   const status = 'new';
@@ -53,11 +56,23 @@ const OrderSummary = ({ navigation, route }) => {
   }
 
   const handlePayment = async () => {
+    if (cartItems.length === 0) {
+
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: "Cart" }, { name: 'Cart' }],
+        })
+      );
+      return;
+    }
 
     if (!restaurant.open) {
       Alert.alert('CLOSED', 'Store already closed', [{ text: 'OK', style: 'cancel' }])
       return
     }
+
+
     try {
       const newOrder = new Order(
         user.id,
@@ -111,6 +126,9 @@ const OrderSummary = ({ navigation, route }) => {
     }
   };
 
+
+
+  if (loading) return <Loader />
 
   return (
     <Screen >

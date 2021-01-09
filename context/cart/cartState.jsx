@@ -60,6 +60,7 @@ const CartState = (props) => {
 							total: +(total + +item.price).toFixed(2),
 						},
 					});
+					calculateCartTotal(newItems)
 
 
 					await db
@@ -70,6 +71,7 @@ const CartState = (props) => {
 							quantity: quantity + 1,
 							total: +(total + +item.price).toFixed(2),
 						});
+					calculateCartTotal(newItems)
 
 				} else {
 					dispatch({
@@ -80,6 +82,7 @@ const CartState = (props) => {
 							total: +(total + +item.price).toFixed(2),
 						},
 					});
+					calculateCartTotal([...items, item])
 
 					await db
 						.collection("carts")
@@ -89,6 +92,7 @@ const CartState = (props) => {
 							quantity: quantity + 1,
 							total: +(total + +item.price).toFixed(2),
 						});
+					calculateCartTotal([...items, item])
 
 					//item not found with same size -- add to the array
 
@@ -109,6 +113,7 @@ const CartState = (props) => {
 							total: +(total + +item.price).toFixed(2),
 						},
 					});
+					calculateCartTotal(newItems)
 
 
 					await db
@@ -119,6 +124,7 @@ const CartState = (props) => {
 							quantity: quantity + 1,
 							total: +(total + +item.price).toFixed(2),
 						});
+					calculateCartTotal(newItems)
 				} else {
 					//item no found -- add
 					dispatch({
@@ -129,6 +135,7 @@ const CartState = (props) => {
 							total: +(total + +item.price).toFixed(2),
 						},
 					});
+					calculateCartTotal([...items, item])
 
 					await db
 						.collection("carts")
@@ -138,6 +145,7 @@ const CartState = (props) => {
 							quantity: quantity + 1,
 							total: +(total + +item.price).toFixed(2),
 						});
+					calculateCartTotal([...items, item])
 
 				}
 			}
@@ -190,6 +198,7 @@ const CartState = (props) => {
 								total: +(total - +item.price).toFixed(2),
 							},
 						});
+						calculateCartTotal(updatedItems)
 
 
 						await db
@@ -200,6 +209,7 @@ const CartState = (props) => {
 								quantity: quantity - 1,
 								total: +(total - +item.price).toFixed(2),
 							});
+						calculateCartTotal(updatedItems)
 
 					} else {
 						// remove from cart
@@ -217,6 +227,7 @@ const CartState = (props) => {
 								total: +(total - +item.price).toFixed(2),
 							},
 						});
+						calculateCartTotal(updatedItems)
 
 
 						await db
@@ -227,6 +238,7 @@ const CartState = (props) => {
 								quantity: quantity - 1,
 								total: +(total - +item.price).toFixed(2),
 							});
+						calculateCartTotal(updatedItems)
 					}
 
 				} else {
@@ -254,6 +266,7 @@ const CartState = (props) => {
 								total: +(total - +item.price).toFixed(2),
 							},
 						});
+						calculateCartTotal(updatedItems)
 
 
 						await db
@@ -264,6 +277,7 @@ const CartState = (props) => {
 								quantity: quantity - 1,
 								total: +(total - +item.price).toFixed(2),
 							});
+						calculateCartTotal(updatedItems)
 
 					} else {
 						//remove item from array;
@@ -280,6 +294,7 @@ const CartState = (props) => {
 								total: +(total - +item.price).toFixed(2),
 							},
 						});
+						calculateCartTotal(updatedItems)
 
 
 
@@ -291,7 +306,9 @@ const CartState = (props) => {
 								quantity: quantity - 1,
 								total: +(total - +item.price).toFixed(2),
 							});
+						calculateCartTotal(updatedItems)
 					}
+
 
 
 					//getCartItems();
@@ -305,7 +322,7 @@ const CartState = (props) => {
 	};
 
 	const getCartItems = async () => {
-		console.log('gettings')
+
 		try {
 			setLoading();
 			const id = await getCartId();

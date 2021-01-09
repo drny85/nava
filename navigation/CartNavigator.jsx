@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
+import { CommonActions } from "@react-navigation/native";
 import colors from "../config/colors";
 import Cart from "../screens/cart/Cart";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -12,13 +13,23 @@ import MyAddress from "../screens/profiles/MyAddress";
 
 const CartStack = createStackNavigator();
 
-const CartStackNavigator = () => {
+const CartStackNavigator = ({ navigation }) => {
 	const { clearCart, cartItems } = useContext(cartContext);
 
 	const emptyCart = () => {
 		Alert.alert("Are you sure?", "You want to empty the cart", [
 			{ text: "Cancel", style: "cancel" },
-			{ text: "Yes", onPress: () => clearCart(), style: "default" },
+			{
+				text: "Yes", onPress: () => {
+					clearCart()
+					navigation.dispatch(
+						CommonActions.reset({
+							index: 1,
+							routes: [{ name: "Cart" }, { name: 'Cart' }],
+						})
+					);
+				}, style: "default"
+			},
 		]);
 		//clearCart();
 	};
