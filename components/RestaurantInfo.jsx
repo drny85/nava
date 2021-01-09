@@ -13,7 +13,7 @@ import authContext from '../context/auth/authContext';
 
 const RestaurantInfo = ({ restaurant, onPress }) => {
     const [favorite, setFavorite] = useState(false)
-    const { user, addOrRemoveFavorite } = useContext(authContext)
+    const { user, isFavorite } = useContext(authContext)
     const makeCall = async () => {
         try {
             await call({ number: restaurant.phone, prompt: false })
@@ -22,15 +22,10 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
         }
     }
 
-    const handleFavorite = () => {
-        addOrRemoveFavorite(user.id, restaurant.id)
-        const fav = user?.favoriteStores.find(s => s === restaurant.id)
+    const handleFavorite = async () => {
+        const fav = await isFavorite(user.id, restaurant.id)
+        setFavorite(fav)
 
-        if (fav) {
-            setFavorite(true)
-        } else {
-            setFavorite(false)
-        }
     }
 
     useEffect(() => {

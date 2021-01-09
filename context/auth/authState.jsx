@@ -168,9 +168,11 @@ const AuthState = (props) => {
 		}
 	};
 
-	const addOrRemoveFavorite = async (userId, storeId) => {
+	const isFavorite = async (userId, storeId) => {
 
 		try {
+
+			let favorite;
 
 			const user = (await db.collection('appUser').doc(userId).get()).data()
 
@@ -183,13 +185,16 @@ const AuthState = (props) => {
 				await db.collection('appUser').doc(userId).update({
 					favoriteStores: [...newStore]
 				})
+				favorite = false
 			} else {
 				//add store to favorite
 				await db.collection('appUser').doc(userId).update({
 					favoriteStores: [...user.favoriteStores, storeId]
 				})
+				favorite = true
 			}
 			setUser(userId)
+			return favorite;
 		} catch (error) {
 			console.log(error)
 		}
@@ -218,7 +223,7 @@ const AuthState = (props) => {
 				deleteUserAddress,
 				saveDeliveryAddress,
 				updateLastLogin,
-				addOrRemoveFavorite,
+				isFavorite,
 			}}
 		>
 			{props.children}
