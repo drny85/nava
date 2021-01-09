@@ -16,7 +16,7 @@ import { db } from "../../services/database";
 const ItemsState = (props) => {
   const initialState = {
     items: [],
-
+    mostPopular: [],
     current: null,
     filtered: null,
     loading: false,
@@ -44,6 +44,7 @@ const ItemsState = (props) => {
             }
           });
           dispatch({ type: GET_ITEMS, payload: data });
+          dispatch({ type: 'MOST_POPULAR' })
 
 
 
@@ -106,6 +107,12 @@ const ItemsState = (props) => {
     }
   };
 
+  const getMostPopular = () => {
+
+    dispatch({ type: "MOST_POPULAR" })
+  }
+
+
 
   // @ts-ignore
   const setLoading = () => dispatch({ type: SET_LOADING });
@@ -117,6 +124,7 @@ const ItemsState = (props) => {
         current: state.current,
         loading: state.loading,
         filtered: state.filtered,
+        mostPopular: state.mostPopular,
 
         getItems,
         setLoading,
@@ -126,6 +134,7 @@ const ItemsState = (props) => {
         setCurrent,
         clearCurrent,
         changeAvailability,
+        getMostPopular,
 
       }}
     >

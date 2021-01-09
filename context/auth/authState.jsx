@@ -28,6 +28,7 @@ const AuthState = (props) => {
 				name: name,
 				email: email,
 				imageUrl: null,
+				favoriteStores: [],
 				signedDate: new Date().toISOString(),
 			});
 		} catch (error) {
@@ -72,7 +73,7 @@ const AuthState = (props) => {
 		try {
 			authUnsubcribe = auth.onAuthStateChanged((user) => {
 				if (user) {
-					console.log("Setting up user");
+
 					setUser(user.uid);
 				}
 			});
@@ -167,6 +168,37 @@ const AuthState = (props) => {
 		}
 	};
 
+	const addOrRemoveFavorite = async (userId, storeId) => {
+
+		try {
+
+			const user = (await db.collection('appUser').doc(userId).get()).data()
+
+			const exist = user.favoriteStores.find(s => s === storeId)
+			const index = user.favoriteStores.findIndex(s => s === storeId)
+			if (exist) {
+				//remove store from favorites if already there
+				const newStore = user.favoriteStores.filter(s => s !== storeId)
+				const favorites = [...newStore]
+				await db.collection('appUser').doc(userId).update({
+					favoriteStores: [...newStore]
+				})
+			} else {
+				//add store to favorite
+				await db.collection('appUser').doc(userId).update({
+					favoriteStores: [...user.favoriteStores, storeId]
+				})
+			}
+			setUser(userId)
+		} catch (error) {
+			console.log(error)
+		}
+
+
+
+
+	}
+
 	const setLoading = () => dispatch({ type: SET_LOADING });
 
 	return (
@@ -186,6 +218,7 @@ const AuthState = (props) => {
 				deleteUserAddress,
 				saveDeliveryAddress,
 				updateLastLogin,
+				addOrRemoveFavorite,
 			}}
 		>
 			{props.children}

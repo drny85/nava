@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 import colors from "../config/colors";
 
@@ -15,14 +15,16 @@ import OrderInTheMaking from "../screens/orders/OrderInTheMaking";
 
 const OrdersStack = createStackNavigator();
 
-const OrdersStackNavigator = () => {
+const OrdersStackNavigator = ({ route }) => {
+  const previous = route.params;
+
   const navigation = useNavigation();
   return (
     <OrdersStack.Navigator mode="modal">
       <OrdersStack.Screen
         name="MyOrders"
         component={MyOrders}
-        options={{ title: "My Orders", headerLeft: null }}
+        options={{ title: "My Orders", headerLeft: previous && (() => <AntDesign name='arrowleft' onPress={() => navigation.goBack()} size={30} style={{ paddingLeft: 10 }} />) }}
       />
       <OrdersStack.Screen
         name="OrderConfirmation"

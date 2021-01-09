@@ -128,7 +128,7 @@ const Profile = ({ navigation }) => {
 			<View style={styles.profile_view}>
 				<ProfileItem
 					text="my orders"
-					onPress={() => navigation.navigate("Orders")}
+					onPress={() => navigation.navigate("Orders", { previous: 'Profile' })}
 				/>
 				<ProfileItem
 					text="Personal Info"

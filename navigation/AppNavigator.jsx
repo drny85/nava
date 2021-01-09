@@ -16,6 +16,7 @@ import OrdersStackNavigator from "./OrdersStackNavigator";
 import authContext from "../context/auth/authContext";
 
 import * as Notifications from "expo-notifications";
+import { COLORS } from "../config";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -84,8 +85,8 @@ const AppNavigator = () => {
             <View style={styles.cartIcon}>
               <MaterialCommunityIcons name="cart" color={color} size={30} />
               {itemCounts > 0 && (
-                <View style={styles.badge}>
-                  <Text style={{ fontWeight: "700", color: colors.secondary }}>
+                <View style={[styles.badge, { backgroundColor: COLORS.ascent }]}>
+                  <Text style={{ fontWeight: "700", color: COLORS.tile }}>
                     {itemCounts}
                   </Text>
                 </View>
@@ -118,13 +119,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   badge: {
-    backgroundColor: colors.ascent,
-    width: 25,
-    height: 25,
+
+    width: 22,
+    height: 22,
     borderRadius: 50,
     position: "absolute",
     top: -5,
-    right: -5,
+    right: -1,
     alignItems: "center",
     justifyContent: "center",
   },

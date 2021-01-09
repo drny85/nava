@@ -13,6 +13,11 @@ import {
 
 export default (state, action) => {
 	switch (action.type) {
+		case 'MOST_POPULAR':
+			return {
+				...state,
+				mostPopular: [...state.items.sort((a, b) => a.unitSold < b.unitSold).slice(0, 7)]
+			}
 		case ADD_ITEM:
 			return {
 				...state,

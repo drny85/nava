@@ -12,7 +12,9 @@ export default (state, action) => {
 
       return {
         ...state,
-        cartTotal: action.payload
+        cartTotal: action.payload.total,
+        itemCounts: action.payload.counts,
+        loading: false
       }
     }
     case ADD_TO_CART:

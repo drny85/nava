@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, TouchableWithoutFeedback, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
+import { FONTS } from "../config";
 
 const ProfileItem = ({ text, onPress }) => {
   return (
@@ -9,9 +10,8 @@ const ProfileItem = ({ text, onPress }) => {
       <View style={styles.container}>
         <Text
           style={{
-            fontSize: 16,
-            textTransform: "capitalize",
-            fontFamily: "montserrat",
+            ...FONTS.body4,
+            textTransform: 'capitalize'
           }}
         >
           {text}

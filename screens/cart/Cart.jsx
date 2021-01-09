@@ -69,9 +69,6 @@ const Cart = ({ navigation }) => {
 
 	}, []);
 
-
-	if (loading) return <Loader />;
-
 	return (
 		<View style={styles.container}>
 			{cartItems.length > 0 ? (

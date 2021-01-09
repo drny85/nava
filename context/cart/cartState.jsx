@@ -158,8 +158,10 @@ const CartState = (props) => {
 	};
 
 	const calculateCartTotal = (items) => {
+		setLoading()
 		const total = items.reduce((current, index) => current + (index.price * index.quantity), 0)
-		dispatch({ type: "TOTAL", payload: total })
+		const counts = items.reduce((current, index) => (current + index.quantity), 0)
+		dispatch({ type: "TOTAL", payload: { total, counts } })
 
 		return total
 	}

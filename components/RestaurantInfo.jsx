@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native'
 import Constants from "expo-constants";
 import FloatingButton from './FloatingButton';
@@ -7,10 +7,13 @@ import { Feather, FontAwesome } from '@expo/vector-icons';
 
 import call from 'react-native-phone-call';
 import { COLORS, FONTS } from '../config';
+import authContext from '../context/auth/authContext';
+
 
 
 const RestaurantInfo = ({ restaurant, onPress }) => {
     const [favorite, setFavorite] = useState(false)
+    const { user, addOrRemoveFavorite } = useContext(authContext)
     const makeCall = async () => {
         try {
             await call({ number: restaurant.phone, prompt: false })
@@ -19,6 +22,27 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
         }
     }
 
+    const handleFavorite = () => {
+        addOrRemoveFavorite(user.id, restaurant.id)
+        const fav = user?.favoriteStores.find(s => s === restaurant.id)
+
+        if (fav) {
+            setFavorite(true)
+        } else {
+            setFavorite(false)
+        }
+    }
+
+    useEffect(() => {
+        const fav = user && user.favoriteStores.find(s => s === restaurant.id)
+
+        if (fav) {
+            setFavorite(true)
+        } else {
+            setFavorite(false)
+        }
+    }, [favorite, user])
+
     return (
         <View style={styles.container}>
             <View style={styles.closeBtn}>
@@ -26,10 +50,13 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
             </View>
             <Image resizeMode='cover' style={styles.img} source={{ uri: 'https://img.texasmonthly.com/2020/04/restaurants-covid-19-coronavirus-not-reopening-salome-mcallen.jpg?auto=compress&crop=faces&fit=fit&fm=pjpg&ixlib=php-1.2.1&q=45&w=1100' }} />
             <Text style={styles.name}>{restaurant.name}</Text>
-            <View style={styles.fav}>
-                {favorite ? (<FontAwesome onPress={() => setFavorite(!favorite)} name="heart" size={40} color="red" />) : (<Feather onPress={() => setFavorite(!favorite)} name="heart" size={40} color="black" />)}
+            {user && (
+                <View style={styles.fav}>
+                    {favorite ? (<FontAwesome onPress={handleFavorite} name="heart" size={40} color="red" />) : (<Feather onPress={handleFavorite} name="heart" size={40} color="black" />)}
 
-            </View>
+                </View>
+            )}
+
             <View style={styles.details}>
 
                 <View style={{ paddingBottom: 10 }}>

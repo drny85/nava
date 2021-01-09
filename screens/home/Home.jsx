@@ -27,27 +27,22 @@ const Home = ({ route, navigation }) => {
   const itemsContext = useContext(ItemsContext);
   const categoryContext = useContext(CategoryContext);
   const [visible, setVisible] = useState(false);
-  const [mostPopular, setMostPopular] = useState([])
+  //const [mostPopular, setMostPopular] = useState([])
 
-  const { items, getItems, loading } = itemsContext;
+  const { items, getItems, loading, mostPopular } = itemsContext;
   const { categories, getCategories } = categoryContext;
   const { restaurant } = route.params;
-
-  const fetchMostPopular = () => {
-    const itemsCopy = [...items]
-    const popular = itemsCopy.sort((a, b) => a.unitSold < b.unitSold).slice(0, 7)
-    setMostPopular(popular)
-  }
 
   useEffect(() => {
     const { res, uns } = getItems(restaurant?.id);
     getCategories(restaurant?.id);
-    fetchMostPopular()
 
     return () => {
       uns && uns();
+
     };
-  }, []);
+  }, [restaurant?.id]);
+
 
   if (loading) {
     return <Loader size="large" />;
