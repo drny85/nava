@@ -1,15 +1,6 @@
 // @ts-nocheck
 import React, { useEffect, useContext, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
-
-
+import { View, Text, StyleSheet, FlatList, Modal } from "react-native";
 
 import Screen from "../../components/Screen";
 import Loader from "../../components/Loader";
@@ -20,7 +11,6 @@ import ListCategoryItems from "../../components/ListCategoryItems";
 import FloatingButton from "../../components/FloatingButton";
 import RestaurantInfo from "../../components/RestaurantInfo";
 import { COLORS, FONTS, SIZES } from "../../config";
-import RecentOrderCard from "../../components/RecentOrderCard";
 import MostPouplarItem from "../../components/MostPouplarItem";
 
 const Home = ({ route, navigation }) => {
@@ -39,10 +29,8 @@ const Home = ({ route, navigation }) => {
 
     return () => {
       uns && uns();
-
     };
   }, [restaurant?.id]);
-
 
   if (loading) {
     return <Loader size="large" />;
@@ -51,9 +39,14 @@ const Home = ({ route, navigation }) => {
   return (
     <Screen style={styles.screen}>
       <View style={styles.top}>
-        <FloatingButton iconName="arrow-left" onPress={() => navigation.navigate('Restaurants')} />
-        <Text style={styles.name}>{restaurant.name}</Text>
-        <FloatingButton iconName="phone" onPress={() => setVisible(true)} />
+        <FloatingButton
+          iconName="arrow-left"
+          onPress={() => navigation.navigate("Restaurants")}
+        />
+        <Text style={{ ...FONTS.body2, textTransform: "capitalize" }}>
+          {restaurant.name}
+        </Text>
+        <FloatingButton iconName="list" onPress={() => setVisible(true)} />
       </View>
       <Modal visible={visible} animationType="slide">
         <RestaurantInfo
@@ -62,16 +55,43 @@ const Home = ({ route, navigation }) => {
         />
       </Modal>
       <View style={styles.headerView}>
-        <Text style={{ ...FONTS.body2, paddingLeft: 10 }}>What are you craving for today?</Text>
+        <Text style={{ ...FONTS.body2, paddingLeft: 10 }}>
+          What are you craving for today?
+        </Text>
       </View>
       {mostPopular.length > 0 && (
-        <View style={{ justifyContent: 'flex-start', width: SIZES.width, height: SIZES.height * 0.20, padding: SIZES.radius }}>
-          <Text style={{ paddingLeft: 12, paddingBottom: 5, ...FONTS.body2 }}>Most Popular</Text>
+        <View
+          style={{
+            justifyContent: "flex-start",
+            width: SIZES.width,
+            height: SIZES.height * 0.2,
+            padding: SIZES.radius,
+          }}
+        >
+          <Text style={{ paddingLeft: 12, paddingBottom: 5, ...FONTS.body2 }}>
+            Most Popular
+          </Text>
 
-          <FlatList showsHorizontalScrollIndicator={false} contentContainerStyle={{ height: '100%' }} data={mostPopular} horizontal keyExtractor={item => item.id} renderItem={({ item }) => <MostPouplarItem item={item} onPress={() => navigation.navigate('ProductDetail', { product: item, restaurant })} />} />
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ height: "100%" }}
+            data={mostPopular}
+            horizontal
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <MostPouplarItem
+                item={item}
+                onPress={() =>
+                  navigation.navigate("ProductDetail", {
+                    product: item,
+                    restaurant,
+                  })
+                }
+              />
+            )}
+          />
         </View>
       )}
-
 
       <ListCategoryItems
         categories={categories}

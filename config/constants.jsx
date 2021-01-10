@@ -1,6 +1,5 @@
 import { Dimensions } from "react-native";
 
-
 const { width, height } = Dimensions.get("screen");
 
 export const COLORS = {
@@ -45,18 +44,18 @@ export const SIZES = {
 };
 
 export const WEEKDAYS = {
-  1: 'mon',
-  2: 'tue',
-  3: 'wed',
-  4: 'thu',
-  5: 'fri',
-  6: 'sat',
-  7: 'sun'
-}
+  1: "mon",
+  2: "tue",
+  3: "wed",
+  4: "thu",
+  5: "fri",
+  6: "sat",
+  7: "sun",
+};
 
 export const FONTS = {
   navTitle: { fontFamily: "monserrat-thin", fontSize: SIZES.navTitle },
-  italic: { fontFamily: 'montserrat-bold-italic', fontSize: SIZES.body2 },
+  italic: { fontFamily: "montserrat-bold-italic", fontSize: SIZES.body2 },
   h1: { fontFamily: "montserrat-bold", fontSize: SIZES.h1, lineHeight: 36 },
   h2: { fontFamily: "montserrat-bold", fontSize: SIZES.h2, lineHeight: 30 },
   h3: { fontFamily: "montserrat-bold", fontSize: SIZES.h3, lineHeight: 22 },
@@ -92,5 +91,3 @@ export const FONTS = {
 const appTheme = { COLORS, SIZES, FONTS, WEEKDAYS };
 
 export default appTheme;
-
-

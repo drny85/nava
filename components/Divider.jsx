@@ -1,29 +1,23 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { colors } from "react-native-elements";
 
+const Divider = ({ color }) => {
+  return <View style={[styles.view, { backgroundColor: color }]}></View>;
+};
 
-const Divider = () => {
-    return (
-        <View style={styles.view}>
-
-        </View>
-    )
-}
-
-export default Divider
+export default Divider;
 
 const styles = StyleSheet.create({
-    view: {
-        width: '95%',
-        height: 0.4,
-        backgroundColor: 'grey',
-        justifyContent: 'center',
-        alignSelf: 'center',
+  view: {
+    width: "95%",
+    height: 0.4,
 
+    justifyContent: "center",
+    alignSelf: "center",
 
-        opacity: 0.4,
-        elevation: 10,
-        margin: 10,
-
-    }
-})
+    opacity: 0.4,
+    elevation: 10,
+    margin: 10,
+  },
+});

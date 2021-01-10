@@ -5,8 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import Card from "./Card";
 
 import colors from "../config/colors";
-import { FONTS } from "../config";
-
+import { FONTS, SIZES } from "../config";
 
 const ListCategoryItems = ({ categories, items, restaurant }) => {
   const navigation = useNavigation();
@@ -35,18 +34,19 @@ const ListCategoryItems = ({ categories, items, restaurant }) => {
               renderItem={({ item }) => {
                 return (
                   <Card
-                    style={{ width: Dimensions.get("screen").width * 0.85 }}
+                    style={{
+                      width: Dimensions.get("screen").width * 0.85,
+                      maxWidth: 600,
+                    }}
                     key={item.id}
                     name={item.name}
                     price={item.price}
                     sizes={item.sizes}
                     imageUrl={item.imageUrl}
                     onPress={() => {
-
                       navigation.navigate("ProductDetail", {
                         product: item,
-                        restaurant
-
+                        restaurant,
                       });
                     }}
                   />
@@ -63,15 +63,15 @@ const ListCategoryItems = ({ categories, items, restaurant }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
+    width: SIZES.width,
+    maxWidth: 600,
+
     // flexDirection: "row",
   },
   text: {
-
     textTransform: "capitalize",
     marginLeft: 12,
     color: colors.text,
-
   },
 });
 

@@ -72,21 +72,18 @@ const ProductDetail = ({ route, navigation }) => {
           : parseFloat(item.price[checked]);
       item.instruction = instruction;
 
-      await addToCart(item)
-      navigation.goBack()
+      await addToCart(item);
+      navigation.goBack();
     } else {
-      console.log('error deleting and adding to cart')
-
+      console.log("error deleting and adding to cart");
     }
-
-  }
+  };
 
   const handleAddToCart = async () => {
     //check if the item being added is from the same store.
     const { storeId } = item;
     const items = [...cartItems];
     const notEmpty = items.length > 0;
-
 
     if (notEmpty) {
       const found = items.find((i) => i.storeId === storeId);
@@ -101,11 +98,12 @@ const ProductDetail = ({ route, navigation }) => {
         );
         return;
       } else {
-
         if (checked === false && item.sizes) {
-          Alert.alert("Size Matter", `Please pick a size for your ${item.name}`, [
-            { text: "OK", style: "cancel" },
-          ]);
+          Alert.alert(
+            "Size Matter",
+            `Please pick a size for your ${item.name}`,
+            [{ text: "OK", style: "cancel" }]
+          );
           return;
         }
 
@@ -136,10 +134,8 @@ const ProductDetail = ({ route, navigation }) => {
           : parseFloat(item.price[checked]);
       item.instruction = instruction;
 
-
       await addToCart(item);
       navigation.pop();
-
     }
   };
 
@@ -154,7 +150,7 @@ const ProductDetail = ({ route, navigation }) => {
   return (
     <View style={styles.screen}>
       <KeyboardAvoidingView
-        style={{ flex: 1, justifyContent: 'space-between' }}
+        style={{ flex: 1, justifyContent: "space-between" }}
         behavior="position"
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
       >
@@ -175,23 +171,25 @@ const ProductDetail = ({ route, navigation }) => {
             </View>
           </TouchableWithoutFeedback>
         </View>
-        <ScrollView contentContainerStyle={{ paddingVertical: 10, }} style={styles.scrollView}>
+        <ScrollView
+          contentContainerStyle={{ paddingVertical: 10 }}
+          style={styles.scrollView}
+        >
           <View style={styles.details}>
             <Text style={styles.name}>{item.name}</Text>
             {/* <Text style={styles.price}>${item.sizes ? item.price[checked] : item.price}</Text> */}
             <Text style={styles.price}>
               {item.sizes && checked ? `$${item.price[checked]}` : null}
               {item.sizes && !checked
-                ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
-                }`
+                ? `$${item.price[item.sizes[0]]} - $${
+                    item.price[item.sizes[item.sizes.length - 1]]
+                  }`
                 : null}
               {!item.sizes && `$${item.price}`}
             </Text>
           </View>
           <View style={styles.descriptionView}>
-            <Text
-              style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}
-            >
+            <Text style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}>
               -- {item.description}
             </Text>
           </View>
@@ -202,7 +200,7 @@ const ProductDetail = ({ route, navigation }) => {
                 style={{ paddingLeft: 10, fontSize: 16, fontWeight: "600" }}
               >
                 Pick a size
-                </Text>
+              </Text>
               <View
                 style={{
                   flexDirection: "row",
@@ -233,7 +231,7 @@ const ProductDetail = ({ route, navigation }) => {
           <View style={{ padding: 10 }}>
             <Text style={{ fontSize: 16, paddingLeft: 5, paddingBottom: 5 }}>
               Special instructions
-              </Text>
+            </Text>
             <TextInput
               style={styles.instruction}
               multiline
@@ -244,10 +242,7 @@ const ProductDetail = ({ route, navigation }) => {
               placeholderTextColor={"grey"}
             />
           </View>
-
         </ScrollView>
-
-
 
         <View style={styles.buttonView}>
           <AppButton
@@ -275,7 +270,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   buttonView: {
-
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
@@ -302,10 +296,10 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
     borderRadius: 10,
-    fontFamily: 'montserrat',
+    fontFamily: "montserrat",
   },
   imgView: {
-    height: '40%',
+    height: "40%",
     marginBottom: 5,
   },
   instruction: {
@@ -317,18 +311,18 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     // height: '100%'
-    height: '50%'
+    height: "50%",
   },
 
   screen: {
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: colors.tile,
-    height: '100%',
+    height: "100%",
   },
   image: {
     width: "100%",
-    height: '100%',
+    height: "100%",
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     marginBottom: 20,
