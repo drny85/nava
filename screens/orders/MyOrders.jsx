@@ -12,6 +12,7 @@ import Divider from "../../components/Divider";
 
 const MyOrders = ({ navigation }) => {
   const { user } = useContext(authContext);
+
   const { orders, getOrders, loading, Unsubscribe } = useContext(ordersContext);
 
   const goToOrderDetails = (order) => {

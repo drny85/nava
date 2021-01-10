@@ -43,7 +43,9 @@ const Home = ({ route, navigation }) => {
           iconName="arrow-left"
           onPress={() => navigation.navigate("Restaurants")}
         />
-        <Text style={styles.name}>{restaurant.name}</Text>
+        <Text style={{ ...FONTS.body2, textTransform: "capitalize" }}>
+          {restaurant.name}
+        </Text>
         <FloatingButton iconName="list" onPress={() => setVisible(true)} />
       </View>
       <Modal visible={visible} animationType="slide">

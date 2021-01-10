@@ -23,12 +23,13 @@ const StoreCard = ({ store, onPress }) => {
             : "https://mk0tarestaurant7omoy.kinstacdn.com/wp-content/uploads/2018/01/premiumforrestaurants_0.jpg",
         }}
       />
-      <LinearGradient
+      {/* <LinearGradient
         colors={["rgba(0,0,0,0.8)", "black"]}
         start={{ x: 1, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.details}
-      ></LinearGradient>
+      ></LinearGradient> */}
+
       {isFavorite && (
         <View style={{ position: "absolute", top: 10, right: 15 }}>
           <Feather name="heart" size={32} color="red" />
@@ -69,11 +70,19 @@ const StoreCard = ({ store, onPress }) => {
           )}
         </View>
       </View>
+      <View
+        style={[
+          styles.details,
+          {
+            backgroundColor: "rgba(0,0,0,0.7)",
+            zIndex: 1,
+            borderRadius: 15,
+          },
+        ]}
+      ></View>
     </TouchableOpacity>
   );
 };
-
-export default StoreCard;
 
 const styles = StyleSheet.create({
   view: {
@@ -118,6 +127,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
     overflow: "hidden",
+    zIndex: 2,
   },
   name: {
     fontSize: 16,
@@ -140,3 +150,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
+
+export default StoreCard;

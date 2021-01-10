@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -15,18 +15,22 @@ import colors from "../config/colors";
 import { COLORS, FONTS, SIZES } from "../config";
 import cartContext from "../context/cart/cartContext";
 import { useNavigation } from "@react-navigation/native";
+import Loader from "./Loader";
 
 const OrderTile = ({ order, onPress }) => {
   const { addToCart, cartItems, clearCart } = useContext(cartContext);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const addThem = async () => {
     try {
+      setLoading(true);
       for (let index = 0; index < order.items.length; index++) {
         const element = order.items[index];
 
         await addToCart(element);
         //calculateCartTotal(order.items)
       }
+      setLoading(false);
       // navigation.navigate('Cart')
     } catch (error) {
       console.log("Error adding items to cart", error);
@@ -81,6 +85,8 @@ const OrderTile = ({ order, onPress }) => {
       console.log("Error adding and checking out", error);
     }
   };
+
+  if (loading) return <Loader />;
   return (
     <TouchableOpacity onPress={onPress} style={[styles.container]}>
       {/* restaurant image view */}
