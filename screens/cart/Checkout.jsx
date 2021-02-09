@@ -26,7 +26,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppSubmitButton from "../../components/AppSubmitButton";
 import authContext from "../../context/auth/authContext";
 import AppButton from "../../components/AppButton";
-import { FONTS } from "../../config";
+import { FONTS, SIZES } from "../../config";
 
 
 const zipCodes = ['10452', '10451', '10453', '10456', '10457']
@@ -47,6 +47,7 @@ const Checkout = ({ route, navigation }) => {
   const [deliveryAddress, setDeliveryAddress] = useState(null);
 
   const { cartTotal, itemCounts } = useContext(cartContext);
+  console.log(restaurant)
 
   const handlePickup = (pickupInfo) => {
     if (paymentOption === "cash") {
@@ -166,8 +167,8 @@ const Checkout = ({ route, navigation }) => {
       <View style={{ flex: 1, width: Dimensions.get('screen').width, alignItems: 'center' }}>
         <View style={styles.view}>
 
-          <Text style={styles.qty}>Total Items: {itemCounts}</Text>
-          <Text style={styles.total}>Order Total: ${cartTotal.toFixed(2)}</Text>
+          <Text style={{ ...FONTS.h4 }}>Total Items: {itemCounts}</Text>
+          <Text style={{ ...FONTS.h3, padding: SIZES.padding * 0.3 }}>Order Total: ${cartTotal.toFixed(2)}</Text>
         </View>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Text style={styles.title}>Delivery Option</Text>
@@ -328,7 +329,15 @@ const Checkout = ({ route, navigation }) => {
                   </View>
                 </View>
               </TouchableWithoutFeedback>
-              {error && <Text style={{ ...FONTS.body4, color: 'red' }}>{error}</Text>}
+              {error && (<View style={{ height: 40 }}>
+                <Text style={{ ...FONTS.body3, color: 'red' }}>{error}</Text>
+                <Text style={{ fontStyle: 'italic', ...FONTS.body5 }}>This location only makes deliveries to these zip codes</Text>
+                <View style={{ flexDirection: 'row', height: 30 }}>
+                  {restaurant?.deliveryZip.map(zip => {
+                    return <Text style={{ marginRight: 5, ...FONTS.body5 }} key={zip}>{zip}</Text>
+                  })}
+                </View>
+              </View>)}
 
               <View style={{ height: 80 }}></View>
             </View>
@@ -339,7 +348,7 @@ const Checkout = ({ route, navigation }) => {
 
 
       </View>
-      <View style={{ marginBottom: 20, width: "90%", }}>
+      <View style={{ marginBottom: 15, width: "90%", }}>
         {/* <AppSubmitButton disabled={!canContinue} title="Check Out" /> */}
         <AppButton title='Check Out' disabled={!canContinue} onPress={deliveryOption === 'delivery' ? handleDelivery : handlePickup} />
       </View>
@@ -357,7 +366,7 @@ const styles = StyleSheet.create({
   },
   addressView: {
     width: "100%",
-    height: Dimensions.get('screen').height * 0.25,
+    height: Dimensions.get('screen').height * 0.30,
     alignItems: "center",
     marginVertical: 10,
   },
@@ -426,15 +435,7 @@ const styles = StyleSheet.create({
     borderColor: "grey",
     backgroundColor: colors.tile,
   },
-  qty: {
-    fontSize: 22,
-    padding: 5,
-  },
-  total: {
-    fontSize: 22,
-    fontWeight: "bold",
-    padding: 10,
-  },
+
   pickAddress: {
     width: Dimensions.get("screen").width,
     height: Dimensions.get("screen").height * 0.13,

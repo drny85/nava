@@ -22,16 +22,27 @@ import AppForm from "../../components/AppForm";
 import authContext from "../../context/auth/authContext";
 import colors from "../../config/colors";
 import settingsContext from "../../context/settings/settingsContext";
+import cartContext from "../../context/cart/cartContext";
+import storesContext from "../../context/stores/storesContext";
+
 
 const validationSchema = Yup.object().shape({
 	email: Yup.string().required().email().label("Email"),
 	password: Yup.string().required().min(6).label("Password"),
 });
 
-const Signin = () => {
+const Signin = ({ route }) => {
 	const navigation = useNavigation();
 	const { user, login, setUser, updateLastLogin } = useContext(authContext);
 	const { previewRoute, clearSettings } = useContext(settingsContext);
+	const { cartItems } = useContext(cartContext)
+	const { stores } = useContext(storesContext)
+	const restaurants = [...stores];
+	const restaurant = restaurants.find(s => s.id === cartItems[0]?.storeId)
+
+
+	// const { restaurant } = route.params
+	console.log(route)
 
 	const handleSignin = async ({ email, password }) => {
 		try {
@@ -40,7 +51,7 @@ const Signin = () => {
 				setUser(data.user.uid);
 				updateLastLogin(data.user.uid);
 				if (previewRoute) {
-					navigation.navigate(previewRoute);
+					navigation.navigate(previewRoute, { restaurant });
 					clearSettings();
 
 					return;

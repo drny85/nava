@@ -7,6 +7,7 @@ import authContext from "../context/auth/authContext";
 import { Platform } from "react-native";
 import { auth } from "firebase";
 import Constant from "expo-constants";
+import { useNavigation } from "@react-navigation/native";
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
@@ -17,7 +18,7 @@ Notifications.setNotificationHandler({
 });
 
 let pushToken = null;
-export default useNotifications = (notificationListener) => {
+const useNotifications = (notificationListener) => {
 	const { user, saveExpoPushToken } = useContext(authContext);
 
 	useEffect(() => {
@@ -31,7 +32,7 @@ export default useNotifications = (notificationListener) => {
 	};
 
 	const registerForPushNotificationsAsync = async () => {
-		console.log("getting token");
+
 		try {
 			if (Constant.isDevice) {
 				const { status: existingStatus } = await Permissions.getAsync(
@@ -69,3 +70,5 @@ export default useNotifications = (notificationListener) => {
 		}
 	};
 };
+
+export default useNotifications;

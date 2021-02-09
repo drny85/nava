@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image, Animated } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
@@ -7,80 +7,82 @@ import { COLORS, SIZES } from "../config";
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import authContext from "../context/auth/authContext";
 
-const StoreCard = ({ store, onPress }) => {
+const StoreCard = ({ store, onPress, scale = null }) => {
   const { name, phone, street, city, zipcode, imageUrl } = store;
   const { user } = useContext(authContext);
   const isFavorite = user?.favoriteStores.find((s) => s === store.id);
 
   return (
-    <TouchableOpacity style={styles.view} onPress={onPress}>
-      <Image
-        resizeMode="cover"
-        style={styles.img}
-        source={{
-          uri: imageUrl
-            ? imageUrl
-            : "https://mk0tarestaurant7omoy.kinstacdn.com/wp-content/uploads/2018/01/premiumforrestaurants_0.jpg",
-        }}
-      />
-      {/* <LinearGradient
+    <Animated.View style={{ transform: scale && [{ scale }] }}>
+      <TouchableOpacity style={styles.view} onPress={onPress}>
+        <Image
+          resizeMode="cover"
+          style={styles.img}
+          source={{
+            uri: imageUrl
+              ? imageUrl
+              : "https://mk0tarestaurant7omoy.kinstacdn.com/wp-content/uploads/2018/01/premiumforrestaurants_0.jpg",
+          }}
+        />
+        {/* <LinearGradient
         colors={["rgba(0,0,0,0.8)", "black"]}
         start={{ x: 1, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.details}
       ></LinearGradient> */}
 
-      {isFavorite && (
-        <View style={{ position: "absolute", top: 10, right: 15 }}>
-          <Feather name="heart" size={32} color="red" />
-        </View>
-      )}
-      <View style={styles.details2}>
-        <Text numberOfLines={1} style={styles.name}>
-          {name}
-        </Text>
-        <Text style={styles.phone}>{phone}</Text>
-        <Text style={styles.phone}>{street}</Text>
-        <Text style={styles.caption}>
-          {city}, {zipcode}
-        </Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text
-            style={{
-              color: "red",
-              paddingLeft: 15,
-              paddingVertical: 5,
-              fontWeight: "700",
-            }}
-          >
-            {store.open ? null : "CLOSED"}
+        {isFavorite && (
+          <View style={{ position: "absolute", top: 10, right: 15 }}>
+            <Feather name="heart" size={32} color="red" />
+          </View>
+        )}
+        <View style={styles.details2}>
+          <Text numberOfLines={1} style={styles.name}>
+            {name}
           </Text>
-          {store.estimatedDeliveryTime && (
+          <Text style={styles.phone}>{phone}</Text>
+          <Text style={styles.phone}>{street}</Text>
+          <Text style={styles.caption}>
+            {city}, {zipcode}
+          </Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
             <Text
               style={{
-                fontSize: 18,
-                color: COLORS.white,
-                textAlign: "right",
-                paddingRight: 20,
-                fontWeight: "500",
+                color: "red",
+                paddingLeft: 15,
+                paddingVertical: 5,
+                fontWeight: "700",
               }}
             >
-              {store.estimatedDeliveryTime} mins
+              {store.open ? null : "CLOSED"}
             </Text>
-          )}
+            {store.estimatedDeliveryTime && (
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: COLORS.white,
+                  textAlign: "right",
+                  paddingRight: 20,
+                  fontWeight: "500",
+                }}
+              >
+                {store.estimatedDeliveryTime} mins
+              </Text>
+            )}
+          </View>
         </View>
-      </View>
-      <View
-        style={[
-          styles.details,
-          {
-            backgroundColor: "rgba(0,0,0,0.7)",
-            zIndex: 1,
-            borderRadius: 15,
-          },
-        ]}
-      ></View>
-    </TouchableOpacity>
+        <View
+          style={[
+            styles.details,
+            {
+              backgroundColor: "rgba(0,0,0,0.7)",
+              zIndex: 1,
+              borderRadius: 15,
+            },
+          ]}
+        ></View>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 

@@ -165,13 +165,13 @@ const OrderSummary = ({ navigation, route }) => {
             <>
               <Text
                 style={{
-                  ...FONTS.italic,
+                  ...FONTS.h4,
                   marginBottom: 20,
                 }}
               >
                 Important information about your order {customer.name}
               </Text>
-              <Text style={styles.title}>
+              <Text style={{ ...FONTS.body5 }}>
                 You will be picking up this order at the restaurant
             </Text>
             </>
@@ -205,7 +205,7 @@ const OrderSummary = ({ navigation, route }) => {
           )}
           {paymentMethod === "credit" && deliveryMethod === "pickup" && (
             <View style={{ padding: 12 }}>
-              <Text style={styles.text}>
+              <Text style={{ ...FONTS.body5 }}>
                 You will pay with debit or credit card, please have it ready.
             </Text>
               <Divider />
@@ -216,15 +216,15 @@ const OrderSummary = ({ navigation, route }) => {
           )}
           {paymentMethod === "in store" && deliveryMethod === "pickup" && (
             <View style={styles.pickup}>
-              <Text style={styles.title}>
+              <Text style={{ ...FONTS.body5 }}>
                 You will pay for this order at the store
             </Text>
-              <Text style={styles.title}>
+              <Text style={{ ...FONTS.body5 }}>
                 You can pay with cash or credit / debit card
             </Text>
               <View style={styles.totalView}>
                 <Text style={styles.title}>Order Total</Text>
-                <Text style={{ fontWeight: "bold", fontSize: 45 }}>
+                <Text style={{ fontWeight: "bold", fontSize: 34 }}>
                   ${cartTotal.toFixed(2)}
                 </Text>
               </View>
@@ -274,13 +274,6 @@ const styles = StyleSheet.create({
 
   },
 
-
-
-  title: {
-    fontWeight: "600",
-    fontSize: 16,
-    marginVertical: 10,
-  },
   address: {
     fontSize: 16,
   },
@@ -325,7 +318,7 @@ const styles = StyleSheet.create({
   },
   storeInfo: {
     width: '100%',
-    padding: 5,
+    padding: 8,
     alignItems: 'flex-start',
     justifyContent: 'center',
     flexDirection: 'column',

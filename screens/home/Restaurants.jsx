@@ -1,9 +1,8 @@
 // @ts-nocheck
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ScrollView } from "react-native";
-import { TouchableOpacity } from "react-native";
 import { Modal } from "react-native";
-import { StyleSheet, FlatList, Text, View } from "react-native";
+import { StyleSheet, FlatList, Text, View, TouchableOpacity, Animated } from "react-native";
 import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
 
 import Loader from "../../components/Loader";
@@ -21,7 +20,13 @@ import cartContext from "../../context/cart/cartContext";
 import { Alert } from "react-native";
 import itemsContext from "../../context/items/itemsContext";
 
+
+const SPACING = 30
+const ITEM_SIZE = 100 + SPACING * 3
+
+
 const Restaurants = ({ navigation }) => {
+  const scrollY = useRef(new Animated.Value(0)).current
   const { stores, getStores, loading } = useContext(storesContext);
   const { items, getItems } = useContext(itemsContext);
   const { user } = useContext(authContext);
@@ -264,14 +269,26 @@ const Restaurants = ({ navigation }) => {
       >
         <Text style={{ ...FONTS.body2, paddingLeft: 18 }}>Restaurants</Text>
       </View>
-      <FlatList
+      <Animated.FlatList
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true })}
         showsVerticalScrollIndicator={false}
         onRefresh={getStores}
         refreshing={refreshing}
         data={stores}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          return <StoreCard store={item} onPress={() => fetchStores(item)} />;
+        renderItem={({ item, index }) => {
+          const inputRange = [-1, 0, ITEM_SIZE * index, ITEM_SIZE * (index + 2)]
+          const opacityRange = [-1, 0, ITEM_SIZE * index, ITEM_SIZE * (index + 1)]
+          const scale = scrollY.interpolate({
+            inputRange,
+            outputRange: [1, 1, 1, 0]
+          })
+          const opacity = scrollY.interpolate({
+            inputRange: opacityRange,
+            outputRange: [1, 1, 1, 0]
+          })
+          return <StoreCard scale={scale} style={{ transform: [{ scale }] }} store={item} onPress={() => fetchStores(item)} />;
+
         }}
       />
 

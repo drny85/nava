@@ -15,6 +15,7 @@ import { Dimensions } from "react-native";
 import ProfileItem from "../../components/ProfileItem";
 import * as ImagePicker from "expo-image-picker";
 
+
 import { Alert } from "react-native";
 
 import { storage, db } from "../../services/database";
@@ -23,7 +24,6 @@ const Profile = ({ navigation }) => {
   const [image, setImage] = useState("");
   const [hasPermission, setHasPermission] = useState(false);
   const { user, setUser } = useContext(authContext);
-  useNotifications();
 
   if (!user) return <Signin />;
 

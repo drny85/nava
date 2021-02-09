@@ -18,6 +18,7 @@ const ListItem = ({ name, imageUrl, price, qty, size }) => {
               <Text
                 style={{
                   marginLeft: 8,
+                  fontSize: 12,
                   textTransform: "capitalize",
                   fontFamily: "montserrat",
                 }}
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   name: {
-    fontSize: 18,
+    fontSize: 16,
     textTransform: "capitalize",
     paddingBottom: 10,
     fontFamily: "montserrat",
@@ -77,6 +78,7 @@ const styles = StyleSheet.create({
   },
   qty: {
     fontFamily: "montserrat",
+    fontSize: 12,
   },
 });
 

@@ -28,7 +28,6 @@ const Cart = ({ navigation }) => {
 		addToCart,
 		cartTotal,
 		itemCounts,
-
 		deleteFromCart,
 	} = useContext(cartContext);
 	const { user } = useContext(authContext);
@@ -51,7 +50,7 @@ const Cart = ({ navigation }) => {
 		}
 		if (!user) {
 			setRoute("Checkout");
-			navigation.navigate("Profile", { screen: "Login" });
+			navigation.navigate("Profile", { screen: "Login", restaurant });
 			return;
 		}
 
@@ -60,7 +59,6 @@ const Cart = ({ navigation }) => {
 			restaurant: restaurant
 		});
 	};
-
 
 
 	useEffect(() => {
