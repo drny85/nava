@@ -22,7 +22,7 @@ import AppForm from "../../components/AppForm";
 import AppFormField from "../../components/AppFormField";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import * as Yup from "yup";
+
 import AppSubmitButton from "../../components/AppSubmitButton";
 import authContext from "../../context/auth/authContext";
 import AppButton from "../../components/AppButton";
@@ -43,8 +43,6 @@ const Checkout = ({ route, navigation }) => {
   const { user } = useContext(authContext);
   const previous = route.params?.previous;
   const { restaurant } = route.params;
-  console.log(restaurant)
-
   const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
 
@@ -405,10 +403,6 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
   },
 
-  form: {
-    width: "100%",
-    alignItems: "center",
-  },
   summary: {
     fontSize: 18,
     fontWeight: "700",
