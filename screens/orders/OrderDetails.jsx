@@ -22,8 +22,8 @@ const OrderDetails = ({ route }) => {
 
       headerLeft: () => {
         return <Ionicons
-          style={{ marginLeft: 10 }}
-          onPress={() => navigation.goBack()}
+          style={{ marginLeft: 12 }}
+          onPress={() => navigation.navigate('MyOrders')}
           name="md-arrow-back"
           color={colors.primary}
           size={30}

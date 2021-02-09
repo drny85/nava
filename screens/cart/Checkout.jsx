@@ -31,14 +31,6 @@ import { FONTS } from "../../config";
 
 const zipCodes = ['10452', '10451', '10453', '10456', '10457']
 
-
-const pickUpSchema = Yup.object().shape({
-  name: Yup.string().required().label("First Name"),
-  lastName: Yup.string().required().label("Last Name"),
-  phone: Yup.string().required().min(10).label("Phone"),
-  email: Yup.string().email().required().label("Email"),
-});
-
 const MINIMUM_DELIVERY = 10;
 
 const Checkout = ({ route, navigation }) => {
@@ -46,9 +38,12 @@ const Checkout = ({ route, navigation }) => {
 
   const [paymentOption, setPaymentOption] = useState("credit");
   const [canContinue, setCanContinue] = useState(false);
+  const [error, setError] = useState(null);
   const { deliveryMethod } = useContext(settingsContext);
   const { user } = useContext(authContext);
   const previous = route.params?.previous;
+  const { restaurant } = route.params;
+  console.log(restaurant)
 
   const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
@@ -74,7 +69,7 @@ const Checkout = ({ route, navigation }) => {
   };
 
   const handleDelivery = (deliveryInfo) => {
-    console.log('HERE')
+
     if (paymentOption === "in store" || paymentOption === "") {
       Alert.alert("Payment", "Please select a payment method", [
         { text: "OK", style: "cancel" },
@@ -125,12 +120,15 @@ const Checkout = ({ route, navigation }) => {
     if (previous) {
       setDeliveryAddress(previous);
       const zip = previous.zipcode
-      if (zipCodes.includes(zip)) {
+      if (restaurant?.deliveryZip.includes(zip)) {
         setCanContinue(true)
+        setError(null)
 
 
       } else {
         setCanContinue(false)
+        setError('No delivery at this address')
+
         Alert.alert(
           "Not Delivery Available",
           "Please select a new delivery address",
@@ -319,7 +317,9 @@ const Checkout = ({ route, navigation }) => {
                         </>
                       ) : null}
                     </View>
+
                   </View>
+
                   <View>
                     <MaterialCommunityIcons
                       style={styles.icon}
@@ -330,6 +330,7 @@ const Checkout = ({ route, navigation }) => {
                   </View>
                 </View>
               </TouchableWithoutFeedback>
+              {error && <Text style={{ ...FONTS.body4, color: 'red' }}>{error}</Text>}
 
               <View style={{ height: 80 }}></View>
             </View>

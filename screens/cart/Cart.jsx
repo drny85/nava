@@ -16,6 +16,7 @@ import CartItemTile from "../../components/CartItemTile";
 import authContext from "../../context/auth/authContext";
 import settingsContext from "../../context/settings/settingsContext";
 import Loader from "../../components/Loader";
+import storesContext from "../../context/stores/storesContext";
 
 const MINIMUM = 10
 
@@ -31,8 +32,10 @@ const Cart = ({ navigation }) => {
 		deleteFromCart,
 	} = useContext(cartContext);
 	const { user } = useContext(authContext);
-
+	const { stores } = useContext(storesContext)
 	const { setRoute, clearSettings } = useContext(settingsContext);
+	const restaurants = [...stores];
+	const restaurant = restaurants.find(s => s.id === cartItems[0]?.storeId)
 
 	const continueToCheckOut = () => {
 		if (cartTotal < MINIMUM) {
@@ -54,6 +57,7 @@ const Cart = ({ navigation }) => {
 
 		navigation.navigate("Checkout", {
 			cart: { cartItems, cartTotal, itemCounts },
+			restaurant: restaurant
 		});
 	};
 
