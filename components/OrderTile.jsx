@@ -115,14 +115,14 @@ const OrderTile = ({ order, onPress }) => {
           padding: 10,
         }}
       >
-        <Text style={{ ...FONTS.h3, textTransform: "capitalize" }}>
+        <Text style={{ ...FONTS.h5, textTransform: "capitalize" }}>
           {order.restaurant.name}
         </Text>
-        <Text style={{ ...FONTS.body3 }}>Type: {order.orderType}</Text>
-        <Text style={{ ...FONTS.body3 }}>
+        <Text style={{ ...FONTS.body6 }}>Type: {order.orderType}</Text>
+        {/* <Text style={{ ...FONTS.body4 }}>
           {moment(order.orderPlaced).format("lll")}
-        </Text>
-        <Text style={{ ...FONTS.body3 }}>
+        </Text> */}
+        <Text style={{ ...FONTS.body6, paddingVertical: 6 }}>
           Total: ${order.totalAmount.toFixed(2)}
         </Text>
       </View>
@@ -140,7 +140,7 @@ const OrderTile = ({ order, onPress }) => {
           paddingHorizontal: 15,
         }}
       >
-        <Text style={{ ...FONTS.body3, color: COLORS.white }}>
+        <Text style={{ ...FONTS.body5, color: COLORS.white }}>
           {order.status === "new" ? "Progress" : "Reorder"}
         </Text>
       </TouchableOpacity>

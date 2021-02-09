@@ -21,7 +21,8 @@ const AppFormField = ({ name, autoFocus, style, ...otherProps }) => {
       <AppInput
         autoFocus={autoFocus}
         style={style}
-        onBlur={() => setFieldTouched(name)}
+
+        onBlur={() => setFieldTouched(values[name])}
         onChangeText={handleChange(name)}
         {...otherProps}
       />

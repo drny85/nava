@@ -51,7 +51,7 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
         resizeMode="cover"
         style={styles.img}
         source={{
-          uri:
+          uri: restaurant.imageUrl ? restaurant.imageUrl :
             "https://img.texasmonthly.com/2020/04/restaurants-covid-19-coronavirus-not-reopening-salome-mcallen.jpg?auto=compress&crop=faces&fit=fit&fm=pjpg&ixlib=php-1.2.1&q=45&w=1100",
         }}
       />
@@ -73,13 +73,13 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
               color="red"
             />
           ) : (
-            <Feather
-              onPress={handleFavorite}
-              name="heart"
-              size={40}
-              color="black"
-            />
-          )}
+              <Feather
+                onPress={handleFavorite}
+                name="heart"
+                size={40}
+                color="black"
+              />
+            )}
         </View>
       )}
 

@@ -25,6 +25,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Yup from "yup";
 import AppSubmitButton from "../../components/AppSubmitButton";
 import authContext from "../../context/auth/authContext";
+import AppButton from "../../components/AppButton";
+import { FONTS } from "../../config";
 
 
 const zipCodes = ['10452', '10451', '10453', '10456', '10457']
@@ -66,12 +68,13 @@ const Checkout = ({ route, navigation }) => {
       params: {
         deliveryMethod: deliveryOption,
         paymentMethod: paymentOption,
-        customer: pickupInfo,
+        customer: { name: user?.name, lastName: user?.lastName, email: user?.email, phone: user?.phone }
       },
     });
   };
 
   const handleDelivery = (deliveryInfo) => {
+    console.log('HERE')
     if (paymentOption === "in store" || paymentOption === "") {
       Alert.alert("Payment", "Please select a payment method", [
         { text: "OK", style: "cancel" },
@@ -108,15 +111,12 @@ const Checkout = ({ route, navigation }) => {
       return;
     }
 
-    let customer = { ...deliveryInfo };
-    customer.address = { ...previous };
-
     navigation.navigate("Orders", {
       screen: "OrderSummary",
       params: {
         deliveryMethod: deliveryOption,
         paymentMethod: paymentOption,
-        customer: customer,
+        customer: { name: user?.name, lastName: user?.lastName, email: user?.email, phone: user?.phone, address: { ...previous } },
       },
     });
   };
@@ -133,7 +133,7 @@ const Checkout = ({ route, navigation }) => {
         setCanContinue(false)
         Alert.alert(
           "Not Delivery Available",
-          "Please select a vew delivery address",
+          "Please select a new delivery address",
           [
             {
               text: "Add Address",
@@ -155,17 +155,21 @@ const Checkout = ({ route, navigation }) => {
   }, [previous]);
 
   return (
-    <KeyboardAvoidingView
-      behavior="position"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 100}
+
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{
+        justifyContent: "center",
+        alignItems: "center",
+        height: Dimensions.get('screen').height,
+        flex: 1,
+
+
+      }}
     >
-      <ScrollView
-        contentContainerStyle={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <View style={{ flex: 1, width: Dimensions.get('screen').width, alignItems: 'center' }}>
         <View style={styles.view}>
+
           <Text style={styles.qty}>Total Items: {itemCounts}</Text>
           <Text style={styles.total}>Order Total: ${cartTotal.toFixed(2)}</Text>
         </View>
@@ -173,7 +177,15 @@ const Checkout = ({ route, navigation }) => {
           <Text style={styles.title}>Delivery Option</Text>
           <View style={styles.delivery}>
             <TouchableOpacity
-              onPress={() => setDeliveryOption("delivery")}
+              onPress={() => {
+                setDeliveryOption("delivery")
+                if (!deliveryAddress) {
+                  setCanContinue(false)
+                } else {
+                  setCanContinue(true)
+                }
+
+              }}
               style={{
                 height: "100%",
                 backgroundColor:
@@ -201,7 +213,10 @@ const Checkout = ({ route, navigation }) => {
             </TouchableOpacity>
             <View style={styles.divider}></View>
             <TouchableOpacity
-              onPress={() => setDeliveryOption("pickup")}
+              onPress={() => {
+                setDeliveryOption("pickup")
+                setCanContinue(true)
+              }}
               style={{
                 height: "100%",
                 backgroundColor:
@@ -276,148 +291,76 @@ const Checkout = ({ route, navigation }) => {
                 </>
               )}
           </View>
-        </View>
-
-        <View style={styles.form}>
-          {deliveryOption === "pickup" && paymentOption !== null && (
-            <View style={styles.form}>
-              <Text style={{ fontWeight: "700", marginTop: 5 }}>
-                Person Picking Up
-              </Text>
-              <AppForm
-                initialValues={{ name: "", lastName: "", phone: "", email: "" }}
-                onSubmit={handlePickup}
-                validationSchema={pickUpSchema}
+          {deliveryOption === "delivery" && (
+            <View style={styles.addressView}>
+              <Text style={{ ...FONTS.h4 }}>Delivery Information</Text>
+              <TouchableWithoutFeedback
+                onPress={() =>
+                  navigation.navigate("MyAddress", { previous: "Checkout" })
+                }
               >
-                <AppFormField
-                  name="name"
-                  iconName="account-badge-horizontal"
-                  placeholder="First Name"
-                />
-                <AppFormField
-                  name="lastName"
-                  iconName="account-badge-horizontal"
-                  placeholder="Last Name"
-                />
-                <AppFormField
-                  name="phone"
-                  iconName="phone"
-                  placeholder="Phone"
-                  maxLength={10}
-                  keyboardType="number-pad"
-                />
-                <AppFormField
-                  name="email"
-                  placeholder="Email"
-                  iconName="email"
-                  autoCorrect={false}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  textContentType="emailAddress"
-                />
-                <View style={{ marginTop: 20, width: "100%" }}>
-                  <AppSubmitButton title="Check Out" />
+                <View style={styles.pickAddress}>
+                  <View>
+                    <Text style={styles.deliveryTitle}>
+                      {previous ? `Delivery Address` : `Pick an address *`}
+                    </Text>
+                    <View style={{ padding: 10 }}>
+                      {deliveryAddress ? (
+                        <>
+                          <Text style={styles.deliveryText}>
+                            {deliveryAddress.street}{" "}
+                            {deliveryAddress.apt
+                              ? `, Apt ${deliveryAddress.apt}`
+                              : null}
+                          </Text>
+                          <Text style={styles.deliveryText}>
+                            {deliveryAddress.city}, {deliveryAddress.zipcode}
+                          </Text>
+                        </>
+                      ) : null}
+                    </View>
+                  </View>
+                  <View>
+                    <MaterialCommunityIcons
+                      style={styles.icon}
+                      name="chevron-right"
+                      size={24}
+                      color="black"
+                    />
+                  </View>
                 </View>
-              </AppForm>
+              </TouchableWithoutFeedback>
+
+              <View style={{ height: 80 }}></View>
             </View>
           )}
         </View>
 
-        {deliveryOption === "delivery" && (
-          <View style={styles.addressView}>
-            <Text style={styles.title}>Delivery Information</Text>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                navigation.navigate("MyAddress", { previous: "Checkout" })
-              }
-            >
-              <View style={styles.pickAddress}>
-                <View>
-                  <Text style={styles.deliveryTitle}>
-                    {previous ? `Delivery Address` : `Pick an address *`}
-                  </Text>
-                  <View style={{ padding: 10 }}>
-                    {deliveryAddress ? (
-                      <>
-                        <Text style={styles.deliveryText}>
-                          {deliveryAddress.street}{" "}
-                          {deliveryAddress.apt
-                            ? `, Apt ${deliveryAddress.apt}`
-                            : null}
-                        </Text>
-                        <Text style={styles.deliveryText}>
-                          {deliveryAddress.city}, {deliveryAddress.zipcode}
-                        </Text>
-                      </>
-                    ) : null}
-                  </View>
-                </View>
-                <View>
-                  <MaterialCommunityIcons
-                    style={styles.icon}
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                  />
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-            <View style={styles.form}>
-              <AppForm
-                initialValues={{ name: "", lastName: "", phone: "", email: "" }}
-                onSubmit={handleDelivery}
-                validationSchema={pickUpSchema}
-              >
-                <AppFormField
-                  name="name"
-                  iconName="account-badge-horizontal"
-                  placeholder="First Name"
-                />
-                <AppFormField
-                  name="lastName"
-                  iconName="account-badge-horizontal"
-                  placeholder="Last Name"
-                />
-                <AppFormField
-                  name="phone"
-                  iconName="phone"
-                  placeholder="Phone"
-                  maxLength={10}
-                  keyboardType="number-pad"
-                />
-                <AppFormField
-                  name="email"
-                  placeholder="Email"
-                  iconName="email"
-                  autoCorrect={false}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  textContentType="emailAddress"
-                />
-                <View style={{ marginTop: 20, width: "90%" }}>
-                  <AppSubmitButton disabled={!canContinue} title="Check Out" />
-                </View>
-              </AppForm>
-            </View>
 
-            <View style={{ height: 80 }}></View>
-          </View>
-        )}
-      </ScrollView>
-    </KeyboardAvoidingView>
+
+
+      </View>
+      <View style={{ marginBottom: 20, width: "90%", }}>
+        {/* <AppSubmitButton disabled={!canContinue} title="Check Out" /> */}
+        <AppButton title='Check Out' disabled={!canContinue} onPress={deliveryOption === 'delivery' ? handleDelivery : handlePickup} />
+      </View>
+    </ScrollView>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    marginTop: 10,
-    justifyContent: "center",
+    marginTop: 15,
+
+
   },
   addressView: {
     width: "100%",
+    height: Dimensions.get('screen').height * 0.25,
     alignItems: "center",
+    marginVertical: 10,
   },
   btn: {
     width: "95%",
@@ -453,7 +396,7 @@ const styles = StyleSheet.create({
   deliveryTitle: {
     fontFamily: "montserrat-bold",
     paddingHorizontal: 10,
-    fontSize: 16,
+    fontSize: 14,
   },
   divider: {
     height: "100%",
@@ -526,6 +469,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontFamily: "montserrat-bold",
     fontSize: 16,
+
   },
 });
 

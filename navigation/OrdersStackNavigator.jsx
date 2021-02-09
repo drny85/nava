@@ -20,7 +20,7 @@ const OrdersStackNavigator = ({ route }) => {
 
   const navigation = useNavigation();
   return (
-    <OrdersStack.Navigator mode="modal">
+    <OrdersStack.Navigator mode="modal" initialRouteName="MyOrders">
       <OrdersStack.Screen
         name="MyOrders"
         component={MyOrders}

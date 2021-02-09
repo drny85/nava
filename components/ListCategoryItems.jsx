@@ -12,7 +12,7 @@ const ListCategoryItems = ({ categories, items, restaurant }) => {
 
   return (
     <FlatList
-      data={categories}
+      data={categories} ß
       showsVerticalScrollIndicator={false}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => {

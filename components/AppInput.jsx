@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
 	container: {
 		width: "100%",
 		height: 50,
-
 		marginVertical: 12,
 		padding: 8,
 		borderRadius: 25,

@@ -1,19 +1,36 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { View, StyleSheet, Text, FlatList } from "react-native";
 
 import moment from "moment";
 
 import Screen from "../../components/Screen";
+import { Ionicons } from '@expo/vector-icons';
 import colors from "../../config/colors";
 import ListItem from "../../components/ListItem";
+import { useNavigation } from "@react-navigation/native";
 
-const OrderDetails = ({ route, navigation }) => {
+const OrderDetails = ({ route }) => {
   const { order } = route.params;
-
+  const navigation = useNavigation()
 
   if (order.status !== "delivered") {
     navigation.navigate("OrderInTheMaking");
   }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+
+      headerLeft: () => {
+        return <Ionicons
+          style={{ marginLeft: 10 }}
+          onPress={() => navigation.goBack()}
+          name="md-arrow-back"
+          color={colors.primary}
+          size={30}
+        />
+      }
+    })
+  }, [navigation])
 
   return (
     <Screen style={styles.container}>

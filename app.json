@@ -1,11 +1,7 @@
 {
   "expo": {
     "name": "Antojito",
-<<<<<<< HEAD
-    "slug": "nava6",
-=======
     "slug": "nava7",
->>>>>>> 52eb734a063c15f88a44b9031b1dab4cf2338293,
     "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
