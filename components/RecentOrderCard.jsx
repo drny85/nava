@@ -24,7 +24,7 @@ const RecentOrderCard = ({ order, onPress }) => {
       <View style={styles.bottomView}>
         <Text
           style={{
-            ...FONTS.body4,
+            ...FONTS.body5,
             textTransform: "capitalize",
 
             color: COLORS.black,
@@ -33,7 +33,7 @@ const RecentOrderCard = ({ order, onPress }) => {
           {order.restaurant.name}
         </Text>
 
-        <Text style={{ color: COLORS.black, fontSize: 12, opacity: 0.5 }}>
+        <Text style={{ color: COLORS.black, fontSize: 10, opacity: 0.5 }}>
           {moment(order.orderPlaced).fromNow()}
         </Text>
       </View>

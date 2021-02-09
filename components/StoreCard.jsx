@@ -7,13 +7,13 @@ import { COLORS, SIZES } from "../config";
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import authContext from "../context/auth/authContext";
 
-const StoreCard = ({ store, onPress, scale = null }) => {
+const StoreCard = ({ store, onPress, scale = null, opacity = null }) => {
   const { name, phone, street, city, zipcode, imageUrl } = store;
   const { user } = useContext(authContext);
   const isFavorite = user?.favoriteStores.find((s) => s === store.id);
 
   return (
-    <Animated.View style={{ transform: scale && [{ scale }] }}>
+    <Animated.View style={{ transform: scale && [{ scale }], opacity: opacity && opacity }}>
       <TouchableOpacity style={styles.view} onPress={onPress}>
         <Image
           resizeMode="cover"

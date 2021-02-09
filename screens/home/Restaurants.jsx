@@ -21,8 +21,8 @@ import { Alert } from "react-native";
 import itemsContext from "../../context/items/itemsContext";
 
 
-const SPACING = 30
-const ITEM_SIZE = 100 + SPACING * 3
+const SPACING = SIZES.padding
+const ITEM_SIZE = (SIZES.height * 0.25) + SPACING * 2
 
 
 const Restaurants = ({ navigation }) => {
@@ -287,7 +287,7 @@ const Restaurants = ({ navigation }) => {
             inputRange: opacityRange,
             outputRange: [1, 1, 1, 0]
           })
-          return <StoreCard scale={scale} style={{ transform: [{ scale }] }} store={item} onPress={() => fetchStores(item)} />;
+          return <StoreCard scale={scale} opacity={opacity} style={{ transform: [{ scale }] }} store={item} onPress={() => fetchStores(item)} />;
 
         }}
       />
