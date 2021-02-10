@@ -2,21 +2,23 @@ import React from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
+import { COLORS } from "../config";
 
-const AppInput = ({ iconName, focus = false, style, ...otherProps }) => {
+const AppInput = ({ iconName, e = null, focus = false, style, ...otherProps }) => {
 	return (
 		<View style={styles.container}>
 			{iconName && (
 				<MaterialCommunityIcons
 					style={styles.icon}
 					size={24}
-					color={colors.ascent}
+					color={COLORS.primary}
 					name={iconName}
 				/>
 			)}
 			<TextInput
 				autoFocus={focus}
-				placeholderTextColor={colors.primary}
+				autoCapitalize={e}
+				placeholderTextColor={COLORS.secondary}
 				style={[styles.input, style]}
 				{...otherProps}
 			/>
@@ -32,7 +34,7 @@ const styles = StyleSheet.create({
 		padding: 8,
 		borderRadius: 25,
 		alignItems: "center",
-		backgroundColor: colors.tile,
+		backgroundColor: COLORS.tile,
 		flexDirection: "row",
 		borderBottomWidth: 1,
 		borderBottomColor: "grey",

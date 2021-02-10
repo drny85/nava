@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, TouchableWithoutFeedback, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
-import { FONTS } from "../config";
+import { COLORS, FONTS, SIZES } from "../config";
 
 const ProfileItem = ({ text, onPress }) => {
   return (
@@ -26,15 +26,27 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
+    width: SIZES.width * 0.95,
     alignItems: "center",
+    height: SIZES.height * 0.09,
+    maxHeight: 80,
+    marginHorizontal: 5,
+    alignSelf: 'center',
 
     paddingHorizontal: 10,
-    borderColor: colors.primary,
-    borderBottomWidth: 0.3,
-    borderTopWidth: 0.3,
-    paddingVertical: 20,
+    marginVertical: 5,
+    shadowOffset: {
+      width: 5, height: 7
+    },
+    elevation: 7,
+    shadowColor: COLORS.secondary,
+    backgroundColor: COLORS.primary,
+
+    shadowOpacity: 0.7,
+    shadowRadius: 8,
+
   },
+
 });
 
 export default ProfileItem;

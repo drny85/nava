@@ -11,6 +11,7 @@ import {
 import colors from "../config/colors";
 
 import { Feather } from "@expo/vector-icons";
+import { COLORS, FONTS } from "../config";
 
 const { width } = Dimensions.get("screen");
 
@@ -23,7 +24,7 @@ const CartItemTile = ({ item, onAddMore, onRemove, isDisable }) => {
 				</View>
 				<View style={styles.details}>
 					<View>
-						<Text style={styles.name}>{item.name}</Text>
+						<Text style={{ ...FONTS.h3, textTransform: 'capitalize', }}>{item.name}</Text>
 						<View style={{ flexDirection: "row" }}>
 							<Text style={styles.qty}>
 								{item.quantity} x $
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
 	container: {
 		width: width * 0.95,
 		height: 120,
-		backgroundColor: colors.primary,
+		backgroundColor: COLORS.secondary,
 		borderRadius: 5,
 		elevation: 10,
 		margin: 10,
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 		width: "60%",
 		height: "100%",
-		backgroundColor: colors.primary,
+		backgroundColor: COLORS.primary,
 		padding: 10,
 	},
 
@@ -131,15 +132,19 @@ const styles = StyleSheet.create({
 	mini: {
 		height: "100%",
 		width: "50%",
-		backgroundColor: colors.card,
+		backgroundColor: COLORS.primary,
+
 		borderRadius: 30,
 		alignItems: "center",
 		justifyContent: "space-around",
 		flexDirection: "row",
+		borderColor: COLORS.secondary,
+		borderWidth: 0.2
 	},
 	priceView: {
 		width: "40%",
 		marginHorizontal: 5,
+
 	},
 
 	divider: {
@@ -148,7 +153,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "grey",
 	},
 	qty: {
-		color: colors.secondary,
+		color: COLORS.secondary,
 	},
 });
 

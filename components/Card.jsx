@@ -10,6 +10,7 @@ import {
 import colors from "../config/colors";
 
 import { Image } from "react-native-expo-image-cache";
+import { COLORS } from "../config";
 
 const { height } = Dimensions.get("screen");
 
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 15,
     marginBottom: 20,
-    backgroundColor: colors.card,
+    backgroundColor: COLORS.card,
     shadowOffset: {
       width: 3,
       height: 7,
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 15,
   },
   name: {
-    fontSize: 22,
+    fontSize: 18,
     marginBottom: 8,
     fontWeight: "600",
     letterSpacing: 1.1,
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   price: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "600",
     color: "white",
   },

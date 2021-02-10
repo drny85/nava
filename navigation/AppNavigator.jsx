@@ -45,14 +45,14 @@ const AppNavigator = () => {
     <BottomTabs.Navigator
       tabBarOptions={{
         labelStyle: {
-          color: colors.secondary,
+          color: COLORS.secondary,
           fontWeight: "600",
         },
         style: {
           backgroundColor: colors.primary,
         },
-        inactiveTintColor: colors.ascent,
-        activeTintColor: colors.secondary,
+        inactiveTintColor: COLORS.secondary,
+        activeTintColor: COLORS.ascent,
       }}
     >
       <BottomTabs.Screen

@@ -14,7 +14,6 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { CheckBox } from "react-native-elements";
-import colors from "../../config/colors";
 import AppButton from "../../components/AppButton";
 import cartContext from "../../context/cart/cartContext";
 import { Alert } from "react-native";
@@ -22,6 +21,7 @@ import { Alert } from "react-native";
 import Loader from "../../components/Loader";
 import storesContext from "../../context/stores/storesContext";
 import Divider from "../../components/Divider";
+import { COLORS, SIZES } from "../../config";
 
 const heigth = Dimensions.get("screen").height;
 
@@ -181,9 +181,8 @@ const ProductDetail = ({ route, navigation }) => {
             <Text style={styles.price}>
               {item.sizes && checked ? `$${item.price[checked]}` : null}
               {item.sizes && !checked
-                ? `$${item.price[item.sizes[0]]} - $${
-                    item.price[item.sizes[item.sizes.length - 1]]
-                  }`
+                ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
+                }`
                 : null}
               {!item.sizes && `$${item.price}`}
             </Text>
@@ -214,8 +213,8 @@ const ProductDetail = ({ route, navigation }) => {
                       key={i}
                       center
                       textStyle={{ textTransform: "capitalize" }}
-                      checkedColor={colors.primary}
-                      containerStyle={{ backgroundColor: colors.tile }}
+                      checkedColor={COLORS.secondary}
+                      containerStyle={{ backgroundColor: COLORS.primary }}
                       checkedIcon="dot-circle-o"
                       uncheckedIcon="circle-o"
                       title={size}
@@ -239,14 +238,14 @@ const ProductDetail = ({ route, navigation }) => {
               onChangeText={(text) => setIntruction(text)}
               numberOfLines={3}
               placeholder="Dressing on the side? any request on this item, please let us know here."
-              placeholderTextColor={"grey"}
+              placeholderTextColor={COLORS.ascent}
             />
           </View>
         </ScrollView>
 
         <View style={styles.buttonView}>
           <AppButton
-            style={{ backgroundColor: colors.primary }}
+
             title="add to cart"
             onPress={handleAddToCart}
           />
@@ -284,7 +283,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     display: "flex",
     justifyContent: "center",
-    backgroundColor: colors.secondary,
+    backgroundColor: COLORS.secondary,
 
     marginRight: 20,
     borderRadius: 30,
@@ -303,11 +302,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   instruction: {
-    backgroundColor: colors.secondary,
+    backgroundColor: COLORS.card,
     height: 80,
     padding: 10,
-    fontSize: 16,
-    borderRadius: 10,
+    fontSize: 12,
+    borderRadius: SIZES.padding * 0.3,
   },
   scrollView: {
     // height: '100%'
@@ -317,7 +316,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: "space-between",
-    backgroundColor: colors.tile,
+    backgroundColor: COLORS.tile,
     height: "100%",
   },
   image: {

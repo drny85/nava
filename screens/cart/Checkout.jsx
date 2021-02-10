@@ -26,7 +26,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppSubmitButton from "../../components/AppSubmitButton";
 import authContext from "../../context/auth/authContext";
 import AppButton from "../../components/AppButton";
-import { FONTS, SIZES } from "../../config";
+import { COLORS, FONTS, SIZES } from "../../config";
 
 
 const zipCodes = ['10452', '10451', '10453', '10456', '10457']
@@ -186,7 +186,7 @@ const Checkout = ({ route, navigation }) => {
               style={{
                 height: "100%",
                 backgroundColor:
-                  deliveryOption === "delivery" ? colors.primary : colors.tile,
+                  deliveryOption === "delivery" ? COLORS.secondary : COLORS.white,
                 width: "50%",
                 alignItems: "center",
                 justifyContent: "center",
@@ -200,8 +200,8 @@ const Checkout = ({ route, navigation }) => {
                     fontWeight: "700",
                     color:
                       deliveryOption === "delivery"
-                        ? colors.secondary
-                        : "black",
+                        ? COLORS.white
+                        : COLORS.black
                   }}
                 >
                   Delivery
@@ -217,7 +217,7 @@ const Checkout = ({ route, navigation }) => {
               style={{
                 height: "100%",
                 backgroundColor:
-                  deliveryOption === "pickup" ? colors.primary : colors.tile,
+                  deliveryOption === "pickup" ? COLORS.secondary : COLORS.white,
                 width: "50%",
                 alignItems: "center",
                 justifyContent: "center",
@@ -230,7 +230,7 @@ const Checkout = ({ route, navigation }) => {
                     fontSize: 24,
                     fontWeight: "700",
                     color:
-                      deliveryOption === "pickup" ? colors.secondary : "black",
+                      deliveryOption === "pickup" ? COLORS.white : COLORS.black,
                   }}
                 >
                   Pick up
@@ -249,7 +249,7 @@ const Checkout = ({ route, navigation }) => {
                   type={paymentOption}
                   style={{
                     color:
-                      paymentOption === "credit" ? colors.secondary : "black",
+                      paymentOption === "credit" ? COLORS.white : COLORS.black
                   }}
                   onPress={() => setPaymentOption("credit")}
                 />
@@ -258,7 +258,7 @@ const Checkout = ({ route, navigation }) => {
                   title="cash"
                   style={{
                     color:
-                      paymentOption === "cash" ? colors.secondary : "black",
+                      paymentOption === "cash" ? COLORS.white : COLORS.black,
                   }}
                   type={paymentOption}
                   onPress={() => setPaymentOption("cash")}
@@ -270,7 +270,7 @@ const Checkout = ({ route, navigation }) => {
                     title="credit"
                     style={{
                       color:
-                        paymentOption === "credit" ? colors.secondary : "black",
+                        paymentOption === "credit" ? COLORS.white : COLORS.black,
                     }}
                     type={paymentOption}
                     onPress={() => setPaymentOption("credit")}
@@ -280,7 +280,7 @@ const Checkout = ({ route, navigation }) => {
                     title="in store"
                     style={{
                       color:
-                        paymentOption === "in store" ? colors.secondary : "black",
+                        paymentOption === "in store" ? COLORS.white : COLORS.black,
                     }}
                     type={paymentOption}
                     onPress={() => setPaymentOption("in store")}
@@ -289,7 +289,7 @@ const Checkout = ({ route, navigation }) => {
               )}
           </View>
           {deliveryOption === "delivery" && (
-            <View style={styles.addressView}>
+            <View style={[styles.addressView, { height: deliveryAddress ? SIZES.height * 0.30 : SIZES.height * 0.2 }]}>
               <Text style={{ ...FONTS.h4 }}>Delivery Information</Text>
               <TouchableWithoutFeedback
                 onPress={() =>
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   },
   addressView: {
     width: "100%",
-    height: Dimensions.get('screen').height * 0.30,
+
     alignItems: "center",
     marginVertical: 10,
   },
@@ -424,13 +424,14 @@ const styles = StyleSheet.create({
     height: Dimensions.get("screen").height * 0.15,
     elevation: 10,
     borderRadius: 5,
-    shadowColor: "grey",
+    shadowColor: COLORS.ascent,
     shadowOffset: {
       width: 3,
-      height: 3,
+      height: 7,
     },
     padding: 10,
     shadowOpacity: 0.7,
+    marginVertical: 8,
     shadowRadius: 10,
     borderColor: "grey",
     backgroundColor: colors.tile,

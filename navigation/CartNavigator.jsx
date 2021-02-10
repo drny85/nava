@@ -1,64 +1,34 @@
 import React, { useContext } from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
-import { CommonActions } from "@react-navigation/native";
+
 import colors from "../config/colors";
 import Cart from "../screens/cart/Cart";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import cartContext from "../context/cart/cartContext";
-import { Alert } from "react-native";
+
 import Checkout from "../screens/cart/Checkout";
 import OrderSummary from "../screens/orders/OrderSummary";
 import MyAddress from "../screens/profiles/MyAddress";
+import { COLORS } from "../config";
 
 const CartStack = createStackNavigator();
 
 const CartStackNavigator = ({ navigation }) => {
-	const { clearCart, cartItems } = useContext(cartContext);
 
-	const emptyCart = () => {
-		Alert.alert("Are you sure?", "You want to empty the cart", [
-			{ text: "Cancel", style: "cancel" },
-			{
-				text: "Yes", onPress: () => {
-					clearCart()
-					navigation.dispatch(
-						CommonActions.reset({
-							index: 1,
-							routes: [{ name: "Cart" }, { name: 'Cart' }],
-						})
-					);
-				}, style: "default"
-			},
-		]);
-		//clearCart();
-	};
 
 	return (
 		<CartStack.Navigator
 			screenOptions={{
-				headerTintColor: colors.secondary,
-				headerStyle: {
-					backgroundColor: colors.primary,
-				},
+				headerTintColor: COLORS.secondary,
+
 			}}
 		>
 			<CartStack.Screen
 				name="Cart"
 				component={Cart}
 				options={{
-					title: "My Cart",
+					title: "My Cart"
 
-					headerRight: () =>
-						cartItems.length > 0 && (
-							<MaterialCommunityIcons
-								onPress={emptyCart}
-								style={{ marginRight: 8 }}
-								name="delete"
-								size={30}
-								color={colors.ascent}
-							/>
-						),
+
 				}}
 			/>
 			<CartStack.Screen
@@ -79,6 +49,8 @@ const CartStackNavigator = ({ navigation }) => {
 			/>
 		</CartStack.Navigator>
 	);
-};
+
+}
+
 
 export default CartStackNavigator;

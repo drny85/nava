@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import colors from "../../config/colors";
 import ListItem from "../../components/ListItem";
 import { useNavigation } from "@react-navigation/native";
+import { COLORS, FONTS } from "../../config";
 
 const OrderDetails = ({ route }) => {
   const { order } = route.params;
@@ -25,7 +26,7 @@ const OrderDetails = ({ route }) => {
           style={{ marginLeft: 12 }}
           onPress={() => navigation.navigate('MyOrders')}
           name="md-arrow-back"
-          color={colors.primary}
+          color={COLORS.secondary}
           size={30}
         />
       }
@@ -54,7 +55,7 @@ const OrderDetails = ({ route }) => {
               </Text>
             )}
         </Text>
-        {order.instruction && (<Text style={styles.text}>Note: {order.instruction}</Text>)}
+        {order.instruction && (<Text style={{ ...FONTS.body4 }}>Note: {order.instruction}</Text>)}
       </View>
       <View
         style={{

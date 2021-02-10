@@ -10,23 +10,28 @@ import {
 } from "react-native";
 import AppButton from "../../components/AppButton";
 import cartContext from "../../context/cart/cartContext";
+import { CommonActions } from "@react-navigation/native";
 import colors from "../../config/colors";
 import CartItemTile from "../../components/CartItemTile";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import authContext from "../../context/auth/authContext";
 import settingsContext from "../../context/settings/settingsContext";
 import Loader from "../../components/Loader";
 import storesContext from "../../context/stores/storesContext";
+import { COLORS } from "../../config";
 
 const MINIMUM = 10
 
-const Cart = ({ navigation }) => {
+const Cart = ({ navigation, route }) => {
+	const [deleting, setDeleting] = useState(false)
 	const {
 		cartItems,
 		getCartItems,
 		loading,
 		addToCart,
 		cartTotal,
+		clearCart,
 		itemCounts,
 		deleteFromCart,
 	} = useContext(cartContext);
@@ -60,16 +65,63 @@ const Cart = ({ navigation }) => {
 		});
 	};
 
+	const emptyCart = () => {
+		Alert.alert("Are you sure?", "You want to empty the cart", [
+			{ text: "Cancel", style: "cancel" },
+			{
+				text: "Yes", onPress: async () => {
+
+					try {
+						setDeleting(true)
+						const deleted = await clearCart()
+						if (deleted) {
+							navigation.dispatch(
+								CommonActions.reset({
+									index: 1,
+									routes: [{ name: "Cart" }],
+								})
+							);
+						}
+
+					} catch (error) {
+						console.log(error)
+					} finally {
+						setDeleting(false)
+					}
+
+				}, style: "default"
+			},
+		]);
+	}
+
+	useLayoutEffect(() => {
+		navigation.setOptions({
+			headerRight: () =>
+				cartItems.length > 0 && (
+					<MaterialCommunityIcons
+						onPress={emptyCart}
+						style={{ marginRight: 8 }}
+						name="delete"
+						size={30}
+						color={colors.ascent}
+					/>
+				),
+		})
+	}, [navigation, route])
+
 
 	useEffect(() => {
 		getCartItems();
-
 
 		return () => {
 
 		}
 
 	}, []);
+
+
+
+	if (deleting) return <Loader />
 
 	return (
 		<View style={styles.container}>
@@ -109,7 +161,7 @@ const Cart = ({ navigation }) => {
 					style={{
 						marginBottom: 8,
 						width: "95%",
-						backgroundColor: colors.primary,
+						backgroundColor: COLORS.secondary,
 					}}
 					title={`Checkout: $${cartTotal.toFixed(2)}`}
 					onPress={continueToCheckOut}
@@ -126,14 +178,14 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	btn: {
-		backgroundColor: colors.primary,
+		backgroundColor: COLORS.secondary,
 
 	},
 
 	cartTotalView: {
 		height: 60,
 		width: "100%",
-		backgroundColor: colors.ascent,
+		backgroundColor: COLORS.ascent,
 		justifyContent: "center",
 		alignItems: "center",
 	},
@@ -141,7 +193,7 @@ const styles = StyleSheet.create({
 	text: {
 		fontSize: 28,
 		fontWeight: "bold",
-		color: colors.secondary,
+		color: COLORS.secondary,
 	},
 	noItems: {
 		justifyContent: "center",

@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { COLORS } from "../config";
 import colors from "../config/colors";
 
 const AppButton = ({ title, onPress, style, textStyle, disabled = false }) => {
@@ -12,7 +13,7 @@ const AppButton = ({ title, onPress, style, textStyle, disabled = false }) => {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: colors.ascent,
+		backgroundColor: COLORS.secondary,
 		borderRadius: 25,
 		width: "100%",
 		padding: 12,

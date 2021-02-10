@@ -7,6 +7,7 @@ import { CommonActions } from "@react-navigation/native";
 import Screen from "../../components/Screen";
 
 import LottieView from "lottie-react-native";
+import { COLORS } from "../../config";
 
 const OrderConfirmation = ({ navigation, route }) => {
   const { order } = route.params;
@@ -36,7 +37,7 @@ const OrderConfirmation = ({ navigation, route }) => {
         <LottieView
           loop={false}
           autoPlay
-          colorFilters={[{ keypath: "Sending Loader", color: "#6D042A" }]}
+          colorFilters={[{ keypath: "Sending Loader", color: COLORS.secondary }]}
           onAnimationFinish={() => setIsVisible(false)}
           source={require("../../assets/animations/done.json")}
         />

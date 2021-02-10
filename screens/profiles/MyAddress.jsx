@@ -24,6 +24,7 @@ import authContext from "../../context/auth/authContext";
 import { Alert } from "react-native";
 import SwipeDelete from "../../components/SwipeDelete";
 import Divider from "../../components/Divider";
+import { COLORS } from "../../config";
 
 const addressSchema = Yup.object().shape({
 	street: Yup.string().required().label("Street"),
@@ -88,7 +89,7 @@ const MyAddress = ({ navigation, route }) => {
 		<Screen style={styles.container}>
 			<AppButton
 				style={styles.btn}
-				textStyle={{ color: colors.primary, fontSize: 15 }}
+				textStyle={{ fontSize: 15, color: COLORS.white }}
 				title="Add New Address"
 				onPress={() => setVisible(true)}
 			/>
@@ -153,6 +154,7 @@ const MyAddress = ({ navigation, route }) => {
 								<AppFormField
 									name="street"
 									style={{ textTransform: "capitalize" }}
+									autoCapitalize='words'
 									placeholder="Street number and name"
 								/>
 								<AppFormField name="apt" placeholder="Apt, Suite, Floor" />
@@ -169,7 +171,7 @@ const MyAddress = ({ navigation, route }) => {
 								/>
 
 								<AppSubmitButton
-									style={{ backgroundColor: colors.primary, marginTop: 20 }}
+									style={{ backgroundColor: COLORS.secondary, marginTop: 20 }}
 									title="Save Address"
 								/>
 							</AppForm>
@@ -191,7 +193,7 @@ const styles = StyleSheet.create({
 	btn: {
 		width: "80%",
 		marginVertical: 10,
-		backgroundColor: "transparent",
+
 		color: colors.primary,
 		borderWidth: 1,
 		borderColor: colors.primary,

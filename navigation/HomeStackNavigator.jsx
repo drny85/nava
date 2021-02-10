@@ -36,7 +36,7 @@ const HomeStackNavigator = () => {
           headerBackground: () => (
             <View
               style={{
-                backgroundColor: colors.primary,
+                backgroundColor: COLORS.primary,
 
               }}
             ></View>

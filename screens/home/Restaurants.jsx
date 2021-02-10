@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.primary,
   },
   modal: {
     position: "absolute",
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     right: 0,
     width: SIZES.width,
     height: "50%",
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.ascent,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
   },

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -10,6 +10,8 @@ import {
   ScrollView,
   KeyboardAvoidingView
 } from "react-native";
+
+import { Ionicons } from '@expo/vector-icons';
 
 
 import authContext from "../../context/auth/authContext";
@@ -30,7 +32,7 @@ import CardSummaryItem from "../../components/CardSummaryItem";
 import { TextInput } from "react-native-gesture-handler";
 import storesContext from "../../context/stores/storesContext";
 import Divider from "../../components/Divider";
-import { FONTS } from "../../config";
+import { COLORS, FONTS } from "../../config";
 import Loader from "../../components/Loader";
 
 const OrderSummary = ({ navigation, route }) => {
@@ -126,6 +128,20 @@ const OrderSummary = ({ navigation, route }) => {
     }
   };
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => {
+        return <Ionicons
+          style={{ marginLeft: 12 }}
+          onPress={() => navigation.goBack()}
+          name="md-arrow-back"
+          color={COLORS.secondary}
+          size={30}
+        />
+      }
+    })
+  }, [navigation])
+
 
 
   if (loading) return <Loader />
@@ -209,7 +225,7 @@ const OrderSummary = ({ navigation, route }) => {
                 You will pay with debit or credit card, please have it ready.
             </Text>
               <Divider />
-              <Text style={styles.text}>
+              <Text style={[styles.text]}>
                 Just click Pay Now at the bottom to enter your card information.
             </Text>
             </View>
@@ -246,7 +262,7 @@ const OrderSummary = ({ navigation, route }) => {
       <View style={{ position: "absolute", bottom: 8, width: "100%", }}>
         <AppButton
           style={{ width: '90%', alignSelf: 'center' }}
-          title={paymentMethod === "credit" ? "Pay Now" : "Place Order"}
+          title={paymentMethod === "credit" ? `Pay $${cartTotal.toFixed(2)}` : "Place Order"}
           onPress={handlePayment}
         />
       </View>
@@ -315,6 +331,7 @@ const styles = StyleSheet.create({
     fontFamily: "montserrat",
     fontSize: 16,
     marginBottom: 12,
+
   },
   storeInfo: {
     width: '100%',

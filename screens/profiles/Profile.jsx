@@ -17,11 +17,14 @@ import * as ImagePicker from "expo-image-picker";
 
 
 import { Alert } from "react-native";
-
+import { Feather } from "@expo/vector-icons";
 import { storage, db } from "../../services/database";
+import { Modal } from "react-native";
+import { COLORS } from "../../config";
 
 const Profile = ({ navigation }) => {
   const [image, setImage] = useState("");
+  const [show, setShow] = useState(false);
   const [hasPermission, setHasPermission] = useState(false);
   const { user, setUser } = useContext(authContext);
 
@@ -131,7 +134,7 @@ const Profile = ({ navigation }) => {
         />
         <ProfileItem
           text="Personal Info"
-          onPress={() => console.log("go to my personal info")}
+          onPress={() => setShow(true)}
         />
         <ProfileItem
           text="My Delivery Addresses"
@@ -144,6 +147,30 @@ const Profile = ({ navigation }) => {
           }
         />
       </View>
+      <Modal visible={show} animationType='slide'>
+        <View style={styles.modal}>
+          <TouchableWithoutFeedback
+            onPress={() => setShow(false)
+
+            }
+          >
+            <View style={styles.back}>
+              <Feather
+                name="x"
+                style={{ fontWeight: "700" }}
+                size={24}
+                color="black"
+              />
+            </View>
+          </TouchableWithoutFeedback>
+          <View>
+            <Text>Name: {user.name} {user.lastName}</Text>
+            <Text>Phone: {user.phone}</Text>
+            <Text>Email: {user.email}</Text>
+          </View>
+        </View>
+
+      </Modal>
     </Screen>
   );
 };
@@ -151,6 +178,18 @@ const Profile = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
+  },
+  back: {
+    position: "absolute",
+    top: 50,
+    left: 10,
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    zIndex: 3,
+    backgroundColor: COLORS.primary,
+    alignItems: "center",
+    justifyContent: "center",
   },
   img: {
     width: "100%",
@@ -163,6 +202,12 @@ const styles = StyleSheet.create({
     height: Dimensions.get("screen").height * 0.3,
     borderRadius: Dimensions.get("screen").height / 2,
     marginVertical: 10,
+  },
+  modal: {
+    flex: 1,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   profile_view: {
     flex: 1,

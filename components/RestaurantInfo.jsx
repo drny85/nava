@@ -126,9 +126,9 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
         )}
 
         <TouchableOpacity style={styles.btn} onPress={makeCall}>
-          <Feather name="phone" size={24} color={colors.tile} />
+          <Feather name="phone" size={24} color={COLORS.primary} />
           <Text
-            style={{ marginHorizontal: 8, fontSize: 18, color: colors.tile }}
+            style={{ marginHorizontal: 8, fontSize: 18, color: COLORS.primary }}
           >
             Call Restaurant
           </Text>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.primary,
+    backgroundColor: COLORS.secondary,
     marginVertical: 20,
     height: 50,
     width: Dimensions.get("screen").width * 0.6,

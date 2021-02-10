@@ -13,6 +13,8 @@ import MyAddress from "../screens/profiles/MyAddress";
 import MyFavorites from "../screens/profiles/MyFavorites";
 
 import { CommonActions } from "@react-navigation/native";
+import { COLORS } from "../config";
+import { color } from "react-native-reanimated";
 
 const ProfileStack = createStackNavigator();
 
@@ -52,21 +54,22 @@ const ProfileStackNavigator = ({ navigation }) => {
               onPress={handleLogout}
             >
               {user && (
-                <Text style={{ color: colors.primary, fontWeight: "700" }}>
+                <Text style={{ color: COLORS.secondary, fontWeight: "700" }}>
                   Log Out
                 </Text>
               )}
             </TouchableOpacity>
           ),
           headerShown: user && true,
+          headerBackTitleStyle: { color: COLORS.secondary }
         }}
       />
       <ProfileStack.Screen
         name="MyAddress"
         component={MyAddress}
-        options={{ title: "My Addresses", headerBackTitle: "Profile" }}
+        options={{ title: "My Addresses", headerBackTitle: "Profile", headerBackTitleStyle: { color: COLORS.secondary } }}
       />
-      <ProfileStack.Screen name="Favorites" component={MyFavorites} />
+      <ProfileStack.Screen name="Favorites" component={MyFavorites} options={{ headerBackTitleStyle: { color: COLORS.secondary } }} />
       <ProfileStack.Screen name="Signin" component={Signin} />
       <ProfileStack.Screen name="Signup" component={Signup} />
     </ProfileStack.Navigator>

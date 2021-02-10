@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useLayoutEffect, useRef } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import ordersContext from "../../context/order/orderContext";
 import authContext from "../../context/auth/authContext";
@@ -9,6 +9,9 @@ import { WebView } from "react-native-webview";
 import { stripeCheckoutRedirectHTML } from "../StripeCheckout";
 import Signin from "../profiles/Signin";
 import cartContext from "../../context/cart/cartContext";
+import { COLORS } from "../../config";
+
+import { Ionicons } from '@expo/vector-icons';
 
 const OrderVerification = ({ navigation, route }) => {
   const { placeOrder } = useContext(ordersContext);
@@ -22,6 +25,21 @@ const OrderVerification = ({ navigation, route }) => {
   if (!user) {
     return <Signin />;
   }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+
+      headerLeft: () => {
+        return <Ionicons
+          style={{ marginLeft: 12 }}
+          onPress={() => navigation.goBack()}
+          name="md-arrow-back"
+          color={COLORS.secondary}
+          size={30}
+        />
+      }
+    })
+  }, [navigation])
 
   if (loading) return <Loader />;
 
