@@ -15,7 +15,6 @@ import { Dimensions } from "react-native";
 import ProfileItem from "../../components/ProfileItem";
 import * as ImagePicker from "expo-image-picker";
 
-
 import { Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { storage, db } from "../../services/database";
@@ -48,7 +47,6 @@ const Profile = ({ navigation }) => {
       if (user.imageUrl) {
         const ref = storage.ref(`profile/${filename}`);
         if (ref) {
-          console.log("YES");
           await ref.delete();
         }
       }
@@ -132,10 +130,7 @@ const Profile = ({ navigation }) => {
           text="my orders"
           onPress={() => navigation.navigate("Orders", { previous: "Profile" })}
         />
-        <ProfileItem
-          text="Personal Info"
-          onPress={() => setShow(true)}
-        />
+        <ProfileItem text="Personal Info" onPress={() => setShow(true)} />
         <ProfileItem
           text="My Delivery Addresses"
           onPress={() => navigation.navigate("MyAddress", { previous: null })}
@@ -147,13 +142,9 @@ const Profile = ({ navigation }) => {
           }
         />
       </View>
-      <Modal visible={show} animationType='slide'>
+      <Modal visible={show} animationType="slide">
         <View style={styles.modal}>
-          <TouchableWithoutFeedback
-            onPress={() => setShow(false)
-
-            }
-          >
+          <TouchableWithoutFeedback onPress={() => setShow(false)}>
             <View style={styles.back}>
               <Feather
                 name="x"
@@ -164,12 +155,13 @@ const Profile = ({ navigation }) => {
             </View>
           </TouchableWithoutFeedback>
           <View>
-            <Text>Name: {user.name} {user.lastName}</Text>
+            <Text>
+              Name: {user.name} {user.lastName}
+            </Text>
             <Text>Phone: {user.phone}</Text>
             <Text>Email: {user.email}</Text>
           </View>
         </View>
-
       </Modal>
     </Screen>
   );
@@ -206,8 +198,8 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     backgroundColor: COLORS.primary,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   profile_view: {
     flex: 1,

@@ -9,6 +9,7 @@ import OrderTile from "../../components/OrderTile";
 import AppButton from "../../components/AppButton";
 import { COLORS, SIZES } from "../../config";
 import Divider from "../../components/Divider";
+import Spinner from "../../components/Spinner";
 
 const MyOrders = ({ navigation }) => {
   const { user } = useContext(authContext);
@@ -28,7 +29,7 @@ const MyOrders = ({ navigation }) => {
   }, []);
 
   if (loading) {
-    return <Loader />;
+    return <Spinner />;
   }
 
   if (orders.length === 0) {

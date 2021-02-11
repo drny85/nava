@@ -12,6 +12,7 @@ import FloatingButton from "../../components/FloatingButton";
 import RestaurantInfo from "../../components/RestaurantInfo";
 import { COLORS, FONTS, SIZES } from "../../config";
 import MostPouplarItem from "../../components/MostPouplarItem";
+import Spinner from "../../components/Spinner";
 
 const Home = ({ route, navigation }) => {
   const itemsContext = useContext(ItemsContext);
@@ -33,7 +34,7 @@ const Home = ({ route, navigation }) => {
   }, [restaurant?.id]);
 
   if (loading) {
-    return <Loader size="large" />;
+    return <Spinner />;
   }
 
   return (

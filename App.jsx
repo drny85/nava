@@ -16,61 +16,59 @@ import navigationTheme from "./navigation/navigationTheme";
 import StoresState from "./context/stores/storesState";
 
 const loadFonts = async () => {
-	return await Font.loadAsync({
-		montserrat: require("./assets/fonts/Montserrat-Regular.ttf"),
-		"monte": require('./assets/fonts/Montez-Regular.ttf'),
-		"montserrat-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
-		"montserrat-bold-italic": require("./assets/fonts/Montserrat-BoldItalic.ttf"),
-		"tange": require('./assets/fonts/Tangerine-Regular.ttf'),
-
-
-	});
-}
+  return await Font.loadAsync({
+    montserrat: require("./assets/fonts/Montserrat-Regular.ttf"),
+    monte: require("./assets/fonts/Montez-Regular.ttf"),
+    "montserrat-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
+    "montserrat-bold-italic": require("./assets/fonts/Montserrat-BoldItalic.ttf"),
+    tange: require("./assets/fonts/Tangerine-Regular.ttf"),
+  });
+};
 
 const App = () => {
-	const [isReady, setIsReady] = React.useState(false);
-	const { getCurrentUser, authUnsubcribe } = React.useContext(authContext);
+  const [isReady, setIsReady] = React.useState(false);
+  const { getCurrentUser, authUnsubcribe } = React.useContext(authContext);
 
-	React.useEffect(() => {
-		return () => {
-			console.log("Unsubcribing user");
-			authUnsubcribe();
-		};
-	}, []);
+  React.useEffect(() => {
+    return () => {
+      console.log("Unsubcribing user");
+      authUnsubcribe();
+    };
+  }, []);
 
-	if (!isReady) {
-		loadFonts();
-		return (
-			<AppLoading
-				startAsync={getCurrentUser}
-				onFinish={() => setIsReady(true)}
-			/>
-		);
-	}
+  if (!isReady) {
+    loadFonts();
+    return (
+      <AppLoading
+        startAsync={getCurrentUser}
+        onFinish={() => setIsReady(true)}
+      />
+    );
+  }
 
-	return (
-		<StoresState>
-			<ItemsState>
-				<SettingsState>
-					<CategoryState>
-						<CartState>
-							<OrdersState>
-								<NavigationContainer theme={navigationTheme}>
-									<AppNavigator />
-								</NavigationContainer>
-							</OrdersState>
-						</CartState>
-					</CategoryState>
-				</SettingsState>
-			</ItemsState>
-		</StoresState>
-	);
+  return (
+    <StoresState>
+      <ItemsState>
+        <SettingsState>
+          <CategoryState>
+            <CartState>
+              <OrdersState>
+                <NavigationContainer theme={navigationTheme}>
+                  <AppNavigator />
+                </NavigationContainer>
+              </OrdersState>
+            </CartState>
+          </CategoryState>
+        </SettingsState>
+      </ItemsState>
+    </StoresState>
+  );
 };
 
 export default () => {
-	return (
-		<AuthState>
-			<App />
-		</AuthState>
-	);
+  return (
+    <AuthState>
+      <App />
+    </AuthState>
+  );
 };

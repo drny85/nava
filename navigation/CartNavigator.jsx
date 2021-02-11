@@ -13,44 +13,37 @@ import { COLORS } from "../config";
 const CartStack = createStackNavigator();
 
 const CartStackNavigator = ({ navigation }) => {
+  return (
+    <CartStack.Navigator
+      screenOptions={{
+        headerTintColor: COLORS.secondary,
+      }}
+    >
+      <CartStack.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          title: "My Cart",
+        }}
+      />
+      <CartStack.Screen
+        name="OrderSummary"
+        component={OrderSummary}
+        options={{ title: "Order Summary" }}
+      />
+      <CartStack.Screen
+        name="Checkout"
+        component={Checkout}
+        options={{ title: "Check Out" }}
+      />
 
-
-	return (
-		<CartStack.Navigator
-			screenOptions={{
-				headerTintColor: COLORS.secondary,
-
-			}}
-		>
-			<CartStack.Screen
-				name="Cart"
-				component={Cart}
-				options={{
-					title: "My Cart"
-
-
-				}}
-			/>
-			<CartStack.Screen
-				name="OrderSumaary"
-				component={OrderSummary}
-				options={{ title: "Order Summary" }}
-			/>
-			<CartStack.Screen
-				name="Checkout"
-				component={Checkout}
-				options={{ title: "Check Out" }}
-			/>
-
-			<CartStack.Screen
-				name="MyAddress"
-				component={MyAddress}
-				options={{ title: "My Address", headerBackTitle: "CheckOut" }}
-			/>
-		</CartStack.Navigator>
-	);
-
-}
-
+      <CartStack.Screen
+        name="MyAddress"
+        component={MyAddress}
+        options={{ title: "My Address", headerBackTitle: "CheckOut" }}
+      />
+    </CartStack.Navigator>
+  );
+};
 
 export default CartStackNavigator;

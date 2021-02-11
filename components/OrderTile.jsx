@@ -9,28 +9,31 @@ import {
   Alert,
 } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
-import moment from "moment";
+import LottieView from "lottie-react-native";
 
 import colors from "../config/colors";
 import { COLORS, FONTS, SIZES } from "../config";
 import cartContext from "../context/cart/cartContext";
 import { useNavigation } from "@react-navigation/native";
-import Loader from "./Loader";
+
+import Spinner from "./Spinner";
+import ordersContext from "../context/order/orderContext";
 
 const OrderTile = ({ order, onPress }) => {
   const { addToCart, cartItems, clearCart } = useContext(cartContext);
-  const [loading, setLoading] = useState(false);
+
+  const { loadingOrders, stopOrdersLoading } = useContext(ordersContext);
   const navigation = useNavigation();
   const addThem = async () => {
     try {
-      setLoading(true);
+      await loadingOrders();
       for (let index = 0; index < order.items.length; index++) {
         const element = order.items[index];
 
         await addToCart(element);
         //calculateCartTotal(order.items)
       }
-      setLoading(false);
+      stopOrdersLoading();
       // navigation.navigate('Cart')
     } catch (error) {
       console.log("Error adding items to cart", error);
@@ -47,9 +50,11 @@ const OrderTile = ({ order, onPress }) => {
             {
               text: "Yes Please",
               onPress: async () => {
+                await loadingOrders();
+
                 await clearCart();
                 await addThem();
-
+                await stopOrdersLoading();
                 navigation.navigate("Orders", {
                   screen: "OrderSummary",
                   params: {
@@ -70,7 +75,9 @@ const OrderTile = ({ order, onPress }) => {
           ]
         );
       } else {
+        loadingOrders();
         await addThem();
+        stopOrdersLoading();
 
         navigation.navigate("Orders", {
           screen: "OrderSummary",
@@ -86,7 +93,6 @@ const OrderTile = ({ order, onPress }) => {
     }
   };
 
-  if (loading) return <Loader />;
   return (
     <TouchableOpacity onPress={onPress} style={[styles.container]}>
       {/* restaurant image view */}
@@ -132,7 +138,7 @@ const OrderTile = ({ order, onPress }) => {
         onPress={addToCartAndCheckout}
         style={{
           backgroundColor:
-            order.status === "new" ? COLORS.lightGray : COLORS.primary,
+            order.status === "new" ? COLORS.lightGray : COLORS.secondary,
           borderRadius: 30,
           alignItems: "center",
           justifyContent: "center",
@@ -140,8 +146,8 @@ const OrderTile = ({ order, onPress }) => {
           paddingHorizontal: 15,
         }}
       >
-        <Text style={{ ...FONTS.body5, color: COLORS.white }}>
-          {order.status === "new" ? "Progress" : "Reorder"}
+        <Text style={{ ...FONTS.body5, color: COLORS.primary }}>
+          {order.status === "new" ? "Progress" : "Re-order"}
         </Text>
       </TouchableOpacity>
       <EvilIcons name="chevron-right" size={35} color={colors.ascent} />

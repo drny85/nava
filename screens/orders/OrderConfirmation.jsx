@@ -37,7 +37,9 @@ const OrderConfirmation = ({ navigation, route }) => {
         <LottieView
           loop={false}
           autoPlay
-          colorFilters={[{ keypath: "Sending Loader", color: COLORS.secondary }]}
+          colorFilters={[
+            { keypath: "Sending Loader", color: COLORS.secondary },
+          ]}
           onAnimationFinish={() => setIsVisible(false)}
           source={require("../../assets/animations/done.json")}
         />

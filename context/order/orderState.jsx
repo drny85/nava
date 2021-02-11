@@ -3,7 +3,12 @@ import React, { useReducer } from "react";
 import OrderReducer from "./orderReducer";
 import OrderContex from "./orderContext";
 import { db } from "../../services/database";
-import { GET_ORDERS, SET_LOADING } from "../types";
+import {
+  GET_ORDERS,
+  ORDER_LOADING,
+  SET_LOADING,
+  STOP_ORDER_LOADING,
+} from "../types";
 import { diffClamp } from "react-native-reanimated";
 
 const OrdersState = (props) => {
@@ -159,6 +164,9 @@ const OrdersState = (props) => {
     ordersSubscrition();
   };
 
+  const loadingOrders = () => dispatch({ type: ORDER_LOADING });
+  const stopOrdersLoading = () => dispatch({ type: STOP_ORDER_LOADING });
+
   const setLoading = () => dispatch({ type: SET_LOADING });
   return (
     <OrderContex.Provider
@@ -167,6 +175,8 @@ const OrdersState = (props) => {
         order: state.order,
         loading: state.loading,
         filtered: state.filtered,
+        loadingOrders,
+        stopOrdersLoading,
         getOrders,
         placeOrder,
         Unsubscribe,

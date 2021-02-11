@@ -27,6 +27,8 @@ export const REMOVE_ALERT = "REMOVE_ALERT";
 export const LOGIN = "LOGIN";
 export const SIGNUP = "SIGNUP";
 export const PLACE_ORDER = "PLACE_ORDER";
+export const ORDER_LOADING = "ORDER_LOADING";
+export const STOP_ORDER_LOADING = "STOP_ORDER_LOADING";
 
 export const LOGOUT = "LOGOUT";
 export const AUTH_ERROR = "AUTH_ERROR";
