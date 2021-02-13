@@ -5,11 +5,12 @@ import { STRIPE } from "../config/stripeSettings";
  *
  * @returns {String}
  */
-export function stripeCheckoutRedirectHTML(order, items) {
-	if (!order) {
-		return;
-	}
-	return `
+export function stripeCheckoutRedirectHTML(order, items, public_key) {
+
+    if (!order) {
+        return;
+    }
+    return `
   <html>
   <body>
   <!-- Load Stripe.js on your website. -->
@@ -21,7 +22,7 @@ export function stripeCheckoutRedirectHTML(order, items) {
   <div id="error-message"></div>
   <script>
       ( function () {
-          var stripe = Stripe( '${STRIPE.PUBLIC_KEY}' );
+          var stripe = Stripe( '${public_key}' );
           window.onload = function () {
              
               fetch( '${STRIPE.DB_URL}', {
@@ -34,6 +35,7 @@ export function stripeCheckoutRedirectHTML(order, items) {
 
                   },
                   body: JSON.stringify( {
+                     
                       amount: "${order.totalAmount}",
                       items: ${items},
                       email: "${order.customer.email}",

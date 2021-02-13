@@ -100,23 +100,23 @@ const MyAddress = ({ navigation, route }) => {
           <Text style={{ fontSize: 16 }}>No Preferred Address</Text>
         </View>
       ) : (
-        <View style={styles.mainView}>
-          <FlatList
-            ItemSeparatorComponent={() => <Divider />}
-            data={addresses.sort((a, b) => b.dateAdded > a.dateAdded)}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <AddressTile
-                address={item}
-                onPress={() => (previous ? handleAddressPress(item) : null)}
-                renderRightActions={() => (
-                  <SwipeDelete onPress={() => deleteAddressHandler(item)} />
-                )}
-              />
-            )}
-          />
-        </View>
-      )}
+          <View style={styles.mainView}>
+            <FlatList
+              ItemSeparatorComponent={() => <Divider />}
+              data={addresses.sort((a, b) => b.dateAdded > a.dateAdded)}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <AddressTile
+                  address={item}
+                  onPress={() => (previous ? handleAddressPress(item) : null)}
+                  renderRightActions={() => (
+                    <SwipeDelete onPress={() => deleteAddressHandler(item)} />
+                  )}
+                />
+              )}
+            />
+          </View>
+        )}
 
       <Modal
         visible={visible}

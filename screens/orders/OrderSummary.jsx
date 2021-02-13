@@ -12,17 +12,14 @@ import {
 } from "react-native";
 
 import { Ionicons } from '@expo/vector-icons';
-
-
+import { STRIPE } from '../../config/stripeSettings'
 import authContext from "../../context/auth/authContext";
 import Screen from "../../components/Screen";
 
 import Order from "../../models/Order";
 
 import ListItem from "../../components/ListItem";
-
 import { CommonActions } from "@react-navigation/native";
-
 import cartContext from "../../context/cart/cartContext";
 
 import ordersContext from "../../context/order/orderContext";
@@ -34,6 +31,7 @@ import storesContext from "../../context/stores/storesContext";
 import Divider from "../../components/Divider";
 import { COLORS, FONTS } from "../../config";
 import Loader from "../../components/Loader";
+import Axios from "axios";
 
 const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
@@ -48,8 +46,6 @@ const OrderSummary = ({ navigation, route }) => {
   const [instruction, setInstrction] = useState(null)
 
   const { deliveryMethod, customer, paymentMethod } = route.params;
-
-
 
   if (!user) {
     navigation.navigate("Profile", {
@@ -85,19 +81,28 @@ const OrderSummary = ({ navigation, route }) => {
         paymentMethod,
         status,
         instruction,
-        restaurant
+        restaurant,
+
 
       );
-
+      console.log(newOrder)
 
       if (cartItems.length > 0) {
         //handle payment with credit
-        if (paymentMethod === "credit") {
-          navigation.navigate("Orders", {
-            screen: "OrderVerification",
 
-            params: { newOrder, paymentMethod },
-          });
+        if (paymentMethod === "credit") {
+          const res = await Axios.get(`${STRIPE.PUBLIC_KEY_URL}/${restaurant.id}`)
+          if (res.status === 200) {
+            navigation.navigate("Orders", {
+              screen: "OrderVerification",
+
+              params: { newOrder, paymentMethod, public_key: res.data },
+            });
+          } else {
+            alert('Payment error')
+            return
+          }
+
         } else {
           //handle payment with cash
 

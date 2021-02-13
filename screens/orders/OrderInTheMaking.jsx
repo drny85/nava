@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import LottieView from "lottie-react-native";
+import { COLORS } from "../../config";
 
 const OrderInTheMaking = ({ navigation }) => {
 
@@ -21,7 +22,7 @@ const OrderInTheMaking = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "white",
+		backgroundColor: '#ffffff',
 	},
 });
 

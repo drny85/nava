@@ -1,5 +1,5 @@
 import React, { useContext, useLayoutEffect, useRef } from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, Alert } from "react-native";
 import ordersContext from "../../context/order/orderContext";
 import authContext from "../../context/auth/authContext";
 
@@ -17,7 +17,7 @@ const OrderVerification = ({ navigation, route }) => {
   const { placeOrder } = useContext(ordersContext);
   const { clearCart } = useContext(cartContext);
   const { user, loading } = useContext(authContext);
-  const { newOrder, paymentMethod } = route.params;
+  const { newOrder, paymentMethod, public_key } = route.params;
   const items = JSON.stringify(newOrder.items);
 
   const webRef = useRef(null);
@@ -76,6 +76,7 @@ const OrderVerification = ({ navigation, route }) => {
       //maybe close this view?
     } else {
       console.log("processing");
+
     }
   };
 
@@ -106,15 +107,13 @@ const OrderVerification = ({ navigation, route }) => {
     <WebView
       ref={webRef}
       originWhitelist={["*"]}
-      source={{ html: stripeCheckoutRedirectHTML(newOrder, items) }}
+      source={{ html: stripeCheckoutRedirectHTML(newOrder, items, public_key) }}
       onLoadStart={onLoadStart}
       onNavigationStateChange={handleChange}
     />
   );
 };
 
-const styles = StyleSheet.create({
-  container: {},
-});
+
 
 export default OrderVerification;

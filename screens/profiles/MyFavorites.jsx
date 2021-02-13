@@ -33,10 +33,10 @@ const MyFavorites = ({ navigation }) => {
           )}
         />
       ) : (
-        <View>
-          <Text>No Favorite Stores.</Text>
-        </View>
-      )}
+          <View>
+            <Text>No Favorite Stores.</Text>
+          </View>
+        )}
     </Screen>
   );
 };

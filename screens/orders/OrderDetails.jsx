@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     //fontFamily: "montserrat",
+
   },
 
   orderInfo: {

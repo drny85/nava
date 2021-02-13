@@ -8,15 +8,22 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const Stripe = require("stripe");
-const stripe = Stripe("sk_test_3XShaHWNu48XiJcCo0OPgNls");
+const config = require('./config')
+//const stripe = Stripe("sk_test_3XShaHWNu48XiJcCo0OPgNls");
+const secrets = config.secret;
+const public = config.public;
 
 app.use(cors());
 app.use(express.json());
 
 app.post("/payment", async (req, res) => {
   try {
-    const { items, email } = req.body;
+    const { items, email} = req.body;
+    const restaurantKey = items[0].storeId.toLowerCase();
+ 
+    const stripe = Stripe(secrets[restaurantKey])
     const newItems = items.map((item) => {
+      console.log(item.price)
       return {
         price_data: {
           currency: "usd",
@@ -42,9 +49,23 @@ app.post("/payment", async (req, res) => {
       session_id: session.id,
     });
   } catch (error) {
-    console.log("ERROR", error);
+    console.log("ERROR", error.message);
     return res.status(500).send(error.message);
   }
 });
 
+app.get('/stripeKey/:id', async(req, res) => {
+  try {
+    const id = req.params.id
+    const key = public[id.toLowerCase()]
+    return res.status(200).send(key)
+
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).send(error.message);
+  }
+})
+
 exports.makePayment = functions.https.onRequest(app);
+

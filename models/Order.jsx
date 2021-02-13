@@ -8,7 +8,8 @@ class Order {
 		paymentMethod,
 		status = 'new',
 		instruction,
-		restaurant
+		restaurant,
+
 	) {
 		(this.userId = userId),
 			(this.items = items),
@@ -19,7 +20,9 @@ class Order {
 			(this.status = status),
 			(this.instruction = instruction),
 			(this.restaurant = restaurant)
+
 	}
+
 }
 
 export default Order;

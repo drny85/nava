@@ -11,6 +11,8 @@ const Screen = ({ children, style }) => {
 
       {children}
       <StatusBar style='auto' />
+
+
     </SafeAreaView>
   );
 };

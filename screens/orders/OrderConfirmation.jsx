@@ -17,7 +17,7 @@ const OrderConfirmation = ({ navigation, route }) => {
   const resetCartNavigation = () => {
     navigation.dispatch(
       CommonActions.reset({
-        index: 2,
+        index: 1,
         routes: [{ name: "Cart" }],
       })
     );
@@ -50,8 +50,10 @@ const OrderConfirmation = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   screen: {
+
     justifyContent: "center",
     alignItems: "center",
+
   },
 });
 
