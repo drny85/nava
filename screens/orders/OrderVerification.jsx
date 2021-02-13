@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useRef } from "react";
+import React, { useContext, useLayoutEffect, useRef, useState } from "react";
 import { View, Alert } from "react-native";
 import ordersContext from "../../context/order/orderContext";
 import authContext from "../../context/auth/authContext";
@@ -11,11 +11,14 @@ import Signin from "../profiles/Signin";
 import cartContext from "../../context/cart/cartContext";
 import { COLORS } from "../../config";
 
+import Spinner from '../../components/Spinner'
+
 import { Ionicons } from '@expo/vector-icons';
 
 const OrderVerification = ({ navigation, route }) => {
   const { placeOrder } = useContext(ordersContext);
   const { clearCart } = useContext(cartContext);
+  const [processing, setProccessing] = useState(false)
   const { user, loading } = useContext(authContext);
   const { newOrder, paymentMethod, public_key } = route.params;
   const items = JSON.stringify(newOrder.items);
@@ -47,6 +50,7 @@ const OrderVerification = ({ navigation, route }) => {
 
   const onSuccessHandler = async () => {
     try {
+      setProccessing(true)
       const { data, error } = await placeOrder(newOrder);
 
       if (error) {
@@ -54,7 +58,7 @@ const OrderVerification = ({ navigation, route }) => {
           navigation.goBack()
         return;
       }
-
+      setProccessing(false)
       clearCart();
       navigation.navigate("OrderConfirmation", { paymentMethod, order: data });
       /* TODO: do something */
@@ -86,6 +90,7 @@ const OrderVerification = ({ navigation, route }) => {
 
     if (nativeEvent.url === STRIPE.SUCCESS_URL) {
       onSuccessHandler();
+
       return;
     }
     if (nativeEvent.url === STRIPE.CANCELED_URL) {
@@ -102,6 +107,8 @@ const OrderVerification = ({ navigation, route }) => {
   if (!user) {
     return null;
   }
+
+  if (processing) return <Spinner />
 
   return (
     <WebView

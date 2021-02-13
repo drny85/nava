@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Antojito",
-    "slug": "nava16",
+    "slug": "nava18",
     "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -35,6 +35,6 @@
     "android": {
       "useNextNotificationsApi": true
     },
-    "description": "changed loading screen"
+    "description": "api payment for different stores"
   }
 }

@@ -45,8 +45,9 @@ const Signup = () => {
         data.user.uid,
         values.name,
         values.lastName,
+        values.phone,
         values.email,
-        values.phone
+
       );
 
       // await saveToken(pushToken);
