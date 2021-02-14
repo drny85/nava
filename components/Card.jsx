@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import colors from "../config/colors";
+import { SharedElement } from 'react-navigation-shared-element';
 
 import { Image } from "react-native-expo-image-cache";
 import { COLORS } from "../config";
@@ -16,19 +17,27 @@ const { height } = Dimensions.get("screen");
 
 const Card = ({ name, imageUrl, price, sizes, onPress, style }) => {
   return (
+
     <TouchableOpacity style={[styles.card, style]} onPress={onPress}>
       <View style={{ height: "100%", width: "100%" }}>
         <View>
-          <Image tint="light" style={styles.image} uri={imageUrl} />
+          <SharedElement id={`image.${imageUrl}.item`}>
+            <Image tint="light" style={styles.image} uri={imageUrl} />
+          </SharedElement>
         </View>
         <View style={styles.details}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
-            {name}
-          </Text>
-          <Text style={styles.price}>${sizes ? price[sizes[0]] : price}</Text>
+          <SharedElement id={`item.${name}.name`}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
+              {name}
+            </Text>
+          </SharedElement>
+          <SharedElement id={`item.${price || price[[sizes[0]]]}.price`}>
+            <Text style={styles.price}>${sizes ? price[sizes[0]] : price}</Text>
+          </SharedElement>
         </View>
       </View>
     </TouchableOpacity>
+
   );
 };
 

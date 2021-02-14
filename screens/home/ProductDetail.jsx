@@ -18,12 +18,24 @@ import AppButton from "../../components/AppButton";
 import cartContext from "../../context/cart/cartContext";
 import { Alert } from "react-native";
 
+import * as Animatable from 'react-native-animatable';
+import { SharedElement } from 'react-navigation-shared-element';
+
+
 import Loader from "../../components/Loader";
 import storesContext from "../../context/stores/storesContext";
 import Divider from "../../components/Divider";
 import { COLORS, SIZES } from "../../config";
 
 const heigth = Dimensions.get("screen").height;
+const fadeIn = {
+  from: {
+    opacity: 0,
+  },
+  to: {
+    opacity: 1,
+  },
+};
 
 const ProductDetail = ({ route, navigation }) => {
   const sizes = [];
@@ -154,8 +166,11 @@ const ProductDetail = ({ route, navigation }) => {
         behavior="position"
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
       >
-        <View style={styles.imgView}>
-          <Image style={styles.image} source={{ uri: item && item.imageUrl }} />
+
+        <Animatable.View style={styles.imgView} animation='fadeIn'>
+          <SharedElement id={`image.${item.imageUrl}.item`} >
+            <Image style={styles.image} source={{ uri: item && item.imageUrl }} />
+          </SharedElement>
           <TouchableWithoutFeedback
             onPress={() => {
               navigation.goBack();
@@ -170,37 +185,47 @@ const ProductDetail = ({ route, navigation }) => {
               />
             </View>
           </TouchableWithoutFeedback>
-        </View>
+        </Animatable.View>
+
         <ScrollView
           contentContainerStyle={{ paddingVertical: 10 }}
           style={styles.scrollView}
         >
           <View style={styles.details}>
-            <Text style={styles.name}>{item.name}</Text>
+            <SharedElement id={`item.${item.name}.name`}>
+              <Text style={styles.name}>{item.name}</Text>
+            </SharedElement>
             {/* <Text style={styles.price}>${item.sizes ? item.price[checked] : item.price}</Text> */}
-            <Text style={styles.price}>
-              {item.sizes && checked ? `$${item.price[checked]}` : null}
-              {item.sizes && !checked
-                ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
-                }`
-                : null}
-              {!item.sizes && `$${item.price}`}
-            </Text>
+            <SharedElement id={`item.${item.price || item.price[item.sizes[0]]}.price`}>
+              <Text style={styles.price}>
+                {item.sizes && checked ? `$${item.price[checked]}` : null}
+                {item.sizes && !checked
+                  ? `$${item.price[item.sizes[0]]} - $${item.price[item.sizes[item.sizes.length - 1]]
+                  }`
+                  : null}
+                {!item.sizes && `$${item.price}`}
+              </Text>
+            </SharedElement>
           </View>
-          <View style={styles.descriptionView}>
-            <Text style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}>
+          <Animatable.View animation='bounceInLeft' delay={SIZES.padding * 2} style={styles.descriptionView}>
+            <Animatable.Text animation='bounceInLeft' delay={SIZES.padding * 3} style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}>
               -- {item.description}
-            </Text>
-          </View>
+            </Animatable.Text>
+          </Animatable.View>
           <Divider />
           {item.sizes && item.sizes.length > 0 && (
-            <View style={{ marginVertical: 10 }}>
-              <Text
+            <Animatable.View style={{ marginVertical: 10 }}>
+              <Animatable.Text
+                animation={fadeIn}
+                duration={SIZES.padding * 300}
+
                 style={{ paddingLeft: 10, fontSize: 16, fontWeight: "600" }}
               >
                 Pick a size
-              </Text>
-              <View
+              </Animatable.Text>
+              <Animatable.View
+                animation='bounceInRight'
+                delay={SIZES.padding * 4}
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-evenly",
@@ -223,8 +248,8 @@ const ProductDetail = ({ route, navigation }) => {
                     />
                   );
                 })}
-              </View>
-            </View>
+              </Animatable.View>
+            </Animatable.View>
           )}
 
           <View style={{ padding: 10 }}>
@@ -343,5 +368,17 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
+
+ProductDetail.sharedElements = (route, otherRoute, showing) => {
+  const { product } = route.params;
+
+  return [
+    { id: `image.${product.imageUrl}.item` },
+    { id: `item.${product.name}.name` },
+    {
+      id: `item.${product.price || product.price[product.sizes[0]]}.price`
+    }
+  ]
+}
 
 export default ProductDetail;

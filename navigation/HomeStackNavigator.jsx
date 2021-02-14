@@ -1,11 +1,13 @@
 // @ts-nocheck
 import React, { useEffect, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
+// import { createStackNavigator } from "@react-navigation/stack";
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 
 import colors from "../config/colors";
 
 import Constants from "expo-constants";
+import { enableScreens } from 'react-native-screens'
 
 import cartContext from "../context/cart/cartContext";
 import Home from "../screens/home/Home";
@@ -13,9 +15,9 @@ import ProductDetail from "../screens/home/ProductDetail";
 import Restaurants from "../screens/home/Restaurants";
 import { COLORS, FONTS, SIZES } from "../config";
 import { Image } from "react-native";
+enableScreens()
 
-
-const HomeStack = createStackNavigator();
+const HomeStack = createSharedElementStackNavigator();
 
 const HomeStackNavigator = () => {
   const { getCartItems } = useContext(cartContext);
@@ -27,6 +29,7 @@ const HomeStackNavigator = () => {
   return (
     <HomeStack.Navigator mode="modal">
       <HomeStack.Screen name='Restaurants' options={{ headerTitle: () => <View><Text style={styles.text}>My Deli</Text></View> }} component={Restaurants} />
+
       <HomeStack.Screen
         name="Home"
         component={Home}
