@@ -58,8 +58,9 @@ const OrderVerification = ({ navigation, route }) => {
           navigation.goBack()
         return;
       }
+
+      await clearCart();
       setProccessing(false)
-      clearCart();
       navigation.navigate("OrderConfirmation", { paymentMethod, order: data });
       /* TODO: do something */
     } catch (error) {

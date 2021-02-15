@@ -15,6 +15,7 @@ const CartStack = createStackNavigator();
 const CartStackNavigator = ({ navigation }) => {
   return (
     <CartStack.Navigator
+
       screenOptions={{
         headerTintColor: COLORS.secondary,
       }}

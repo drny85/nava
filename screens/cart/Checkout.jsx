@@ -47,7 +47,6 @@ const Checkout = ({ route, navigation }) => {
   const [deliveryAddress, setDeliveryAddress] = useState(null);
 
   const { cartTotal, itemCounts } = useContext(cartContext);
-  console.log(restaurant)
 
   const handlePickup = (pickupInfo) => {
     if (paymentOption === "cash") {
@@ -57,7 +56,7 @@ const Checkout = ({ route, navigation }) => {
       return;
     }
 
-    navigation.navigate("Orders", {
+    navigation.navigate("CartTab", {
       screen: "OrderSummary",
       params: {
         deliveryMethod: deliveryOption,
@@ -104,8 +103,7 @@ const Checkout = ({ route, navigation }) => {
       );
       return;
     }
-
-    navigation.navigate("Orders", {
+    navigation.navigate("CartTab", {
       screen: "OrderSummary",
       params: {
         deliveryMethod: deliveryOption,

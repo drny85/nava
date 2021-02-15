@@ -15,12 +15,15 @@ const OrderConfirmation = ({ navigation, route }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   const resetCartNavigation = () => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [{ name: "Cart" }],
-      })
-    );
+    navigation.dispatch(state => {
+      // Remove the home route from the stack
+
+
+      return CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'CartTab' }]
+      });
+    });
     navigation.navigate("Orders", {
       screen: "OrderDetails",
       params: { order },

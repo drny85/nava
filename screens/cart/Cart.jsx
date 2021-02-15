@@ -69,13 +69,10 @@ const Cart = ({ navigation }) => {
             const deleted = await clearCart();
             if (deleted) {
               navigation.dispatch((state) => {
-                // Remove the home route from the stack
-                const routes = state.routes.filter((r) => r.name === "Cart");
 
                 return CommonActions.reset({
-                  ...state,
-                  routes,
-                  index: routes.length - 1,
+                  index: 0,
+                  routes: [{ name: 'CartTab' }]
                 });
               });
             }
@@ -108,7 +105,7 @@ const Cart = ({ navigation }) => {
   useEffect(() => {
     getCartItems();
 
-    return () => {};
+    return () => { };
   }, []);
 
   if (deleting) return <Loader />;
@@ -148,16 +145,16 @@ const Cart = ({ navigation }) => {
           )}
         />
       ) : (
-        <View style={styles.noItems}>
-          <Text>No Items in cart</Text>
-          <AppButton
-            title="Start Shopping"
-            style={{ marginTop: 20, paddingHorizontal: 20 }}
-            textStyle={{ fontSize: 16, fontWeight: "600" }}
-            onPress={() => navigation.navigate("Restaurants")}
-          />
-        </View>
-      )}
+          <View style={styles.noItems}>
+            <Text>No Items in cart</Text>
+            <AppButton
+              title="Start Shopping"
+              style={{ marginTop: 20, paddingHorizontal: 20 }}
+              textStyle={{ fontSize: 16, fontWeight: "600" }}
+              onPress={() => navigation.navigate("Restaurants")}
+            />
+          </View>
+        )}
 
       {cartTotal > 0 && (
         // <TouchableWithoutFeedback onPress={continueToCheckOut}>

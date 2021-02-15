@@ -56,12 +56,15 @@ const OrderSummary = ({ navigation, route }) => {
   const handlePayment = async () => {
     if (cartItems.length === 0) {
 
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{ name: "Cart" }, { name: 'Cart' }],
-        })
-      );
+      navigation.dispatch(state => {
+        // Remove the home route from the stack
+
+
+        return CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'CartTab' }]
+        });
+      });
       return;
     }
 

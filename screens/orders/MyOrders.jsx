@@ -1,7 +1,8 @@
 // @ts-nocheck
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { View, StyleSheet, Text, FlatList } from "react-native";
 import Screen from "../../components/Screen";
+import { AntDesign } from '@expo/vector-icons'
 import authContext from "../../context/auth/authContext";
 import ordersContext from "../../context/order/orderContext";
 import Loader from "../../components/Loader";
@@ -11,9 +12,9 @@ import { COLORS, SIZES } from "../../config";
 import Divider from "../../components/Divider";
 import Spinner from "../../components/Spinner";
 
-const MyOrders = ({ navigation }) => {
+const MyOrders = ({ navigation, route }) => {
   const { user } = useContext(authContext);
-
+  const previous = route.params
   const { orders, getOrders, loading, Unsubscribe } = useContext(ordersContext);
 
   const goToOrderDetails = (order) => {
@@ -27,6 +28,7 @@ const MyOrders = ({ navigation }) => {
       Unsubscribe();
     };
   }, []);
+
 
   if (loading) {
     return <Spinner />;

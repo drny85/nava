@@ -16,7 +16,7 @@ import OrderInTheMaking from "../screens/orders/OrderInTheMaking";
 const OrdersStack = createStackNavigator();
 
 const OrdersStackNavigator = ({ route }) => {
-  const previous = route.params;
+
 
   const navigation = useNavigation();
   return (
@@ -24,21 +24,22 @@ const OrdersStackNavigator = ({ route }) => {
       <OrdersStack.Screen
         name="MyOrders"
         component={MyOrders}
-        options={{ title: "My Orders", headerLeft: previous && (() => <AntDesign name='arrowleft' onPress={() => navigation.goBack()} size={30} style={{ paddingLeft: 10 }} />) }}
+
+        options={{ title: "My Orders", headerLeft: null }}
       />
       <OrdersStack.Screen
         name="OrderConfirmation"
         component={OrderConfirmation}
         options={{ title: "Confirmation", headerLeft: null }}
       />
-      <OrdersStack.Screen
+      {/* <OrdersStack.Screen
         name="OrderSummary"
         component={OrderSummary}
         options={{
           title: "Order Summary",
           headerTitleStyle: { fontFamily: "montserrat-bold" },
         }}
-      />
+      /> */}
       <OrdersStack.Screen
         name="OrderInTheMaking"
         component={OrderInTheMaking}

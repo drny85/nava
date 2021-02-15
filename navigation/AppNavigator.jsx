@@ -67,20 +67,24 @@ const AppNavigator = () => {
       />
       {user && (
         <BottomTabs.Screen
+
           name="Orders"
           component={OrdersStackNavigator}
           options={{
             tabBarIcon: ({ color, size }) => (
               <Fontisto name="shopping-package" size={30} color={color} />
             ),
+
+
           }}
         />
       )}
 
       <BottomTabs.Screen
-        name="Cart"
+        name="CartTab"
         component={CartNavigator}
         options={{
+          tabBarLabel: 'Cart',
           tabBarIcon: ({ color, size }) => (
             <View style={styles.cartIcon}>
               <MaterialCommunityIcons name="cart" color={color} size={30} />

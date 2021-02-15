@@ -207,11 +207,11 @@ const ProductDetail = ({ route, navigation }) => {
               </Text>
             </SharedElement>
           </View>
-          <Animatable.View animation='bounceInLeft' delay={SIZES.padding * 2} style={styles.descriptionView}>
-            <Animatable.Text animation='bounceInLeft' delay={SIZES.padding * 3} style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}>
+          <View style={styles.descriptionView}>
+            <Text style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}>
               -- {item.description}
-            </Animatable.Text>
-          </Animatable.View>
+            </Text>
+          </View>
           <Divider />
           {item.sizes && item.sizes.length > 0 && (
             <Animatable.View style={{ marginVertical: 10 }}>
