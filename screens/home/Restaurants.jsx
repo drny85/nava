@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ScrollView } from "react-native";
 import { Modal } from "react-native";
 import { StyleSheet, FlatList, Text, View, TouchableOpacity, Animated } from "react-native";
@@ -13,12 +13,14 @@ import StoreCard from "../../components/StoreCard";
 import { COLORS, FONTS, SIZES } from "../../config";
 import authContext from "../../context/auth/authContext";
 import ordersContext from "../../context/order/orderContext";
+
 //import { useLocation } from '../../hooks/useLocation'
 
 import storesContext from "../../context/stores/storesContext";
 import cartContext from "../../context/cart/cartContext";
 import { Alert } from "react-native";
 import itemsContext from "../../context/items/itemsContext";
+import useLocation from "../../utils/useLocation";
 
 
 const SPACING = SIZES.padding
@@ -26,16 +28,20 @@ const ITEM_SIZE = (SIZES.height * 0.25) + SPACING * 2
 
 
 const Restaurants = ({ navigation }) => {
+
+  //const location = null;
   const scrollY = useRef(new Animated.Value(0)).current
   const { stores, getStores, loading } = useContext(storesContext);
   const { items, getItems } = useContext(itemsContext);
   const { user } = useContext(authContext);
+  const [onlyLocal, setOnlyLocal] = useState(true)
+  const [location, errorMsg] = useLocation(onlyLocal)
   const { addToCart, cartItems, clearCart, calculateCartTotal } = useContext(
     cartContext
   );
   const { orders, getOrders } = useContext(ordersContext);
   const [order, setOrder] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
   const [restaurant, setRestaurant] = useState(null);
   const [adding, setAdding] = useState(false);
 
@@ -43,7 +49,7 @@ const Restaurants = ({ navigation }) => {
   const [text, setText] = useState("");
 
   // const { address, isloading } = useLocation()
-  // console.log(address)
+
 
   const fetchStores = (restaurant) => {
     if (!restaurant.open) {
@@ -197,12 +203,19 @@ const Restaurants = ({ navigation }) => {
     //get all orders for a particular user if user is logged in
     getOrders(user?.id);
 
+
     return () => {
       setOrder(null);
       setRestaurant(null);
       setShowModal(false);
     };
   }, [stores.length, user]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <Entypo onPress={() => setOnlyLocal(preview => !preview)} style={{ marginRight: SIZES.padding * 0.5 }} name="location-pin" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />
+    })
+  }, [navigation, onlyLocal])
 
   if (loading || adding) return <Loader />;
 
@@ -216,10 +229,23 @@ const Restaurants = ({ navigation }) => {
     );
   }
 
+
+  if (location && onlyLocal && stores.filter(store => store.deliveryZip.includes(location[0].postalCode)).length === 0) {
+
+
+    return <Screen style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{ ...FONTS.body2 }}>No Stores Nearby</Text>
+      <Text style={{ marginTop: SIZES.padding, ...FONTS.body4 }}>Click Icon above to turn off location</Text>
+    </Screen>
+  }
+
+
+
   //check if thee is only a store active and send user to that particular store
   if (stores.length === 1) {
     navigation.replace("Home", { restaurant: stores[0] });
   }
+
   return (
     <Screen style={styles.screen}>
       {/* <SearchBar text={text} onChange={e => onChange(e)} /> */}
@@ -274,7 +300,7 @@ const Restaurants = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         onRefresh={getStores}
         refreshing={refreshing}
-        data={stores}
+        data={location && onlyLocal ? stores.filter(store => store.deliveryZip.includes(location[0].postalCode)) : stores}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => {
           const inputRange = [-1, 0, ITEM_SIZE * index, ITEM_SIZE * (index + 2)]

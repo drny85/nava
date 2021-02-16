@@ -23,6 +23,7 @@ import colors from "../../config/colors";
 import useNotifications from "../../hooks/useNotifications";
 import settingsContext from "../../context/settings/settingsContext";
 
+
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(3).label("First Name"),
   lastName: Yup.string().required().min(3).label("Last Name"),
@@ -31,10 +32,14 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required().min(6).label("Password"),
 });
 
-const Signup = () => {
+const Signup = ({ route }) => {
   const navigation = useNavigation();
   const { signup, createUser } = useContext(authContext);
+  const { restaurant } = route.params
+
+
   const { previewRoute, clearSettings } = useContext(settingsContext);
+
   const handleSignup = async (values) => {
     try {
       const data = await signup(values.email, values.password);
@@ -52,7 +57,7 @@ const Signup = () => {
 
       // await saveToken(pushToken);
       if (previewRoute) {
-        navigation.navigate(previewRoute);
+        navigation.navigate(previewRoute, { restaurant });
         clearSettings();
 
         return;

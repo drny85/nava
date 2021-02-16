@@ -25,7 +25,7 @@ import { SharedElement } from 'react-navigation-shared-element';
 import Loader from "../../components/Loader";
 import storesContext from "../../context/stores/storesContext";
 import Divider from "../../components/Divider";
-import { COLORS, SIZES } from "../../config";
+import { COLORS, FONTS, SIZES } from "../../config";
 
 const heigth = Dimensions.get("screen").height;
 const fadeIn = {
@@ -360,8 +360,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   name: {
-    fontSize: 24,
+    fontSize: 18,
+    marginBottom: 8,
+    fontWeight: "600",
+    letterSpacing: 1.1,
     textTransform: "capitalize",
+    color: "black",
   },
   price: {
     fontSize: 20,

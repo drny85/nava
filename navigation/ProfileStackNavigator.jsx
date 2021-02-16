@@ -28,8 +28,8 @@ const ProfileStackNavigator = ({ navigation }) => {
     clearSettings();
     navigation.dispatch(
       CommonActions.reset({
-        index: 1,
-        routes: [{ name: "Cart" }],
+        index: 0,
+        routes: [{ name: "Profile" }],
       })
     );
   };

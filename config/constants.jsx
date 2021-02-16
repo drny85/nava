@@ -61,6 +61,7 @@ export const FONTS = {
   h3: { fontFamily: "montserrat-bold", fontSize: SIZES.h3, lineHeight: 22 },
   h4: { fontFamily: "montserrat-bold", fontSize: SIZES.h4, lineHeight: 22 },
   h5: { fontFamily: "montserrat-bold", fontSize: SIZES.h5, lineHeight: 22 },
+  itemTitle: { fontFamily: "montserrat-bold", fontSize: 20, lineHeight: 26, textTransform: 'capitalize', color: COLORS.secondary },
   body1: {
     fontFamily: "montserrat",
     fontSize: SIZES.body1,

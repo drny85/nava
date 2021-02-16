@@ -48,7 +48,7 @@ const Cart = ({ navigation }) => {
     }
     if (!user) {
       setRoute("Checkout");
-      navigation.navigate("Profile", { screen: "Login", restaurant });
+      navigation.navigate("Profile", { screen: "Login", params: { restaurant } });
       return;
     }
 

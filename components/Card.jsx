@@ -11,7 +11,7 @@ import colors from "../config/colors";
 import { SharedElement } from 'react-navigation-shared-element';
 
 import { Image } from "react-native-expo-image-cache";
-import { COLORS } from "../config";
+import { COLORS, FONTS } from "../config";
 
 const { height } = Dimensions.get("screen");
 
@@ -27,7 +27,7 @@ const Card = ({ name, imageUrl, price, sizes, onPress, style }) => {
         </View>
         <View style={styles.details}>
           <SharedElement id={`item.${name}.name`}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.name]}>
               {name}
             </Text>
           </SharedElement>

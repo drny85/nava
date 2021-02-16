@@ -42,7 +42,7 @@ const Signin = ({ route }) => {
 
 
 	// const { restaurant } = route.params
-	console.log(route)
+	console.log(previewRoute)
 
 	const handleSignin = async ({ email, password }) => {
 		try {
@@ -112,7 +112,7 @@ const Signin = ({ route }) => {
 					</AppForm>
 					<View style={styles.account}>
 						<Text style={styles.text}>Don't have an account?</Text>
-						<TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+						<TouchableOpacity onPress={() => navigation.navigate("Signup", { restaurant })}>
 							<Text style={styles.signupText}>Sign Up</Text>
 						</TouchableOpacity>
 					</View>
