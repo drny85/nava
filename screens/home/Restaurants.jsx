@@ -41,7 +41,7 @@ const Restaurants = ({ navigation }) => {
   );
   const { orders, getOrders } = useContext(ordersContext);
   const [order, setOrder] = useState(null);
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [restaurant, setRestaurant] = useState(null);
   const [adding, setAdding] = useState(false);
 
@@ -79,7 +79,7 @@ const Restaurants = ({ navigation }) => {
       }
       setShowModal(false);
       setAdding(false);
-      navigation.navigate("Cart");
+      navigation.navigate("CartTab");
     } catch (error) {
       console.log("Error adding items to cart", error);
     }
@@ -102,7 +102,7 @@ const Restaurants = ({ navigation }) => {
               text: "Go to Cart",
               onPress: () => {
                 setShowModal(false);
-                navigation.navigate("Cart");
+                navigation.navigate("CartTab");
               },
             },
           ]
@@ -155,7 +155,7 @@ const Restaurants = ({ navigation }) => {
                 await addThem();
                 setAdding(false);
                 setShowModal(false);
-                navigation.navigate("Orders", {
+                navigation.navigate("CartTab", {
                   screen: "OrderSummary",
                   params: {
                     deliveryMethod: order?.orderType,
@@ -177,8 +177,8 @@ const Restaurants = ({ navigation }) => {
         );
       } else {
         await addThem();
-
-        navigation.navigate("Orders", {
+        setShowModal(false)
+        navigation.navigate("CartTab", {
           screen: "OrderSummary",
           params: {
             deliveryMethod: order?.orderType,

@@ -55,12 +55,16 @@ const OrderTile = ({ order, onPress }) => {
                 await clearCart();
                 await addThem();
                 await stopOrdersLoading();
-                navigation.navigate("Orders", {
+
+                navigation.navigate("CartTab", {
                   screen: "OrderSummary",
+                  initial: false,
                   params: {
                     deliveryMethod: order?.orderType,
                     paymentMethod: order?.paymentMethod,
                     customer: order?.customer,
+                    screen: 'Cart'
+
                   },
                 });
               },
@@ -79,12 +83,16 @@ const OrderTile = ({ order, onPress }) => {
         await addThem();
         stopOrdersLoading();
 
-        navigation.navigate("Orders", {
-          screen: "OrderSummary",
+        navigation.navigate("CartTab", {
+          screen: 'OrderSummary',
+          initial: false,
           params: {
             deliveryMethod: order?.orderType,
             paymentMethod: order?.paymentMethod,
             customer: order?.customer,
+            screen: 'Cart'
+
+
           },
         });
       }
@@ -119,6 +127,7 @@ const OrderTile = ({ order, onPress }) => {
           flexDirection: "column",
           flex: 1,
           padding: 10,
+
         }}
       >
         <Text style={{ ...FONTS.h5, textTransform: "capitalize" }}>

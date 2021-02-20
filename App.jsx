@@ -30,17 +30,18 @@ const App = () => {
   const { getCurrentUser, authUnsubcribe } = React.useContext(authContext);
 
   React.useEffect(() => {
+    //getCurrentUser()
     return () => {
-      console.log("Unsubcribing user");
+
       authUnsubcribe();
     };
   }, []);
 
   if (!isReady) {
-    loadFonts();
+    getCurrentUser()
     return (
       <AppLoading
-        startAsync={getCurrentUser}
+        startAsync={loadFonts}
         onFinish={() => setIsReady(true)}
       />
     );

@@ -88,7 +88,6 @@ const OrderSummary = ({ navigation, route }) => {
 
 
       );
-      console.log(newOrder)
 
       if (cartItems.length > 0) {
         //handle payment with credit

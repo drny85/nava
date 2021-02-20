@@ -8,7 +8,7 @@ import ordersContext from "../../context/order/orderContext";
 import Loader from "../../components/Loader";
 import OrderTile from "../../components/OrderTile";
 import AppButton from "../../components/AppButton";
-import { COLORS, SIZES } from "../../config";
+import { COLORS, FONTS, SIZES } from "../../config";
 import Divider from "../../components/Divider";
 import Spinner from "../../components/Spinner";
 
@@ -37,9 +37,9 @@ const MyOrders = ({ navigation, route }) => {
   if (orders.length === 0) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontSize: 20, marginBottom: 20 }}>No Orders Found</Text>
+        <Text style={{ ...FONTS.body3, marginBottom: 20 }}>No Orders Found</Text>
         <AppButton
-          style={{ width: "90%" }}
+          style={{ width: "80%" }}
           title="Place My First Order"
           textStyle={{ textTransform: "capitalize" }}
           onPress={() => navigation.navigate("Restaurants")}

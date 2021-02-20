@@ -63,6 +63,7 @@ const OrdersState = (props) => {
           paymentMethod: orderInfo.paymentMethod,
           orderPlaced: new Date().toISOString(),
         };
+        console.log(newOrder)
       } else {
         newOrder = {
           userId: orderInfo.userId,
@@ -95,7 +96,7 @@ const OrdersState = (props) => {
       const result = await db.collection("orders").add(newOrder);
       const res = (await result.get()).data();
 
-      updateUnitSold(result?.id, res?.restaurantId);
+      // updateUnitSold(result?.id, res?.restaurantId);
       return { data: { id: result.id, ...res }, error: false };
     } catch (error) {
       console.log(error);
@@ -151,7 +152,7 @@ const OrdersState = (props) => {
           .doc(item.id);
         await updated.update({ unitSold: parseInt(unit + item.quantity) });
       } catch (error) {
-        console.error("ER", error);
+        console.error("ERROR updating units sold", error);
       }
     });
   };

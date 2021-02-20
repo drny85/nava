@@ -69,3 +69,25 @@ app.get('/stripeKey/:id', async(req, res) => {
 
 exports.makePayment = functions.https.onRequest(app);
 
+exports.updateUnitSold = functions.firestore.document('/orders/{orderId}').onCreate(async (snap, contex) => {
+    const items = snap.data().items;
+    items.forEach(async (item) => {
+      try {
+        const i = await admin.firestore().collection('items').doc(item.storeId).collection('items').doc(item.id).get()
+        const res = await admin.firestore()
+          .collection("items")
+          .doc(item.storeId)
+          .collection("items")
+          .doc(item.id)
+          console.log(`From ${i.data().unitSold} to ${i.data().unitSold + item.quantity}`)
+          return res.update({unitSold: parseInt(i.data().unitSold + item.quantity)})
+  
+          
+      
+      } catch (error) {
+        console.error("ERROR updating units sold", error);
+        return null
+      }
+    });
+})
+

@@ -55,7 +55,9 @@ const OrderDetails = ({ route }) => {
               </Text>
             )}
         </Text>
+        {order.cancelReason && (<Text style={[styles.text, { color: 'red', fontWeight: '700' }]}>Canceled: {order.cancelReason}</Text>)}
         {order.instruction && (<Text style={{ ...FONTS.body4 }}>Note: {order.instruction}</Text>)}
+
       </View>
       <View
         style={{

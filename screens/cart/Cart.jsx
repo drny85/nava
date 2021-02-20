@@ -14,7 +14,7 @@ import Loader from "../../components/Loader";
 import storesContext from "../../context/stores/storesContext";
 import { COLORS } from "../../config";
 
-const MINIMUM = 10;
+const MINIMUM_DELIVERY = 10;
 
 const Cart = ({ navigation }) => {
   const [deleting, setDeleting] = useState(false);
@@ -35,11 +35,11 @@ const Cart = ({ navigation }) => {
   const restaurant = restaurants.find((s) => s.id === cartItems[0]?.storeId);
 
   const continueToCheckOut = () => {
-    if (cartTotal < MINIMUM) {
+    if (cartTotal < (restaurant?.deliveryMinimum ? restaurant.deliveryMinimum : MINIMUM_DELIVERY)) {
       Alert.alert(
         "Opsss",
-        `Please make a purchase greater than $${MINIMUM}. You are just $${(
-          MINIMUM - cartTotal
+        `Please make a purchase greater than $${(restaurant?.deliveryMinimum ? restaurant.deliveryMinimum : MINIMUM_DELIVERY).toFixed(2)}. You are just $${(
+          (restaurant?.deliveryMinimum ? restaurant.deliveryMinimum : MINIMUM_DELIVERY) - cartTotal
         ).toFixed(2)} away`,
         [{ text: "OK", style: "cancel" }]
       );

@@ -93,11 +93,11 @@ const Checkout = ({ route, navigation }) => {
     }
 
     //  check cart total is greater than 10 for minimum delivery amount.
-    if (deliveryMethod === "delivery" && cartTotal < MINIMUM_DELIVERY) {
-      console.log("minimun delivery");
+    if (deliveryMethod === "delivery" && cartTotal < (restaurant?.deliveryMinimum ? restaurant.deliveryMinimum : MINIMUM_DELIVERY)) {
+
       Alert.alert(
         "Minimum Delivery",
-        `Please spend at least $${MINIMUM_DELIVERY - cartTotal
+        `Please spend at least $${(restaurant?.deliveryMinimum ? restaurant.deliveryMinimum : MINIMUM_DELIVERY) - cartTotal
         } more to be eligible for delivery`,
         [{ text: "OK", style: "cancel" }]
       );
