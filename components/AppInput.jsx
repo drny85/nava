@@ -1,28 +1,33 @@
-import React from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import React, { useRef } from "react";
+import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import { COLORS } from "../config";
 
 const AppInput = ({ iconName, e = null, focus = false, style, ...otherProps }) => {
+	const inputRef = useRef()
 	return (
-		<View style={styles.container}>
-			{iconName && (
-				<MaterialCommunityIcons
-					style={styles.icon}
-					size={24}
-					color={COLORS.primary}
-					name={iconName}
+		<TouchableWithoutFeedback onPress={() => inputRef.current.focus()}>
+			<View style={styles.container}>
+				{iconName && (
+					<MaterialCommunityIcons
+						style={styles.icon}
+						size={24}
+						color={COLORS.primary}
+						name={iconName}
+					/>
+				)}
+				<TextInput
+					ref={inputRef}
+					autoFocus={focus}
+					autoCapitalize={e}
+				
+					placeholderTextColor={COLORS.secondary}
+					style={[styles.input, style]}
+					{...otherProps}
 				/>
-			)}
-			<TextInput
-				autoFocus={focus}
-				autoCapitalize={e}
-				placeholderTextColor={COLORS.secondary}
-				style={[styles.input, style]}
-				{...otherProps}
-			/>
-		</View>
+			</View>
+		</TouchableWithoutFeedback>
 	);
 };
 
@@ -45,7 +50,8 @@ const styles = StyleSheet.create({
 	input: {
 		color: "black",
 		fontSize: 20,
-		padding: 5,
+		paddingHorizontal: 10,
+		
 		height: "100%",
 	},
 });

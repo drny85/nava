@@ -52,7 +52,7 @@ const OrdersState = (props) => {
             lastName: orderInfo.customer.lastName,
             email: null,
           },
-
+          isPaid: orderInfo.isPaid,
           orderPlaced: orderInfo.orderPlaced,
           totalAmount: orderInfo.totalAmount,
           orderType: orderInfo.type,
@@ -81,6 +81,7 @@ const OrdersState = (props) => {
             lastName: orderInfo.customer.lastName,
             email: orderInfo.customer.email,
           },
+          isPaid: orderInfo.isPaid,
           orderPlaced: orderInfo.orderPlaced,
           totalAmount: orderInfo.totalAmount,
           orderType: orderInfo.type,

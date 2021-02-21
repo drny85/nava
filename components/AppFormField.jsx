@@ -2,11 +2,13 @@
 import React from "react";
 
 import { useFormikContext } from "formik";
+import { TouchableWithoutFeedback } from 'react-native'
 
 import AppInput from "./AppInput";
 import AppErrorMessage from "./AppErrorMessage";
 
 const AppFormField = ({ name, autoFocus, style, ...otherProps }) => {
+
   const {
     errors,
     touched,
@@ -21,7 +23,6 @@ const AppFormField = ({ name, autoFocus, style, ...otherProps }) => {
       <AppInput
         autoFocus={autoFocus}
         style={style}
-
         onBlur={() => setFieldTouched(values[name])}
         onChangeText={handleChange(name)}
         {...otherProps}

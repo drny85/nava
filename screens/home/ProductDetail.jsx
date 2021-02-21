@@ -217,14 +217,14 @@ const ProductDetail = ({ route, navigation }) => {
             <Animatable.View style={{ marginVertical: 10 }}>
               <Animatable.Text
                 animation={fadeIn}
-                duration={SIZES.padding * 300}
+                duration={SIZES.padding * 100}
 
                 style={{ paddingLeft: 10, fontSize: 16, fontWeight: "600" }}
               >
                 Pick a size
               </Animatable.Text>
               <Animatable.View
-                animation='bounceInRight'
+                animation='fadeIn'
                 delay={SIZES.padding * 4}
                 style={{
                   flexDirection: "row",

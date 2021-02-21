@@ -9,6 +9,7 @@ class Order {
 		status = 'new',
 		instruction,
 		restaurant,
+		isPaid = false
 
 	) {
 		(this.userId = userId),
@@ -19,7 +20,8 @@ class Order {
 			(this.paymentMethod = paymentMethod),
 			(this.status = status),
 			(this.instruction = instruction),
-			(this.restaurant = restaurant)
+			(this.restaurant = restaurant),
+			(this.isPaid = isPaid)
 
 	}
 

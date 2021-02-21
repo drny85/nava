@@ -46,7 +46,7 @@ export function stripeCheckoutRedirectHTML(order, items, public_key) {
                   } ),
 
               } ).then( function ( response ) {
-                  console.log( response );
+                  
                   return response.json();
               } ).then( function ( responseJson ) {
                   var sessionID = responseJson.session_id;
