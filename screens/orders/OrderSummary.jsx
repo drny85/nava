@@ -25,6 +25,7 @@ import cartContext from "../../context/cart/cartContext";
 import ordersContext from "../../context/order/orderContext";
 import AppButton from "../../components/AppButton";
 import CardSummaryItem from "../../components/CardSummaryItem";
+import NetInfo from '@react-native-community/netinfo';
 
 import { TextInput } from "react-native-gesture-handler";
 import storesContext from "../../context/stores/storesContext";
@@ -36,6 +37,7 @@ import Axios from "axios";
 const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
   const { placeOrder } = useContext(ordersContext);
+  const [connected, setConnected] = useState(false)
   const { cartItems, cartTotal, clearCart, loading } = useContext(
     cartContext
   );
@@ -137,8 +139,20 @@ const OrderSummary = ({ navigation, route }) => {
     }
   };
 
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(netInfo => {
+      const { isConnected, isInternetReachable } = netInfo
+      console.log(netInfo)
+      if (isConnected && isInternetReachable) {
+        setConnected(true)
+      }
+    })
+    return unsubscribe && unsubscribe()
+  }, [])
+
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: connected ? 'Order Summary' : 'No Internet',
       headerLeft: () => {
         return <Ionicons
           style={{ marginLeft: 12 }}
@@ -149,7 +163,7 @@ const OrderSummary = ({ navigation, route }) => {
         />
       }
     })
-  }, [navigation])
+  }, [navigation, connected])
 
 
 
@@ -157,7 +171,11 @@ const OrderSummary = ({ navigation, route }) => {
 
   return (
     <Screen >
-
+      {!connected && (
+        <View style={{ alignContent: 'center', justifyContent: 'center', width: '100%', height: 60, backgroundColor: COLORS.ascent }}>
+          <Text style={{ ...FONTS.h3, textAlign: 'center' }}>No Internet Connection</Text>
+        </View>
+      )}
       <View style={styles.listView}>
         <View style={styles.storeInfo}>
           {restaurant && (
@@ -270,6 +288,7 @@ const OrderSummary = ({ navigation, route }) => {
       </KeyboardAvoidingView>
       <View style={{ position: "absolute", bottom: 8, width: "100%", }}>
         <AppButton
+          disabled={!connected}
           style={{ width: '90%', alignSelf: 'center' }}
           title={paymentMethod === "credit" ? `Pay $${cartTotal.toFixed(2)}` : "Place Order"}
           onPress={handlePayment}

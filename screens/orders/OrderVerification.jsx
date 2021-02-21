@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { View, Alert, Text } from "react-native";
+import { View, Alert } from "react-native";
 import ordersContext from "../../context/order/orderContext";
 import authContext from "../../context/auth/authContext";
 
@@ -10,7 +10,7 @@ import { stripeCheckoutRedirectHTML } from "../StripeCheckout";
 import Signin from "../profiles/Signin";
 import cartContext from "../../context/cart/cartContext";
 import { COLORS, FONTS } from "../../config";
-import NetInfo from '@react-native-community/netinfo';
+
 import Spinner from '../../components/Spinner'
 
 import { Ionicons } from '@expo/vector-icons';
@@ -19,7 +19,7 @@ import Screen from "../../components/Screen";
 const OrderVerification = ({ navigation, route }) => {
   const { placeOrder } = useContext(ordersContext);
   const { clearCart } = useContext(cartContext);
-  const [connected, setConnected] = useState(false)
+
   const [processing, setProccessing] = useState(false)
   const { user, loading } = useContext(authContext);
   const { newOrder, paymentMethod, public_key } = route.params;
@@ -31,20 +31,11 @@ const OrderVerification = ({ navigation, route }) => {
     return <Signin />;
   }
 
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(netInfo => {
-      const { isConnected, isInternetReachable } = netInfo
-      console.log(netInfo)
-      if (isConnected && isInternetReachable) {
-        setConnected(true)
-      }
-    })
-    return unsubscribe && unsubscribe()
-  }, [])
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: connected ? 'Payment' : 'No Internet',
+
       headerLeft: () => {
         return <Ionicons
           style={{ marginLeft: 12 }}
@@ -126,11 +117,6 @@ const OrderVerification = ({ navigation, route }) => {
 
   if (processing) return <Spinner />
 
-  if (!connected && !processing) {
-    return <Screen style={{ justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ ...FONTS.body2 }}>No Internet Connection</Text>
-    </Screen>
-  }
 
   return (
     <WebView
