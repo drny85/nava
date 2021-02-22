@@ -12,7 +12,7 @@ const ListCategoryItems = ({ categories, items, restaurant }) => {
 
   return (
     <FlatList
-      data={categories} ß
+      data={categories.sort((a, b) => a.name < b.name ? -1 : 1)} ß
       showsVerticalScrollIndicator={false}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => {

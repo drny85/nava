@@ -4,9 +4,9 @@ import { Feather } from "@expo/vector-icons";
 import colors from "../config/colors";
 import { COLORS } from "../config";
 
-export default function FloatingButton({ iconName, onPress }) {
+export default function FloatingButton({ iconName, onPress, style }) {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
       <Feather name={iconName} size={24} color={COLORS.black} />
     </TouchableOpacity>
   );

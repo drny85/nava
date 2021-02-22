@@ -46,7 +46,7 @@ const OrderVerification = ({ navigation, route }) => {
         />
       }
     })
-  }, [navigation, connected])
+  }, [navigation])
 
   if (loading) return <Loader />;
 

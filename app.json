@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Antojito",
-    "slug": "nava30",
+    "slug": "nava35",
     "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -35,6 +35,6 @@
     "android": {
       "useNextNotificationsApi": true
     },
-    "description": "navigation improvements and functions -- added no internet connection screen for credir card payment"
+    "description": "fixed reset password issue"
   }
 }

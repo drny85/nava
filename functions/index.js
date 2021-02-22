@@ -90,4 +90,3 @@ exports.updateUnitSold = functions.firestore.document('/orders/{orderId}').onCre
       }
     });
 })
-

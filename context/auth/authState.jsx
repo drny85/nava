@@ -31,6 +31,8 @@ const AuthState = (props) => {
 				favoriteStores: [],
 				signedDate: new Date().toISOString(),
 			});
+
+			await auth.currentUser.updateProfile({ displayName: `${name} ${lastName}` })
 		} catch (error) {
 			console.log(error);
 		}
@@ -73,7 +75,6 @@ const AuthState = (props) => {
 		try {
 			authUnsubcribe = auth.onAuthStateChanged((user) => {
 				if (user) {
-
 					setUser(user.uid);
 				}
 			});
@@ -168,6 +169,17 @@ const AuthState = (props) => {
 		}
 	};
 
+	const resetPassword = async (email) => {
+
+		try {
+			const user = await auth.sendPasswordResetEmail(email)
+			console.log(user)
+		} catch (error) {
+			console.log('error resetting password', error.message)
+		}
+
+	}
+
 	const isFavorite = async (userId, storeId) => {
 
 		try {
@@ -222,6 +234,7 @@ const AuthState = (props) => {
 				saveExpoPushToken,
 				deleteUserAddress,
 				saveDeliveryAddress,
+				resetPassword,
 				updateLastLogin,
 				isFavorite,
 			}}

@@ -142,13 +142,15 @@ const OrderSummary = ({ navigation, route }) => {
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(netInfo => {
       const { isConnected, isInternetReachable } = netInfo
-      console.log(netInfo)
+
       if (isConnected && isInternetReachable) {
         setConnected(true)
       }
     })
-    return unsubscribe && unsubscribe()
-  }, [])
+    return () => {
+      unsubscribe && unsubscribe()
+    }
+  }, [connected])
 
   useLayoutEffect(() => {
     navigation.setOptions({
