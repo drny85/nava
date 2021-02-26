@@ -23,7 +23,7 @@ app.post("/payment", async (req, res) => {
  
     const stripe = Stripe(secrets[restaurantKey])
     const newItems = items.map((item) => {
-      console.log(item.price)
+      
       return {
         price_data: {
           currency: "usd",

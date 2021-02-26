@@ -145,7 +145,7 @@ const Checkout = ({ route, navigation }) => {
   }
 
   useEffect(() => {
-    console.log("Checkout Mounted");
+
     checkDeliveryAddress()
   }, [previous]);
 

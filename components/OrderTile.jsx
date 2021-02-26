@@ -138,7 +138,7 @@ const OrderTile = ({ order, onPress }) => {
           {moment(order.orderPlaced).format("lll")}
         </Text> */}
         <Text style={{ ...FONTS.body6, paddingVertical: 6 }}>
-          Total: ${order.totalAmount.toFixed(2)}
+          Total: ${parseFloat(order.totalAmount).toFixed(2)}
         </Text>
       </View>
       {/* re-order button */}

@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ScrollView } from "react-native";
 import { Modal } from "react-native";
-import { StyleSheet, FlatList, Text, View, TouchableOpacity, Animated } from "react-native";
+import { StyleSheet, FlatList, Text, View, TouchableOpacity, Animated, TextInput } from "react-native";
 import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
 
 import Loader from "../../components/Loader";
@@ -44,6 +44,7 @@ const Restaurants = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false);
   const [restaurant, setRestaurant] = useState(null);
   const [adding, setAdding] = useState(false);
+  const [searching, setSearching] = useState(true);
 
   const [refreshing, setRefreshing] = useState(false);
   const [text, setText] = useState("");
@@ -60,6 +61,29 @@ const Restaurants = ({ navigation }) => {
     }
     navigation.navigate("Home", { restaurant });
   };
+
+  const filterRestaurantBySearchItem = () => {
+
+  }
+
+  useLayoutEffect(() => {
+    if (searching) {
+      navigation.setOptions({
+        headerTitle: () => (
+          <View
+            style={{
+              backgroundColor: COLORS.primary,
+
+            }}
+          >
+
+          </View>
+        ),
+
+      })
+    }
+
+  }, [navigation, searching])
 
   //handle modal press
   const modalHandler = (order) => {

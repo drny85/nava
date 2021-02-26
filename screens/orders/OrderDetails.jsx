@@ -55,6 +55,7 @@ const OrderDetails = ({ route }) => {
               </Text>
             )}
         </Text>
+        {order.coupon && (<Text style={{ ...FONTS.body4 }}>Coupon Used: {(order.coupon.code).toUpperCase()} - {order.coupon.value}%</Text>)}
         {order.cancelReason && (<Text style={[styles.text, { color: 'red', fontWeight: '700' }]}>Canceled: {order.cancelReason}</Text>)}
         {order.instruction && (<Text style={{ ...FONTS.body4 }}>Note: {order.instruction}</Text>)}
 
@@ -70,32 +71,31 @@ const OrderDetails = ({ route }) => {
       >
         <Text
           style={{
-            fontSize: 18,
-            fontWeight: "700",
-            fontFamily: "montserrat-bold",
+            ...FONTS.h4
           }}
         >
           Order #: {order.orderNumber}
         </Text>
         <Text
           style={{
-            fontSize: 18,
-            fontWeight: "700",
-            fontFamily: "montserrat-bold",
+            ...FONTS.h4
           }}
         >
           Items: {order.items.length}
         </Text>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: "700",
-            marginVertical: 10,
-            fontFamily: "montserrat-bold",
-          }}
-        >
-          Amount: ${order.totalAmount.toFixed(2)}
-        </Text>
+        <View style={{ flexDirection: 'row', }}>
+          <Text style={{ ...FONTS.h4 }}>Amount: </Text>
+          {order.coupon && (<Text style={{ ...FONTS.h4, color: 'red', opacity: 0.4, textDecorationLine: 'line-through', marginRight: 8 }}>${order.coupon.originalPrice}</Text>)}
+          <Text
+            style={{
+              ...FONTS.h4
+            }}
+          >
+            ${parseFloat(order.totalAmount).toFixed(2)}
+          </Text>
+
+        </View>
+
       </View>
 
       <View style={{ width: "100%", marginTop: 5, flex: 1 }}>
