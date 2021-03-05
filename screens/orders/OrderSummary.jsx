@@ -8,6 +8,7 @@ import {
   Alert,
   Dimensions,
   ScrollView,
+  Keyboard,
   KeyboardAvoidingView,
   Button
 } from "react-native";
@@ -63,7 +64,8 @@ const OrderSummary = ({ navigation, route }) => {
     return items.map(item => {
       return {
         ...item,
-        price: promoDetails && Number(parseFloat(item.price - (item.price * promoDetails.value / 100)).toFixed(2))
+        price: promoDetails && Number(parseFloat(item.price - (item.price * promoDetails.value / 100)).toFixed(2)),
+        originalPrice: item.price
       }
     })
   }
@@ -94,6 +96,7 @@ const OrderSummary = ({ navigation, route }) => {
             setPromoDetails(doc.data())
             setPromoCode('')
             setDiscountedPrice(newTotal)
+            Keyboard.dismiss()
           } else {
             alert('Coupon Already Expired')
             return;
@@ -280,7 +283,7 @@ const OrderSummary = ({ navigation, route }) => {
           <Button disabled={promoDetails !== null} title='Add Coupon' onPress={() => setCouponModal(true)} />
           {promoDetails && (
             <View style={{ width: SIZES.width, height: 25, flexDirection: 'row', alignItems: 'center', marginLeft: SIZES.padding * 0.3, }}>
-              <Text style={{ color: 'green', ...FONTS.body5 }}>Promo coded applied - {promoDetails?.value}%</Text>
+              <Text style={{ color: 'green', ...FONTS.body5 }}>Promo code {promoDetails?.code.toUpperCase()} was applied - {promoDetails?.value}%</Text>
               <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => {
                 setPromoCode('')
                 setCouponModal(false)

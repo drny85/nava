@@ -19,6 +19,7 @@ const ItemsState = (props) => {
     mostPopular: [],
     current: null,
     filtered: null,
+    allItems: [],
     loading: false,
   };
 
@@ -90,6 +91,26 @@ const ItemsState = (props) => {
     }
   };
 
+  const getAllStoresItems = async () => {
+
+    try {
+      setLoading()
+      const items = []
+      const ids = (await db.collection('stores').get()).docs.map(doc => doc.id)
+
+      await ids.forEach(async id => {
+        (await db.collection('items').doc(id).collection('items').get()).docs.map(i => {
+          items.push({ id: i.id, ...i.data() })
+        })
+      })
+
+      dispatch({ type: "ALL_ITEMS", payload: items })
+    } catch (error) {
+      console.log('Error getting all items', error.message)
+    }
+
+  }
+
   const clearCurrent = () => {
     setLoading();
     console.log("Current cleared");
@@ -124,6 +145,7 @@ const ItemsState = (props) => {
         current: state.current,
         loading: state.loading,
         filtered: state.filtered,
+        allItems: state.allItems,
         mostPopular: state.mostPopular,
 
         getItems,
@@ -135,6 +157,7 @@ const ItemsState = (props) => {
         clearCurrent,
         changeAvailability,
         getMostPopular,
+        getAllStoresItems
 
       }}
     >

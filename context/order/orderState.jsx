@@ -102,7 +102,7 @@ const OrdersState = (props) => {
       // updateUnitSold(result?.id, res?.restaurantId);
       return { data: { id: result.id, ...res }, error: false };
     } catch (error) {
-      console.log(error);
+      console.log('Error submitting Order', error);
       return { error: true, msg: error };
     }
   };

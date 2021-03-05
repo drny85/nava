@@ -39,6 +39,13 @@ export default (state, action) => {
 				filtered: null,
 				loading: false,
 			};
+
+		case 'ALL_ITEMS':
+			return {
+				...state,
+				allItems: action.payload,
+				loading: false,
+			}
 		case SEARCH_BY_NAME:
 			return {
 				...state,

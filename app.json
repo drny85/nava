@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Antojito",
-    "slug": "nava35",
+    "slug": "nava39",
     "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -35,6 +35,6 @@
     "android": {
       "useNextNotificationsApi": true
     },
-    "description": "fixed reset password issue"
+    "description": "added search -- major improment on search functionality - bug fixes"
   }
 }

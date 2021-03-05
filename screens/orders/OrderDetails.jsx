@@ -85,7 +85,7 @@ const OrderDetails = ({ route }) => {
         </Text>
         <View style={{ flexDirection: 'row', }}>
           <Text style={{ ...FONTS.h4 }}>Amount: </Text>
-          {order.coupon && (<Text style={{ ...FONTS.h4, color: 'red', opacity: 0.4, textDecorationLine: 'line-through', marginRight: 8 }}>${order.coupon.originalPrice}</Text>)}
+          {order.coupon && (<Text style={{ ...FONTS.h4, color: 'red', opacity: 0.4, textDecorationLine: 'line-through', marginRight: 8 }}>${order.coupon.originalPrice.toFixed(2)}</Text>)}
           <Text
             style={{
               ...FONTS.h4

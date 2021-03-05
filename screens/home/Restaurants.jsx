@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ScrollView } from "react-native";
 import { Modal } from "react-native";
-import { StyleSheet, FlatList, Text, View, TouchableOpacity, Animated, TextInput } from "react-native";
+import { StyleSheet, FlatList, Text, View, TouchableOpacity, Animated, TextInput, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
 
 import Loader from "../../components/Loader";
@@ -21,6 +21,9 @@ import cartContext from "../../context/cart/cartContext";
 import { Alert } from "react-native";
 import itemsContext from "../../context/items/itemsContext";
 import useLocation from "../../utils/useLocation";
+import { ActivityIndicator } from "react-native";
+
+
 
 
 const SPACING = SIZES.padding
@@ -32,7 +35,7 @@ const Restaurants = ({ navigation }) => {
   //const location = null;
   const scrollY = useRef(new Animated.Value(0)).current
   const { stores, getStores, loading } = useContext(storesContext);
-  const { items, getItems } = useContext(itemsContext);
+  const { items, getItems, allItems, getAllStoresItems, loading: itemsLoading } = useContext(itemsContext);
   const { user } = useContext(authContext);
   const [onlyLocal, setOnlyLocal] = useState(true)
   const [location, errorMsg] = useLocation(onlyLocal)
@@ -47,10 +50,10 @@ const Restaurants = ({ navigation }) => {
   const [searching, setSearching] = useState(true);
 
   const [refreshing, setRefreshing] = useState(false);
-  const [text, setText] = useState("");
+  const [searchText, setSearchText] = useState("");
+
 
   // const { address, isloading } = useLocation()
-
 
   const fetchStores = (restaurant) => {
     if (!restaurant.open) {
@@ -62,28 +65,52 @@ const Restaurants = ({ navigation }) => {
     navigation.navigate("Home", { restaurant });
   };
 
-  const filterRestaurantBySearchItem = () => {
+  const handleSearchText = e => {
+    setSearchText(e.nativeEvent.text)
+    if (e.nativeEvent.text.length > 0) {
+      setSearching(true)
+      allItems.length === 0 && getAllStoresItems()
+    }
+    if (e.nativeEvent.text === '' || e.nativeEvent.text.length === 0) {
+      setSearching(false)
+
+    }
 
   }
 
-  useLayoutEffect(() => {
+  const currentStores = () => {
     if (searching) {
-      navigation.setOptions({
-        headerTitle: () => (
-          <View
-            style={{
-              backgroundColor: COLORS.primary,
 
-            }}
-          >
+      const newStores = []
+      location && onlyLocal ? stores.filter(store => store.deliveryZip.includes(location[0].postalCode)).forEach(s => {
 
-          </View>
-        ),
+        allItems.filter(i => {
+          if (i.name.toLowerCase().includes(searchText.toLowerCase()) && s.id === i.storeId && s.hasItems) {
+            let index = newStores.indexOf(s)
+            if (index === -1) {
+              newStores.push(s)
+            }
+          }
 
-      })
+        })
+      }) : (
+          stores.forEach(s => {
+
+            allItems.filter(i => {
+              if (i.name.toLowerCase().includes(searchText.toLowerCase()) && s.id === i.storeId && s.hasItems) {
+                let index = newStores.indexOf(s)
+                if (index === -1) {
+                  newStores.push(s)
+                }
+              }
+            })
+          }))
+      return newStores
     }
+    return location && onlyLocal ? stores.filter(store => store.deliveryZip.includes(location[0].postalCode)) : stores
+  }
 
-  }, [navigation, searching])
+
 
   //handle modal press
   const modalHandler = (order) => {
@@ -96,7 +123,14 @@ const Restaurants = ({ navigation }) => {
     try {
       setAdding(true);
       for (let index = 0; index < order.items.length; index++) {
-        const element = order.items[index];
+        let element = order.items[index];
+        if (order.coupon) {
+          element.price = element.originalPrice
+
+        }
+        if (element.originalPrice) {
+          delete element.originalPrice
+        }
 
         await addToCart(element);
         calculateCartTotal(order.items);
@@ -232,14 +266,21 @@ const Restaurants = ({ navigation }) => {
       setOrder(null);
       setRestaurant(null);
       setShowModal(false);
+      setSearching(false)
+      setSearchText('')
     };
   }, [stores.length, user]);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <Entypo onPress={() => setOnlyLocal(preview => !preview)} style={{ marginRight: SIZES.padding * 0.5 }} name="location-pin" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />
-    })
-  }, [navigation, onlyLocal])
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => <Entypo onPress={() => setOnlyLocal(preview => !preview)} style={{ marginRight: SIZES.padding * 0.5 }} name="location-pin" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />,
+  //     headerTitle: () => {
+  //       return <View style={{ flexDirection: 'row', width: SIZES.width * 0.7, marginBottom: 8 }}>
+  //         <AppInput placeholder='What are you craving for?' style={{ padding: SIZES.padding, }} value={searchText} onChange={filterRestaurantBySearchItem} />
+  //       </View>
+  //     }
+  //   })
+  // }, [navigation, onlyLocal])
 
   if (loading || adding) return <Loader />;
 
@@ -274,74 +315,116 @@ const Restaurants = ({ navigation }) => {
     <Screen style={styles.screen}>
       {/* <SearchBar text={text} onChange={e => onChange(e)} /> */}
 
-      {user && orders.length > 0 && (
-        <View
-          style={{
-            justifyContent: "flex-start",
-            width: SIZES.width,
-            height: SIZES.height * 0.2,
-            padding: SIZES.radius,
-          }}
-        >
-          <Text
-            style={{
-              paddingLeft: 12,
-              paddingBottom: 5,
-              fontWeight: "600",
-              fontSize: 16,
-            }}
-          >
-            Recent Orders
+      <View style={{ flexDirection: 'row', width: SIZES.width * 0.95, justifyContent: 'space-between', alignItems: 'center', }}>
+
+        <TextInput placeholder='What are you craving for?'
+          onChange={handleSearchText}
+          enablesReturnKeyAutomatically={true}
+          value={searchText}
+          //onSubmitEditing={filterRestaurantBySearchItem}
+          returnKeyType='search'
+          style={{ backgroundColor: COLORS.white, marginVertical: 15, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3, }}
+          placeholderTextColor={COLORS.black} />
+        {searching ? (<TouchableOpacity onPress={() => {
+          setSearching(false)
+          setSearchText('')
+
+          Keyboard.dismiss()
+
+        }} style={{ marginRight: 10, }}>
+          <AntDesign name="closecircleo" size={24} color="black" />
+        </TouchableOpacity>) : (<Entypo onPress={() => setOnlyLocal(preview => !preview)} style={{ width: '10%', marginHorizontal: 5 }} name="location-pin" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />)}
+
+      </View>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
+        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, }}>
+          {user && orders.length > 0 && (
+
+            <View
+              style={{
+                justifyContent: "flex-start",
+                width: SIZES.width,
+                height: SIZES.height * 0.2,
+                padding: SIZES.radius,
+              }}
+            >
+              <Text
+                style={{
+                  paddingLeft: 12,
+                  paddingBottom: 5,
+                  fontWeight: "600",
+                  fontSize: 16,
+                }}
+              >
+                Recent Orders
           </Text>
 
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ height: "100%" }}
-            data={orders}
-            horizontal
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <RecentOrderCard
-                key={item.id}
-                onPress={() => modalHandler(item)}
-                order={item}
+
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ height: "100%" }}
+                data={orders}
+                horizontal
+                style={{ flexGrow: 0 }}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <RecentOrderCard
+                    key={item.id}
+                    onPress={() => modalHandler(item)}
+                    order={item}
+                  />
+                )}
               />
-            )}
+            </View>
+          )}
+          <View
+            style={{
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
+              width: "100%",
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', width: SIZES.width, paddingLeft: 5 }}>
+              <Text style={{ ...FONTS.body3, paddingLeft: 18, textAlign: 'left' }}>Restaurants</Text>
+            </View>
+
+          </View>
+          {currentStores().length === 0 && searching && (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', zIndex: 999 }}>
+              <Text style={{ ...FONTS.body3 }}>No stores found. </Text>
+              <Text style={{ ...FONTS.body4, margin: SIZES.padding }}>Please modify your search</Text>
+              <TouchableOpacity onPress={() => getAllStoresItems()}>
+                {itemsLoading ? <ActivityIndicator size='large' /> : (<Text style={{ color: 'blue', padding: SIZES.padding, fontWeight: '600' }}>Refresh</Text>)}
+
+              </TouchableOpacity>
+            </View>
+          )
+
+          }
+          <Animated.FlatList
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true })}
+            showsVerticalScrollIndicator={false}
+            onRefresh={getStores}
+            refreshing={refreshing}
+            data={currentStores()}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item, index }) => {
+              const inputRange = [-1, 0, ITEM_SIZE * index, ITEM_SIZE * (index + 2)]
+              const opacityRange = [-1, 0, ITEM_SIZE * index, ITEM_SIZE * (index + 1)]
+              const scale = scrollY.interpolate({
+                inputRange,
+                outputRange: [1, 1, 1, 0]
+              })
+              const opacity = scrollY.interpolate({
+                inputRange: opacityRange,
+                outputRange: [1, 1, 1, 0]
+              })
+              return <StoreCard scale={scale} opacity={opacity} style={{ transform: [{ scale }] }} store={item} onPress={() => fetchStores(item)} />;
+
+            }}
           />
         </View>
-      )}
-      <View
-        style={{
-          alignItems: "flex-start",
-          justifyContent: "flex-start",
-          width: "100%",
-        }}
-      >
-        <Text style={{ ...FONTS.body2, paddingLeft: 18 }}>Restaurants</Text>
-      </View>
-      <Animated.FlatList
-        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true })}
-        showsVerticalScrollIndicator={false}
-        onRefresh={getStores}
-        refreshing={refreshing}
-        data={location && onlyLocal ? stores.filter(store => store.deliveryZip.includes(location[0].postalCode)) : stores}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item, index }) => {
-          const inputRange = [-1, 0, ITEM_SIZE * index, ITEM_SIZE * (index + 2)]
-          const opacityRange = [-1, 0, ITEM_SIZE * index, ITEM_SIZE * (index + 1)]
-          const scale = scrollY.interpolate({
-            inputRange,
-            outputRange: [1, 1, 1, 0]
-          })
-          const opacity = scrollY.interpolate({
-            inputRange: opacityRange,
-            outputRange: [1, 1, 1, 0]
-          })
-          return <StoreCard scale={scale} opacity={opacity} style={{ transform: [{ scale }] }} store={item} onPress={() => fetchStores(item)} />;
-
-        }}
-      />
-
+      </TouchableWithoutFeedback>
       <Modal
         visible={showModal}
         animationType="slide"
@@ -430,6 +513,7 @@ const Restaurants = ({ navigation }) => {
           </View>
         </View>
       </Modal>
+
     </Screen>
   );
 };

@@ -30,6 +30,14 @@ const OrderTile = ({ order, onPress }) => {
       for (let index = 0; index < order.items.length; index++) {
         const element = order.items[index];
 
+        if (order.coupon) {
+          element.price = element.originalPrice
+
+        }
+        if (element.originalPrice) {
+          delete element.originalPrice
+        }
+
         await addToCart(element);
         //calculateCartTotal(order.items)
       }

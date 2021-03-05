@@ -28,7 +28,7 @@ const HomeStackNavigator = () => {
   }, []);
   return (
     <HomeStack.Navigator mode="modal">
-      <HomeStack.Screen name='Restaurants' options={{ headerTitle: () => <View><Text style={styles.text}>My Deli</Text></View> }} component={Restaurants} />
+      <HomeStack.Screen name='Restaurants' options={{ headerTitle: () => <View><Text style={styles.text}>My Deli</Text></View>, headerShown: false, }} component={Restaurants} />
 
       <HomeStack.Screen
         name="Home"
