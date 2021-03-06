@@ -24,8 +24,9 @@ const RecentOrderCard = ({ order, onPress }) => {
       <View style={styles.bottomView}>
         <Text
           style={{
-            ...FONTS.body5,
+
             textTransform: "capitalize",
+            fontFamily: 'lobster',
 
             color: COLORS.black,
           }}

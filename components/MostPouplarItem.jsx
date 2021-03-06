@@ -14,7 +14,7 @@ const MostPouplarItem = ({ onPress, item }) => {
       </View>
 
       <View style={styles.bottomView}>
-        <Text style={{ ...FONTS.body5, textTransform: "capitalize" }}>
+        <Text style={{ textTransform: "capitalize", fontFamily: 'lobster', fontWeight: '400' }}>
           {item.name}
         </Text>
       </View>

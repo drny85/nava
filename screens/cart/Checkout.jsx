@@ -46,6 +46,8 @@ const Checkout = ({ route, navigation }) => {
   const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
 
+  console.log(deliveryMethod)
+
   const { cartTotal, itemCounts } = useContext(cartContext);
 
   const handlePickup = (pickupInfo) => {

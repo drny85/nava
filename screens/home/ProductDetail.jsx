@@ -39,7 +39,7 @@ const fadeIn = {
 
 const ProductDetail = ({ route, navigation }) => {
   const sizes = [];
-  const { product, restaurant } = route.params;
+  const { product, restaurant, deliveryType } = route.params;
   const [instruction, setIntruction] = useState(null);
 
   const { addToCart, cartItems, clearCart } = useContext(cartContext);
@@ -365,6 +365,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     letterSpacing: 1.1,
     textTransform: "capitalize",
+    fontFamily: 'lobster',
+    lineHeight: 28,
     color: "black",
   },
   price: {

@@ -21,6 +21,7 @@ const loadFonts = async () => {
     monte: require("./assets/fonts/Montez-Regular.ttf"),
     "montserrat-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
     "montserrat-bold-italic": require("./assets/fonts/Montserrat-BoldItalic.ttf"),
+    "lobster": require('./assets/fonts/Lobster-Regular.ttf'),
     tange: require("./assets/fonts/Tangerine-Regular.ttf"),
   });
 };

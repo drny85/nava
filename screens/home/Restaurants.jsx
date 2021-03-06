@@ -22,6 +22,7 @@ import { Alert } from "react-native";
 import itemsContext from "../../context/items/itemsContext";
 import useLocation from "../../utils/useLocation";
 import { ActivityIndicator } from "react-native";
+import settingsContext from "../../context/settings/settingsContext";
 
 
 
@@ -37,7 +38,9 @@ const Restaurants = ({ navigation }) => {
   const { stores, getStores, loading } = useContext(storesContext);
   const { items, getItems, allItems, getAllStoresItems, loading: itemsLoading } = useContext(itemsContext);
   const { user } = useContext(authContext);
+  const { setDeliveryMethod } = useContext(settingsContext)
   const [onlyLocal, setOnlyLocal] = useState(true)
+  const [deliveryType, setDeliveryType] = useState('delivery')
   const [location, errorMsg] = useLocation(onlyLocal)
   const { addToCart, cartItems, clearCart, calculateCartTotal } = useContext(
     cartContext
@@ -62,7 +65,7 @@ const Restaurants = ({ navigation }) => {
       ]);
       return;
     }
-    navigation.navigate("Home", { restaurant });
+    navigation.navigate("Home", { restaurant, deliveryType });
   };
 
   const handleSearchText = e => {
@@ -82,7 +85,7 @@ const Restaurants = ({ navigation }) => {
     if (searching) {
 
       const newStores = []
-      location && onlyLocal ? stores.filter(store => store.deliveryZip.includes(location[0].postalCode)).forEach(s => {
+      location && onlyLocal ? stores.filter(store => store.deliveryZip && store.deliveryZip.includes(location[0].postalCode)).forEach(s => {
 
         allItems.filter(i => {
           if (i.name.toLowerCase().includes(searchText.toLowerCase()) && s.id === i.storeId && s.hasItems) {
@@ -105,9 +108,9 @@ const Restaurants = ({ navigation }) => {
               }
             })
           }))
-      return newStores
+      return deliveryType === 'pickup' ? newStores.filter(store => store.deliveryType && store.deliveryType === 'pickupOnly') : newStores.filter(store => store.deliveryType && store.deliveryType !== 'pickupOnly')
     }
-    return location && onlyLocal ? stores.filter(store => store.deliveryZip.includes(location[0].postalCode)) : stores
+    return location && onlyLocal && deliveryType !== 'pickup' ? stores.filter(store => store.deliveryZip && store.deliveryZip.includes(location[0].postalCode)) : deliveryType !== 'pickup' && !onlyLocal ? stores.filter(store => store.deliveryType !== 'pickupOnly') : stores
   }
 
 
@@ -261,6 +264,7 @@ const Restaurants = ({ navigation }) => {
     //get all orders for a particular user if user is logged in
     getOrders(user?.id);
 
+    setDeliveryMethod(deliveryType)
 
     return () => {
       setOrder(null);
@@ -295,7 +299,7 @@ const Restaurants = ({ navigation }) => {
   }
 
 
-  if (location && onlyLocal && stores.filter(store => store.deliveryZip.includes(location[0].postalCode)).length === 0) {
+  if (location && onlyLocal && stores.filter(store => store.deliveryZip && store.deliveryZip.includes(location[0].postalCode)).length === 0) {
 
 
     return <Screen style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -334,6 +338,22 @@ const Restaurants = ({ navigation }) => {
         }} style={{ marginRight: 10, }}>
           <AntDesign name="closecircleo" size={24} color="black" />
         </TouchableOpacity>) : (<Entypo onPress={() => setOnlyLocal(preview => !preview)} style={{ width: '10%', marginHorizontal: 5 }} name="location-pin" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />)}
+
+      </View>
+      {/* //delivery Type View */}
+      <View style={{ flexDirection: 'row', width: SIZES.width * 0.6, alignItems: 'center', justifyContent: 'center', height: 40, }}>
+        <TouchableOpacity onPress={() => {
+          setDeliveryType('delivery')
+          setDeliveryMethod('delivery')
+        }} style={{ alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '50%', backgroundColor: deliveryType === 'delivery' ? COLORS.gray : COLORS.white, shadowColor: COLORS.gray, shadowOffset: { width: 4, height: 60 }, elevation: 8, height: '100%', shadowOpacity: 0.7, shadowRadius: 4, borderBottomLeftRadius: 25, borderTopLeftRadius: 25, }}>
+          <Text style={{ fontFamily: deliveryType === 'delivery' ? 'montserrat-bold' : 'montserrat' }}>Delivery</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+          setDeliveryType('pickup')
+          setDeliveryMethod('pickup')
+        }} style={{ alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '50%', backgroundColor: deliveryType === 'pickup' ? COLORS.gray : COLORS.white, shadowColor: COLORS.gray, shadowOffset: { width: 4, height: 60 }, elevation: 8, height: '100%', shadowOpacity: 0.7, shadowRadius: 4, borderBottomRightRadius: 25, borderTopRightRadius: 25, borderLeftWidth: 1, borderLeftColor: COLORS.gray }}>
+          <Text style={{ fontFamily: deliveryType === 'pickup' ? 'montserrat-bold' : 'montserrat' }}>Pick Up</Text>
+        </TouchableOpacity>
 
       </View>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >

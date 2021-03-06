@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Image, Animated } from "react
 
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
-import { COLORS, SIZES } from "../config";
+import { COLORS, FONTS, SIZES } from "../config";
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import authContext from "../context/auth/authContext";
 
@@ -41,11 +41,9 @@ const StoreCard = ({ store, onPress, scale = null, opacity = null }) => {
             {name}
           </Text>
           <Text style={styles.phone}>{phone}</Text>
-          <Text style={styles.phone}>{street}</Text>
-          <Text style={styles.caption}>
-            {city}, {zipcode}
-          </Text>
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={styles.phone}>{street},  {city}, {zipcode}</Text>
+
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: 'flex-end', position: 'absolute', bottom: 10, left: 0, right: 0, }}>
             <Text
               style={{
                 color: "red",
@@ -56,10 +54,11 @@ const StoreCard = ({ store, onPress, scale = null, opacity = null }) => {
             >
               {store.open ? null : "CLOSED"}
             </Text>
+            {store.deliveryMinimum && (<Text style={{ ...FONTS.body5, color: COLORS.white, }}>${store.deliveryMinimum} minimum delivery</Text>)}
             {store.estimatedDeliveryTime && (
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: 16,
                   color: COLORS.white,
                   textAlign: "right",
                   paddingRight: 20,
@@ -132,9 +131,9 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   name: {
-    fontSize: 16,
-    fontFamily: "montserrat-bold",
-    textTransform: "uppercase",
+    fontSize: 18,
+    fontFamily: "lobster",
+    textTransform: 'capitalize',
     letterSpacing: 1.1,
     paddingLeft: 12,
     color: colors.tile,
@@ -150,6 +149,7 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     color: colors.tile,
     fontSize: 12,
+    marginVertical: 2
   },
 });
 

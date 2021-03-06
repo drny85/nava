@@ -7,7 +7,7 @@ import Card from "./Card";
 import colors from "../config/colors";
 import { FONTS, SIZES } from "../config";
 
-const ListCategoryItems = ({ categories, items, restaurant }) => {
+const ListCategoryItems = ({ categories, items, restaurant, deliveryType }) => {
   const navigation = useNavigation();
 
   return (
@@ -47,6 +47,7 @@ const ListCategoryItems = ({ categories, items, restaurant }) => {
                       navigation.navigate("ProductDetail", {
                         product: item,
                         restaurant,
+                        deliveryType
                       });
                     }}
                   />

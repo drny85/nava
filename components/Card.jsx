@@ -86,8 +86,10 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     marginBottom: 8,
+    fontFamily: 'lobster',
     fontWeight: "600",
     letterSpacing: 1.1,
+    lineHeight: 28,
     textTransform: "capitalize",
     color: "white",
   },

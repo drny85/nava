@@ -22,7 +22,8 @@ const Home = ({ route, navigation }) => {
 
   const { items, getItems, loading, mostPopular } = itemsContext;
   const { categories, getCategories } = categoryContext;
-  const { restaurant } = route.params;
+  const { restaurant, deliveryType } = route.params;
+
 
   useEffect(() => {
     const { res, uns } = getItems(restaurant?.id);
@@ -44,7 +45,7 @@ const Home = ({ route, navigation }) => {
           iconName="arrow-left"
           onPress={() => navigation.navigate("Restaurants")}
         />
-        <Text style={{ ...FONTS.body2, textTransform: "capitalize" }}>
+        <Text style={{ textTransform: "capitalize", fontFamily: 'lobster', fontSize: 20, lineHeight: 32 }}>
           {restaurant.name}
         </Text>
         <FloatingButton iconName="list" onPress={() => setVisible(true)} />
@@ -97,6 +98,7 @@ const Home = ({ route, navigation }) => {
       <ListCategoryItems
         categories={categories}
         items={items}
+        deliveryType={deliveryType}
         restaurant={restaurant}
         onRefresh={getItems}
       />
