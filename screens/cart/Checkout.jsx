@@ -39,14 +39,14 @@ const Checkout = ({ route, navigation }) => {
   const [paymentOption, setPaymentOption] = useState("credit");
   const [canContinue, setCanContinue] = useState(false);
   const [error, setError] = useState(null);
-  const { deliveryMethod } = useContext(settingsContext);
+  const { deliveryMethod: deliveryOption } = useContext(settingsContext);
   const { user } = useContext(authContext);
   const previous = route.params?.previous;
   const { restaurant } = route.params;
-  const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
+  //const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
 
-  console.log(deliveryMethod)
+  console.log(deliveryOption)
 
   const { cartTotal, itemCounts } = useContext(cartContext);
 
@@ -94,8 +94,13 @@ const Checkout = ({ route, navigation }) => {
       return;
     }
 
+    if (!canContinue) {
+      alert('This location do not delivery to yours')
+      return
+    }
+
     //  check cart total is greater than 10 for minimum delivery amount.
-    if (deliveryMethod === "delivery" && cartTotal < (restaurant?.deliveryMinimum ? restaurant.deliveryMinimum : MINIMUM_DELIVERY)) {
+    if (deliveryOption === "delivery" && cartTotal < (restaurant?.deliveryMinimum ? restaurant.deliveryMinimum : MINIMUM_DELIVERY)) {
 
       Alert.alert(
         "Minimum Delivery",
@@ -145,10 +150,12 @@ const Checkout = ({ route, navigation }) => {
 
     }
   }
+  console.log(canContinue)
 
   useEffect(() => {
 
     checkDeliveryAddress()
+
   }, [previous]);
 
   return (
@@ -174,6 +181,7 @@ const Checkout = ({ route, navigation }) => {
           <Text style={styles.title}>Delivery Option</Text>
           <View style={styles.delivery}>
             <TouchableOpacity
+              disabled
               onPress={() => {
                 setDeliveryOption("delivery")
                 if (!deliveryAddress) {
@@ -185,6 +193,7 @@ const Checkout = ({ route, navigation }) => {
               }}
               style={{
                 height: "100%",
+
                 backgroundColor:
                   deliveryOption === "delivery" ? COLORS.secondary : COLORS.white,
                 width: "50%",
@@ -193,7 +202,7 @@ const Checkout = ({ route, navigation }) => {
                 flexDirection: "row",
               }}
             >
-              <View>
+              <View style={{ opacity: 0.5 }}>
                 <Text
                   style={{
                     fontSize: 24,
@@ -210,12 +219,14 @@ const Checkout = ({ route, navigation }) => {
             </TouchableOpacity>
             <View style={styles.divider}></View>
             <TouchableOpacity
+              disabled
               onPress={() => {
                 setDeliveryOption("pickup")
                 setCanContinue(true)
               }}
               style={{
                 height: "100%",
+
                 backgroundColor:
                   deliveryOption === "pickup" ? COLORS.secondary : COLORS.white,
                 width: "50%",
@@ -224,7 +235,7 @@ const Checkout = ({ route, navigation }) => {
                 flexDirection: "row",
               }}
             >
-              <View>
+              <View style={{ opacity: 0.5 }}>
                 <Text
                   style={{
                     fontSize: 24,
@@ -301,7 +312,7 @@ const Checkout = ({ route, navigation }) => {
                     <Text style={styles.deliveryTitle}>
                       {previous ? `Delivery Address` : `Pick an address *`}
                     </Text>
-                    <View style={{ padding: 10 }}>
+                    <View style={{ padding: 12 }}>
                       {deliveryAddress ? (
                         <>
                           <Text style={styles.deliveryText}>
@@ -350,7 +361,7 @@ const Checkout = ({ route, navigation }) => {
       </View>
       <View style={{ marginBottom: 15, width: "90%", }}>
         {/* <AppSubmitButton disabled={!canContinue} title="Check Out" /> */}
-        <AppButton title='Check Out' disabled={!canContinue} onPress={deliveryOption === 'delivery' ? handleDelivery : handlePickup} />
+        <AppButton title='Check Out' onPress={deliveryOption === 'delivery' ? handleDelivery : handlePickup} />
       </View>
     </ScrollView>
 

@@ -253,6 +253,45 @@ const Restaurants = ({ navigation }) => {
     }
   };
 
+  const handleDeliveryType = type => {
+    switch (type) {
+      case 'delivery':
+
+        if (cartItems.length > 0) {
+          const storeId = cartItems[0].storeId
+          const res = stores.find(store => store.id === storeId)
+          if (res.deliveryType === 'pickupOnly') {
+            alert('You already have an item which store only offers pick ups. Please remove item to continue')
+            return;
+          }
+
+        }
+        setDeliveryType('delivery')
+        setDeliveryMethod('delivery')
+
+        break;
+
+
+      case 'pickup':
+
+        if (cartItems.length > 0) {
+          const storeId = cartItems[0].storeId
+          const res = stores.find(store => store.id === storeId)
+          if (res.deliveryType === 'deliveryOnly') {
+            alert('You already have an item which store only offers deliveries. Please remove item to continue')
+            return;
+          }
+
+        }
+        setDeliveryType('pickup')
+        setDeliveryMethod('pickup')
+
+
+      default:
+        break;
+    }
+  }
+
   const onChange = (e) => {
     setText(e);
     console.log(storesCopy.map((s) => s.name.includes(text)));
@@ -342,16 +381,14 @@ const Restaurants = ({ navigation }) => {
       </View>
       {/* //delivery Type View */}
       <View style={{ flexDirection: 'row', width: SIZES.width * 0.6, alignItems: 'center', justifyContent: 'center', height: 40, }}>
-        <TouchableOpacity onPress={() => {
-          setDeliveryType('delivery')
-          setDeliveryMethod('delivery')
-        }} style={{ alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '50%', backgroundColor: deliveryType === 'delivery' ? COLORS.gray : COLORS.white, shadowColor: COLORS.gray, shadowOffset: { width: 4, height: 60 }, elevation: 8, height: '100%', shadowOpacity: 0.7, shadowRadius: 4, borderBottomLeftRadius: 25, borderTopLeftRadius: 25, }}>
+        <TouchableOpacity onPress={() => handleDeliveryType('delivery')
+
+        } style={{ alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '50%', backgroundColor: deliveryType === 'delivery' ? COLORS.gray : COLORS.white, shadowColor: COLORS.gray, shadowOffset: { width: 4, height: 60 }, elevation: 8, height: '100%', shadowOpacity: 0.7, shadowRadius: 4, borderBottomLeftRadius: 25, borderTopLeftRadius: 25, }}>
           <Text style={{ fontFamily: deliveryType === 'delivery' ? 'montserrat-bold' : 'montserrat' }}>Delivery</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {
-          setDeliveryType('pickup')
-          setDeliveryMethod('pickup')
-        }} style={{ alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '50%', backgroundColor: deliveryType === 'pickup' ? COLORS.gray : COLORS.white, shadowColor: COLORS.gray, shadowOffset: { width: 4, height: 60 }, elevation: 8, height: '100%', shadowOpacity: 0.7, shadowRadius: 4, borderBottomRightRadius: 25, borderTopRightRadius: 25, borderLeftWidth: 1, borderLeftColor: COLORS.gray }}>
+        <TouchableOpacity onPress={() => handleDeliveryType('pickup')
+
+        } style={{ alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '50%', backgroundColor: deliveryType === 'pickup' ? COLORS.gray : COLORS.white, shadowColor: COLORS.gray, shadowOffset: { width: 4, height: 60 }, elevation: 8, height: '100%', shadowOpacity: 0.7, shadowRadius: 4, borderBottomRightRadius: 25, borderTopRightRadius: 25, borderLeftWidth: 1, borderLeftColor: COLORS.gray }}>
           <Text style={{ fontFamily: deliveryType === 'pickup' ? 'montserrat-bold' : 'montserrat' }}>Pick Up</Text>
         </TouchableOpacity>
 
