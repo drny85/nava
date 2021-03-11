@@ -13,6 +13,7 @@ import StoreCard from "../../components/StoreCard";
 import { COLORS, FONTS, SIZES } from "../../config";
 import authContext from "../../context/auth/authContext";
 import ordersContext from "../../context/order/orderContext";
+import Animatable from 'react-native-animatable'
 
 //import { useLocation } from '../../hooks/useLocation'
 
@@ -23,6 +24,7 @@ import itemsContext from "../../context/items/itemsContext";
 import useLocation from "../../utils/useLocation";
 import { ActivityIndicator } from "react-native";
 import settingsContext from "../../context/settings/settingsContext";
+import { getFilteredStores } from "../../utils/getFiltetredStores";
 
 
 
@@ -50,7 +52,7 @@ const Restaurants = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false);
   const [restaurant, setRestaurant] = useState(null);
   const [adding, setAdding] = useState(false);
-  const [searching, setSearching] = useState(true);
+  const [searching, setSearching] = useState(false);
 
   const [refreshing, setRefreshing] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -112,7 +114,6 @@ const Restaurants = ({ navigation }) => {
     }
     return location && onlyLocal && deliveryType !== 'pickup' ? stores.filter(store => store.deliveryZip && store.deliveryZip.includes(location[0].postalCode)) : deliveryType !== 'pickup' && !onlyLocal ? stores.filter(store => store.deliveryType !== 'pickupOnly') : stores
   }
-
 
 
   //handle modal press
@@ -366,7 +367,7 @@ const Restaurants = ({ navigation }) => {
           value={searchText}
           //onSubmitEditing={filterRestaurantBySearchItem}
           returnKeyType='search'
-          style={{ backgroundColor: COLORS.white, marginVertical: 15, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3, }}
+          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3, }}
           placeholderTextColor={COLORS.black} />
         {searching ? (<TouchableOpacity onPress={() => {
           setSearching(false)
@@ -379,8 +380,13 @@ const Restaurants = ({ navigation }) => {
         </TouchableOpacity>) : (<Entypo onPress={() => setOnlyLocal(preview => !preview)} style={{ width: '10%', marginHorizontal: 5 }} name="location-pin" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />)}
 
       </View>
+      {onlyLocal && (
+        <View>
+          <Text style={{ paddingVertical: 5, fontFamily: 'montserrat', fontSize: 12, }}>showing based on location...</Text>
+        </View>
+      )}
       {/* //delivery Type View */}
-      <View style={{ flexDirection: 'row', width: SIZES.width * 0.6, alignItems: 'center', justifyContent: 'center', height: 40, }}>
+      <View style={{ flexDirection: 'row', width: SIZES.width * 0.6, alignItems: 'center', justifyContent: 'center', height: 40, marginVertical: 10, }}>
         <TouchableOpacity onPress={() => handleDeliveryType('delivery')
 
         } style={{ alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '50%', backgroundColor: deliveryType === 'delivery' ? COLORS.gray : COLORS.white, shadowColor: COLORS.gray, shadowOffset: { width: 4, height: 60 }, elevation: 8, height: '100%', shadowOpacity: 0.7, shadowRadius: 4, borderBottomLeftRadius: 25, borderTopLeftRadius: 25, }}>
@@ -407,10 +413,7 @@ const Restaurants = ({ navigation }) => {
             >
               <Text
                 style={{
-                  paddingLeft: 12,
-                  paddingBottom: 5,
-                  fontWeight: "600",
-                  fontSize: 16,
+                  ...FONTS.body4, paddingLeft: SIZES.padding * 0.5, paddingBottom: SIZES.padding * 0.2,
                 }}
               >
                 Recent Orders
@@ -441,12 +444,16 @@ const Restaurants = ({ navigation }) => {
               width: "100%",
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', width: SIZES.width, paddingLeft: 5 }}>
-              <Text style={{ ...FONTS.body3, paddingLeft: 18, textAlign: 'left' }}>Restaurants</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', width: SIZES.width, }}>
+
+
+              <Text style={{
+                ...FONTS.body3, paddingLeft: SIZES.padding,
+              }}>Restaurants</Text>
             </View>
 
           </View>
-          {currentStores().length === 0 && searching && (
+          {getFilteredStores(stores, allItems, location, searchText, searching, deliveryType, onlyLocal).length === 0 && searching && (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', zIndex: 999 }}>
               <Text style={{ ...FONTS.body3 }}>No stores found. </Text>
               <Text style={{ ...FONTS.body4, margin: SIZES.padding }}>Please modify your search</Text>
@@ -463,7 +470,7 @@ const Restaurants = ({ navigation }) => {
             showsVerticalScrollIndicator={false}
             onRefresh={getStores}
             refreshing={refreshing}
-            data={currentStores()}
+            data={getFilteredStores(stores, allItems, location, searchText, searching, deliveryType, onlyLocal)}
             keyExtractor={(item) => item.id}
             renderItem={({ item, index }) => {
               const inputRange = [-1, 0, ITEM_SIZE * index, ITEM_SIZE * (index + 2)]

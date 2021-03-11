@@ -43,8 +43,8 @@ const StoreCard = ({ store, onPress, scale = null, opacity = null }) => {
           <Text style={styles.phone}>{phone}</Text>
           <Text style={styles.phone}>{street},  {city}, {zipcode}</Text>
 
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: 'flex-end', position: 'absolute', bottom: 10, left: 0, right: 0, }}>
-            <Text
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: 'flex-end', position: 'absolute', bottom: 10, left: 0, right: 0, paddingHorizontal: SIZES.padding * 0.5 }}>
+            {!store.open && (<Text
               style={{
                 color: "red",
                 paddingLeft: 15,
@@ -52,16 +52,16 @@ const StoreCard = ({ store, onPress, scale = null, opacity = null }) => {
                 fontWeight: "700",
               }}
             >
-              {store.open ? null : "CLOSED"}
-            </Text>
-            {store.deliveryMinimum && (<Text style={{ ...FONTS.body5, color: COLORS.white, }}>${store.deliveryMinimum} minimum delivery</Text>)}
+              CLOSED
+            </Text>)}
+
+            {store.deliveryMinimum ? (<Text style={{ ...FONTS.body5, color: COLORS.white, fontFamily: 'montserrat-bold', }}>${store.deliveryMinimum} minimum delivery</Text>) : (<Text style={{ ...FONTS.body5, color: COLORS.white, fontFamily: 'montserrat-bold', }}>Free Delivery</Text>)}
             {store.estimatedDeliveryTime && (
               <Text
                 style={{
                   fontSize: 16,
                   color: COLORS.white,
                   textAlign: "right",
-                  paddingRight: 20,
                   fontWeight: "500",
                 }}
               >
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   name: {
-    fontSize: 18,
+    fontSize: 22,
     fontFamily: "lobster",
     textTransform: 'capitalize',
     letterSpacing: 1.1,

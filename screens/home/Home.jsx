@@ -13,10 +13,12 @@ import RestaurantInfo from "../../components/RestaurantInfo";
 import { COLORS, FONTS, SIZES } from "../../config";
 import MostPouplarItem from "../../components/MostPouplarItem";
 import Spinner from "../../components/Spinner";
+import storesContext from "../../context/stores/storesContext";
 
 const Home = ({ route, navigation }) => {
   const itemsContext = useContext(ItemsContext);
   const categoryContext = useContext(CategoryContext);
+  const { stores } = useContext(storesContext)
   const [visible, setVisible] = useState(false);
   //const [mostPopular, setMostPopular] = useState([])
 
@@ -41,11 +43,13 @@ const Home = ({ route, navigation }) => {
   return (
     <Screen style={styles.screen}>
       <View style={styles.top}>
-        <FloatingButton
+        {stores.length > 1 ? (<FloatingButton
+
           iconName="arrow-left"
           onPress={() => navigation.navigate("Restaurants")}
-        />
-        <Text style={{ textTransform: "capitalize", fontFamily: 'lobster', fontSize: 20, lineHeight: 32 }}>
+        />) : (<Text></Text>)}
+
+        <Text style={{ textTransform: "capitalize", fontFamily: 'lobster', fontSize: 24, lineHeight: 32 }}>
           {restaurant.name}
         </Text>
         <FloatingButton iconName="list" onPress={() => setVisible(true)} />
@@ -57,8 +61,8 @@ const Home = ({ route, navigation }) => {
         />
       </Modal>
       <View style={styles.headerView}>
-        <Text style={{ ...FONTS.body2, paddingLeft: 10 }}>
-          What are you craving for today?
+        <Text style={{ ...FONTS.body2, paddingLeft: 10, fontFamily: 'lobster', }}>
+          What do you feel like eating today?
         </Text>
       </View>
       {mostPopular.length > 0 && (
@@ -70,7 +74,7 @@ const Home = ({ route, navigation }) => {
             padding: SIZES.radius,
           }}
         >
-          <Text style={{ paddingLeft: 12, paddingBottom: 5, ...FONTS.body2 }}>
+          <Text style={{ paddingLeft: 12, paddingBottom: 5, ...FONTS.body3 }}>
             Most Popular
           </Text>
 

@@ -27,9 +27,7 @@ import AppSubmitButton from "../../components/AppSubmitButton";
 import authContext from "../../context/auth/authContext";
 import AppButton from "../../components/AppButton";
 import { COLORS, FONTS, SIZES } from "../../config";
-
-
-const zipCodes = ['10452', '10451', '10453', '10456', '10457']
+import storesContext from "../../context/stores/storesContext";
 
 const MINIMUM_DELIVERY = 10;
 
@@ -39,16 +37,15 @@ const Checkout = ({ route, navigation }) => {
   const [paymentOption, setPaymentOption] = useState("credit");
   const [canContinue, setCanContinue] = useState(false);
   const [error, setError] = useState(null);
-  const { deliveryMethod: deliveryOption } = useContext(settingsContext);
+  const { deliveryMethod: deliveryOption, setDeliveryMethod } = useContext(settingsContext);
+  const { stores } = useContext(storesContext)
   const { user } = useContext(authContext);
   const previous = route.params?.previous;
   const { restaurant } = route.params;
   //const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
+  const { cartTotal, itemCounts, cartItems } = useContext(cartContext);
 
-  console.log(deliveryOption)
-
-  const { cartTotal, itemCounts } = useContext(cartContext);
 
   const handlePickup = (pickupInfo) => {
     if (paymentOption === "cash") {
@@ -120,6 +117,47 @@ const Checkout = ({ route, navigation }) => {
     });
   };
 
+  //allow customer to change delivery type
+  const handleDeliveryType = type => {
+    switch (type) {
+      case 'delivery':
+
+        if (cartItems.length > 0) {
+          const storeId = cartItems[0].storeId
+          const res = stores.find(store => store.id === storeId)
+          if (res.deliveryType === 'pickupOnly') {
+            alert('You already have an item which store only offers pick ups. Please remove item to continue')
+            return;
+          }
+
+        }
+        //setDeliveryType('delivery')
+        setDeliveryMethod('delivery')
+
+        break;
+
+
+      case 'pickup':
+
+        if (cartItems.length > 0) {
+          const storeId = cartItems[0].storeId
+          const res = stores.find(store => store.id === storeId)
+          if (res.deliveryType === 'deliveryOnly') {
+            alert('You already have an item which store only offers deliveries. Please remove item to continue')
+            return;
+          }
+
+        }
+        // setDeliveryType('pickup')
+        setDeliveryMethod('pickup')
+
+
+      default:
+        break;
+    }
+  }
+
+
   const checkDeliveryAddress = () => {
     if (previous) {
       setDeliveryAddress(previous);
@@ -150,7 +188,6 @@ const Checkout = ({ route, navigation }) => {
 
     }
   }
-  console.log(canContinue)
 
   useEffect(() => {
 
@@ -181,9 +218,9 @@ const Checkout = ({ route, navigation }) => {
           <Text style={styles.title}>Delivery Option</Text>
           <View style={styles.delivery}>
             <TouchableOpacity
-              disabled
+
               onPress={() => {
-                setDeliveryOption("delivery")
+                handleDeliveryType("delivery")
                 if (!deliveryAddress) {
                   setCanContinue(false)
                 } else {
@@ -202,7 +239,7 @@ const Checkout = ({ route, navigation }) => {
                 flexDirection: "row",
               }}
             >
-              <View style={{ opacity: 0.5 }}>
+              <View>
                 <Text
                   style={{
                     fontSize: 24,
@@ -219,9 +256,9 @@ const Checkout = ({ route, navigation }) => {
             </TouchableOpacity>
             <View style={styles.divider}></View>
             <TouchableOpacity
-              disabled
+
               onPress={() => {
-                setDeliveryOption("pickup")
+                handleDeliveryType("pickup")
                 setCanContinue(true)
               }}
               style={{
@@ -235,7 +272,7 @@ const Checkout = ({ route, navigation }) => {
                 flexDirection: "row",
               }}
             >
-              <View style={{ opacity: 0.5 }}>
+              <View>
                 <Text
                   style={{
                     fontSize: 24,

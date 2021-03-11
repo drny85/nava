@@ -142,9 +142,11 @@ const OrderSummary = ({ navigation, route }) => {
 
 
     try {
-      const totalAmount = promoDetails ? parseFloat(discountedPrice).toFixed(2) : cartTotal;
+      const totalAmount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
       const newItems = [...cartItems]
       const itemsCopy = generateItemDiscounted(newItems)
+      console.log(typeof totalAmount)
+      console.log(totalAmount)
 
       const newOrder = new Order(
         user.id,
@@ -308,7 +310,7 @@ const OrderSummary = ({ navigation, route }) => {
                 >
                   Important information about your order {customer.name}
                 </Text>
-                <Text style={{ ...FONTS.body5 }}>
+                <Text style={{ ...FONTS.body5, paddingLeft: 12, }}>
                   You will be picking up this order at the restaurant
             </Text>
               </>

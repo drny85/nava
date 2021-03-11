@@ -16,7 +16,7 @@ export default (state, action) => {
 		case 'MOST_POPULAR':
 			return {
 				...state,
-				mostPopular: [...state.items.sort((a, b) => a.unitSold < b.unitSold).slice(0, 7).filter(i => i.unitSold > 0)]
+				mostPopular: [...state.items.sort((a, b) => a.unitSold < b.unitSold).slice(0, 7).filter(i => i.unitSold > 0).filter(i => i.unitSold > 0)]
 			}
 		case ADD_ITEM:
 			return {

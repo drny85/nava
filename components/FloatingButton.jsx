@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import colors from "../config/colors";
+
 import { COLORS } from "../config";
 
 export default function FloatingButton({ iconName, onPress, style }) {
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 25,
-    backgroundColor: colors.tile,
+    backgroundColor: COLORS.tile,
     alignItems: "center",
     justifyContent: "center",
     elevation: 10,

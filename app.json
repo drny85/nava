@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Antojito",
-    "slug": "nava39",
+    "slug": "nava42",
     "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -35,6 +35,6 @@
     "android": {
       "useNextNotificationsApi": true
     },
-    "description": "added search -- major improment on search functionality - bug fixes"
+    "description": "imporve delivery type selection"
   }
 }

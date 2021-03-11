@@ -94,8 +94,9 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
           <View style={styles.hours}>
             <Text
               style={{
-                ...FONTS.body2,
+                ...FONTS.body3,
                 textDecorationLine: "underline",
+                fontFamily: 'montserrat-bold',
                 textDecorationColor: COLORS.lightGray,
               }}
             >
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "montserrat",
     padding: 5,
     textTransform: "uppercase",

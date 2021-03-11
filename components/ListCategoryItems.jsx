@@ -19,7 +19,7 @@ const ListCategoryItems = ({ categories, items, restaurant, deliveryType }) => {
         return (
           <>
             {items.filter((i) => i.category === item.id).length !== 0 && (
-              <Text style={[styles.text, { ...FONTS.body2 }]}>
+              <Text style={[styles.text, { ...FONTS.body3, fontFamily: 'montserrat-bold' }]}>
                 {item.name} (
                 {items.filter((i) => i.category === item.id).length})
               </Text>
