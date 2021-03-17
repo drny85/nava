@@ -13,6 +13,8 @@ const StoresState = (props) => {
 
   const [state, dispatch] = useReducer(storesReducer, initialState);
 
+  let storesSub;
+
   const getStores = async () => {
 
     try {
@@ -31,6 +33,8 @@ const StoresState = (props) => {
         dispatch({ type: GET_STORES, payload: allStores });
 
       })
+
+      storesSub = snapshot
 
       return snapshot;
 
@@ -52,6 +56,7 @@ const StoresState = (props) => {
         current: state.current,
 
         getStores,
+        storesSub,
       }}
     >
       {props.children}

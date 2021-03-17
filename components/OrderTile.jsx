@@ -151,20 +151,21 @@ const OrderTile = ({ order, onPress }) => {
       </View>
       {/* re-order button */}
       <TouchableOpacity
-        disabled={order.status === "new"}
+        disabled={order.status !== 'delivered' || order.status !== 'pickup'}
         onPress={addToCartAndCheckout}
         style={{
           backgroundColor:
-            order.status === "new" ? COLORS.lightGray : COLORS.secondary,
+            order.status === "new" ? COLORS.lightGray : order.status === 'in progress' ? COLORS.ascent : COLORS.secondary,
           borderRadius: 30,
           alignItems: "center",
           justifyContent: "center",
+          width: SIZES.width * 0.25,
           paddingVertical: 8,
           paddingHorizontal: 15,
         }}
       >
         <Text style={{ ...FONTS.body5, color: COLORS.primary }}>
-          {order.status === "new" ? "Progress" : "Re-order"}
+          {order.status === "new" ? "New" : order.status === 'in progress' ? 'Preparing' : "Re-order"}
         </Text>
       </TouchableOpacity>
       <EvilIcons name="chevron-right" size={35} color={colors.ascent} />

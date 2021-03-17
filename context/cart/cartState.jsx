@@ -398,7 +398,7 @@ const CartState = (props) => {
 					.collection("carts")
 					.add({ items: [], quantity: 0, total: 0 });
 				cartId = (await query.get()).id;
-				console.log(cartId);
+
 				await AsyncStorage.setItem(CART_ID, JSON.stringify(cartId));
 			} else {
 				cartId = JSON.parse(data);

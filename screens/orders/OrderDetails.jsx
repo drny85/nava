@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useContext, useLayoutEffect } from "react";
 import { View, StyleSheet, Text, FlatList } from "react-native";
 
 import moment from "moment";
@@ -10,12 +10,13 @@ import ListItem from "../../components/ListItem";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS, FONTS } from "../../config";
 
+
 const OrderDetails = ({ route }) => {
   const { order } = route.params;
   const navigation = useNavigation()
 
-  if (order.status !== "delivered") {
-    navigation.navigate("OrderInTheMaking");
+  if (order) {
+    navigation.navigate("OrderInTheMaking", { order });
   }
 
   useLayoutEffect(() => {

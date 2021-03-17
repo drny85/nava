@@ -1,6 +1,9 @@
 import { Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("screen");
+import Constants from 'expo-constants'
+
+
 
 export const COLORS = {
   // colors
@@ -24,6 +27,7 @@ export const SIZES = {
   font: 14,
   radius: 12,
   padding: 24,
+  statusBarHeight: Constants.statusBarHeight,
 
   // font sizes
   navTitle: 25,

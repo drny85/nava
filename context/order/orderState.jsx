@@ -64,7 +64,7 @@ const OrdersState = (props) => {
           paymentMethod: orderInfo.paymentMethod,
           orderPlaced: new Date().toISOString(),
         };
-        console.log(newOrder)
+
       } else {
         newOrder = {
           userId: orderInfo.userId,
@@ -128,6 +128,7 @@ const OrdersState = (props) => {
           });
           dispatch({ type: GET_ORDERS, payload: data });
         });
+
       //dispatch({ type: GET_ORDERS, payload: data });
     } catch (error) {
       console.log(error);
@@ -184,6 +185,7 @@ const OrdersState = (props) => {
         getOrders,
         placeOrder,
         Unsubscribe,
+        ordersSubscrition,
         filterOrdersBy,
       }}
     >

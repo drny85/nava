@@ -24,5 +24,6 @@ const styles = StyleSheet.create({
     shadowColor: "#34495e",
     shadowOffset: { width: 2, height: 3 },
     shadowOpacity: 0.7,
+
   },
 });

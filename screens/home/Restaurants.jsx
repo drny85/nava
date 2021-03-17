@@ -37,7 +37,7 @@ const Restaurants = ({ navigation }) => {
 
   //const location = null;
   const scrollY = useRef(new Animated.Value(0)).current
-  const { stores, getStores, loading } = useContext(storesContext);
+  const { stores, getStores, loading, storesSub, ordersSubscrition } = useContext(storesContext);
   const { items, getItems, allItems, getAllStoresItems, loading: itemsLoading } = useContext(itemsContext);
   const { user } = useContext(authContext);
   const { setDeliveryMethod } = useContext(settingsContext)
@@ -293,14 +293,9 @@ const Restaurants = ({ navigation }) => {
     }
   }
 
-  const onChange = (e) => {
-    setText(e);
-    console.log(storesCopy.map((s) => s.name.includes(text)));
-  };
-
   useEffect(() => {
     //get all stores
-    getStores();
+    getStores()
     //get all orders for a particular user if user is logged in
     getOrders(user?.id);
 
@@ -312,6 +307,8 @@ const Restaurants = ({ navigation }) => {
       setShowModal(false);
       setSearching(false)
       setSearchText('')
+      storesSub && storesSub()
+      ordersSubscrition && ordersSubscrition()
     };
   }, [stores.length, user]);
 
@@ -342,7 +339,28 @@ const Restaurants = ({ navigation }) => {
   if (location && onlyLocal && stores.filter(store => store.deliveryZip && store.deliveryZip.includes(location[0].postalCode)).length === 0) {
 
 
-    return <Screen style={{ alignItems: 'center', justifyContent: 'center' }}>
+    return <Screen style={{ alignItems: 'center', justifyContent: 'center', flex: 1, height: SIZES.height }}>
+      <View style={{ flexDirection: 'row', width: SIZES.width * 0.95, justifyContent: 'space-between', alignItems: 'center', position: 'absolute', left: 0, right: 0, top: SIZES.statusBarHeight }}>
+
+        <TextInput placeholder='What are you craving for?'
+          onChange={handleSearchText}
+          enablesReturnKeyAutomatically={true}
+          value={searchText}
+          //onSubmitEditing={filterRestaurantBySearchItem}
+          returnKeyType='search'
+          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3, }}
+          placeholderTextColor={COLORS.black} />
+        {searching ? (<TouchableOpacity onPress={() => {
+          setSearching(false)
+          setSearchText('')
+
+          Keyboard.dismiss()
+
+        }} style={{ marginRight: 10, }}>
+          <AntDesign name="closecircleo" size={24} color="black" />
+        </TouchableOpacity>) : (<Entypo onPress={() => setOnlyLocal(preview => !preview)} style={{ width: '10%', marginHorizontal: 5 }} name="location-pin" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />)}
+
+      </View>
       <Text style={{ ...FONTS.body2 }}>No Stores Nearby</Text>
       <Text style={{ marginTop: SIZES.padding, ...FONTS.body4 }}>Click Icon above to turn off location</Text>
     </Screen>
