@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -26,6 +26,8 @@ import Loader from "../../components/Loader";
 import storesContext from "../../context/stores/storesContext";
 import Divider from "../../components/Divider";
 import { COLORS, FONTS, SIZES } from "../../config";
+import Animated from "react-native-reanimated";
+import { StatusBar } from "expo-status-bar";
 
 const heigth = Dimensions.get("screen").height;
 const fadeIn = {
@@ -39,6 +41,7 @@ const fadeIn = {
 
 const ProductDetail = ({ route, navigation }) => {
   const sizes = [];
+  const opacity = useRef(new Animated.Value(0)).current;
   const { product, restaurant, deliveryType } = route.params;
   const [instruction, setIntruction] = useState(null);
 
@@ -152,6 +155,7 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
   useEffect(() => {
+
     return () => {
       //setChecked(false);
     };
@@ -161,6 +165,7 @@ const ProductDetail = ({ route, navigation }) => {
 
   return (
     <View style={styles.screen}>
+
       <KeyboardAvoidingView
         style={{ flex: 1, justifyContent: "space-between" }}
         behavior="position"
@@ -191,7 +196,7 @@ const ProductDetail = ({ route, navigation }) => {
           contentContainerStyle={{ paddingVertical: 10 }}
           style={styles.scrollView}
         >
-          <View style={styles.details}>
+          <Animatable.View style={styles.details} animation='fadeIn' duration={250} >
             <SharedElement id={`item.${item.name}.name`}>
               <Text style={styles.name}>{item.name}</Text>
             </SharedElement>
@@ -206,7 +211,7 @@ const ProductDetail = ({ route, navigation }) => {
                 {!item.sizes && `$${item.price}`}
               </Text>
             </SharedElement>
-          </View>
+          </Animatable.View>
           <View style={styles.descriptionView}>
             <Text style={{ color: "grey", fontSize: 16, fontStyle: "italic" }}>
               -- {item.description}
@@ -275,6 +280,7 @@ const ProductDetail = ({ route, navigation }) => {
             onPress={handleAddToCart}
           />
         </View>
+        <StatusBar style='auto' />
       </KeyboardAvoidingView>
     </View>
   );

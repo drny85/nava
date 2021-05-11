@@ -40,7 +40,7 @@ const StoresState = (props) => {
 
 
     } catch (error) {
-      console.log(error);
+      console.log('Error loading stores', error);
     }
   };
 

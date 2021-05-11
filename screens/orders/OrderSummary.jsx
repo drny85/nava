@@ -39,6 +39,7 @@ import { Modal } from "react-native";
 import FloatingButton from "../../components/FloatingButton";
 import { db } from '../../services/database'
 import { TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 
 const OrderSummary = ({ navigation, route }) => {
@@ -101,8 +102,6 @@ const OrderSummary = ({ navigation, route }) => {
             alert('Coupon Already Expired')
             return;
           }
-
-
         }
 
       })
@@ -110,8 +109,6 @@ const OrderSummary = ({ navigation, route }) => {
     } catch (error) {
       console.log('ERROR', error)
     }
-
-
   }
 
   if (!user) {
@@ -145,8 +142,7 @@ const OrderSummary = ({ navigation, route }) => {
       const totalAmount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
       const newItems = [...cartItems]
       const itemsCopy = generateItemDiscounted(newItems)
-      console.log(typeof totalAmount)
-      console.log(totalAmount)
+
 
       const newOrder = new Order(
         user.id,
@@ -211,6 +207,15 @@ const OrderSummary = ({ navigation, route }) => {
     }
   };
 
+  const savePaymentInfo = async () => {
+    try {
+      await AsyncStorage.setItem('paymentType', paymentMethod)
+    } catch (error) {
+      console.log('Error saving payment method', error)
+    }
+
+  }
+
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(netInfo => {
       const { isConnected, isInternetReachable } = netInfo
@@ -219,6 +224,8 @@ const OrderSummary = ({ navigation, route }) => {
         setConnected(true)
       }
     })
+    savePaymentInfo()
+
     return () => {
       setCouponModal(false)
       // setPromoDetails(null)
@@ -310,7 +317,7 @@ const OrderSummary = ({ navigation, route }) => {
                 >
                   Important information about your order {customer.name}
                 </Text>
-                <Text style={{ ...FONTS.body5, paddingLeft: 12, }}>
+                <Text style={{ ...FONTS.body5 }}>
                   You will be picking up this order at the restaurant
             </Text>
               </>
@@ -343,7 +350,7 @@ const OrderSummary = ({ navigation, route }) => {
               <Text>Handle cash pickup</Text>
             )}
             {paymentMethod === "credit" && deliveryMethod === "pickup" && (
-              <View style={{ padding: 12 }}>
+              <View>
                 <Text style={{ ...FONTS.body5 }}>
                   You will pay with debit or credit card, please have it ready.
             </Text>
@@ -354,7 +361,7 @@ const OrderSummary = ({ navigation, route }) => {
               </View>
             )}
             {paymentMethod === "in store" && deliveryMethod === "pickup" && (
-              <View style={styles.pickup}>
+              <View style={[styles.pickup, { alignItems: 'center', justifyContent: 'center' }]}>
                 <Text style={{ ...FONTS.body5 }}>
                   You will pay for this order at the store
             </Text>
@@ -431,6 +438,7 @@ const styles = StyleSheet.create({
   details: {
     flex: 2,
     padding: 10,
+
   },
   deliveryInstruction: {
     width: '100%',
@@ -453,6 +461,7 @@ const styles = StyleSheet.create({
   infoView: {
     width: "100%",
     marginTop: 20,
+
     shadowOffset: {
       width: 5,
       height: 7,

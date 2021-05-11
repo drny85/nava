@@ -28,6 +28,7 @@ import authContext from "../../context/auth/authContext";
 import AppButton from "../../components/AppButton";
 import { COLORS, FONTS, SIZES } from "../../config";
 import storesContext from "../../context/stores/storesContext";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const MINIMUM_DELIVERY = 10;
 
@@ -42,6 +43,7 @@ const Checkout = ({ route, navigation }) => {
   const { user } = useContext(authContext);
   const previous = route.params?.previous;
   const { restaurant } = route.params;
+
   //const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
   const { cartTotal, itemCounts, cartItems } = useContext(cartContext);
@@ -189,9 +191,22 @@ const Checkout = ({ route, navigation }) => {
     }
   }
 
-  useEffect(() => {
+  const getPaymentType = async () => {
+    try {
+      const pt = await AsyncStorage.getItem('paymentType')
+      return pt ? pt : 'credit';
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  }
 
-    checkDeliveryAddress()
+  useEffect(() => {
+    (async () => {
+      checkDeliveryAddress()
+      const pt = await getPaymentType()
+      setPaymentOption(pt)
+    })()
 
   }, [previous]);
 

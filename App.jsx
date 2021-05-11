@@ -15,6 +15,7 @@ import * as Font from "expo-font";
 import navigationTheme from "./navigation/navigationTheme";
 import StoresState from "./context/stores/storesState";
 
+
 const loadFonts = async () => {
   return await Font.loadAsync({
     montserrat: require("./assets/fonts/Montserrat-Regular.ttf"),
@@ -56,6 +57,7 @@ const App = () => {
             <CartState>
               <OrdersState>
                 <NavigationContainer theme={navigationTheme}>
+
                   <AppNavigator />
                 </NavigationContainer>
               </OrdersState>

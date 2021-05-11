@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import colors from "../config/colors";
+
 import { COLORS } from "../config";
 
 const AppInput = ({ iconName, e = null, focus = false, style, ...otherProps }) => {
@@ -21,7 +21,7 @@ const AppInput = ({ iconName, e = null, focus = false, style, ...otherProps }) =
 					ref={inputRef}
 					autoFocus={focus}
 					autoCapitalize={e}
-				
+
 					placeholderTextColor={COLORS.secondary}
 					style={[styles.input, style]}
 					{...otherProps}
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 		color: "black",
 		fontSize: 20,
 		paddingHorizontal: 10,
-		
+
 		height: "100%",
 	},
 });

@@ -14,6 +14,7 @@ import Loader from "../../components/Loader";
 import storesContext from "../../context/stores/storesContext";
 import { COLORS } from "../../config";
 
+
 const MINIMUM_DELIVERY = 10;
 
 const Cart = ({ navigation }) => {
@@ -101,6 +102,9 @@ const Cart = ({ navigation }) => {
         ),
     });
   }, [navigation, cartItems.length]);
+
+
+
 
   useEffect(() => {
     getCartItems();

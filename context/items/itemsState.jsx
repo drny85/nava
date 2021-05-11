@@ -27,6 +27,7 @@ const ItemsState = (props) => {
 
   const getItems = async (storeId) => {
     try {
+
       setLoading();
       const itemsSubcription = db
         .collection("items")

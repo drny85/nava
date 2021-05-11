@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import Spinner from "./Spinner";
 import ordersContext from "../context/order/orderContext";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const OrderTile = ({ order, onPress }) => {
   const { addToCart, cartItems, clearCart } = useContext(cartContext);
@@ -150,26 +151,30 @@ const OrderTile = ({ order, onPress }) => {
         </Text>
       </View>
       {/* re-order button */}
-      <TouchableOpacity
-        disabled={order.status !== 'delivered' || order.status !== 'pickup'}
-        onPress={addToCartAndCheckout}
-        style={{
-          backgroundColor:
-            order.status === "new" ? COLORS.lightGray : order.status === 'in progress' ? COLORS.ascent : COLORS.secondary,
-          borderRadius: 30,
-          alignItems: "center",
-          justifyContent: "center",
-          width: SIZES.width * 0.25,
-          paddingVertical: 8,
-          paddingHorizontal: 15,
-        }}
-      >
-        <Text style={{ ...FONTS.body5, color: COLORS.primary }}>
-          {order.status === "new" ? "New" : order.status === 'in progress' ? 'Preparing' : "Re-order"}
-        </Text>
-      </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={addToCartAndCheckout}>
+        <TouchableOpacity
+          disabled={order.status !== 'delivered' || order.status !== 'pickup'}
+
+          style={{
+            backgroundColor:
+              order.status === "new" ? COLORS.lightGray : order.status === 'in progress' ? COLORS.ascent : COLORS.secondary,
+            borderRadius: 30,
+            alignItems: "center",
+            justifyContent: "center",
+            width: SIZES.width * 0.25,
+            paddingVertical: 8,
+            paddingHorizontal: 15,
+            zIndex: 100,
+          }}
+        >
+          <Text style={{ ...FONTS.body5, color: COLORS.primary }}>
+            {order.status === "new" ? "New" : order.status === 'in progress' ? 'Preparing' : "Re-order"}
+          </Text>
+        </TouchableOpacity>
+      </TouchableWithoutFeedback>
       <EvilIcons name="chevron-right" size={35} color={colors.ascent} />
     </TouchableOpacity>
+
   );
 };
 

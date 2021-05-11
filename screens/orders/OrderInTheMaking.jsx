@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import LottieView from "lottie-react-native";
 import { COLORS, FONTS, SIZES } from "../../config";
@@ -16,10 +16,13 @@ import useCustomLocation from "../../utils/useCustomLocation";
 import { FontAwesome } from '@expo/vector-icons';
 
 
+
 const OrderInTheMaking = ({ navigation, route }) => {
 	const { order: orderInfo } = route.params
-	const [estimated, setEstimated] = useState('')
+	const mapRef = useRef()
+	const [estimated, setEstimated] = useState(0)
 	const { name } = orderInfo.restaurant
+	const [zoomIn, setZoomIn] = useState(0.04)
 	const { orders } = useContext(ordersContext)
 	const order = orders.find(o => o.id === orderInfo.id)
 	const { street, city, zipcode } = order.customer.address
@@ -57,7 +60,7 @@ const OrderInTheMaking = ({ navigation, route }) => {
 					{order.status === 'delivered' && (<>
 						<Animatable.View animation='fadeInUp' delay={3000} style={{ flexDirection: 'row' }}>
 							<FontAwesome name="bicycle" size={24} color="black" />
-							<Animatable.Text animation='fadeInUp' delay={3000} style={{ ...FONTS.body3, marginLeft: 10, alignItems: 'center', justifyContent: 'center' }}>Estimated Arrival Time: {moment(order.deliveredOn).add(estimated, 'minute').format('LT')}</Animatable.Text>
+							<Animatable.Text animation='fadeInUp' delay={3000} style={{ ...FONTS.body3, marginLeft: 10, alignItems: 'center', justifyContent: 'center' }}>Estimated Arrival Time: {moment(order.deliveredOn).add(estimated + 5, 'minute').format('LT')}</Animatable.Text>
 						</Animatable.View>
 
 						<Animatable.Text animation='fadeInUp' delay={3000} style={{ ...FONTS.body3, marginTop: SIZES.padding }}>We hope you liked it. </Animatable.Text>
@@ -86,7 +89,7 @@ const OrderInTheMaking = ({ navigation, route }) => {
 
 				{origin && destination && (
 					(order.status === 'picked' || order.status === 'delivered') && (order.orderType === 'delivery' || order.orderType === 'picked') && origin && (
-						<MapView style={styles.map} provider={PROVIDER_GOOGLE} region={{ longitudeDelta: 0.025, latitudeDelta: 0.03, ...origin }} >
+						<MapView ref={mapRef} style={styles.map} provider={PROVIDER_GOOGLE} region={{ longitudeDelta: 0.035, latitudeDelta: zoomIn, ...origin }} >
 							<Marker coordinate={destination} title="Me" >
 								<FontAwesome name="user" size={22} color={COLORS.secondary} />
 							</Marker>

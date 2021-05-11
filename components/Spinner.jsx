@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import LottieView from "lottie-react-native";
+import LottieView from 'lottie-react-native'
 import { COLORS } from "../config";
 import Screen from "./Screen";
 

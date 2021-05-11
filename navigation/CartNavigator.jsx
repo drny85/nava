@@ -15,12 +15,12 @@ const CartStack = createStackNavigator();
 const CartStackNavigator = ({ navigation }) => {
   return (
     <CartStack.Navigator
-
       screenOptions={{
         headerTintColor: COLORS.secondary,
       }}
     >
       <CartStack.Screen
+
         name="Cart"
         component={Cart}
         options={{

@@ -18,7 +18,7 @@ const MyFavorites = ({ navigation }) => {
       }
     });
   });
-  console.log(favorites);
+
   return (
     <Screen style={styles.container}>
       {favorites.length > 0 ? (

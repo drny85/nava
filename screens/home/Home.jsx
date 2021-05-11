@@ -70,11 +70,11 @@ const Home = ({ route, navigation }) => {
           style={{
             justifyContent: "flex-start",
             width: SIZES.width,
-            height: SIZES.height * 0.2,
+            height: 100,
             padding: SIZES.radius,
           }}
         >
-          <Text style={{ paddingLeft: 12, paddingBottom: 5, ...FONTS.body3 }}>
+          <Text style={{ paddingBottom: 5, ...FONTS.body3 }}>
             Most Popular
           </Text>
 
@@ -99,13 +99,17 @@ const Home = ({ route, navigation }) => {
         </View>
       )}
 
-      <ListCategoryItems
-        categories={categories}
-        items={items}
-        deliveryType={deliveryType}
-        restaurant={restaurant}
-        onRefresh={getItems}
-      />
+      <View style={{ flex: 1, marginTop: 10, }}>
+        <ListCategoryItems
+          categories={categories}
+          items={items}
+          deliveryType={deliveryType}
+          restaurant={restaurant}
+          onRefresh={getItems}
+        />
+      </View>
+
+
     </Screen>
   );
 };
@@ -122,7 +126,7 @@ const styles = StyleSheet.create({
     fontFamily: "montserrat-bold-italic",
   },
   headerView: {
-    padding: 10,
+    padding: 5,
   },
   name: {
     fontSize: 22,
