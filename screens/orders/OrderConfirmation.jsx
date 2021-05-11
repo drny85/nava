@@ -8,26 +8,32 @@ import Screen from "../../components/Screen";
 
 import LottieView from "lottie-react-native";
 import { COLORS } from "../../config";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const OrderConfirmation = ({ navigation, route }) => {
   const { order } = route.params;
 
   const [isVisible, setIsVisible] = useState(true);
 
-  const resetCartNavigation = () => {
-    navigation.dispatch(state => {
-      // Remove the home route from the stack
+  const resetCartNavigation = async () => {
 
+    try {
+      await AsyncStorage.removeItem('paymentType')
+      navigation.dispatch(state => {
 
-      return CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'CartTab' }]
+        return CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'CartTab' }]
+        });
       });
-    });
-    navigation.navigate("Orders", {
-      screen: "OrderDetails",
-      params: { order },
-    });
+      navigation.navigate("Orders", {
+        screen: "OrderDetails",
+        params: { order },
+      });
+    } catch (error) {
+      console.log('Error resetting nav', error)
+    }
+
   };
 
   return (

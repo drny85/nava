@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import LottieView from "lottie-react-native";
 import { COLORS, FONTS, SIZES } from "../../config";
-import { Text } from "react-native";
+import { Text, Image } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import FloatingButton from "../../components/FloatingButton";
 import moment from 'moment'
@@ -13,7 +13,7 @@ import useLocation from "../../utils/useLocation";
 import MapViewDirections from 'react-native-maps-directions'
 import Constants from 'expo-constants'
 import useCustomLocation from "../../utils/useCustomLocation";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
 
 
@@ -54,7 +54,7 @@ const OrderInTheMaking = ({ navigation, route }) => {
 				<Animatable.View style={{ alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
 					<Animatable.Text animation='bounceInDown' duration={5000} style={{ ...FONTS.h2, marginVertical: SIZES.padding * 0.5 }}>{(order.status === 'delivered' || order.status === 'pickup') ? 'Awesome' : 'Great'} News!</Animatable.Text>
 					{order.status === 'new' && (<Animatable.Text animation='fadeIn' delay={2000} style={{ ...FONTS.body3, paddingHorizontal: 10 }}> {capitalize(name)} received your order {moment(order.orderPlaced).fromNow()}</Animatable.Text>)}
-					{order.status === 'in progress' && (<Animatable.Text animation='fadeIn' delay={2000} style={{ ...FONTS.body3, }}> {capitalize(name)} started preparing your order {order.processingOn && moment(order.processingOn).fromNow()}</Animatable.Text>)}
+					{order.status === 'in progress' && (<Animatable.Text animation='fadeIn' delay={2000} style={{ ...FONTS.body3, padding: 10, }}> {capitalize(name)} started preparing your order {order.processingOn && moment(order.processingOn).fromNow()}</Animatable.Text>)}
 					<Animatable.Text animation="fadeIn" delay={2000} style={{ marginVertical: SIZES.padding * 0.8, ...FONTS.body3, paddingHorizontal: 8, }}>
 						{order.status === 'new' ? 'We will start preparing your order shortly' : order.status === 'in progress' ? 'Your order will be delivered shortly' : order.status === 'delivered' ? `Your order was marked as delivered on ${moment(order.deliveredOn).format('LLL')}` : `Your order was picked up on ${moment(order.pickedOn).format('LLL')}`}</Animatable.Text>
 					{order.status === 'delivered' && (<>
@@ -94,7 +94,7 @@ const OrderInTheMaking = ({ navigation, route }) => {
 								<FontAwesome name="user" size={22} color={COLORS.secondary} />
 							</Marker>
 							<Marker coordinate={origin} title={capitalize(name)}>
-								<FontAwesome name="home" size={22} color={COLORS.secondary} />
+								<Image source={require('../../assets/images/restaurant.png')} style={{ width: 24, height: 24 }} />
 							</Marker>
 							<MapViewDirections mode='BICYCLING' onReady={getDistance} origin={origin} destination={destination} apikey={Constants.manifest.ios.config.googleMapsApiKey} strokeWidth={3} strokeColor={COLORS.secondary} />
 
