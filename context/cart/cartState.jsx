@@ -328,8 +328,6 @@ const CartState = (props) => {
 		try {
 			setLoading();
 			const id = await getCartId();
-
-
 			const { items, total, quantity } = (
 				await db.collection("carts").doc(id).get()
 			).data();

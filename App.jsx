@@ -34,7 +34,7 @@ const loadFonts = async () => {
 const App = () => {
   const [isReady, setIsReady] = React.useState(false);
   const { getCurrentUser, authUnsubcribe } = React.useContext(authContext);
-  logger.log(new Error('an error'))
+
   React.useEffect(() => {
     //getCurrentUser()
     return () => {

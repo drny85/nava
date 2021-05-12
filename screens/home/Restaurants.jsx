@@ -294,6 +294,10 @@ const Restaurants = ({ navigation }) => {
   }
 
   useEffect(() => {
+    if (stores?.length === 1) {
+      navigation.replace("Home", { restaurant: stores[0] });
+    }
+
     //get all stores
     getStores()
     //get all orders for a particular user if user is logged in
@@ -302,6 +306,8 @@ const Restaurants = ({ navigation }) => {
     setDeliveryMethod(deliveryType)
 
     return () => {
+
+
       setOrder(null);
       setRestaurant(null);
       setShowModal(false);
@@ -310,18 +316,7 @@ const Restaurants = ({ navigation }) => {
       storesSub && storesSub()
       ordersSubscrition && ordersSubscrition()
     };
-  }, [stores.length, user]);
-
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerRight: () => <Entypo onPress={() => setOnlyLocal(preview => !preview)} style={{ marginRight: SIZES.padding * 0.5 }} name="location-pin" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />,
-  //     headerTitle: () => {
-  //       return <View style={{ flexDirection: 'row', width: SIZES.width * 0.7, marginBottom: 8 }}>
-  //         <AppInput placeholder='What are you craving for?' style={{ padding: SIZES.padding, }} value={searchText} onChange={filterRestaurantBySearchItem} />
-  //       </View>
-  //     }
-  //   })
-  // }, [navigation, onlyLocal])
+  }, [stores.length, user])
 
   if (loading || adding) return <Loader />;
 
@@ -369,9 +364,6 @@ const Restaurants = ({ navigation }) => {
 
 
   //check if thee is only a store active and send user to that particular store
-  if (stores.length === 1) {
-    navigation.replace("Home", { restaurant: stores[0] });
-  }
 
   return (
     <Screen style={styles.screen}>

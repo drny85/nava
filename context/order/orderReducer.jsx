@@ -34,6 +34,13 @@ export default (state, action) => {
         loading: false,
       };
 
+    case 'STOP_LOADING':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+      };
+
     case "FILTER_BY":
       const ordersCopy = [...state.orders];
       return {
@@ -42,10 +49,10 @@ export default (state, action) => {
           action.payload === "price"
             ? ordersCopy.sort((a, b) => a.totalAmount > b.totalAmount)
             : ordersCopy.sort(
-                (a, b) =>
-                  new Date(a.orderPlaced).getMilliseconds() >
-                  new Date(b.orderPlaced).getMilliseconds()
-              ),
+              (a, b) =>
+                new Date(a.orderPlaced).getMilliseconds() >
+                new Date(b.orderPlaced).getMilliseconds()
+            ),
       };
 
     case SET_LOADING:

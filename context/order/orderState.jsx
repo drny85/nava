@@ -111,7 +111,11 @@ const OrdersState = (props) => {
 
   const getOrders = async (userId) => {
     try {
+
       setLoading();
+
+      if (!userId) return
+
 
       ordersSubscrition = db
         .collection("orders")
@@ -132,6 +136,8 @@ const OrdersState = (props) => {
       //dispatch({ type: GET_ORDERS, payload: data });
     } catch (error) {
       console.log(error);
+    } finally {
+      dispatch({ type: 'STOP_LOADING' })
     }
   };
 
