@@ -295,7 +295,7 @@ const Restaurants = ({ navigation }) => {
 
   useEffect(() => {
     if (stores?.length === 1) {
-      navigation.replace("Home", { restaurant: stores[0] });
+      navigation.navigate("Home", { restaurant: stores[0] });
     }
 
     //get all stores
@@ -316,7 +316,7 @@ const Restaurants = ({ navigation }) => {
       storesSub && storesSub()
       ordersSubscrition && ordersSubscrition()
     };
-  }, [stores.length, user])
+  }, [user])
 
   if (loading || adding) return <Loader />;
 

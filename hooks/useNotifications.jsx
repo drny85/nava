@@ -8,6 +8,7 @@ import { Platform } from "react-native";
 import { auth } from "firebase";
 import Constant from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
+import { NOTIFICATIONS } from "expo-permissions";
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
@@ -17,14 +18,15 @@ Notifications.setNotificationHandler({
 	}),
 });
 
+
 let pushToken = null;
 const useNotifications = (notificationListener) => {
 	const { user, saveExpoPushToken } = useContext(authContext);
 
 	useEffect(() => {
 		registerForPushNotificationsAsync();
-		if (notificationListener) Notifications.addListener(notificationListener);
-		return () => { };
+		if (notificationListener) Notifications.addNotificationResponseReceivedListener(notificationListener)
+		// return () => notificationListener && notificationListener()
 	}, []);
 
 	const saveToken = async (token) => {
@@ -35,24 +37,23 @@ const useNotifications = (notificationListener) => {
 
 		try {
 			if (Constant.isDevice) {
-				const { status: existingStatus } = await Permissions.getAsync(
-					Permissions.NOTIFICATIONS
-				);
+				const { status: existingStatus } = await Notifications.requestPermissionsAsync()
 				let finalStatus = existingStatus;
 				if (existingStatus !== "granted") {
-					const { status } = await Permissions.askAsync(
-						Permissions.NOTIFICATIONS
-					);
+					const { status } = await Notifications.getPermissionsAsync()
 					finalStatus = status;
 				}
-				console.log(finalStatus);
+
 				if (finalStatus !== "granted") {
 					alert("Failed to get push token for push notification!");
 					return;
 				}
 				const token = await Notifications.getExpoPushTokenAsync();
 				const id = auth().currentUser.uid;
-				saveToken(token.data)
+				if (!user.pushToken) {
+					saveToken(token.data)
+				}
+
 			} else {
 				alert("Must use physical device for Push Notifications");
 			}

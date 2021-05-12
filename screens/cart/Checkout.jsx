@@ -29,12 +29,13 @@ import AppButton from "../../components/AppButton";
 import { COLORS, FONTS, SIZES } from "../../config";
 import storesContext from "../../context/stores/storesContext";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useNotifications from "../../hooks/useNotifications";
 
 const MINIMUM_DELIVERY = 10;
 
 const Checkout = ({ route, navigation }) => {
 
-
+  useNotifications()
   const [paymentOption, setPaymentOption] = useState("credit");
   const [canContinue, setCanContinue] = useState(false);
   const [error, setError] = useState(null);
