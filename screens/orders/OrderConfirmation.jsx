@@ -1,12 +1,12 @@
 // @ts-nocheck
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Modal } from "react-native";
 
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions } from "@react-navigation/native"
 
 import Screen from "../../components/Screen";
 
-import LottieView from "lottie-react-native";
+import LottieView from 'lottie-react-native'
 import { COLORS } from "../../config";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -19,13 +19,9 @@ const OrderConfirmation = ({ navigation, route }) => {
 
     try {
       await AsyncStorage.removeItem('paymentType')
-      navigation.dispatch(state => {
 
-        return CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'CartTab' }]
-        });
-      });
+      resetNavigationState()
+      setIsVisible(false)
       navigation.navigate("Orders", {
         screen: "OrderDetails",
         params: { order },
@@ -36,12 +32,25 @@ const OrderConfirmation = ({ navigation, route }) => {
 
   };
 
+  const resetNavigationState = () => {
+    return navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          { name: 'CartTab' },
+
+        ],
+      })
+    );
+  }
+
+
   return (
     <Screen style={styles.screen}>
       <Modal
         visible={isVisible}
         animationType="slide"
-        onDismiss={resetCartNavigation}
+
       >
         <LottieView
           loop={false}
@@ -49,7 +58,7 @@ const OrderConfirmation = ({ navigation, route }) => {
           colorFilters={[
             { keypath: "Sending Loader", color: COLORS.secondary },
           ]}
-          onAnimationFinish={() => setIsVisible(false)}
+          onAnimationFinish={resetCartNavigation}
           source={require("../../assets/animations/done.json")}
         />
       </Modal>

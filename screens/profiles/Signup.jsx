@@ -19,9 +19,9 @@ import AppSubmitButton from "../../components/AppSubmitButton";
 import AppForm from "../../components/AppForm";
 
 import authContext from "../../context/auth/authContext";
-import colors from "../../config/colors";
 import useNotifications from "../../hooks/useNotifications";
 import settingsContext from "../../context/settings/settingsContext";
+import { COLORS } from "../../config";
 
 
 const validationSchema = Yup.object().shape({
@@ -84,7 +84,7 @@ const Signup = ({ route }) => {
   return (
     <Screen>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <KeyboardAvoidingView>
+        <KeyboardAvoidingView style={styles.container}>
           <AppForm
             initialValues={{
               name: "",
@@ -99,13 +99,13 @@ const Signup = ({ route }) => {
             <AppFormField
               autoFocus={true}
               placeholder="Name"
-              iconName="account-badge-horizontal"
+              iconName="account-circle"
               name="name"
               autoCorrect={false}
             />
             <AppFormField
               placeholder="Last Name"
-              iconName="account-badge-horizontal"
+              iconName="account-circle"
               name="lastName"
               autoCorrect={false}
             />
@@ -136,7 +136,7 @@ const Signup = ({ route }) => {
               textContentType="password"
             />
 
-            <AppSubmitButton title="Sign Up" />
+            <AppSubmitButton title="Sign Up" style={{ width: '80%', marginTop: 30, }} />
           </AppForm>
           <View style={styles.account}>
             <Text style={styles.text}>Already have an account?</Text>
@@ -154,8 +154,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+
     marginHorizontal: 8,
+
   },
   btn: {
     marginTop: 25,
@@ -166,9 +167,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 30,
   },
   text: {
-    color: colors.primary,
+    color: COLORS.black,
     fontSize: 18,
   },
   signupText: {

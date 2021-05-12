@@ -30,7 +30,8 @@ const OrderInTheMaking = ({ navigation, route }) => {
 	const userLocation = order.restaurant.street + ' ' + order.restaurant.city + ' ' + order.restaurant.state + ' ' + order.restaurant.zipcode
 
 	const [location, errorMsg] = useLocation(true)
-	const { origin, destination } = useCustomLocation(restaurantLocation, userLocation)
+
+	const { origin, destination } = order.orderType === 'delivery' && useCustomLocation(restaurantLocation, userLocation)
 
 	const capitalize = st => {
 		const n = st.toLowerCase()

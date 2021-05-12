@@ -15,6 +15,7 @@ import Spinner from '../../components/Spinner'
 
 import { Ionicons } from '@expo/vector-icons';
 import Screen from "../../components/Screen";
+import logger from "../../utils/logger";
 
 const OrderVerification = ({ navigation, route }) => {
   const { placeOrder } = useContext(ordersContext);
@@ -71,6 +72,7 @@ const OrderVerification = ({ navigation, route }) => {
       /* TODO: do something */
     } catch (error) {
       console.log("Error processing payment", error);
+      logger.log(error)
     }
   };
   const onCanceledHandler = () => {
@@ -78,17 +80,21 @@ const OrderVerification = ({ navigation, route }) => {
     navigation.goBack();
   };
 
-  const handleChange = (newState) => {
-    const { url } = newState;
+  const handleChange = async (newState) => {
 
-    if (url.includes("/success")) {
-      webRef.current.stopLoading();
-      //resetCartNavigation();
-      //maybe close this view?
-    } else {
-      console.log("processing");
+    try {
+      const { url } = newState;
 
+      if (url.includes("/success")) {
+        webRef.current.stopLoading();
+        //resetCartNavigation();
+        //maybe close this view?
+      }
+    } catch (error) {
+      console.error('Error processing payment', error)
+      logger.log(error)
     }
+
   };
 
   // Called everytime the URL stats to load in the webview

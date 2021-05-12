@@ -25,90 +25,7 @@ const OrderTile = ({ order, onPress }) => {
 
   const { loadingOrders, stopOrdersLoading } = useContext(ordersContext);
   const navigation = useNavigation();
-  const addThem = async () => {
-    try {
-      await loadingOrders();
-      for (let index = 0; index < order.items.length; index++) {
-        const element = order.items[index];
 
-        if (order.coupon) {
-          element.price = element.originalPrice
-
-        }
-        if (element.originalPrice) {
-          delete element.originalPrice
-        }
-
-        await addToCart(element);
-        //calculateCartTotal(order.items)
-      }
-      stopOrdersLoading();
-      // navigation.navigate('Cart')
-    } catch (error) {
-      console.log("Error adding items to cart", error);
-    }
-  };
-  // add all items to cart from selected previous order and go right to check out
-  const addToCartAndCheckout = async () => {
-    try {
-      if (cartItems.length > 0) {
-        Alert.alert(
-          "Cart not empty",
-          "All items in cart will be deleted and check out with these",
-          [
-            {
-              text: "Yes Please",
-              onPress: async () => {
-                await loadingOrders();
-
-                await clearCart();
-                await addThem();
-                await stopOrdersLoading();
-
-                navigation.navigate("CartTab", {
-                  screen: "OrderSummary",
-                  initial: false,
-                  params: {
-                    deliveryMethod: order?.orderType,
-                    paymentMethod: order?.paymentMethod,
-                    customer: order?.customer,
-                    screen: 'Cart'
-
-                  },
-                });
-              },
-            },
-            {
-              text: "Cancel",
-              style: "cancel",
-              onPress: () => {
-                return;
-              },
-            },
-          ]
-        );
-      } else {
-        loadingOrders();
-        await addThem();
-        stopOrdersLoading();
-
-        navigation.navigate("CartTab", {
-          screen: 'OrderSummary',
-          initial: false,
-          params: {
-            deliveryMethod: order?.orderType,
-            paymentMethod: order?.paymentMethod,
-            customer: order?.customer,
-            screen: 'Cart'
-
-
-          },
-        });
-      }
-    } catch (error) {
-      console.log("Error adding and checking out", error);
-    }
-  };
 
   return (
     <TouchableOpacity onPress={onPress} style={[styles.container]}>
@@ -151,27 +68,27 @@ const OrderTile = ({ order, onPress }) => {
         </Text>
       </View>
       {/* re-order button */}
-      <TouchableWithoutFeedback onPress={addToCartAndCheckout}>
-        <TouchableOpacity
-          disabled={order.status !== 'delivered' || order.status !== 'pickup'}
 
-          style={{
-            backgroundColor:
-              order.status === "new" ? COLORS.lightGray : order.status === 'in progress' ? COLORS.ascent : COLORS.secondary,
-            borderRadius: 30,
-            alignItems: "center",
-            justifyContent: "center",
-            width: SIZES.width * 0.25,
-            paddingVertical: 8,
-            paddingHorizontal: 15,
-            zIndex: 100,
-          }}
-        >
-          <Text style={{ ...FONTS.body5, color: COLORS.primary }}>
-            {order.status === "new" ? "New" : order.status === 'in progress' ? 'Preparing' : "Re-order"}
-          </Text>
-        </TouchableOpacity>
-      </TouchableWithoutFeedback>
+      <TouchableOpacity
+        disabled={order.status !== 'delivered' || order.status !== 'pickup'}
+
+        style={{
+          backgroundColor:
+            order.status === "new" ? COLORS.lightGray : order.status === 'in progress' ? COLORS.ascent : COLORS.secondary,
+          borderRadius: 30,
+          alignItems: "center",
+          justifyContent: "center",
+          width: SIZES.width * 0.25,
+          paddingVertical: 8,
+          paddingHorizontal: 15,
+          zIndex: 100,
+        }}
+      >
+        <Text style={{ ...FONTS.body5, color: COLORS.primary }}>
+          {order.status === "new" ? "New" : order.status === 'in progress' ? 'Preparing' : "View"}
+        </Text>
+      </TouchableOpacity>
+
       <EvilIcons name="chevron-right" size={35} color={colors.ascent} />
     </TouchableOpacity>
 

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import { COLORS } from "../config";
 
@@ -10,10 +10,10 @@ const AppInput = ({ iconName, e = null, focus = false, style, ...otherProps }) =
 		<TouchableWithoutFeedback onPress={() => inputRef.current.focus()}>
 			<View style={styles.container}>
 				{iconName && (
-					<MaterialCommunityIcons
+					<MaterialIcons
 						style={styles.icon}
 						size={24}
-						color={COLORS.primary}
+						color={COLORS.secondary}
 						name={iconName}
 					/>
 				)}

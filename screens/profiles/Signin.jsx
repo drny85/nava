@@ -149,7 +149,7 @@ const Signin = ({ route }) => {
 						</TouchableOpacity>
 
 					</View>
-					<View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 30 }}>
+					<View style={{ flexDirection: 'row', alignItems: 'center', position: 'absolute', left: 0, right: 0, bottom: 30, justifyContent: 'center' }}>
 
 						<Text style={{ ...FONTS.body4 }}>Forgot password?</Text>
 						<Button title='Reset' onPress={() => setModalReset(true)} />
