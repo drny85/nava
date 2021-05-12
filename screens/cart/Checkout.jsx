@@ -28,7 +28,7 @@ import authContext from "../../context/auth/authContext";
 import AppButton from "../../components/AppButton";
 import { COLORS, FONTS, SIZES } from "../../config";
 import storesContext from "../../context/stores/storesContext";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MINIMUM_DELIVERY = 10;
 

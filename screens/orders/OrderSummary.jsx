@@ -39,7 +39,7 @@ import { Modal } from "react-native";
 import FloatingButton from "../../components/FloatingButton";
 import { db } from '../../services/database'
 import { TouchableOpacity } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
 const OrderSummary = ({ navigation, route }) => {

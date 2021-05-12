@@ -3,7 +3,7 @@ import React, { useReducer } from "react";
 import CartReducer from "./cartReducer";
 import CartContext from "./cartContext";
 
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { db } from "../../services/database";
 import {
 	SET_LOADING,

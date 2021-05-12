@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import * as Location from 'expo-location';
 
-const zipCodes = ['10452', '10451', '10453', '10456', '10457']
+
 export const useLocation = () => {
 
     const [address, setAddress] = useState(null)
@@ -10,7 +10,7 @@ export const useLocation = () => {
     useEffect(() => {
         (async () => {
             try {
-                let { status } = await Location.requestPermissionsAsync();
+                let { status } = await Location.requestForegroundPermissionsAsync()
                 if (status !== 'granted') {
                     setErrorMsg('Permission to access location was denied');
                 }

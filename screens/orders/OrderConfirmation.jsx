@@ -8,7 +8,7 @@ import Screen from "../../components/Screen";
 
 import LottieView from "lottie-react-native";
 import { COLORS } from "../../config";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OrderConfirmation = ({ navigation, route }) => {
   const { order } = route.params;

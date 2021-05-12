@@ -33,7 +33,10 @@
       "storageBucket": "grocery-409ef.appspot.com",
       "messagingSenderId": "897113180247",
       "appId": "1:897113180247:web:131d1ce3d7fddaeba13b12",
-      "measurementId": "G-FWR2GHNDSM"
+      "measurementId": "G-FWR2GHNDSM",
+      "bugsnag": {
+        "apiKey": "8cc5d21c704443e3bf140192faa651b7"
+      }
     },
     "android": {
       "useNextNotificationsApi": true,
@@ -43,6 +46,6 @@
         }
       }
     },
-    "description": "implemented maps"
+    "description": "updated to SDK41"
   }
 }

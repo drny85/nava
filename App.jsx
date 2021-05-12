@@ -8,12 +8,16 @@ import CategoryState from "./context/category/categoryState";
 import CartState from "./context/cart/cartState";
 import OrdersState from "./context/order/orderState";
 import AuthState from "./context/auth/authState";
-import { AppLoading } from "expo";
+import AppLoading from 'expo-app-loading'
 import authContext from "./context/auth/authContext";
 import SettingsState from "./context/settings/settingsState";
 import * as Font from "expo-font";
 import navigationTheme from "./navigation/navigationTheme";
 import StoresState from "./context/stores/storesState";
+
+import logger from './utils/logger'
+logger.start()
+
 
 
 const loadFonts = async () => {
@@ -30,7 +34,7 @@ const loadFonts = async () => {
 const App = () => {
   const [isReady, setIsReady] = React.useState(false);
   const { getCurrentUser, authUnsubcribe } = React.useContext(authContext);
-
+  logger.log(new Error('an error'))
   React.useEffect(() => {
     //getCurrentUser()
     return () => {
@@ -45,7 +49,13 @@ const App = () => {
       <AppLoading
         startAsync={loadFonts}
         onFinish={() => setIsReady(true)}
+        autoHideSplash={true}
+        onError={error => console.log('Loading App', error)}
+
+
+
       />
+      //<AppLoading autoHideSplash={true} />
     );
   }
 
