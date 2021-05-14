@@ -18,7 +18,7 @@ const MyOrders = ({ navigation, route }) => {
   const { orders, getOrders, loading, Unsubscribe } = useContext(ordersContext);
 
   const goToOrderDetails = (order) => {
-    navigation.navigate("OrderDetails", { order });
+    navigation.navigate("OrderInTheMaking", { order });
   };
 
   useEffect(() => {

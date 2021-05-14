@@ -22,7 +22,7 @@ import AppForm from "../../components/AppForm";
 import AppFormField from "../../components/AppFormField";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-
+import * as Animatable from 'react-native-animatable'
 import AppSubmitButton from "../../components/AppSubmitButton";
 import authContext from "../../context/auth/authContext";
 import AppButton from "../../components/AppButton";
@@ -225,11 +225,11 @@ const Checkout = ({ route, navigation }) => {
       }}
     >
       <View style={{ flex: 1, width: Dimensions.get('screen').width, alignItems: 'center' }}>
-        <View style={styles.view}>
+        <Animatable.View animation='fadeInDown' easing='ease-in-cubic' style={styles.view}>
 
           <Text style={{ ...FONTS.h4 }}>Total Items: {itemCounts}</Text>
           <Text style={{ ...FONTS.h3, padding: SIZES.padding * 0.3 }}>Order Total: ${cartTotal.toFixed(2)}</Text>
-        </View>
+        </Animatable.View>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Text style={styles.title}>Delivery Option</Text>
           <View style={styles.delivery}>
@@ -258,8 +258,8 @@ const Checkout = ({ route, navigation }) => {
               <View>
                 <Text
                   style={{
-                    fontSize: 24,
-                    fontWeight: "700",
+
+                    ...FONTS.h2,
                     color:
                       deliveryOption === "delivery"
                         ? COLORS.white
@@ -291,8 +291,7 @@ const Checkout = ({ route, navigation }) => {
               <View>
                 <Text
                   style={{
-                    fontSize: 24,
-                    fontWeight: "700",
+                    ...FONTS.h2,
                     color:
                       deliveryOption === "pickup" ? COLORS.white : COLORS.black,
                   }}
@@ -312,6 +311,7 @@ const Checkout = ({ route, navigation }) => {
                   title="credit"
                   type={paymentOption}
                   style={{
+                    ...FONTS.h2,
                     color:
                       paymentOption === "credit" ? COLORS.white : COLORS.black
                   }}
@@ -321,6 +321,7 @@ const Checkout = ({ route, navigation }) => {
                 <Pick
                   title="cash"
                   style={{
+                    ...FONTS.h2,
                     color:
                       paymentOption === "cash" ? COLORS.white : COLORS.black,
                   }}

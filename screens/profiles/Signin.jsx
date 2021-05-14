@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
 	StyleSheet,
 	KeyboardAvoidingView,
@@ -81,6 +81,7 @@ const Signin = ({ route }) => {
 			if (data.user) {
 				setUser(data.user.uid);
 				updateLastLogin(data.user.uid);
+
 				if (previewRoute) {
 					navigation.navigate(previewRoute, { restaurant });
 					clearSettings();
@@ -100,11 +101,6 @@ const Signin = ({ route }) => {
 		}
 	};
 
-	useEffect(() => {
-		return () => {
-			console.log("left");
-		};
-	}, [user]);
 
 	return (
 		<Screen>

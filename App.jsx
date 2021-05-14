@@ -16,8 +16,7 @@ import navigationTheme from "./navigation/navigationTheme";
 import StoresState from "./context/stores/storesState";
 
 import logger from './utils/logger'
-logger.start()
-
+import { auth } from "./services/database";
 
 
 const loadFonts = async () => {
@@ -33,18 +32,29 @@ const loadFonts = async () => {
 
 const App = () => {
   const [isReady, setIsReady] = React.useState(false);
-  const { getCurrentUser, authUnsubcribe } = React.useContext(authContext);
+  const { setUser } = React.useContext(authContext);
 
   React.useEffect(() => {
     //getCurrentUser()
+
+    try {
+      const sub = auth.onAuthStateChanged(user => {
+        if (user) {
+          setUser(user.uid)
+        }
+      })
+    } catch (error) {
+      console.log('Error logging in user', error.message)
+    }
+
     return () => {
 
-      authUnsubcribe();
+      sub && sub()
     };
   }, []);
 
   if (!isReady) {
-    getCurrentUser()
+
     return (
       <AppLoading
         startAsync={loadFonts}

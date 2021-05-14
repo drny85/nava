@@ -20,12 +20,14 @@ const OrderConfirmation = ({ navigation, route }) => {
     try {
       await AsyncStorage.removeItem('paymentType')
 
-      resetNavigationState()
+
       setIsVisible(false)
+      resetNavigationState()
       navigation.navigate("Orders", {
         screen: "OrderDetails",
         params: { order },
       });
+
     } catch (error) {
       console.log('Error resetting nav', error)
     }

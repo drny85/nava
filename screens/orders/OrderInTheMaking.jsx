@@ -49,7 +49,7 @@ const OrderInTheMaking = ({ navigation, route }) => {
 
 		<View style={styles.container}>
 			<View style={{ marginTop: SIZES.statusBarHeight, margin: 10, }}>
-				<FloatingButton iconName='arrow-left' onPress={() => navigation.goBack()} />
+				<FloatingButton iconName='arrow-left' onPress={() => navigation.navigate('OrderDetails', { order })} />
 			</View>
 			<View style={styles.top}>
 				<Animatable.View style={{ alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>

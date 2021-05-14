@@ -84,7 +84,7 @@ const MyAddress = ({ navigation, route }) => {
   useEffect(() => {
     if (deliveryAddresses) setAddresses(deliveryAddresses);
   }, [user]);
-  console.log(loading);
+
   return (
     <Screen style={styles.container}>
       <AppButton

@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { View, StyleSheet, Text, FlatList } from "react-native";
 
 import moment from "moment";
@@ -15,9 +15,7 @@ const OrderDetails = ({ route }) => {
   const { order } = route.params;
   const navigation = useNavigation()
 
-  if (order) {
-    navigation.navigate("OrderInTheMaking", { order });
-  }
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -33,6 +31,7 @@ const OrderDetails = ({ route }) => {
       }
     })
   }, [navigation])
+
 
   return (
     <Screen style={styles.container}>
