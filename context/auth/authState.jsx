@@ -64,8 +64,10 @@ const AuthState = (props) => {
 			await auth.signOut();
 
 			dispatch({ type: LOGOUT });
+			return true
 		} catch (error) {
 			console.log("Error logging out", error.message);
+			return false;
 		}
 	};
 

@@ -34,6 +34,7 @@ const App = () => {
   const [isReady, setIsReady] = React.useState(false);
   const { setUser } = React.useContext(authContext);
 
+
   React.useEffect(() => {
     //getCurrentUser()
 

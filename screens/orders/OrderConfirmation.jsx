@@ -24,7 +24,7 @@ const OrderConfirmation = ({ navigation, route }) => {
       setIsVisible(false)
       resetNavigationState()
       navigation.navigate("Orders", {
-        screen: "OrderDetails",
+        screen: "OrderInTheMaking",
         params: { order },
       });
 

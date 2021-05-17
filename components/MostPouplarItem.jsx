@@ -24,8 +24,8 @@ export default MostPouplarItem;
 const styles = StyleSheet.create({
   container: {
     width: SIZES.width / 2.5,
-    height: 50,
-    borderRadius: 25,
+    height: 60,
+    borderRadius: 30,
     elevation: 5,
     shadowColor: COLORS.lightGray,
     shadowRadius: 4,

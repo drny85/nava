@@ -28,7 +28,11 @@ export const useLocation = () => {
             }
 
         })();
-    }, []);
+
+        return () => {
+
+        }
+    }, [isloading]);
 
 
     return { isloading, address }

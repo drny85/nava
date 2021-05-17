@@ -70,7 +70,7 @@ const Home = ({ route, navigation }) => {
           style={{
             justifyContent: "flex-start",
             width: SIZES.width,
-            height: 100,
+            height: 120,
             padding: SIZES.radius,
           }}
         >

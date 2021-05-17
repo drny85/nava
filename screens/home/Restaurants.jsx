@@ -35,7 +35,6 @@ const ITEM_SIZE = (SIZES.height * 0.25) + SPACING * 2
 
 const Restaurants = ({ navigation }) => {
 
-  //const location = null;
   const scrollY = useRef(new Animated.Value(0)).current
   const { stores, getStores, loading, storesSub, ordersSubscrition } = useContext(storesContext);
   const { items, getItems, allItems, getAllStoresItems, loading: itemsLoading } = useContext(itemsContext);
@@ -316,9 +315,10 @@ const Restaurants = ({ navigation }) => {
       storesSub && storesSub()
       ordersSubscrition && ordersSubscrition()
     };
-  }, [user])
+  }, [user, stores.length])
 
-  if (loading || adding) return <Loader />;
+
+
 
   if (stores.length === 0) {
     return (
@@ -364,6 +364,8 @@ const Restaurants = ({ navigation }) => {
 
 
   //check if thee is only a store active and send user to that particular store
+
+  if (loading || adding) return <Loader />;
 
   return (
     <Screen style={styles.screen}>

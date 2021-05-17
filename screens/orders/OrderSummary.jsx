@@ -164,7 +164,7 @@ const OrderSummary = ({ navigation, route }) => {
 
         if (paymentMethod === "credit") {
           const res = await Axios.get(`${STRIPE.PUBLIC_KEY_URL}/${restaurant.id}`)
-          console.log(res.status)
+
           if (res.status === 200) {
             navigation.navigate("Orders", {
               screen: "OrderVerification",
