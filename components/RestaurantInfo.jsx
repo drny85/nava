@@ -4,16 +4,16 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
+
   TouchableOpacity,
 } from "react-native";
 import Constants from "expo-constants";
 import FloatingButton from "./FloatingButton";
-import colors from "../config/colors";
+
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 import call from "react-native-phone-call";
-import { COLORS, FONTS } from "../config";
+import { COLORS, FONTS, SIZES } from "../config";
 import authContext from "../context/auth/authContext";
 
 const RestaurantInfo = ({ restaurant, onPress }) => {
@@ -149,24 +149,22 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondary,
     marginVertical: 20,
     height: 50,
-    width: Dimensions.get("screen").width * 0.6,
+    width: SIZES.width * 0.6,
   },
   container: {
     flex: 1,
     zIndex: 1,
     justifyContent: "space-around",
-
     position: "relative",
   },
   closeBtn: {
-    paddingTop: Constants.statusBarHeight,
-    marginLeft: 20,
     zIndex: 3,
     position: "absolute",
+    right: 20,
+    top: SIZES.statusBarHeight,
   },
   details: {
-    backgroundColor: colors.tile,
-
+    backgroundColor: COLORS.tile,
     alignItems: "center",
     flex: 1,
     flexDirection: "column",
@@ -177,7 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     width: "100%",
     alignItems: "center",
-    backgroundColor: colors.tile,
+    backgroundColor: COLORS.tile,
     padding: 10,
   },
   hours: {
@@ -185,15 +183,15 @@ const styles = StyleSheet.create({
   },
 
   img: {
-    width: Dimensions.get("screen").width,
-    height: Dimensions.get("screen").height * 0.45,
+    width: SIZES.width,
+    height: SIZES.height * 0.45,
   },
   name: {
     color: "white",
     position: "absolute",
 
     right: 10,
-    top: Dimensions.get("screen").height * 0.45 - 50,
+    top: SIZES.height * 0.45 - 50,
     textTransform: "capitalize",
   },
   text: {

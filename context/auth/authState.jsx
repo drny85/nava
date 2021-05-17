@@ -71,15 +71,17 @@ const AuthState = (props) => {
 		}
 	};
 
-	let authUnsubcribe = Function;
+
 
 	const getCurrentUser = async () => {
 		try {
-			authUnsubcribe = auth.onAuthStateChanged((user) => {
+			const authUnsubcribe = auth.onAuthStateChanged((user) => {
 				if (user) {
 					setUser(user.uid);
 				}
 			});
+
+			return authUnsubcribe
 		} catch (error) {
 			console.log("Error with user", error);
 		}
@@ -232,7 +234,6 @@ const AuthState = (props) => {
 				login,
 				getCurrentUser,
 				createUser,
-				authUnsubcribe,
 				saveExpoPushToken,
 				deleteUserAddress,
 				saveDeliveryAddress,

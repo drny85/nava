@@ -26,12 +26,7 @@ const OrderInTheMaking = ({ navigation, route }) => {
 	const { orders } = useContext(ordersContext)
 	const order = orders.find(o => o.id === orderInfo.id)
 	const { street, city, zipcode } = order.customer.address
-	const restaurantLocation = street + ' ' + city + ' ' + zipcode
-	const userLocation = order.restaurant.street + ' ' + order.restaurant.city + ' ' + order.restaurant.state + ' ' + order.restaurant.zipcode
 
-	const [location, errorMsg] = useLocation(true)
-
-	const { origin, destination } = order.orderType === 'delivery' && useCustomLocation(restaurantLocation, userLocation)
 
 	const capitalize = st => {
 		const n = st.toLowerCase()
@@ -45,6 +40,18 @@ const OrderInTheMaking = ({ navigation, route }) => {
 		setEstimated(duration)
 	}
 
+	useEffect(() => {
+		if (order.restaurant) {
+			const { estimatedDeliveryTime } = order.restaurant
+			if (estimatedDeliveryTime.split('-').length === 2) {
+				setEstimated(parseInt(estimatedDeliveryTime.split('-')[1]))
+			} else {
+				setEstimated(15)
+			}
+
+		}
+	}, [])
+
 	return (
 
 		<View style={styles.container}>
@@ -56,7 +63,7 @@ const OrderInTheMaking = ({ navigation, route }) => {
 					<Animatable.Text animation='bounceInDown' duration={5000} style={{ ...FONTS.h2, marginVertical: SIZES.padding * 0.5 }}>{(order.status === 'delivered' || order.status === 'pickup') ? 'Awesome' : 'Great'} News!</Animatable.Text>
 					{order.status === 'new' && (<Animatable.Text animation='fadeIn' delay={2000} style={{ ...FONTS.body3, paddingHorizontal: 10 }}> {capitalize(name)} received your order {moment(order.orderPlaced).fromNow()}</Animatable.Text>)}
 					{order.status === 'in progress' && (<Animatable.Text animation='fadeIn' delay={2000} style={{ ...FONTS.body3, padding: 10, }}> {capitalize(name)} started preparing your order {order.processingOn && moment(order.processingOn).fromNow()}</Animatable.Text>)}
-					<Animatable.Text animation="fadeIn" delay={2000} style={{ marginVertical: SIZES.padding * 0.8, ...FONTS.body3, paddingHorizontal: 8, }}>
+					<Animatable.Text animation="fadeIn" delay={2000} style={{ marginVertical: SIZES.padding * 0.8, ...FONTS.body3, paddingHorizontal: 10, }}>
 						{order.status === 'new' ? 'We will start preparing your order shortly' : order.status === 'in progress' ? 'Your order will be delivered shortly' : order.status === 'delivered' ? `Your order was marked as delivered on ${moment(order.deliveredOn).format('LLL')}` : `Your order was picked up on ${moment(order.pickedOn).format('LLL')}`}</Animatable.Text>
 					{order.status === 'delivered' && (<>
 						<Animatable.View animation='fadeInUp' delay={3000} style={{ flexDirection: 'row' }}>
@@ -88,7 +95,13 @@ const OrderInTheMaking = ({ navigation, route }) => {
 					/>
 				)}
 
-				{origin && destination && (
+				{(order.status === 'picked' || order.status === 'delivered') && (order.orderType === 'delivery' || order.orderType === 'picked') && (
+					<LottieView autoPlay autoSize loop resizeMode='cover' source={require('../../assets/animations/delivery.json')} style={styles.making} />
+
+
+				)}
+
+				{/* {origin && destination && (
 					(order.status === 'picked' || order.status === 'delivered') && (order.orderType === 'delivery' || order.orderType === 'picked') && origin && (
 						<MapView ref={mapRef} style={styles.map} provider={PROVIDER_GOOGLE} region={{ longitudeDelta: 0.035, latitudeDelta: zoomIn, ...origin }} >
 							<Marker coordinate={destination} title="Me" >
@@ -103,9 +116,7 @@ const OrderInTheMaking = ({ navigation, route }) => {
 
 
 					)
-				)}
-
-
+				)} */}
 
 			</View>
 

@@ -81,7 +81,7 @@ const Signin = ({ route }) => {
 			if (data.user) {
 				setUser(data.user.uid);
 				updateLastLogin(data.user.uid);
-
+				console.log(previewRoute)
 				if (previewRoute) {
 					navigation.navigate(previewRoute, { restaurant });
 					clearSettings();
@@ -89,6 +89,7 @@ const Signin = ({ route }) => {
 					return;
 				}
 				navigation.navigate("Profile");
+				console.log('no Previous')
 			}
 		} catch (error) {
 			console.log(error);

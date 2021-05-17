@@ -6,6 +6,7 @@ const useCustomLocation = (restaurantLocation, userLocation) => {
     const [origin, setOrigen] = useState(null)
     const [destination, setDestination] = useState(null)
 
+
     useEffect(() => {
         (async () => {
 
@@ -28,7 +29,7 @@ const useCustomLocation = (restaurantLocation, userLocation) => {
             }
 
         })();
-    }, [restaurantLocation, userLocation])
+    }, [])
     return { origin, destination }
 }
 

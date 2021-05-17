@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import * as Location from 'expo-location';
-import { add } from 'react-native-reanimated';
 
 
-const useLocation = (refresh) => {
+
+const useLocation = () => {
 
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
@@ -29,7 +29,7 @@ const useLocation = (refresh) => {
 
 
         })();
-    }, [refresh, add]);
+    }, []);
 
     return [location, errorMsg]
 

@@ -84,8 +84,8 @@ const OrderTile = ({ order, onPress }) => {
           zIndex: 100,
         }}
       >
-        <Text style={{ ...FONTS.body5, color: COLORS.primary }}>
-          {order.status === "new" ? "New" : order.status === 'in progress' ? 'Preparing' : "View"}
+        <Text style={{ ...FONTS.body5, color: COLORS.primary, textTransform: 'capitalize' }}>
+          {order.status === "new" ? "New" : order.status === 'in progress' ? 'Preparing' : `${order.status}`}
         </Text>
       </TouchableOpacity>
 

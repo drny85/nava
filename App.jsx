@@ -12,6 +12,7 @@ import AppLoading from 'expo-app-loading'
 import authContext from "./context/auth/authContext";
 import SettingsState from "./context/settings/settingsState";
 import * as Font from "expo-font";
+import * as SplashScreen from 'expo-splash-screen';
 import navigationTheme from "./navigation/navigationTheme";
 import StoresState from "./context/stores/storesState";
 
@@ -32,41 +33,38 @@ const loadFonts = async () => {
 
 const App = () => {
   const [isReady, setIsReady] = React.useState(false);
-  const { setUser } = React.useContext(authContext);
+  const { setUser, getCurrentUser } = React.useContext(authContext);
 
 
   React.useEffect(() => {
-    //getCurrentUser()
 
-    try {
-      const sub = auth.onAuthStateChanged(user => {
-        if (user) {
-          setUser(user.uid)
-        }
-      })
-    } catch (error) {
-      console.log('Error logging in user', error.message)
-    }
 
-    return () => {
+    (async () => {
 
-      sub && sub()
-    };
+      try {
+        await SplashScreen.preventAutoHideAsync()
+        await loadFonts()
+        getCurrentUser()
+
+        const loaded = await SplashScreen.hideAsync()
+        loaded && setIsReady(true)
+
+      } catch (error) {
+        console.log('Error @App.js', error)
+      } finally {
+        setIsReady(true)
+
+      }
+
+    })()
+
   }, []);
 
   if (!isReady) {
 
     return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setIsReady(true)}
-        autoHideSplash={true}
-        onError={error => console.log('Loading App', error)}
 
-
-
-      />
-      //<AppLoading autoHideSplash={true} />
+      <AppLoading />
     );
   }
 
