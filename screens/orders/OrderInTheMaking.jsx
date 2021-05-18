@@ -8,11 +8,9 @@ import FloatingButton from "../../components/FloatingButton";
 import moment from 'moment'
 import ordersContext from "../../context/order/orderContext";
 
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import useLocation from "../../utils/useLocation";
-import MapViewDirections from 'react-native-maps-directions'
-import Constants from 'expo-constants'
-import useCustomLocation from "../../utils/useCustomLocation";
+
+
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
 
