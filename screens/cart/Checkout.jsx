@@ -28,7 +28,7 @@ import authContext from "../../context/auth/authContext";
 import AppButton from "../../components/AppButton";
 import { COLORS, FONTS, SIZES } from "../../config";
 import storesContext from "../../context/stores/storesContext";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import useNotifications from "../../hooks/useNotifications";
 
 const MINIMUM_DELIVERY = 10;
@@ -36,14 +36,15 @@ const MINIMUM_DELIVERY = 10;
 const Checkout = ({ route, navigation }) => {
 
   useNotifications()
-  const [paymentOption, setPaymentOption] = useState("credit");
+  //const [paymentOption, updatePaymentMethod] = useState("credit");
   const [canContinue, setCanContinue] = useState(false);
   const [error, setError] = useState(null);
-  const { deliveryMethod: deliveryOption, setDeliveryMethod } = useContext(settingsContext);
+  const { deliveryMethod: deliveryOption, setDeliveryMethod, updatePaymentMethod, paymentOption } = useContext(settingsContext);
   const { stores } = useContext(storesContext)
   const { user } = useContext(authContext);
   const previous = route.params?.previous;
   const { restaurant } = route.params;
+  console.log(paymentOption)
 
   //const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
@@ -192,21 +193,11 @@ const Checkout = ({ route, navigation }) => {
     }
   }
 
-  const getPaymentType = async () => {
-    try {
-      const pt = await AsyncStorage.getItem('paymentType')
-      return pt ? pt : 'credit';
-    } catch (error) {
-      console.log(error)
-      return null
-    }
-  }
 
   useEffect(() => {
     (async () => {
       checkDeliveryAddress()
-      const pt = await getPaymentType()
-      setPaymentOption(pt)
+
     })()
 
   }, [previous]);
@@ -315,7 +306,7 @@ const Checkout = ({ route, navigation }) => {
                     color:
                       paymentOption === "credit" ? COLORS.white : COLORS.black
                   }}
-                  onPress={() => setPaymentOption("credit")}
+                  onPress={() => updatePaymentMethod("credit")}
                 />
                 <View style={styles.divider}></View>
                 <Pick
@@ -326,7 +317,7 @@ const Checkout = ({ route, navigation }) => {
                       paymentOption === "cash" ? COLORS.white : COLORS.black,
                   }}
                   type={paymentOption}
-                  onPress={() => setPaymentOption("cash")}
+                  onPress={() => updatePaymentMethod("cash")}
                 />
               </>
             ) : (
@@ -338,7 +329,7 @@ const Checkout = ({ route, navigation }) => {
                         paymentOption === "credit" ? COLORS.white : COLORS.black,
                     }}
                     type={paymentOption}
-                    onPress={() => setPaymentOption("credit")}
+                    onPress={() => updatePaymentMethod("credit")}
                   />
                   <View style={styles.divider}></View>
                   <Pick
@@ -348,7 +339,7 @@ const Checkout = ({ route, navigation }) => {
                         paymentOption === "in store" ? COLORS.white : COLORS.black,
                     }}
                     type={paymentOption}
-                    onPress={() => setPaymentOption("in store")}
+                    onPress={() => updatePaymentMethod("in store")}
                   />
                 </>
               )}

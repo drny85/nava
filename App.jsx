@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from "react";
+import React, { useCallback } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigator from "./navigation/AppNavigator";
@@ -17,7 +17,6 @@ import navigationTheme from "./navigation/navigationTheme";
 import StoresState from "./context/stores/storesState";
 
 import logger from './utils/logger'
-import { auth } from "./services/database";
 
 
 const loadFonts = async () => {
@@ -33,7 +32,15 @@ const loadFonts = async () => {
 
 const App = () => {
   const [isReady, setIsReady] = React.useState(false);
-  const { setUser, getCurrentUser } = React.useContext(authContext);
+  const { getCurrentUser } = React.useContext(authContext);
+
+
+  const onLayoutRootView = useCallback(async () => {
+    if (isReady) {
+
+      await SplashScreen.hideAsync();
+    }
+  }, [isReady]);
 
 
   React.useEffect(() => {
@@ -46,26 +53,21 @@ const App = () => {
         await loadFonts()
         getCurrentUser()
 
-        const loaded = await SplashScreen.hideAsync()
-        loaded && setIsReady(true)
-
       } catch (error) {
         console.log('Error @App.js', error)
       } finally {
         setIsReady(true)
-
       }
 
     })()
 
-  }, []);
+    onLayoutRootView()
+
+  }, [isReady]);
 
   if (!isReady) {
 
-    return (
-
-      <AppLoading />
-    );
+    <AppLoading />
   }
 
   return (

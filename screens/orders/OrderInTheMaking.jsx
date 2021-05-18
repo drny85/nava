@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import LottieView from "lottie-react-native";
 import { COLORS, FONTS, SIZES } from "../../config";
@@ -19,13 +19,12 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
 const OrderInTheMaking = ({ navigation, route }) => {
 	const { order: orderInfo } = route.params
-	const mapRef = useRef()
+
 	const [estimated, setEstimated] = useState(0)
 	const { name } = orderInfo.restaurant
 	const [zoomIn, setZoomIn] = useState(0.04)
 	const { orders } = useContext(ordersContext)
 	const order = orders.find(o => o.id === orderInfo.id)
-	const { street, city, zipcode } = order.customer.address
 
 
 	const capitalize = st => {
@@ -76,6 +75,8 @@ const OrderInTheMaking = ({ navigation, route }) => {
 
 						<Animatable.Text animation='fadeInUp' delay={3000} style={{ ...FONTS.body3 }}>Thank you for doing business with us</Animatable.Text>
 					</>)}
+
+					{order.status === 'pickup' && (<Animatable.Text animation='fadeInUp' delay={2000} style={{ ...FONTS.body3, marginTop: SIZES.padding }}>We hope to see you soon!. </Animatable.Text>)}
 				</Animatable.View>
 				<View>
 
@@ -95,8 +96,14 @@ const OrderInTheMaking = ({ navigation, route }) => {
 					/>
 				)}
 
-				{(order.status === 'picked' || order.status === 'delivered') && (order.orderType === 'delivery' || order.orderType === 'picked') && (
+				{(order.status === 'delivered') && (order.orderType === 'delivery') && (
 					<LottieView autoPlay autoSize loop resizeMode='cover' source={require('../../assets/animations/delivery.json')} style={styles.making} />
+
+
+				)}
+
+				{(order.status === 'pickup') && (order.orderType === 'pickup') && (
+					<LottieView autoPlay autoSize loop resizeMode='cover' source={require('../../assets/animations/picked.json')} style={[styles.making, { marginBottom: 40 }]} />
 
 
 				)}

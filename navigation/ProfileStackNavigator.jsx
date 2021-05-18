@@ -16,6 +16,7 @@ import { CommonActions } from "@react-navigation/native";
 import { COLORS } from "../config";
 import { color } from "react-native-reanimated";
 import MyOrders from "../screens/orders/MyOrders";
+import BusinessAccount from "../screens/profiles/BusinessAccount";
 
 const ProfileStack = createStackNavigator();
 
@@ -74,6 +75,7 @@ const ProfileStackNavigator = ({ navigation }) => {
       <ProfileStack.Screen name="Signin" component={Signin} />
       <ProfileStack.Screen name="MyOrders" component={MyOrders} options={{ title: 'My Orders', headerBackTitleStyle: { color: COLORS.secondary }, headerBackTitle: null }} />
       <ProfileStack.Screen name="Signup" component={Signup} />
+      <ProfileStack.Screen name="Business" component={BusinessAccount} />
     </ProfileStack.Navigator>
   );
 };

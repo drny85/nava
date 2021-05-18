@@ -7,6 +7,7 @@ import { SET_REDIRECT, CLEAR_SETTINGS, SET_DELIVERY } from "../types";
 const SettingsState = (props) => {
 	const initialState = {
 		previewRoute: null,
+		paymentOption: 'credit',
 		deliveryMethod: "delivery",
 	};
 
@@ -21,16 +22,25 @@ const SettingsState = (props) => {
 			payload: method,
 		});
 
+	const updatePaymentMethod = payment => {
+		dispatch({
+			type: 'PAYMENT',
+			payload: payment
+		})
+	}
+
 	const clearSettings = () => dispatch({ type: CLEAR_SETTINGS });
 
 	return (
 		<SettingsContext.Provider
 			value={{
 				previewRoute: state.previewRoute,
+				paymentOption: state.paymentOption,
 				deliveryMethod: state.deliveryMethod,
 				setRoute,
 				setDeliveryMethod,
 				clearSettings,
+				updatePaymentMethod,
 			}}
 		>
 			{props.children}

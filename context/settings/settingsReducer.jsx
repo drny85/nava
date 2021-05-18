@@ -14,10 +14,17 @@ export default (state, action) => {
 				previewRoute: action.payload,
 			};
 
+		case 'PAYMENT':
+			return {
+				...state,
+				paymentOption: action.payload
+			}
+
 		case CLEAR_SETTINGS:
 			return {
 				...state,
 				previewRoute: null,
+				paymentOption: 'credit'
 			};
 
 		default:

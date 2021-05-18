@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import {
   StyleSheet,
   KeyboardAvoidingView,
@@ -21,7 +21,8 @@ import AppForm from "../../components/AppForm";
 import authContext from "../../context/auth/authContext";
 import useNotifications from "../../hooks/useNotifications";
 import settingsContext from "../../context/settings/settingsContext";
-import { COLORS } from "../../config";
+import { COLORS, FONTS } from "../../config";
+import AppButton from "../../components/AppButton";
 
 
 const validationSchema = Yup.object().shape({
@@ -34,6 +35,7 @@ const validationSchema = Yup.object().shape({
 
 const Signup = ({ route }) => {
   const navigation = useNavigation();
+  const [business, setBusiness] = useState(null)
   const { signup, createUser } = useContext(authContext);
   const { restaurant } = route.params
 
@@ -77,75 +79,92 @@ const Signup = ({ route }) => {
 
   useEffect(() => {
     return () => {
-      console.log("left");
+      setBusiness(null)
     };
   }, []);
 
+  if (business === null) {
+    return <Screen>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ width: '60%', height: '30%', justifyContent: 'space-around', alignItems: 'center' }}>
+          <Text style={{ ...FONTS.h3 }}>Account Type</Text>
+          <AppButton title='Regular' onPress={() => setBusiness(false)} />
+          <AppButton title='Business' onPress={() => navigation.navigate('Business')} />
+
+        </View>
+
+      </View>
+    </Screen>
+  }
+
   return (
     <Screen>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <KeyboardAvoidingView style={styles.container}>
-          <AppForm
-            initialValues={{
-              name: "",
-              lastName: "",
-              phone: "",
-              email: "",
-              password: "",
-            }}
-            onSubmit={handleSignup}
-            validationSchema={validationSchema}
-          >
-            <AppFormField
-              autoFocus={true}
-              placeholder="Name"
-              iconName="account-circle"
-              name="name"
-              autoCorrect={false}
-            />
-            <AppFormField
-              placeholder="Last Name"
-              iconName="account-circle"
-              name="lastName"
-              autoCorrect={false}
-            />
-            <AppFormField
-              placeholder="Phone"
-              iconName="phone"
-              name="phone"
-              maxLength={10}
-              keyboardType="phone-pad"
-              autoCorrect={false}
-            />
-            <AppFormField
-              placeholder="Email"
-              keyboardType="email-address"
-              iconName="email"
-              name="email"
-              autoCorrect={false}
-              autoCapitalize="none"
-              textContentType="emailAddress"
-            />
+      {business === false && (
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <KeyboardAvoidingView style={styles.container}>
+            <AppForm
+              initialValues={{
+                name: "",
+                lastName: "",
+                phone: "",
+                email: "",
+                password: "",
+              }}
+              onSubmit={handleSignup}
+              validationSchema={validationSchema}
+            >
+              <AppFormField
+                autoFocus={true}
+                placeholder="Name"
+                iconName="account-circle"
+                name="name"
+                autoCorrect={false}
+              />
+              <AppFormField
+                placeholder="Last Name"
+                iconName="account-circle"
+                name="lastName"
+                autoCorrect={false}
+              />
+              <AppFormField
+                placeholder="Phone"
+                iconName="phone"
+                name="phone"
+                maxLength={10}
+                keyboardType="phone-pad"
+                autoCorrect={false}
+              />
+              <AppFormField
+                placeholder="Email"
+                keyboardType="email-address"
+                iconName="email"
+                name="email"
+                autoCorrect={false}
+                autoCapitalize="none"
+                textContentType="emailAddress"
+              />
 
-            <AppFormField
-              placeholder="Password"
-              name="password"
-              secureTextEntry={true}
-              autoCorrect={false}
-              iconName="lock-open"
-              textContentType="password"
-            />
+              <AppFormField
+                placeholder="Password"
+                name="password"
+                secureTextEntry={true}
+                autoCorrect={false}
+                iconName="lock-open"
+                textContentType="password"
+              />
 
-            <AppSubmitButton title="Sign Up" style={{ width: '80%', marginTop: 30, }} />
-          </AppForm>
-          <View style={styles.account}>
-            <Text style={styles.text}>Already have an account?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
-              <Text style={styles.signupText}>Sign In</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+              <AppSubmitButton title="Sign Up" style={{ width: '80%', marginTop: 30, }} />
+            </AppForm>
+            <View style={styles.account}>
+              <Text style={styles.text}>Already have an account?</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
+                <Text style={styles.signupText}>Sign In</Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      )}
+
     </Screen>
   );
 };

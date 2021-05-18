@@ -82,13 +82,13 @@ const Signin = ({ route }) => {
 				setUser(data.user.uid);
 				updateLastLogin(data.user.uid);
 				console.log(previewRoute)
-				if (previewRoute) {
-					navigation.navigate(previewRoute, { restaurant });
-					clearSettings();
+				// if (previewRoute) {
+				// 	navigation.navigate(previewRoute, { restaurant });
+				// 	clearSettings();
 
-					return;
-				}
-				navigation.navigate("Profile");
+				// 	return;
+				// }
+				navigation.navigate(previewRoute || "Profile", { restaurant });
 				console.log('no Previous')
 			}
 		} catch (error) {
