@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useCallback } from "react";
+import React, { useEffect } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigator from "./navigation/AppNavigator";
@@ -11,63 +11,35 @@ import AuthState from "./context/auth/authState";
 import AppLoading from 'expo-app-loading'
 import authContext from "./context/auth/authContext";
 import SettingsState from "./context/settings/settingsState";
-import * as Font from "expo-font";
-import * as SplashScreen from 'expo-splash-screen';
 import navigationTheme from "./navigation/navigationTheme";
 import StoresState from "./context/stores/storesState";
 
+import { useFonts } from '@expo-google-fonts/montserrat'
 import logger from './utils/logger'
 
 
-const loadFonts = async () => {
-  return await Font.loadAsync({
+
+
+const App = () => {
+  const { getCurrentUser } = React.useContext(authContext);
+  const [fontsLoaded, error] = useFonts({
     montserrat: require("./assets/fonts/Montserrat-Regular.ttf"),
-    monte: require("./assets/fonts/Montez-Regular.ttf"),
     "montserrat-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
     "montserrat-bold-italic": require("./assets/fonts/Montserrat-BoldItalic.ttf"),
     "lobster": require('./assets/fonts/Lobster-Regular.ttf'),
-    tange: require("./assets/fonts/Tangerine-Regular.ttf"),
-  });
-};
+    "tange": require("./assets/fonts/Tangerine-Regular.ttf"),
 
-const App = () => {
-  const [isReady, setIsReady] = React.useState(false);
-  const { getCurrentUser } = React.useContext(authContext);
+  })
 
+  useEffect(() => {
 
-  const onLayoutRootView = useCallback(async () => {
-    if (isReady) {
+    getCurrentUser()
 
-      await SplashScreen.hideAsync();
-    }
-  }, [isReady]);
+  }, [])
 
+  if (!fontsLoaded) {
 
-  React.useEffect(() => {
-
-
-    (async () => {
-
-      try {
-        await SplashScreen.preventAutoHideAsync()
-        await loadFonts()
-        getCurrentUser()
-
-      } catch (error) {
-        console.log('Error @App.js', error)
-      } finally {
-        setIsReady(true)
-      }
-
-    })()
-
-    onLayoutRootView()
-
-  }, [isReady]);
-
-  if (!isReady) {
-
-    <AppLoading />
+    <AppLoading autoHideSplash={true} />
   }
 
   return (
@@ -78,7 +50,6 @@ const App = () => {
             <CartState>
               <OrdersState>
                 <NavigationContainer theme={navigationTheme}>
-
                   <AppNavigator />
                 </NavigationContainer>
               </OrdersState>

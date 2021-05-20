@@ -2,11 +2,12 @@ import React, { useReducer } from "react";
 import storesReducer from "./storesReducer";
 import StoresContext from "./storesContext";
 import { db } from "../../services/database";
-import { GET_STORES, SET_LOADING } from "../types";
+import { GET_STORES, SET_LOADING, SUBMITTING_APPLICATION } from "../types";
 
 const StoresState = (props) => {
   const initialState = {
     stores: [],
+    store: null,
     loading: true,
     current: null,
   };
@@ -44,6 +45,35 @@ const StoresState = (props) => {
     }
   };
 
+  const newStoreApplication = async (storeInfo) => {
+    try {
+      dispatch({ type: SUBMITTING_APPLICATION })
+      console.log('HHHHHHH')
+      const res = await db.collection('stores').where('street', '==', storeInfo.street).where('phone', '==', storeInfo.phone).get();
+      const found = res.size > 0;
+
+      if (found) {
+        dispatch({ type: STORE_ERROR, payload: 'Application already exists' })
+        return
+      }
+
+      const store = await db.collection('stores').add(storeInfo)
+
+      //dispatch({ type: STORE_SUCCESS })
+
+      return { success: true, id: store.id }
+
+
+
+    } catch (error) {
+      console.log(error.message)
+      // dispatch({ type: STORE_ERROR, payload: error.message })
+      return false
+    }
+
+
+  }
+
   const setLoading = () => dispatch({ type: SET_LOADING })
 
 
@@ -52,8 +82,10 @@ const StoresState = (props) => {
     <StoresContext.Provider
       value={{
         stores: state.stores,
+        store: state.store,
         loading: state.loading,
         current: state.current,
+        newStoreApplication,
 
         getStores,
         storesSub,

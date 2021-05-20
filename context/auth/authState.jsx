@@ -61,6 +61,7 @@ const AuthState = (props) => {
 	const logout = async () => {
 		try {
 			setLoading();
+
 			await auth.signOut();
 
 			dispatch({ type: LOGOUT });
@@ -75,11 +76,16 @@ const AuthState = (props) => {
 
 	const getCurrentUser = async () => {
 		try {
+
 			const authUnsubcribe = auth.onAuthStateChanged((user) => {
 				if (user) {
+					u = user;
 					setUser(user.uid);
+
 				}
 			});
+
+
 
 			return authUnsubcribe
 		} catch (error) {

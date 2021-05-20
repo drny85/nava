@@ -1,4 +1,4 @@
-import { GET_STORES, SET_LOADING } from "../types";
+import { GET_STORES, SET_LOADING, SUBMITTING_APPLICATION } from "../types";
 
 export default (state, action) => {
   switch (action.type) {
@@ -16,7 +16,7 @@ export default (state, action) => {
         current: action.payload,
       };
 
-    case SET_LOADING:
+    case SUBMITTING_APPLICATION:
       return {
         ...state,
         loading: true,

@@ -33,7 +33,6 @@ const OrderVerification = ({ navigation, route }) => {
   }
 
 
-
   useLayoutEffect(() => {
     navigation.setOptions({
 
@@ -50,6 +49,7 @@ const OrderVerification = ({ navigation, route }) => {
   }, [navigation])
 
   if (loading) return <Loader />;
+
 
   // TODO: this should come from some service/state store
 
@@ -85,11 +85,20 @@ const OrderVerification = ({ navigation, route }) => {
     try {
       const { url } = newState;
 
+      console.log('URL', url)
+
       if (url.includes("/success")) {
         webRef.current.stopLoading();
         //resetCartNavigation();
         //maybe close this view?
       }
+
+      setTimeout(() => {
+        if (url === 'about:blank') {
+          console.log('error procsessing payment')
+          navigation.goBack()
+        }
+      }, 1000 * 60)
     } catch (error) {
       console.error('Error processing payment', error)
       logger.log(error)
@@ -121,7 +130,9 @@ const OrderVerification = ({ navigation, route }) => {
     return null;
   }
 
+
   if (processing) return <Spinner />
+
 
 
   return (

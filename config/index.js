@@ -1,3 +1,3 @@
-import theme, {COLORS, FONTS, SIZES, WEEKDAYS} from './constants';
+import theme, { COLORS, FONTS, SIZES, WEEKDAYS, STATES } from './constants';
 
-export {theme, COLORS, FONTS, SIZES, WEEKDAYS}
+export { theme, COLORS, FONTS, SIZES, WEEKDAYS, STATES };

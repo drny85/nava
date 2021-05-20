@@ -57,6 +57,13 @@ export const WEEKDAYS = {
   7: "sun",
 };
 
+export const STATES = [
+  'New York',
+  'New Jersey',
+  'Connecticut',
+  'Philadelphia'
+]
+
 export const FONTS = {
   navTitle: { fontFamily: "monserrat-thin", fontSize: SIZES.navTitle },
   italic: { fontFamily: "montserrat-bold-italic", fontSize: SIZES.body2 },
@@ -93,6 +100,6 @@ export const FONTS = {
   },
 };
 
-const appTheme = { COLORS, SIZES, FONTS, WEEKDAYS };
+const appTheme = { COLORS, SIZES, FONTS, WEEKDAYS, STATES };
 
 export default appTheme;

@@ -50,7 +50,7 @@ const useNotifications = (notificationListener) => {
 				}
 				const token = await Notifications.getExpoPushTokenAsync();
 				const id = auth().currentUser.uid;
-				if (!user.pushToken) {
+				if (!user?.pushToken) {
 					saveToken(token.data)
 				}
 

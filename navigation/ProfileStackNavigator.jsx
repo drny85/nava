@@ -17,6 +17,7 @@ import { COLORS } from "../config";
 import { color } from "react-native-reanimated";
 import MyOrders from "../screens/orders/MyOrders";
 import BusinessAccount from "../screens/profiles/BusinessAccount";
+import ApplicationDetails from "../screens/profiles/ApplicationDetails";
 
 const ProfileStack = createStackNavigator();
 
@@ -47,7 +48,7 @@ const ProfileStackNavigator = ({ navigation }) => {
         name="Profile"
         component={Profile}
         options={{
-          headerTitleStyle: { fontFamily: "montserrat-bold", fontSize: 16 },
+          headerTitleStyle: { fontFamily: "montserrat-bold", fontSize: 16, color: COLORS.black },
           title: user ? user.name : "Profile",
 
           headerRight: () => (
@@ -63,7 +64,7 @@ const ProfileStackNavigator = ({ navigation }) => {
             </TouchableOpacity>
           ),
           headerShown: user && true,
-          headerBackTitleStyle: { color: COLORS.secondary }
+          headerBackTitleStyle: { color: COLORS.black }
         }}
       />
       <ProfileStack.Screen
@@ -76,6 +77,7 @@ const ProfileStackNavigator = ({ navigation }) => {
       <ProfileStack.Screen name="MyOrders" component={MyOrders} options={{ title: 'My Orders', headerBackTitleStyle: { color: COLORS.secondary }, headerBackTitle: null }} />
       <ProfileStack.Screen name="Signup" component={Signup} />
       <ProfileStack.Screen name="Business" component={BusinessAccount} />
+      <ProfileStack.Screen name="ApplicationDetails" component={ApplicationDetails} />
     </ProfileStack.Navigator>
   );
 };

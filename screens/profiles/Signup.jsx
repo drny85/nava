@@ -35,7 +35,7 @@ const validationSchema = Yup.object().shape({
 
 const Signup = ({ route }) => {
   const navigation = useNavigation();
-  const [business, setBusiness] = useState(null)
+  const [business, setBusiness] = useState(false)
   const { signup, createUser } = useContext(authContext);
   const { restaurant } = route.params
 
@@ -88,7 +88,7 @@ const Signup = ({ route }) => {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <View style={{ width: '60%', height: '30%', justifyContent: 'space-around', alignItems: 'center' }}>
           <Text style={{ ...FONTS.h3 }}>Account Type</Text>
-          <AppButton title='Regular' onPress={() => setBusiness(false)} />
+          <AppButton title='Customer' onPress={() => setBusiness(false)} />
           <AppButton title='Business' onPress={() => navigation.navigate('Business')} />
 
         </View>

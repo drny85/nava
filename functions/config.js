@@ -1,15 +1,16 @@
+const functions = require('firebase-functions');
+const fs = require('fs');
 
-const functions = require('firebase-functions')
-const fs = require('fs')
+let config = functions.config().env;
 
-let config = functions.config().env
+console.log(process.env.NODE_ENV);
 
-if (process.env.NODE_ENV !== 'production') {
-  if (fs.existsSync('./env.json')) {
-    const env = require('./env.json')
+if (process.env.NODE_ENV === 'production') {
+	if (fs.existsSync('./env.json')) {
+		const env = require('./env.json');
 
-    config = env
-  }
+		config = env;
+	}
 }
 
-module.exports = config
+module.exports = config;

@@ -9,7 +9,7 @@ const app = express();
 const cors = require('cors');
 const Stripe = require('stripe');
 const config = require('./config');
-//const stripe = Stripe("sk_test_3XShaHWNu48XiJcCo0OPgNls");
+
 const secrets = config.secret;
 const public = config.public;
 
@@ -20,7 +20,8 @@ app.post('/payment', async (req, res) => {
 	try {
 		const { items, email } = req.body;
 		const restaurantKey = items[0].storeId.toLowerCase();
-
+		console.log('SECRET', restaurantKey);
+		console.log('REST_KEY', secrets[restaurantKey]);
 		const stripe = Stripe(secrets[restaurantKey]);
 		const newItems = items.map((item) => {
 			return {
@@ -55,12 +56,13 @@ app.post('/payment', async (req, res) => {
 
 app.get('/stripeKey/:id', async (req, res) => {
 	try {
-		console.log('MODE', process.env.NODE_ENV);
 		const id = req.params.id;
+
 		const key = public[id.toLowerCase()];
+
 		return res.status(200).send(key);
 	} catch (error) {
-		console.log(error);
+		console.log('Error prossesing payment', error);
 		return res.status(500).send(error.message);
 	}
 });
