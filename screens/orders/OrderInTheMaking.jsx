@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text, Image } from "react-native";
 import LottieView from "lottie-react-native";
 import { COLORS, FONTS, SIZES } from "../../config";
-import { Text, Image } from "react-native";
+
 import * as Animatable from 'react-native-animatable';
 import FloatingButton from "../../components/FloatingButton";
 import moment from 'moment'
@@ -12,6 +12,7 @@ import useLocation from "../../utils/useLocation";
 
 
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+
 
 
 
@@ -101,7 +102,7 @@ const OrderInTheMaking = ({ navigation, route }) => {
 				)}
 
 				{(order.status === 'pickup') && (order.orderType === 'pickup') && (
-					<LottieView autoPlay autoSize loop resizeMode='cover' source={require('../../assets/animations/picked.json')} style={[styles.making, { marginBottom: 40 }]} />
+					<LottieView autoPlay autoSize loop resizeMode='cover' source={require('../../assets/animations/picked.json')} style={[styles.making, { marginBottom: 80, }]} />
 
 
 				)}
@@ -136,6 +137,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#ffffff',
+		height: SIZES.height,
 	},
 	top: {
 

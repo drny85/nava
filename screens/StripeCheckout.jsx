@@ -7,25 +7,39 @@ import { STRIPE } from "../config/stripeSettings";
  */
 export function stripeCheckoutRedirectHTML(order, items, public_key) {
 
+    const { customer } = order
+
+    const data = JSON.stringify(customer.address)
+
     if (!order) {
+
         return;
     }
+
     return `
   <html>
+  <head>
+    
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
   <body>
   <!-- Load Stripe.js on your website. -->
-  <script src="https://js.stripe.com/v3"></script>
+  
   <div style="padding: 0 auto; position: absolute; top: 50%;left: 50%;transform: translate(-50%, -50%);">
     <img src="https://www.clearsmilealigner.com/wp-content/plugins/ias-fad-wp-plugin/img/preloader.gif" alt="loading" />
+   
   </div>
   
-  <div id="error-message"></div>
+  
   <script>
+  
+
       ( function () {
-          var stripe = Stripe( '${public_key}' );
+          var stripe = Stripe('${public_key}');
+         
           window.onload = function () {
-             
-              fetch( '${STRIPE.DB_URL}', {
+           
+              fetch('http://localhost:4242/payment', {
                   method: 'POST',
                   headers: {
                       'Accept': 'application/json',
@@ -39,10 +53,8 @@ export function stripeCheckoutRedirectHTML(order, items, public_key) {
                       amount: "${order.totalAmount}",
                       items: ${items},
                       email: "${order.customer.email}",
-                      customer: {
-                          name: "${order.customer.name} ${order.customer.lastName}"
-                      },
-                      phone: "${order.customer.phone}"
+                      phone: "${order.customer.phone}",
+                      customer: ${data}
                   } ),
 
               } ).then( function ( response ) {
@@ -60,7 +72,8 @@ export function stripeCheckoutRedirectHTML(order, items, public_key) {
                       sessionId: sessionID
                   } ).then( function ( result ) {
                       console.log( result.error.message )
-
+                      alert(result.error.message);
+                    
                   } );
               } );
           };

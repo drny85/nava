@@ -18,17 +18,18 @@ app.use(express.json());
 
 app.post('/payment', async (req, res) => {
 	try {
-		const { items, email } = req.body;
+		const { items, email, customer } = req.body;
 		const restaurantKey = items[0].storeId.toLowerCase();
-		console.log('SECRET', restaurantKey);
-		console.log('REST_KEY', secrets[restaurantKey]);
 		const stripe = Stripe(secrets[restaurantKey]);
+
 		const newItems = items.map((item) => {
 			return {
+				description: item.description,
 				price_data: {
 					currency: 'usd',
 					product_data: {
 						name: item.name,
+						images: [item.imageUrl],
 					},
 					unit_amount: item.price * 100,
 				},
@@ -41,6 +42,7 @@ app.post('/payment', async (req, res) => {
 			customer_email: email.toLowerCase(),
 			line_items: newItems,
 			mode: 'payment',
+			metadata: customer,
 			success_url: 'https://example.com/success',
 			cancel_url: 'https://example.com/cancel',
 		});

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { View, Alert } from "react-native";
 import ordersContext from "../../context/order/orderContext";
 import authContext from "../../context/auth/authContext";
 
@@ -14,17 +13,17 @@ import { COLORS, FONTS } from "../../config";
 import Spinner from '../../components/Spinner'
 
 import { Ionicons } from '@expo/vector-icons';
-import Screen from "../../components/Screen";
 import logger from "../../utils/logger";
+
 
 const OrderVerification = ({ navigation, route }) => {
   const { placeOrder } = useContext(ordersContext);
   const { clearCart } = useContext(cartContext);
-
   const [processing, setProccessing] = useState(false)
   const { user, loading } = useContext(authContext);
-  const { newOrder, paymentMethod, public_key } = route.params;
+  const { newOrder, paymentMethod, public_key, deliveryMethod } = route.params;
   const items = JSON.stringify(newOrder.items);
+  const [baseUrl, setBaseUrl] = useState('https://robertdev.net')
 
   const webRef = useRef(null);
 
@@ -49,7 +48,6 @@ const OrderVerification = ({ navigation, route }) => {
   }, [navigation])
 
   if (loading) return <Loader />;
-
 
   // TODO: this should come from some service/state store
 
@@ -77,28 +75,34 @@ const OrderVerification = ({ navigation, route }) => {
   };
   const onCanceledHandler = () => {
     /* TODO: do something */
-    navigation.goBack();
+
+    navigation.navigate("CartTab", {
+      screen: "OrderSummary",
+      // params: {
+      //   deliveryMethod,
+      //   paymentMethod,
+      //   customer: { name: user?.name, lastName: user?.lastName, email: user?.email, phone: user?.phone }
+      // },
+    });
   };
+
+
 
   const handleChange = async (newState) => {
 
     try {
       const { url } = newState;
-
-      console.log('URL', url)
-
+      if (newState.canGoBack) {
+        webRef.current.goBack()
+      }
       if (url.includes("/success")) {
         webRef.current.stopLoading();
         //resetCartNavigation();
         //maybe close this view?
+      } else if (url.includes('/cancel')) {
+        setBaseUrl('https://robertdev.net')
       }
 
-      setTimeout(() => {
-        if (url === 'about:blank') {
-          console.log('error procsessing payment')
-          navigation.goBack()
-        }
-      }, 1000 * 60)
     } catch (error) {
       console.error('Error processing payment', error)
       logger.log(error)
@@ -125,10 +129,27 @@ const OrderVerification = ({ navigation, route }) => {
     // }
   };
 
+  const onLoadEnd = () => {
+    console.log("ENDED")
+  }
+
+  const onProgress = (syntheticEvent) => {
+    const { nativeEvent } = syntheticEvent;
+    console.log(nativeEvent.url)
+  }
+
   // Render
   if (!user) {
     return null;
   }
+
+  useEffect(() => {
+    return () => {
+      console.log('Unmounted Webview')
+      setBaseUrl('https://robertdev.net')
+
+    }
+  }, [])
 
 
   if (processing) return <Spinner />
@@ -139,9 +160,12 @@ const OrderVerification = ({ navigation, route }) => {
     <WebView
       ref={webRef}
       originWhitelist={["*"]}
-      source={{ html: stripeCheckoutRedirectHTML(newOrder, items, public_key) }}
+      source={{ html: stripeCheckoutRedirectHTML(newOrder, items, public_key), baseUrl: baseUrl }}
       onLoadStart={onLoadStart}
+      onLoadEnd={onLoadEnd}
       onNavigationStateChange={handleChange}
+      onLoadProgress={onProgress}
+
     />
   );
 };

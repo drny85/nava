@@ -44,7 +44,6 @@ const Checkout = ({ route, navigation }) => {
   const { user } = useContext(authContext);
   const previous = route.params?.previous;
   const { restaurant } = route.params;
-  console.log(paymentOption)
 
   //const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
@@ -64,7 +63,7 @@ const Checkout = ({ route, navigation }) => {
       params: {
         deliveryMethod: deliveryOption,
         paymentMethod: paymentOption,
-        customer: { name: user?.name, lastName: user?.lastName, email: user?.email, phone: user?.phone }
+        customer: { name: user?.name, lastName: user?.lastName, email: user?.email, phone: user?.phone, address: null }
       },
     });
   };
