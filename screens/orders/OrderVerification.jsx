@@ -129,10 +129,6 @@ const OrderVerification = ({ navigation, route }) => {
     // }
   };
 
-  const onLoadEnd = () => {
-    console.log("ENDED")
-  }
-
   // Render
   if (!user) {
     return null;
@@ -140,7 +136,7 @@ const OrderVerification = ({ navigation, route }) => {
 
   useEffect(() => {
     return () => {
-      console.log('Unmounted Webview')
+
       setBaseUrl('https://robertdev.net')
 
     }
@@ -157,7 +153,6 @@ const OrderVerification = ({ navigation, route }) => {
       originWhitelist={["*"]}
       source={{ html: stripeCheckoutRedirectHTML(newOrder, items, public_key), baseUrl: baseUrl }}
       onLoadStart={onLoadStart}
-      onLoadEnd={onLoadEnd}
       onNavigationStateChange={handleChange}
     />
   );

@@ -161,7 +161,7 @@ const Checkout = ({ route, navigation }) => {
 
   const checkDeliveryAddress = () => {
     if (previous) {
-      console.log("IN Previous")
+
       setDeliveryAddress(previous);
       const zip = previous.zipcode
       if (restaurant?.deliveryZip.includes(zip)) {
@@ -197,7 +197,7 @@ const Checkout = ({ route, navigation }) => {
     checkDeliveryAddress()
 
     return () => {
-      console.log('CHECKOUT UNMOUNTED')
+
     }
 
   }, [previous]);
