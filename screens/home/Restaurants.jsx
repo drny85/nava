@@ -306,7 +306,6 @@ const Restaurants = ({ navigation }) => {
 
     return () => {
 
-
       setOrder(null);
       setRestaurant(null);
       setShowModal(false);
@@ -315,12 +314,9 @@ const Restaurants = ({ navigation }) => {
       storesSub && storesSub()
       ordersSubscrition && ordersSubscrition()
     };
-  }, [user, stores.length])
+  }, [stores.length])
 
-
-
-
-  if (stores.length === 0) {
+  if (stores.length === 0 && !loading) {
     return (
       <Screen
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -331,7 +327,7 @@ const Restaurants = ({ navigation }) => {
   }
 
 
-  if (location && onlyLocal && stores.filter(store => store.deliveryZip && store.deliveryZip.includes(location[0].postalCode)).length === 0) {
+  if (location && onlyLocal && stores.filter(store => store.deliveryZip && store.deliveryZip.includes(location[0].postalCode)).length === 0 && !loading) {
 
 
     return <Screen style={{ alignItems: 'center', justifyContent: 'center', flex: 1, height: SIZES.height }}>

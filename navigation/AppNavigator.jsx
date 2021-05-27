@@ -2,12 +2,9 @@ import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Ionicons, Fontisto } from "@expo/vector-icons";
-
-import Settings from "../screens/profiles/Settings";
 import HomeStackNavigator from "./HomeStackNavigator";
 
 import CartNavigator from "./CartNavigator";
-import colors from "../config/colors";
 import cartContext from "../context/cart/cartContext";
 
 import { EvilIcons } from "@expo/vector-icons";
@@ -16,7 +13,7 @@ import OrdersStackNavigator from "./OrdersStackNavigator";
 import authContext from "../context/auth/authContext";
 
 import * as Notifications from "expo-notifications";
-import { COLORS } from "../config";
+import { COLORS, FONTS } from "../config";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -46,10 +43,10 @@ const AppNavigator = () => {
       tabBarOptions={{
         labelStyle: {
           color: COLORS.secondary,
-          fontWeight: "600",
+          fontWeight: '600'
         },
         style: {
-          backgroundColor: colors.primary,
+          backgroundColor: COLORS.primary,
         },
         inactiveTintColor: COLORS.secondary,
         activeTintColor: COLORS.ascent,
@@ -90,7 +87,7 @@ const AppNavigator = () => {
               <MaterialCommunityIcons name="cart" color={color} size={30} />
               {itemCounts > 0 && (
                 <View style={[styles.badge, { backgroundColor: COLORS.ascent }]}>
-                  <Text style={{ fontWeight: "700", color: COLORS.tile }}>
+                  <Text style={{ ...FONTS.h4, color: COLORS.tile }}>
                     {itemCounts}
                   </Text>
                 </View>

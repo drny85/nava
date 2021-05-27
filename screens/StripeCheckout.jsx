@@ -39,7 +39,7 @@ export function stripeCheckoutRedirectHTML(order, items, public_key) {
          
           window.onload = function () {
            
-              fetch('http://localhost:4242/payment', {
+              fetch('${STRIPE.DB_URL}', {
                   method: 'POST',
                   headers: {
                       'Accept': 'application/json',

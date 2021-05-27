@@ -133,11 +133,6 @@ const OrderVerification = ({ navigation, route }) => {
     console.log("ENDED")
   }
 
-  const onProgress = (syntheticEvent) => {
-    const { nativeEvent } = syntheticEvent;
-    console.log(nativeEvent.url)
-  }
-
   // Render
   if (!user) {
     return null;
@@ -164,8 +159,6 @@ const OrderVerification = ({ navigation, route }) => {
       onLoadStart={onLoadStart}
       onLoadEnd={onLoadEnd}
       onNavigationStateChange={handleChange}
-      onLoadProgress={onProgress}
-
     />
   );
 };

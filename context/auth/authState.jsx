@@ -79,7 +79,7 @@ const AuthState = (props) => {
 
 			const authUnsubcribe = auth.onAuthStateChanged((user) => {
 				if (user) {
-					u = user;
+
 					setUser(user.uid);
 
 				}
@@ -183,7 +183,7 @@ const AuthState = (props) => {
 
 		try {
 			const user = await auth.sendPasswordResetEmail(email)
-			console.log(user)
+
 		} catch (error) {
 			console.log('error resetting password', error.message)
 		}

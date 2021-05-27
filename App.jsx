@@ -16,12 +16,13 @@ import StoresState from "./context/stores/storesState";
 
 import { useFonts } from '@expo-google-fonts/montserrat'
 import logger from './utils/logger'
+import { auth } from "./services/database";
 
 
 
 
 const App = () => {
-  const { getCurrentUser } = React.useContext(authContext);
+  const { getCurrentUser, user, setUser } = React.useContext(authContext);
   const [fontsLoaded, error] = useFonts({
     montserrat: require("./assets/fonts/Montserrat-Regular.ttf"),
     "montserrat-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
@@ -31,14 +32,25 @@ const App = () => {
 
   })
 
+  console.log('APP')
+
   useEffect(() => {
 
-    getCurrentUser()
+    const sub = auth.onAuthStateChanged(user => {
+      if (user) {
+        setUser(user.uid)
+      }
+    })
+
+    return () => {
+      console.log('App Unmounted')
+      sub && sub()
+    }
 
   }, [])
 
   if (!fontsLoaded) {
-
+    //getCurrentUser();
     <AppLoading autoHideSplash={true} />
   }
 

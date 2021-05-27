@@ -4,17 +4,14 @@ import {
   View,
   StyleSheet,
   Text,
-  Dimensions,
   ScrollView,
   TouchableOpacity,
   KeyboardAvoidingView,
   Alert,
-  Platform,
   TouchableWithoutFeedback,
 } from "react-native";
 
 import cartContext from "../../context/cart/cartContext";
-import colors from "../../config/colors";
 import settingsContext from "../../context/settings/settingsContext";
 import Pick from "../../components/Pick";
 
@@ -37,11 +34,12 @@ const Checkout = ({ route, navigation }) => {
 
   useNotifications()
   //const [paymentOption, updatePaymentMethod] = useState("credit");
+  const { user, loading } = useContext(authContext);
   const [canContinue, setCanContinue] = useState(false);
   const [error, setError] = useState(null);
   const { deliveryMethod: deliveryOption, setDeliveryMethod, updatePaymentMethod, paymentOption } = useContext(settingsContext);
   const { stores } = useContext(storesContext)
-  const { user } = useContext(authContext);
+
   const previous = route.params?.previous;
   const { restaurant } = route.params;
 
@@ -163,6 +161,7 @@ const Checkout = ({ route, navigation }) => {
 
   const checkDeliveryAddress = () => {
     if (previous) {
+      console.log("IN Previous")
       setDeliveryAddress(previous);
       const zip = previous.zipcode
       if (restaurant?.deliveryZip.includes(zip)) {
@@ -194,10 +193,12 @@ const Checkout = ({ route, navigation }) => {
 
 
   useEffect(() => {
-    (async () => {
-      checkDeliveryAddress()
 
-    })()
+    checkDeliveryAddress()
+
+    return () => {
+      console.log('CHECKOUT UNMOUNTED')
+    }
 
   }, [previous]);
 
@@ -208,13 +209,13 @@ const Checkout = ({ route, navigation }) => {
       contentContainerStyle={{
         justifyContent: "center",
         alignItems: "center",
-        height: Dimensions.get('screen').height,
+        height: SIZES.height,
         flex: 1,
 
 
       }}
     >
-      <View style={{ flex: 1, width: Dimensions.get('screen').width, alignItems: 'center' }}>
+      <View style={{ flex: 1, width: SIZES.width, alignItems: 'center' }}>
         <Animatable.View animation='fadeInDown' easing='ease-in-cubic' style={styles.view}>
 
           <Text style={{ ...FONTS.h4 }}>Total Items: {itemCounts}</Text>
@@ -421,7 +422,6 @@ const styles = StyleSheet.create({
   },
   addressView: {
     width: "100%",
-
     alignItems: "center",
     marginVertical: 10,
   },
@@ -430,15 +430,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     position: "absolute",
     bottom: 5,
-    backgroundColor: colors.secondary,
+    backgroundColor: COLORS.secondary,
   },
 
   delivery: {
     overflow: "hidden",
     width: "95%",
-    height: Dimensions.get("screen").height * 0.06,
+    height: SIZES.height * 0.06,
     borderRadius: 50,
-    backgroundColor: colors.tile,
+    backgroundColor: COLORS.tile,
     marginVertical: 10,
     flexDirection: "row",
     alignItems: "center",
@@ -476,7 +476,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "95%",
-    height: Dimensions.get("screen").height * 0.15,
+    height: SIZES.height * 0.15,
     elevation: 10,
     borderRadius: 5,
     shadowColor: COLORS.ascent,
@@ -489,16 +489,16 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     shadowRadius: 10,
     borderColor: "grey",
-    backgroundColor: colors.tile,
+    backgroundColor: COLORS.tile,
   },
 
   pickAddress: {
-    width: Dimensions.get("screen").width,
-    height: Dimensions.get("screen").height * 0.13,
+    width: SIZES.width,
+    height: SIZES.height * 0.13,
     borderTopWidth: 2,
     borderBottomWidth: 2,
-    borderTopColor: colors.secondary,
-    borderBottomColor: colors.secondary,
+    borderTopColor: COLORS.secondary,
+    borderBottomColor: COLORS.secondary,
     justifyContent: "space-between",
     flexDirection: "row",
 
@@ -525,4 +525,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(Checkout);
+export default Checkout;

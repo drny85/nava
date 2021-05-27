@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
 	StyleSheet,
 	KeyboardAvoidingView,
@@ -12,7 +12,7 @@ import {
 	TouchableWithoutFeedback,
 	TextInput
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 
 import * as Yup from "yup";
 import Screen from "../../components/Screen";
@@ -21,7 +21,7 @@ import AppSubmitButton from "../../components/AppSubmitButton";
 import AppForm from "../../components/AppForm";
 
 import authContext from "../../context/auth/authContext";
-import colors from "../../config/colors";
+
 import settingsContext from "../../context/settings/settingsContext";
 import cartContext from "../../context/cart/cartContext";
 import storesContext from "../../context/stores/storesContext";
@@ -32,14 +32,14 @@ import AppInput from "../../components/AppInput";
 import AppButton from "../../components/AppButton";
 import FloatingButton from "../../components/FloatingButton";
 
-
 const validationSchema = Yup.object().shape({
 	email: Yup.string().required().email().label("Email"),
 	password: Yup.string().required().min(6).label("Password"),
 });
 
-const Signin = ({ route }) => {
-	const navigation = useNavigation();
+const Signin = () => {
+	const navigation = useNavigation()
+	const [processing, setProccessing] = useState(false)
 	const { user, login, setUser, updateLastLogin, resetPassword } = useContext(authContext);
 	const { previewRoute, clearSettings } = useContext(settingsContext);
 	const [modalReset, setModalReset] = useState(false)
@@ -48,12 +48,10 @@ const Signin = ({ route }) => {
 	const [resetEmail, setResetEmail] = useState('')
 	const { cartItems } = useContext(cartContext)
 	const { stores } = useContext(storesContext)
-
 	const restaurants = [...stores];
 	const restaurant = restaurants.find(s => s.id === cartItems[0]?.storeId)
 
-
-	// const { restaurant } = route.params
+	console.log(previewRoute)
 	const handleResetEmail = async (e) => {
 		e.preventDefault()
 
@@ -78,18 +76,12 @@ const Signin = ({ route }) => {
 	const handleSignin = async ({ email, password }) => {
 		try {
 			const data = await login(email, password);
-			if (data.user) {
-				setUser(data.user.uid);
-				updateLastLogin(data.user.uid);
-				console.log(previewRoute)
-				// if (previewRoute) {
-				// 	navigation.navigate(previewRoute, { restaurant });
-				// 	clearSettings();
 
-				// 	return;
-				// }
-				navigation.navigate(previewRoute || "Profile", { restaurant });
-				console.log('no Previous')
+			if (data.user.uid) {
+				if (previewRoute) { navigation.navigate('CartTab', { screen: previewRoute, params: restaurant }) }
+				else {
+					navigation.navigate('Profile')
+				}
 			}
 		} catch (error) {
 			console.log(error);
@@ -101,6 +93,8 @@ const Signin = ({ route }) => {
 			);
 		}
 	};
+
+
 
 
 	return (
@@ -214,7 +208,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	text: {
-		color: colors.primary,
+		color: COLORS.primary,
 		fontSize: 18,
 	},
 	signupText: {

@@ -1,8 +1,8 @@
 {
 	"expo": {
 		"name": "Antojito",
-		"slug": "nava62",
-		"version": "1.0.11",
+		"slug": "nava64",
+		"version": "1.0.14",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -16,8 +16,8 @@
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": false,
-			"bundleIdentifier": "net.robertdev.melendez-antojito2",
-			"buildNumber": "1.0.4"
+			"bundleIdentifier": "net.robertdev.melendez-antojito5",
+			"buildNumber": "1.0.7"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"
@@ -38,6 +38,6 @@
 		"android": {
 			"useNextNotificationsApi": true
 		},
-		"description": "updated to SDK41"
+		"description": "Fix Stripe Live payment issue"
 	}
 }

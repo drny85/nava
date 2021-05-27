@@ -51,6 +51,7 @@ const Cart = ({ navigation }) => {
       setRoute("Checkout");
       navigation.navigate("Profile", { screen: "Login", params: { restaurant } });
       return;
+
     }
 
     navigation.navigate("Checkout", {

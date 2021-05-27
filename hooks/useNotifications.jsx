@@ -1,14 +1,12 @@
-// @ts-nocheck
-import { useEffect } from "react";
-import * as Permissions from "expo-permissions";
+
 import * as Notifications from "expo-notifications";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import authContext from "../context/auth/authContext";
 import { Platform } from "react-native";
 import { auth } from "firebase";
 import Constant from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
-import { NOTIFICATIONS } from "expo-permissions";
+
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
@@ -54,8 +52,6 @@ const useNotifications = (notificationListener) => {
 					saveToken(token.data)
 				}
 
-			} else {
-				alert("Must use physical device for Push Notifications");
 			}
 
 			if (Platform.OS === "android") {
