@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import LottieView from "lottie-react-native";
 import { COLORS, FONTS, SIZES } from "../../config";
@@ -6,8 +6,6 @@ import { COLORS, FONTS, SIZES } from "../../config";
 import * as Animatable from 'react-native-animatable';
 import FloatingButton from "../../components/FloatingButton";
 import moment from 'moment'
-import ordersContext from "../../context/order/orderContext";
-
 import useLocation from "../../utils/useLocation";
 
 
@@ -17,25 +15,16 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
 
 const OrderInTheMaking = ({ navigation, route }) => {
-	const { order: orderInfo } = route.params
+	const { order } = route.params
 
 	const [estimated, setEstimated] = useState(0)
-	const { name } = orderInfo.restaurant
-	const [zoomIn, setZoomIn] = useState(0.04)
-	const { orders } = useContext(ordersContext)
-	const order = orders.find(o => o.id === orderInfo.id)
-
+	const { name } = order.restaurant
 
 	const capitalize = st => {
 		const n = st.toLowerCase()
 		const p = n.charAt(0).toUpperCase()
 		const cap = p + n.slice(1)
 		return cap
-	}
-
-	const getDistance = distance => {
-		const { duration } = distance
-		setEstimated(duration)
 	}
 
 	useEffect(() => {

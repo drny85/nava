@@ -1,7 +1,7 @@
 {
 	"expo": {
-		"name": "Antojito",
-		"slug": "nava64",
+		"name": "My Antojito",
+		"slug": "nava65",
 		"version": "1.0.14",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
@@ -17,7 +17,7 @@
 		"ios": {
 			"supportsTablet": false,
 			"bundleIdentifier": "net.robertdev.melendez-antojito5",
-			"buildNumber": "1.0.7"
+			"buildNumber": "1.0.8"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"
@@ -38,6 +38,6 @@
 		"android": {
 			"useNextNotificationsApi": true
 		},
-		"description": "Fix Stripe Live payment issue"
+		"description": "Fix Stripe Live payment issue. and redirect after sign in"
 	}
 }
