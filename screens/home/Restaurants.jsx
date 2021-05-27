@@ -292,6 +292,10 @@ const Restaurants = ({ navigation }) => {
     }
   }
 
+  const getUserOrders = React.useCallback((user) => {
+    getOrders(user?.id)
+  }, [user])
+
   useEffect(() => {
     if (stores?.length === 1) {
       navigation.navigate("Home", { restaurant: stores[0] });
@@ -300,7 +304,7 @@ const Restaurants = ({ navigation }) => {
     //get all stores
     getStores()
     //get all orders for a particular user if user is logged in
-    getOrders(user?.id);
+    getUserOrders(user)
 
     setDeliveryMethod(deliveryType)
 
@@ -314,7 +318,7 @@ const Restaurants = ({ navigation }) => {
       storesSub && storesSub()
       ordersSubscrition && ordersSubscrition()
     };
-  }, [stores.length])
+  }, [stores.length, getUserOrders])
 
   if (stores.length === 0 && !loading) {
     return (

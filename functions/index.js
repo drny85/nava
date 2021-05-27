@@ -61,7 +61,8 @@ app.get('/stripeKey/:id', async (req, res) => {
 		const id = req.params.id;
 
 		const key = public[id.toLowerCase()];
-
+		console.log(key);
+		if (!key) return res.status(400).send({ message: 'no key found' });
 		return res.status(200).send(key);
 	} catch (error) {
 		console.log('Error prossesing payment', error);

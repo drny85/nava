@@ -200,7 +200,7 @@ const Checkout = ({ route, navigation }) => {
 
     }
 
-  }, [previous]);
+  }, [previous, route.params]);
 
   return (
 

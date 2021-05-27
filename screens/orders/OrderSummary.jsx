@@ -172,7 +172,8 @@ const OrderSummary = ({ navigation, route }) => {
               params: { newOrder, paymentMethod, public_key: res.data },
             });
           } else {
-            alert('Payment error')
+            alert('This store is not taking cards payment at the moment. \n Please change payment method')
+            navigation.goBack()
             return
           }
 
@@ -203,7 +204,10 @@ const OrderSummary = ({ navigation, route }) => {
       }
     } catch (error) {
 
-      console.log('Error catched', error);
+      alert('This store is not taking cards payment at the moment. \n Please change payment method')
+      navigation.goBack()
+      console.log('Error @OrderSummary handling payment', error.message)
+      return
     }
   };
 
