@@ -25,6 +25,7 @@ import useLocation from "../../utils/useLocation";
 import { ActivityIndicator } from "react-native";
 import settingsContext from "../../context/settings/settingsContext";
 import { getFilteredStores } from "../../utils/getFiltetredStores";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 
@@ -292,9 +293,6 @@ const Restaurants = ({ navigation }) => {
     }
   }
 
-  const getUserOrders = React.useCallback((user) => {
-    getOrders(user?.id)
-  }, [user])
 
   useEffect(() => {
     if (stores?.length === 1) {
@@ -303,9 +301,8 @@ const Restaurants = ({ navigation }) => {
 
     //get all stores
     getStores()
+    getOrders(user?.id)
     //get all orders for a particular user if user is logged in
-    getUserOrders(user)
-
     setDeliveryMethod(deliveryType)
 
     return () => {
@@ -318,7 +315,8 @@ const Restaurants = ({ navigation }) => {
       storesSub && storesSub()
       ordersSubscrition && ordersSubscrition()
     };
-  }, [stores.length, getUserOrders])
+  }, [stores.length, user?.id])
+
 
   if (stores.length === 0 && !loading) {
     return (
@@ -419,7 +417,7 @@ const Restaurants = ({ navigation }) => {
               style={{
                 justifyContent: "flex-start",
                 width: SIZES.width,
-                height: SIZES.height * 0.2,
+                height: SIZES.height * 0.15,
                 padding: SIZES.radius,
               }}
             >

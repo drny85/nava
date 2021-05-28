@@ -143,7 +143,6 @@ const OrderSummary = ({ navigation, route }) => {
       const newItems = [...cartItems]
       const itemsCopy = generateItemDiscounted(newItems)
 
-
       const newOrder = new Order(
         user.id,
         promoDetails ? itemsCopy : cartItems,
@@ -322,7 +321,7 @@ const OrderSummary = ({ navigation, route }) => {
                     <CardSummaryItem
                       onPress={() => navigation.goBack()}
                       title="Your order will be delivered to:"
-                      subtitle={`${customer.address.street} ${customer.address.apt ? customer.address.apt : null
+                      subtitle={`${customer.address.street} ${customer.address.apt && customer.address.apt
                         }`}
                       misc={`${customer.address.city}, ${customer.address.zipcode}`}
                     />

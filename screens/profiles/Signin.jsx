@@ -51,7 +51,7 @@ const Signin = () => {
 	const restaurants = [...stores];
 	const restaurant = restaurants.find(s => s.id === cartItems[0]?.storeId)
 
-	console.log(previewRoute)
+
 	const handleResetEmail = async (e) => {
 		e.preventDefault()
 
@@ -75,7 +75,7 @@ const Signin = () => {
 
 	const handleSignin = async ({ email, password }) => {
 		try {
-			const data = await login(email, password);
+			const data = await login(email.trim(), password.trim());
 
 			if (data.user.uid) {
 				if (previewRoute) { navigation.navigate('CartTab', { screen: previewRoute, params: restaurant }) }

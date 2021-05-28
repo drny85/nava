@@ -44,7 +44,7 @@ const Signup = ({ route }) => {
 
   const handleSignup = async (values) => {
     try {
-      const data = await signup(values.email, values.password);
+      const data = await signup(values.email.trim(), values.password.trim());
       if (!data) return;
 
       // setUser({ id: data.user.uid, email: data.user.email });

@@ -25,6 +25,7 @@ const OrderVerification = ({ navigation, route }) => {
   const items = JSON.stringify(newOrder.items);
   const [baseUrl, setBaseUrl] = useState('https://robertdev.net')
 
+
   const webRef = useRef(null);
 
   if (!user) {
@@ -112,6 +113,7 @@ const OrderVerification = ({ navigation, route }) => {
 
   // Called everytime the URL stats to load in the webview
   const onLoadStart = (syntheticEvent) => {
+
     const { nativeEvent } = syntheticEvent;
 
     if (nativeEvent.url === STRIPE.SUCCESS_URL) {
@@ -123,10 +125,6 @@ const OrderVerification = ({ navigation, route }) => {
       onCanceledHandler();
     }
 
-    // if (nativeEvent.url == "about:blank") {
-    // 	console.log("BLANK");
-    // 	navigation.goBack();
-    // }
   };
 
   // Render

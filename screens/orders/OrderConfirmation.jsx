@@ -20,11 +20,15 @@ const OrderConfirmation = ({ navigation, route }) => {
     try {
 
       setIsVisible(false)
-      resetNavigationState()
-      navigation.navigate("Orders", {
-        screen: "OrderInTheMaking",
-        params: { order },
-      });
+      const success = await resetNavigationState()
+
+      if (success) {
+        navigation.navigate("Orders", {
+          screen: "OrderInTheMaking",
+          params: { order },
+        });
+      }
+
 
     } catch (error) {
       console.log('Error resetting nav', error)
@@ -32,8 +36,8 @@ const OrderConfirmation = ({ navigation, route }) => {
 
   };
 
-  const resetNavigationState = () => {
-    return navigation.dispatch(
+  const resetNavigationState = async () => {
+    navigation.dispatch(
       CommonActions.reset({
         index: 0,
         routes: [
@@ -42,6 +46,8 @@ const OrderConfirmation = ({ navigation, route }) => {
         ],
       })
     );
+
+    return true;
   }
 
 

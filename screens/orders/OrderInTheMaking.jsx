@@ -6,17 +6,15 @@ import { COLORS, FONTS, SIZES } from "../../config";
 import * as Animatable from 'react-native-animatable';
 import FloatingButton from "../../components/FloatingButton";
 import moment from 'moment'
-import useLocation from "../../utils/useLocation";
-
 
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
 
 
 
+
 const OrderInTheMaking = ({ navigation, route }) => {
 	const { order } = route.params
-
 	const [estimated, setEstimated] = useState(0)
 	const { name } = order.restaurant
 
@@ -28,6 +26,8 @@ const OrderInTheMaking = ({ navigation, route }) => {
 	}
 
 	useEffect(() => {
+
+
 		if (order.restaurant) {
 			const { estimatedDeliveryTime } = order.restaurant
 			if (estimatedDeliveryTime.split('-').length === 2) {

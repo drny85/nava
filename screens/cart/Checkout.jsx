@@ -36,16 +36,16 @@ const Checkout = ({ route, navigation }) => {
   //const [paymentOption, updatePaymentMethod] = useState("credit");
   const { user, loading } = useContext(authContext);
   const [canContinue, setCanContinue] = useState(false);
+  const { cartTotal, itemCounts, cartItems } = useContext(cartContext);
   const [error, setError] = useState(null);
   const { deliveryMethod: deliveryOption, setDeliveryMethod, updatePaymentMethod, paymentOption } = useContext(settingsContext);
   const { stores } = useContext(storesContext)
-
+  const restaurants = [...stores];
+  const restaurant = restaurants.find(s => s.id === cartItems[0]?.storeId)
   const previous = route.params?.previous;
-  const { restaurant } = route.params;
-
   //const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
-  const { cartTotal, itemCounts, cartItems } = useContext(cartContext);
+
 
 
   const handlePickup = (pickupInfo) => {
@@ -161,7 +161,7 @@ const Checkout = ({ route, navigation }) => {
 
   const checkDeliveryAddress = () => {
     if (previous) {
-
+      console.log('REST', restaurant)
       setDeliveryAddress(previous);
       const zip = previous.zipcode
       if (restaurant?.deliveryZip.includes(zip)) {

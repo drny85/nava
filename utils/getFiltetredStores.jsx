@@ -1,5 +1,6 @@
 
 export const getFilteredStores = (stores, allItems, location, searchText, searching, deliveryType, onlyLocal) => {
+
     if (searching) {
         const filteredStores = []
         if (deliveryType === 'pickup' && onlyLocal && location) {
