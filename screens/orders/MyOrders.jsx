@@ -39,9 +39,9 @@ const MyOrders = ({ navigation, route }) => {
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ ...FONTS.body3, marginBottom: 20 }}>No Orders Found</Text>
         <AppButton
-          style={{ width: "80%" }}
+          style={{ width: "60%" }}
           title="Place My First Order"
-          textStyle={{ textTransform: "capitalize" }}
+          textStyle={{ textTransform: "capitalize", ...FONTS.h3 }}
           onPress={() => navigation.navigate("Restaurants")}
         />
       </View>

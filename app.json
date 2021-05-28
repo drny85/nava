@@ -1,45 +1,43 @@
 {
-  "expo": {
-    "name": "My Antojito",
-    "slug": "nava69",
-    "version": "1.0.15",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "net.robertdev.melendez-antojito6",
-      "buildNumber": "1.0.9"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "apiKey": "AIzaSyBYxZ7c3saf5zHkXpDgXIkSzoIR6ogHbtg",
-      "authDomain": "grocery-409ef.firebaseapp.com",
-      "databaseURL": "https://grocery-409ef.firebaseio.com",
-      "projectId": "grocery-409ef",
-      "storageBucket": "grocery-409ef.appspot.com",
-      "messagingSenderId": "897113180247",
-      "appId": "1:897113180247:web:131d1ce3d7fddaeba13b12",
-      "measurementId": "G-FWR2GHNDSM",
-      "bugsnag": {
-        "apiKey": "8cc5d21c704443e3bf140192faa651b7"
-      }
-    },
-    "android": {
-      "useNextNotificationsApi": true
-    },
-    "description": "Fix reset navigation issue after check out"
-  }
+	"expo": {
+		"name": "My Antojito",
+		"slug": "nava69",
+		"version": "1.0.16",
+		"orientation": "portrait",
+		"icon": "./assets/icon.png",
+		"splash": {
+			"image": "./assets/splash.png",
+			"resizeMode": "cover",
+			"backgroundColor": "#ffffff"
+		},
+		"updates": {
+			"fallbackToCacheTimeout": 0
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": false,
+			"bundleIdentifier": "net.robertdev.melendez-antojito7",
+			"buildNumber": "1.0.10"
+		},
+		"web": {
+			"favicon": "./assets/favicon.png"
+		},
+		"extra": {
+			"apiKey": "AIzaSyBYxZ7c3saf5zHkXpDgXIkSzoIR6ogHbtg",
+			"authDomain": "grocery-409ef.firebaseapp.com",
+			"databaseURL": "https://grocery-409ef.firebaseio.com",
+			"projectId": "grocery-409ef",
+			"storageBucket": "grocery-409ef.appspot.com",
+			"messagingSenderId": "897113180247",
+			"appId": "1:897113180247:web:131d1ce3d7fddaeba13b12",
+			"measurementId": "G-FWR2GHNDSM",
+			"bugsnag": {
+				"apiKey": "8cc5d21c704443e3bf140192faa651b7"
+			}
+		},
+		"android": {
+			"useNextNotificationsApi": true
+		},
+		"description": "Fix reset navigation issue after check out"
+	}
 }
