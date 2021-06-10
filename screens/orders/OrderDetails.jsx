@@ -5,7 +5,6 @@ import moment from "moment";
 
 import Screen from "../../components/Screen";
 import { Ionicons } from '@expo/vector-icons';
-import colors from "../../config/colors";
 import ListItem from "../../components/ListItem";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS, FONTS } from "../../config";
@@ -130,10 +129,10 @@ const styles = StyleSheet.create({
 
     paddingVertical: 10,
     elevation: 10,
-    backgroundColor: colors.tile,
+    backgroundColor: COLORS.tile,
     shadowOpacity: 0.7,
     shadowOffset: { width: 5, height: 3 },
-    shadowColor: colors.primary,
+    shadowColor: COLORS.primary,
     width: "98%",
     justifyContent: "center",
     fontFamily: "montserrat",

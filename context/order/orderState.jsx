@@ -9,7 +9,7 @@ import {
   SET_LOADING,
   STOP_ORDER_LOADING,
 } from "../types";
-import { diffClamp } from "react-native-reanimated";
+
 
 const OrdersState = (props) => {
   const initialState = {

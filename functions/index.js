@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.post('/payment', async (req, res) => {
 	try {
-		const { items, email, customer } = req.body;
+		const { items, email, customer, cardFee } = req.body;
 		const restaurantKey = items[0].storeId.toLowerCase();
 		const stripe = Stripe(secrets[restaurantKey]);
 
@@ -36,6 +36,28 @@ app.post('/payment', async (req, res) => {
 				quantity: item.quantity,
 			};
 		});
+
+		if (cardFee) {
+			const total = items.reduce(
+				(current, index) => current + index.price * index.quantity,
+				0
+			);
+			const percent = +((total + 0.3) / (1 - 0.029));
+			const fee = +(total - percent).toFixed(2) * 100;
+			console.log(Math.abs(fee));
+
+			newItems.push({
+				description: 'Convinience fee',
+				price_data: {
+					currency: 'usd',
+					product_data: {
+						name: 'Fee',
+					},
+					unit_amount: Math.abs(fee),
+				},
+				quantity: 1,
+			});
+		}
 
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ['card'],
@@ -61,7 +83,7 @@ app.get('/stripeKey/:id', async (req, res) => {
 		const id = req.params.id;
 
 		const key = public[id.toLowerCase()];
-		console.log(key);
+
 		if (!key) return res.status(400).send({ message: 'no key found' });
 		return res.status(200).send(key);
 	} catch (error) {

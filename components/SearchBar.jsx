@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput } from 'react-native'
-import colors from '../config/colors'
+import { COLORS } from '../config'
 
 
 const SearchBar = ({ text, onChange }) => {
@@ -8,7 +8,7 @@ const SearchBar = ({ text, onChange }) => {
 
     return (
         <View style={styles.view}>
-            <TextInput placeholderTextColor={colors.text} value={text} onChangeText={onChange} style={styles.input} placeholder="What do you feel like eating today?" />
+            <TextInput placeholderTextColor={COLORS.text} value={text} onChangeText={onChange} style={styles.input} placeholder="What do you feel like eating today?" />
         </View>
     )
 }
@@ -29,9 +29,9 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         borderRadius: 30,
-        backgroundColor: colors.tile,
+        backgroundColor: COLORS.tile,
 
-        borderBottomColor: colors.tile,
+        borderBottomColor: COLORS.tile,
         borderWidth: 0.3,
 
         fontFamily: 'montserrat',

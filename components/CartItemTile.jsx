@@ -8,7 +8,6 @@ import {
 	TouchableWithoutFeedback,
 	TouchableOpacity,
 } from "react-native";
-import colors from "../config/colors";
 
 import { Feather } from "@expo/vector-icons";
 import { COLORS, FONTS } from "../config";
@@ -36,7 +35,7 @@ const CartItemTile = ({ item, onAddMore, onRemove, isDisable }) => {
 								<Text
 									style={{
 										paddingLeft: 20,
-										color: colors.tile,
+										color: COLORS.tile,
 										textTransform: "capitalize",
 									}}
 								>
@@ -84,11 +83,12 @@ const styles = StyleSheet.create({
 			width: 5,
 		},
 		shadowOpacity: 0.4,
-		shadowColor: "black",
+		shadowColor: COLORS.secondary,
 		shadowRadius: 5,
 
 		flexDirection: "row",
 		alignItems: "center",
+
 	},
 	img: {
 		height: "100%",
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
 		fontWeight: "600",
 		textTransform: "capitalize",
 		marginBottom: 8,
-		color: colors.secondary,
+		color: COLORS.secondary,
 	},
 	totalView: {
 		width: "100%",
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
 	price: {
 		fontSize: 20,
 		fontWeight: "bold",
-		color: colors.secondary,
+		color: COLORS.secondary,
 	},
 	mini: {
 		height: "100%",
@@ -138,8 +138,9 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "space-around",
 		flexDirection: "row",
-		borderColor: COLORS.secondary,
-		borderWidth: 0.2
+		borderColor: COLORS.lightGray,
+		borderWidth: 0.3,
+		padding: 2
 	},
 	priceView: {
 		width: "40%",
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
 	divider: {
 		height: "100%",
 		width: 2,
-		backgroundColor: "grey",
+		backgroundColor: COLORS.ascent,
 	},
 	qty: {
 		color: COLORS.secondary,

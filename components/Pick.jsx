@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet, View, Text } from "react-native";
 import { COLORS } from "../config";
-import colors from "../config/colors";
+
 
 const Pick = ({ onPress, width = "50%", title, type, style }) => {
   return (

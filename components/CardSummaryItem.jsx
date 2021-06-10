@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import colors from "../config/colors";
+import { COLORS } from "../config";
+
 
 const CardSummaryItem = ({ title, subtitle, misc, onPress }) => {
 	return (
@@ -23,7 +24,7 @@ const CardSummaryItem = ({ title, subtitle, misc, onPress }) => {
 					{misc && <Text style={styles.misc}>{misc}</Text>}
 				</View>
 				<TouchableWithoutFeedback onPress={onPress}>
-					<Text style={{ color: colors.primary, padding: 8, fontWeight: '600' }}>Edit</Text>
+					<Text style={{ color: COLORS.primary, padding: 8, fontWeight: '600' }}>Edit</Text>
 				</TouchableWithoutFeedback>
 			</View>
 		</View>
@@ -33,14 +34,14 @@ const CardSummaryItem = ({ title, subtitle, misc, onPress }) => {
 const styles = StyleSheet.create({
 	container: {
 		elevation: 10,
-		shadowColor: colors.primary,
+		shadowColor: COLORS.primary,
 		shadowOffset: {
 			width: 3,
 			height: 5,
 		},
 		shadowOpacity: 0.7,
 		shadowRadius: 5,
-		backgroundColor: colors.tile,
+		backgroundColor: COLORS.tile,
 		padding: 10,
 		width: "100%",
 		marginBottom: 10,

@@ -85,8 +85,6 @@ const AuthState = (props) => {
 				}
 			});
 
-
-
 			return authUnsubcribe
 		} catch (error) {
 			console.log("Error with user", error);

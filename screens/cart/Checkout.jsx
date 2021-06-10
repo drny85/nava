@@ -161,7 +161,7 @@ const Checkout = ({ route, navigation }) => {
 
   const checkDeliveryAddress = () => {
     if (previous) {
-      console.log('REST', restaurant)
+
       setDeliveryAddress(previous);
       const zip = previous.zipcode
       if (restaurant?.deliveryZip.includes(zip)) {
@@ -203,212 +203,193 @@ const Checkout = ({ route, navigation }) => {
   }, [previous, route.params]);
 
   return (
+    <View style={{ flex: 1 }}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+          height: SIZES.height,
+          flex: 1,
 
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{
-        justifyContent: "center",
-        alignItems: "center",
-        height: SIZES.height,
-        flex: 1,
 
+        }}
+      >
+        <View style={{ flex: 1, width: SIZES.width, alignItems: 'center' }}>
+          <Animatable.View animation='fadeInDown' easing='ease-in-cubic' style={styles.view}>
 
-      }}
-    >
-      <View style={{ flex: 1, width: SIZES.width, alignItems: 'center' }}>
-        <Animatable.View animation='fadeInDown' easing='ease-in-cubic' style={styles.view}>
+            <Text style={{ ...FONTS.h4 }}>Total Items: {itemCounts}</Text>
+            <Text style={{ ...FONTS.h3, padding: SIZES.padding * 0.3 }}>Order Total: ${cartTotal.toFixed(2)}</Text>
+          </Animatable.View>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <Text style={styles.title}>Delivery Option</Text>
+            <View style={styles.delivery}>
+              <TouchableOpacity
 
-          <Text style={{ ...FONTS.h4 }}>Total Items: {itemCounts}</Text>
-          <Text style={{ ...FONTS.h3, padding: SIZES.padding * 0.3 }}>Order Total: ${cartTotal.toFixed(2)}</Text>
-        </Animatable.View>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text style={styles.title}>Delivery Option</Text>
-          <View style={styles.delivery}>
-            <TouchableOpacity
+                onPress={() => {
+                  handleDeliveryType("delivery")
+                  if (!deliveryAddress) {
+                    setCanContinue(false)
+                  } else {
+                    setCanContinue(true)
+                  }
 
-              onPress={() => {
-                handleDeliveryType("delivery")
-                if (!deliveryAddress) {
-                  setCanContinue(false)
-                } else {
+                }}
+                style={{
+                  height: "100%",
+
+                  backgroundColor:
+                    deliveryOption === "delivery" ? COLORS.secondary : COLORS.white,
+                  width: "50%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+
+                      ...FONTS.h2,
+                      color:
+                        deliveryOption === "delivery"
+                          ? COLORS.white
+                          : COLORS.black
+                    }}
+                  >
+                    Delivery
+                </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.divider}></View>
+              <TouchableOpacity
+
+                onPress={() => {
+                  handleDeliveryType("pickup")
                   setCanContinue(true)
-                }
+                }}
+                style={{
+                  height: "100%",
 
-              }}
-              style={{
-                height: "100%",
-
-                backgroundColor:
-                  deliveryOption === "delivery" ? COLORS.secondary : COLORS.white,
-                width: "50%",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "row",
-              }}
-            >
-              <View>
-                <Text
-                  style={{
-
-                    ...FONTS.h2,
-                    color:
-                      deliveryOption === "delivery"
-                        ? COLORS.white
-                        : COLORS.black
-                  }}
-                >
-                  Delivery
+                  backgroundColor:
+                    deliveryOption === "pickup" ? COLORS.secondary : COLORS.white,
+                  width: "50%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      ...FONTS.h2,
+                      color:
+                        deliveryOption === "pickup" ? COLORS.white : COLORS.black,
+                    }}
+                  >
+                    Pick up
                 </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={styles.divider}></View>
-            <TouchableOpacity
-
-              onPress={() => {
-                handleDeliveryType("pickup")
-                setCanContinue(true)
-              }}
-              style={{
-                height: "100%",
-
-                backgroundColor:
-                  deliveryOption === "pickup" ? COLORS.secondary : COLORS.white,
-                width: "50%",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "row",
-              }}
-            >
-              <View>
-                <Text
-                  style={{
-                    ...FONTS.h2,
-                    color:
-                      deliveryOption === "pickup" ? COLORS.white : COLORS.black,
-                  }}
-                >
-                  Pick up
-                </Text>
-              </View>
-            </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.title}>Payment Option</Text>
-          <View style={styles.delivery}>
-            {deliveryOption === "delivery" ? (
-              <>
-                <Pick
-                  title="credit"
-                  type={paymentOption}
-                  style={{
-                    ...FONTS.h2,
-                    color:
-                      paymentOption === "credit" ? COLORS.white : COLORS.black
-                  }}
-                  onPress={() => updatePaymentMethod("credit")}
-                />
-                <View style={styles.divider}></View>
-                <Pick
-                  title="cash"
-                  style={{
-                    ...FONTS.h2,
-                    color:
-                      paymentOption === "cash" ? COLORS.white : COLORS.black,
-                  }}
-                  type={paymentOption}
-                  onPress={() => updatePaymentMethod("cash")}
-                />
-              </>
-            ) : (
+          <View style={{ alignItems: "center" }}>
+            <Text style={styles.title}>Payment Option</Text>
+            <View style={styles.delivery}>
+              {deliveryOption === "delivery" ? (
                 <>
                   <Pick
                     title="credit"
-                    style={{
-                      color:
-                        paymentOption === "credit" ? COLORS.white : COLORS.black,
-                    }}
                     type={paymentOption}
+                    style={{
+                      ...FONTS.h2,
+                      color:
+                        paymentOption === "credit" ? COLORS.white : COLORS.black
+                    }}
                     onPress={() => updatePaymentMethod("credit")}
                   />
                   <View style={styles.divider}></View>
                   <Pick
-                    title="in store"
+                    title="cash"
                     style={{
+                      ...FONTS.h2,
                       color:
-                        paymentOption === "in store" ? COLORS.white : COLORS.black,
+                        paymentOption === "cash" ? COLORS.white : COLORS.black,
                     }}
                     type={paymentOption}
-                    onPress={() => updatePaymentMethod("in store")}
+                    onPress={() => updatePaymentMethod("cash")}
                   />
                 </>
-              )}
-          </View>
-          {deliveryOption === "delivery" && (
-            <View style={[styles.addressView, { height: deliveryAddress ? SIZES.height * 0.30 : SIZES.height * 0.2 }]}>
-              <Text style={{ ...FONTS.h4 }}>Delivery Information</Text>
-              <TouchableWithoutFeedback
-                onPress={() =>
-                  navigation.navigate("MyAddress", { previous: "Checkout" })
-                }
-              >
-                <View style={styles.pickAddress}>
-                  <View>
-                    <Text style={styles.deliveryTitle}>
-                      {previous ? `Delivery Address` : `Pick an address *`}
-                    </Text>
-                    <View style={{ padding: 12 }}>
-                      {deliveryAddress ? (
-                        <>
-                          <Text style={styles.deliveryText}>
-                            {deliveryAddress.street}{" "}
-                            {deliveryAddress.apt
-                              ? `, Apt ${deliveryAddress.apt}`
-                              : null}
-                          </Text>
-                          <Text style={styles.deliveryText}>
-                            {deliveryAddress.city}, {deliveryAddress.zipcode}
-                          </Text>
-                        </>
-                      ) : null}
-                    </View>
-
-                  </View>
-
-                  <View>
-                    <MaterialCommunityIcons
-                      style={styles.icon}
-                      name="chevron-right"
-                      size={24}
-                      color="black"
+              ) : (
+                  <>
+                    <Pick
+                      title="credit"
+                      style={{
+                        color:
+                          paymentOption === "credit" ? COLORS.white : COLORS.black,
+                      }}
+                      type={paymentOption}
+                      onPress={() => updatePaymentMethod("credit")}
                     />
-                  </View>
-                </View>
-              </TouchableWithoutFeedback>
-              {error && (<View style={{ height: 40 }}>
-                <Text style={{ ...FONTS.body3, color: 'red' }}>{error}</Text>
-                <Text style={{ fontStyle: 'italic', ...FONTS.body5 }}>This location only makes deliveries to these zip codes</Text>
-                <View style={{ flexDirection: 'row', height: 30 }}>
-                  {restaurant?.deliveryZip.map(zip => {
-                    return <Text style={{ marginRight: 5, ...FONTS.body5 }} key={zip}>{zip}</Text>
-                  })}
+                    <View style={styles.divider}></View>
+                    <Pick
+                      title="in store"
+                      style={{
+                        color:
+                          paymentOption === "in store" ? COLORS.white : COLORS.black,
+                      }}
+                      type={paymentOption}
+                      onPress={() => updatePaymentMethod("in store")}
+                    />
+                  </>
+                )}
+            </View>
+            {deliveryOption === 'delivery' && (
+              <View style={{ width: '100%', marginVertical: SIZES.padding * 0.5, alignItems: 'center', }}>
+                <TouchableOpacity onPress={() => navigation.navigate("MyAddress", { previous: "Checkout" })} style={{ alignSelf: 'center', backgroundColor: COLORS.light, paddingHorizontal: SIZES.padding * 0.8, paddingVertical: SIZES.padding * 0.4, borderRadius: SIZES.padding, }}>
+                  <Text style={{ ...FONTS.body4, color: COLORS.secondary }}>
+                    {deliveryAddress ? 'Change Address' : 'Select Address'}
+                  </Text>
+                </TouchableOpacity>
+                <View style={{ marginVertical: SIZES.padding * 0.3, justifyContent: 'center', width: SIZES.width, }}>
+                  {deliveryAddress ? (
+                    <View style={{ ...SIZES.shadow, width: '96%', alignSelf: 'center', alignItems: 'flex-start', justifyContent: 'center' }}>
+                      <Text style={styles.deliveryText}>
+                        {deliveryAddress.street}{" "}
+                        {deliveryAddress.apt
+                          ? `, Apt ${deliveryAddress.apt}`
+                          : null}
+                      </Text>
+                      <Text style={styles.deliveryText}>
+                        {deliveryAddress.city}, {deliveryAddress.zipcode}
+                      </Text>
+                    </View>
+                  ) : null}
+
                 </View>
               </View>)}
-
-              <View style={{ height: 80 }}></View>
+            {error && (<View style={{ marginBottom: 10, flex: 1, width: '100%', marginHorizontal: SIZES.padding * 0.5 }}>
+              <Text style={{ ...FONTS.body3, color: 'red' }}>{error}</Text>
+              <Text style={{ fontStyle: 'italic', ...FONTS.body5, }}>This location only makes deliveries to these zip codes</Text>
+              <View style={{ flexDirection: 'row', height: 30 }}>
+                {restaurant?.deliveryZip.map(zip => {
+                  return <Text style={{ marginRight: 5, ...FONTS.body5 }} key={zip}>{zip}</Text>
+                })}
+              </View>
+              <View style={{ marginBottom: 30 }}></View>
             </View>
-          )}
+            )}
+          </View>
+          <View style={{ height: 40, width: '100%' }}></View>
         </View>
 
 
-
-
-      </View>
-      <View style={{ marginBottom: 15, width: "90%", }}>
+      </ScrollView>
+      <View style={{ width: "100%", position: 'absolute', left: 0, right: 0, bottom: 20, justifyContent: 'center', alignItems: 'center' }}>
         {/* <AppSubmitButton disabled={!canContinue} title="Check Out" /> */}
-        <AppButton title='Check Out' onPress={deliveryOption === 'delivery' ? handleDelivery : handlePickup} />
+        <AppButton style={{ width: '90%' }} title='Check Out' onPress={deliveryOption === 'delivery' ? handleDelivery : handlePickup} />
       </View>
-    </ScrollView>
+    </View>
 
   );
 };
@@ -417,7 +398,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 15,
-
 
   },
   addressView: {
@@ -488,7 +468,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.7,
     marginVertical: 8,
     shadowRadius: 10,
-    borderColor: "grey",
+    borderColor: COLORS.gray,
     backgroundColor: COLORS.tile,
   },
 
@@ -503,10 +483,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
 
     alignItems: "center",
-    flex: 1,
     marginBottom: 10,
   },
-
   icon: {
     marginRight: 10,
   },

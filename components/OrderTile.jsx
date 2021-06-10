@@ -4,19 +4,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
-  Image,
-  Dimensions,
-  Alert,
+  Image
+
 } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
-import LottieView from "lottie-react-native";
-
-import colors from "../config/colors";
 import { COLORS, FONTS, SIZES } from "../config";
 import cartContext from "../context/cart/cartContext";
 import { useNavigation } from "@react-navigation/native";
 
-import Spinner from "./Spinner";
 import ordersContext from "../context/order/orderContext";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
@@ -89,7 +84,7 @@ const OrderTile = ({ order, onPress }) => {
         </Text>
       </TouchableOpacity>
 
-      <EvilIcons name="chevron-right" size={35} color={colors.ascent} />
+      <EvilIcons name="chevron-right" size={35} color={COLORS.ascent} />
     </TouchableOpacity>
 
   );
@@ -97,12 +92,12 @@ const OrderTile = ({ order, onPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get("screen").height * 0.1,
+    height: SIZES.height * 0.1,
     width: "100%",
-    backgroundColor: colors.tile,
+    backgroundColor: COLORS.tile,
     borderBottomWidth: 0.3,
-    borderColor: colors.primary,
-    shadowColor: colors.primary,
+    borderColor: COLORS.primary,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 3, height: 3 },
     shadowOpacity: 0.7,
     justifyContent: "space-between",

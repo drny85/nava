@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
-import colors from "../config/colors";
 import Cart from "../screens/cart/Cart";
 
 import Checkout from "../screens/cart/Checkout";

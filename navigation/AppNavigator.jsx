@@ -82,6 +82,7 @@ const AppNavigator = () => {
         component={CartNavigator}
         options={{
           tabBarLabel: 'Cart',
+
           tabBarIcon: ({ color, size }) => (
             <View style={styles.cartIcon}>
               <MaterialCommunityIcons name="cart" color={color} size={30} />
@@ -121,12 +122,12 @@ const styles = StyleSheet.create({
   },
   badge: {
 
-    width: 22,
-    height: 22,
-    borderRadius: 50,
+    width: 20,
+    height: 20,
+    borderRadius: 40,
     position: "absolute",
-    top: -5,
-    right: -1,
+    top: -2,
+    right: 3,
     alignItems: "center",
     justifyContent: "center",
   },

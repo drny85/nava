@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ordersContext from "../../context/order/orderContext";
 import authContext from "../../context/auth/authContext";
 
@@ -9,11 +9,13 @@ import { stripeCheckoutRedirectHTML } from "../StripeCheckout";
 import Signin from "../profiles/Signin";
 import cartContext from "../../context/cart/cartContext";
 import { COLORS, FONTS } from "../../config";
+import { CommonActions, StackActions, useFocusEffect } from '@react-navigation/native';
 
 import Spinner from '../../components/Spinner'
 
 import { Ionicons } from '@expo/vector-icons';
 import logger from "../../utils/logger";
+import { RefreshControlBase } from "react-native";
 
 
 const OrderVerification = ({ navigation, route }) => {
@@ -21,10 +23,9 @@ const OrderVerification = ({ navigation, route }) => {
   const { clearCart } = useContext(cartContext);
   const [processing, setProccessing] = useState(false)
   const { user, loading } = useContext(authContext);
-  const { newOrder, paymentMethod, public_key, deliveryMethod } = route.params;
-  const items = JSON.stringify(newOrder.items);
-  const [baseUrl, setBaseUrl] = useState('https://robertdev.net')
+  const { newOrder, paymentMethod, public_key, cardFee } = route.params;
 
+  const [baseUrl, setBaseUrl] = useState('https://robertdev.net')
 
   const webRef = useRef(null);
 
@@ -33,20 +34,7 @@ const OrderVerification = ({ navigation, route }) => {
   }
 
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
 
-      headerLeft: () => {
-        return <Ionicons
-          style={{ marginLeft: 12 }}
-          onPress={() => navigation.goBack()}
-          name="md-arrow-back"
-          color={COLORS.secondary}
-          size={30}
-        />
-      }
-    })
-  }, [navigation])
 
   if (loading) return <Loader />;
 
@@ -93,6 +81,7 @@ const OrderVerification = ({ navigation, route }) => {
 
     try {
       const { url } = newState;
+
       if (newState.canGoBack) {
         webRef.current.goBack()
       }
@@ -132,24 +121,23 @@ const OrderVerification = ({ navigation, route }) => {
     return null;
   }
 
+
   useEffect(() => {
     return () => {
 
       setBaseUrl('https://robertdev.net')
 
     }
-  }, [])
+  }, [newOrder, navigation])
 
 
   if (processing) return <Spinner />
-
-
 
   return (
     <WebView
       ref={webRef}
       originWhitelist={["*"]}
-      source={{ html: stripeCheckoutRedirectHTML(newOrder, items, public_key), baseUrl: baseUrl }}
+      source={{ html: stripeCheckoutRedirectHTML(newOrder, newOrder.items, public_key, cardFee), baseUrl: baseUrl }}
       onLoadStart={onLoadStart}
       onNavigationStateChange={handleChange}
     />

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import colors from "../config/colors";
+import { COLORS } from "../config";
+
 
 const ListItem = ({ name, imageUrl, price, qty, size }) => {
   return (
@@ -42,14 +43,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 80,
     fontFamily: "montserrat",
-    backgroundColor: colors.tile,
+    backgroundColor: COLORS.tile,
     justifyContent: "space-between",
     alignItems: "center",
     padding: 15,
     marginBottom: 2,
     elevation: 10,
     shadowOffset: { width: 4, height: 3 },
-    shadowColor: colors.primary,
+    shadowColor: COLORS.primary,
     shadowOpacity: 0.7,
     fontFamily: "montserrat",
   },

@@ -3,8 +3,6 @@ import { TouchableWithoutFeedback } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 
-import colors from "../config/colors";
-
 import MyOrders from "../screens/orders/MyOrders";
 import OrderConfirmation from "../screens/orders/OrderConfirmation";
 import OrderSummary from "../screens/orders/OrderSummary";
@@ -12,6 +10,7 @@ import OrderVerification from "../screens/orders/OrderVerification";
 import { useNavigation } from "@react-navigation/native";
 import OrderDetails from "../screens/orders/OrderDetails";
 import OrderInTheMaking from "../screens/orders/OrderInTheMaking";
+import { COLORS, FONTS } from "../config";
 
 const OrdersStack = createStackNavigator();
 
@@ -59,9 +58,12 @@ const OrdersStackNavigator = ({ route }) => {
       <OrdersStack.Screen
         name="OrderVerification"
         component={OrderVerification}
+
         options={{
+
           title: "Payment",
-          headerTitleStyle: { fontFamily: "montserrat-bold" },
+          headerTitleStyle: { ...FONTS.h3 },
+          unmountOnBlur: true,
           headerLeft: () => (
             <TouchableWithoutFeedback
               onPress={() => navigation.goBack()}
@@ -70,7 +72,7 @@ const OrdersStackNavigator = ({ route }) => {
               <Ionicons
                 style={{ marginLeft: 10 }}
                 name="md-arrow-back"
-                color={colors.primary}
+                color={COLORS.secondary}
                 size={30}
               />
             </TouchableWithoutFeedback>

@@ -417,7 +417,6 @@ const Restaurants = ({ navigation }) => {
               style={{
                 justifyContent: "flex-start",
                 width: SIZES.width,
-                height: SIZES.height * 0.15,
                 padding: SIZES.radius,
               }}
             >
@@ -432,7 +431,6 @@ const Restaurants = ({ navigation }) => {
 
               <FlatList
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ height: "100%" }}
                 data={orders}
                 horizontal
                 style={{ flexGrow: 0 }}
@@ -508,7 +506,7 @@ const Restaurants = ({ navigation }) => {
         <View style={styles.modal}>
           <TouchableOpacity
             style={{
-              top: 5,
+              top: 15,
               left: 20,
               width: 30,
               height: 30,
@@ -518,7 +516,7 @@ const Restaurants = ({ navigation }) => {
             }}
             onPress={() => setShowModal(false)}
           >
-            <AntDesign name="close" size={28} color="black" />
+            <AntDesign name="close" size={28} color={COLORS.secondary} />
           </TouchableOpacity>
           {/* express add order */}
           <View style={{ marginTop: 20, padding: SIZES.padding }}>
@@ -530,7 +528,7 @@ const Restaurants = ({ navigation }) => {
                 style={{ marginRight: SIZES.padding * 0.5 }}
                 name="flash"
                 size={24}
-                color="black"
+                color={COLORS.secondary}
               />
               <View>
                 <Text>Order Express</Text>
@@ -544,7 +542,7 @@ const Restaurants = ({ navigation }) => {
                 style={{ marginRight: SIZES.padding * 0.5 }}
                 name="shopping-cart"
                 size={24}
-                color="black"
+                color={COLORS.secondary}
               />
               <View>
                 <Text>Add to cart</Text>
@@ -562,7 +560,7 @@ const Restaurants = ({ navigation }) => {
                 style={{ marginRight: SIZES.padding * 0.5 }}
                 name="restaurant"
                 size={24}
-                color="black"
+                color={COLORS.secondary}
               />
               <View>
                 <Text>Go to Restaurant</Text>
@@ -606,7 +604,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     width: SIZES.width,
-    height: "50%",
+    height: "60%",
     backgroundColor: COLORS.ascent,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,

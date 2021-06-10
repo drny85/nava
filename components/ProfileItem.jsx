@@ -1,7 +1,6 @@
 import React from "react";
 import { View, StyleSheet, TouchableWithoutFeedback, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import colors from "../config/colors";
 import { COLORS, FONTS, SIZES } from "../config";
 
 const ProfileItem = ({ text, onPress }) => {

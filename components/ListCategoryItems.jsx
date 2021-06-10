@@ -3,9 +3,7 @@ import { StyleSheet, Text, FlatList, Dimensions } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import Card from "./Card";
-
-import colors from "../config/colors";
-import { FONTS, SIZES } from "../config";
+import { COLORS, FONTS, SIZES } from "../config";
 
 const ListCategoryItems = ({ categories, items, restaurant, deliveryType }) => {
   const navigation = useNavigation();
@@ -72,7 +70,7 @@ const styles = StyleSheet.create({
   text: {
     textTransform: "capitalize",
     marginLeft: 12,
-    color: colors.text,
+    color: COLORS.text,
   },
 });
 

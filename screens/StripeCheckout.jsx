@@ -1,15 +1,22 @@
+
 import { STRIPE } from "../config/stripeSettings";
+
 
 /**
  * Create the Stripe Checkout redirect html code for a given user
  *
  * @returns {String}
  */
-export function stripeCheckoutRedirectHTML(order, items, public_key) {
+export function stripeCheckoutRedirectHTML(order, items, public_key, cardFee) {
 
     const { customer } = order
+    const total = items.reduce(
+        (current, index) => current + index.price * index.quantity,
+        0
+    );
 
-    const data = JSON.stringify(customer.address)
+    const products = JSON.stringify(items)
+    const data = JSON.stringify(customer)
 
     if (!order) {
 
@@ -32,9 +39,10 @@ export function stripeCheckoutRedirectHTML(order, items, public_key) {
   
   
   <script>
-  
 
       ( function () {
+       
+         
           var stripe = Stripe('${public_key}');
          
           window.onload = function () {
@@ -51,10 +59,11 @@ export function stripeCheckoutRedirectHTML(order, items, public_key) {
                   body: JSON.stringify( {
                      
                       amount: "${order.totalAmount}",
-                      items: ${items},
+                      items: ${products},
                       email: "${order.customer.email}",
                       phone: "${order.customer.phone}",
-                      customer: ${data}
+                      customer: ${data},
+                      cardFee: "${cardFee}"
                   } ),
 
               } ).then( function ( response ) {

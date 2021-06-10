@@ -3,7 +3,6 @@ import { Alert, Text, TouchableOpacity } from "react-native";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
-import colors from "../config/colors";
 import authContext from "../context/auth/authContext";
 import Signup from "../screens/profiles/Signup";
 import Signin from "../screens/profiles/Signin";
@@ -73,7 +72,7 @@ const ProfileStackNavigator = ({ navigation }) => {
         options={{ title: "My Addresses", headerBackTitle: "Profile", headerBackTitleStyle: { color: COLORS.secondary } }}
       />
       <ProfileStack.Screen name="Favorites" component={MyFavorites} options={{ headerBackTitleStyle: { color: COLORS.secondary } }} />
-      <ProfileStack.Screen name="Signin" component={Signin} />
+      <ProfileStack.Screen name="Signin" component={Signin} options={{ headerBackTitleStyle: { color: COLORS.lightGray, } }} />
       <ProfileStack.Screen name="MyOrders" component={MyOrders} options={{ title: 'My Orders', headerBackTitleStyle: { color: COLORS.secondary }, headerBackTitle: null }} />
       <ProfileStack.Screen name="Signup" component={Signup} />
       <ProfileStack.Screen name="Business" component={BusinessAccount} />

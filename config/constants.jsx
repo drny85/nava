@@ -15,7 +15,8 @@ export const COLORS = {
   primary: "#eceff1",
   secondary: "#212121",
   ascent: "#607d8b",
-  card: "#bdc3c7",
+  card: "#F9F8F8",
+  background: "FFFFFF",
   tile: "#ecf0f1",
   white: "#f7f7f7",
   text: "#555B5D",
@@ -45,6 +46,25 @@ export const SIZES = {
   // app dimensions
   width,
   height,
+  shadow: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "95%",
+    height: height * 0.15,
+    elevation: 10,
+    borderRadius: 5,
+    shadowColor: COLORS.ascent,
+    shadowOffset: {
+      width: 3,
+      height: 7,
+    },
+    padding: 10,
+    shadowOpacity: 0.7,
+    marginVertical: 8,
+    shadowRadius: 10,
+    borderColor: COLORS.gray,
+    backgroundColor: COLORS.tile,
+  }
 };
 
 export const WEEKDAYS = {

@@ -168,7 +168,7 @@ const OrderSummary = ({ navigation, route }) => {
             navigation.navigate("Orders", {
               screen: "OrderVerification",
 
-              params: { newOrder, paymentMethod, public_key: res.data },
+              params: { newOrder, paymentMethod, public_key: res.data, cardFee: restaurant?.chargeCardFee },
             });
           } else {
             alert('This store is not taking cards payment at the moment. \n Please change payment method')

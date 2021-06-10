@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { colors } from "react-native-elements";
+
 
 const Divider = ({ color }) => {
   return <View style={[styles.view, { backgroundColor: color }]}></View>;

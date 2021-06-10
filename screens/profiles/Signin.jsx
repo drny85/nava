@@ -39,7 +39,6 @@ const validationSchema = Yup.object().shape({
 
 const Signin = () => {
 	const navigation = useNavigation()
-	const [processing, setProccessing] = useState(false)
 	const { user, login, setUser, updateLastLogin, resetPassword } = useContext(authContext);
 	const { previewRoute, clearSettings } = useContext(settingsContext);
 	const [modalReset, setModalReset] = useState(false)

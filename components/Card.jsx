@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import colors from "../config/colors";
 import { SharedElement } from 'react-navigation-shared-element';
 
 import { Image } from "react-native-expo-image-cache";

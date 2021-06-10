@@ -5,39 +5,51 @@ import {
   View,
   Image,
   TouchableOpacity,
+  ImageBackground,
   ScrollView,
 } from "react-native";
 import { COLORS, FONTS, SIZES } from "../config";
 import moment from "moment";
 
+import { LinearGradient } from "expo-linear-gradient";
+
+
 const RecentOrderCard = ({ order, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <View style={styles.topView}>
-        <Image
-          style={styles.img}
-          resizeMode="cover"
-          source={{ uri: order.items[0]?.imageUrl }}
-        />
-      </View>
+      <ImageBackground
+        style={styles.img}
+        resizeMode="cover"
+        source={{ uri: order.items[0]?.imageUrl }}
+      >
+        <LinearGradient colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.1)']} style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', }}>
 
-      <View style={styles.bottomView}>
-        <Text
-          style={{
+          <Text
+            style={{
+              textTransform: "capitalize",
+              fontFamily: 'lobster',
+              fontSize: 16,
+              color: COLORS.white,
+              marginTop: 8,
+            }}
+          >
+            {order.restaurant.name}
+          </Text>
+          <Text style={{
+            ...FONTS.body4,
+            color: COLORS.white
+          }}>
+            {order.items[0].name}
+          </Text>
 
-            textTransform: "capitalize",
-            fontFamily: 'lobster',
+          <Text style={{ color: COLORS.white, fontSize: 12, marginBottom: 8, }}>
+            {moment(order.orderPlaced).fromNow()}
+          </Text>
 
-            color: COLORS.black,
-          }}
-        >
-          {order.restaurant.name}
-        </Text>
 
-        <Text style={{ color: COLORS.black, fontSize: 10, opacity: 0.5 }}>
-          {moment(order.orderPlaced).fromNow()}
-        </Text>
-      </View>
+        </LinearGradient>
+
+      </ImageBackground>
     </TouchableOpacity>
   );
 };
@@ -46,50 +58,28 @@ export default RecentOrderCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: SIZES.width / 2.5,
-    height: "100%",
-    borderRadius: SIZES.radius * 2,
-    elevation: 5,
+    width: SIZES.width * 0.4,
+    borderRadius: 15,
+    elevation: 7,
     shadowColor: COLORS.lightGray,
     shadowRadius: 4,
-
     shadowOpacity: 0.7,
     shadowOffset: {
       width: 5,
       height: 8,
     },
-    marginHorizontal: SIZES.padding * 0.3,
+    marginHorizontal: SIZES.padding * 0.2,
+
+    overflow: 'hidden',
+    height: SIZES.height * 0.10
+
   },
   img: {
-    height: "100%",
-    width: "100%",
     borderTopLeftRadius: SIZES.radius,
     borderTopRightRadius: SIZES.radius,
-  },
-  bottomView: {
-    height: "30%",
-    width: "100%",
-    padding: 5,
-    backgroundColor: "rgba(0,0,0,0.1)",
-    opacity: 0.8,
-    borderBottomRightRadius: 15,
-    borderBottomLeftRadius: 15,
-    shadowColor: COLORS.black,
-    shadowOffset: {
-      width: 5,
-      height: 8,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 15,
-    elevation: 7,
+    width: '100%',
+    overflow: 'hidden',
 
-    alignItems: "center",
-    justifyContent: "center",
   },
-  topView: {
-    height: "70%",
-    borderTopLeftRadius: SIZES.radius,
-    borderTopRightRadius: SIZES.radius,
-    backgroundColor: COLORS.card,
-  },
+
 });

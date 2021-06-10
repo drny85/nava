@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import Screen from "../../components/Screen";
 import AppButton from "../../components/AppButton";
-import colors from "../../config/colors";
 import AddressTile from "../../components/AddressTile";
 import { Ionicons } from "@expo/vector-icons";
 import AppForm from "../../components/AppForm";
@@ -89,7 +88,7 @@ const MyAddress = ({ navigation, route }) => {
     <Screen style={styles.container}>
       <AppButton
         style={styles.btn}
-        textStyle={{ fontSize: 15, color: COLORS.white }}
+
         title="Add New Address"
         onPress={() => setVisible(true)}
       />
@@ -193,9 +192,6 @@ const styles = StyleSheet.create({
     width: "80%",
     marginVertical: 10,
 
-    color: colors.primary,
-    borderWidth: 1,
-    borderColor: colors.primary,
   },
   mainView: {
     flex: 1,

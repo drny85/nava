@@ -1,9 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { Dimensions } from "react-native";
-import colors from "../config/colors";
-
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import { COLORS, SIZES } from "../config";
 
 const AddressTile = ({ address, onPress, renderRightActions }) => {
   return (
@@ -36,9 +34,18 @@ const AddressTile = ({ address, onPress, renderRightActions }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: Dimensions.get("screen").width,
-    height: Dimensions.get("screen").height * 0.1,
-    backgroundColor: colors.tile,
+    width: SIZES.width * 0.98,
+    height: SIZES.height * 0.1,
+    backgroundColor: COLORS.card,
+    elevation: 8,
+    shadowColor: COLORS.lightGray,
+    shadowOffset: {
+      width: 4, height: 6
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 8,
+    borderRadius: 6,
+
     flex: 1,
     padding: 10,
     // borderTopColor: colors.secondary,

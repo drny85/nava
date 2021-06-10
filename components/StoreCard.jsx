@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Image, Animated } from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
-import colors from "../config/colors";
 import { COLORS, FONTS, SIZES } from "../config";
-import { FontAwesome, Feather } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import authContext from "../context/auth/authContext";
 
 const StoreCard = ({ store, onPress, scale = null, opacity = null }) => {
@@ -24,12 +22,6 @@ const StoreCard = ({ store, onPress, scale = null, opacity = null }) => {
               : "https://mk0tarestaurant7omoy.kinstacdn.com/wp-content/uploads/2018/01/premiumforrestaurants_0.jpg",
           }}
         />
-        {/* <LinearGradient
-        colors={["rgba(0,0,0,0.8)", "black"]}
-        start={{ x: 1, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={styles.details}
-      ></LinearGradient> */}
 
         {isFavorite && (
           <View style={{ position: "absolute", top: 10, right: 15 }}>
@@ -55,7 +47,7 @@ const StoreCard = ({ store, onPress, scale = null, opacity = null }) => {
               CLOSED
             </Text>)}
 
-            {store.deliveryMinimum ? (<Text style={{ ...FONTS.body5, color: COLORS.white, fontFamily: 'montserrat-bold', }}>${store.deliveryMinimum} minimum delivery</Text>) : (<Text style={{ ...FONTS.body5, color: COLORS.white, fontFamily: 'montserrat-bold', }}>Free Delivery</Text>)}
+            {store.deliveryMinimum && store.open ? (<Text style={{ ...FONTS.body5, color: COLORS.white, fontFamily: 'montserrat-bold', }}>${store.deliveryMinimum} minimum delivery</Text>) : (<Text style={{ ...FONTS.body5, color: COLORS.white, fontFamily: 'montserrat-bold', }}>Free Delivery</Text>)}
             {store.estimatedDeliveryTime && (
               <Text
                 style={{
@@ -96,7 +88,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 3, height: 6 },
     shadowOpacity: 0.7,
     shadowRadius: 15,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
     marginVertical: 8,
     overflow: "hidden",
   },
@@ -105,13 +97,13 @@ const styles = StyleSheet.create({
     height: "100%",
     overflow: "hidden",
     borderRadius: 15,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
   },
   details: {
     position: "absolute",
     bottom: 0,
     width: "100%",
-    height: SIZES.height * 0.12,
+    height: SIZES.height * 0.15,
     opacity: 0.5,
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
@@ -122,7 +114,7 @@ const styles = StyleSheet.create({
 
     bottom: 0,
     width: "100%",
-    height: SIZES.height * 0.12,
+    height: SIZES.height * 0.15,
     paddingTop: 8,
 
     borderBottomRightRadius: 15,
@@ -136,18 +128,18 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
     letterSpacing: 1.1,
     paddingLeft: 12,
-    color: colors.tile,
+    color: COLORS.tile,
   },
   caption: {
     paddingLeft: 12,
     textTransform: "capitalize",
-    color: colors.tile,
+    color: COLORS.tile,
     fontSize: 14,
   },
   phone: {
     paddingLeft: 12,
     textTransform: "capitalize",
-    color: colors.tile,
+    color: COLORS.tile,
     fontSize: 12,
     marginVertical: 2
   },

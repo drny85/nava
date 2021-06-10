@@ -4,9 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 // import { createStackNavigator } from "@react-navigation/stack";
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 
-import colors from "../config/colors";
 
-import Constants from "expo-constants";
 import { enableScreens } from 'react-native-screens'
 
 import cartContext from "../context/cart/cartContext";

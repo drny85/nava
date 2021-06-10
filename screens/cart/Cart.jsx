@@ -4,7 +4,6 @@ import { View, StyleSheet, Text, FlatList, Alert } from "react-native";
 import AppButton from "../../components/AppButton";
 import cartContext from "../../context/cart/cartContext";
 import { CommonActions } from "@react-navigation/native";
-import colors from "../../config/colors";
 import CartItemTile from "../../components/CartItemTile";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -98,7 +97,7 @@ const Cart = ({ navigation }) => {
             style={{ marginRight: 8 }}
             name="delete"
             size={30}
-            color={colors.ascent}
+            color={COLORS.ascent}
           />
         ),
     });
@@ -170,8 +169,7 @@ const Cart = ({ navigation }) => {
         <AppButton
           style={{
             marginBottom: 8,
-            width: "95%",
-            backgroundColor: COLORS.secondary,
+            width: '95%',
           }}
           title={`Checkout: $${cartTotal.toFixed(2)}`}
           onPress={continueToCheckOut}

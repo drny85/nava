@@ -43,7 +43,7 @@ const App = () => {
     })
 
     return () => {
-      console.log('App Unmounted')
+
       sub && sub()
     }
 
