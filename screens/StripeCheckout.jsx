@@ -10,13 +10,9 @@ import { STRIPE } from "../config/stripeSettings";
 export function stripeCheckoutRedirectHTML(order, items, public_key, cardFee) {
 
     const { customer } = order
-    const total = items.reduce(
-        (current, index) => current + index.price * index.quantity,
-        0
-    );
 
     const products = JSON.stringify(items)
-    const data = JSON.stringify(customer)
+    const data = JSON.stringify(customer.address)
 
     if (!order) {
 

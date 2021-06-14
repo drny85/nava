@@ -50,7 +50,7 @@ const MyAddress = ({ navigation, route }) => {
 
   const addNewAddress = async (address) => {
     try {
-      address.userId = user.id;
+      address.userId = user?.id;
       const result = await saveDeliveryAddress(address);
 
       if (result.message === true) {

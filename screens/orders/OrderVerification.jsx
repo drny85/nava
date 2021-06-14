@@ -143,10 +143,7 @@ const OrderVerification = ({ navigation, route }) => {
   return (
     <WebView
       enableApplePay={true}
-      cacheEnabled={false}
-      cacheMode='LOAD_NO_CACHE'
-      startInLoadingState={true}
-      incognito={true}
+
       contentMode='mobile'
       style={{ marginTop: SIZES.statusBarHeight }}
       ref={webRef}
@@ -154,7 +151,7 @@ const OrderVerification = ({ navigation, route }) => {
       source={{ html: stripeCheckoutRedirectHTML(newOrder, newOrder.items, public_key, cardFee), baseUrl: baseUrl }}
       onLoadStart={onLoadStart}
       onNavigationStateChange={handleChange}
-      renderLoading={() => <Spinner />}
+
     />
   );
 };

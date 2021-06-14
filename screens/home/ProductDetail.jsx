@@ -235,6 +235,7 @@ const ProductDetail = ({ route, navigation }) => {
                   flexDirection: "row",
                   justifyContent: "space-evenly",
                   alignItems: "center",
+                  paddingHorizontal: SIZES.padding * 0.5,
                   width: '100%',
 
 
@@ -249,7 +250,7 @@ const ProductDetail = ({ route, navigation }) => {
                       containerStyle={{ backgroundColor: COLORS.primary, paddingVertical: 10, marginHorizontal: 10, }}
                       checkedIcon="dot-circle-o"
                       uncheckedIcon="circle-o"
-                      title={<Text style={{ ...FONTS.body4, textTransform: 'capitalize' }}>{size}</Text>}
+                      title={<Text style={{ ...FONTS.body4, textTransform: 'capitalize', marginLeft: 2 }}>{size}</Text>}
                       onPress={() => handleCheck(size)}
                       checked={checked === size}
                     />
