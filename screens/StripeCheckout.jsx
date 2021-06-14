@@ -41,7 +41,6 @@ export function stripeCheckoutRedirectHTML(order, items, public_key, cardFee) {
   <script>
 
       ( function () {
-       
          
           var stripe = Stripe('${public_key}');
          

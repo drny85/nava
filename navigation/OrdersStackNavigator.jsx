@@ -44,7 +44,7 @@ const OrdersStackNavigator = ({ route }) => {
         component={OrderInTheMaking}
         options={{
           headerShown: false,
-          headerTitleStyle: { fontFamily: "montserrat-bold" },
+          headerTitleStyle: { ...FONTS.h3 },
         }}
       />
       <OrdersStack.Screen
@@ -52,7 +52,7 @@ const OrdersStackNavigator = ({ route }) => {
         component={OrderDetails}
         options={{
           title: "Order Details",
-          headerTitleStyle: { fontFamily: "montserrat-bold" },
+          headerTitleStyle: { ...FONTS.h3 },
         }}
       />
       <OrdersStack.Screen
@@ -61,22 +61,9 @@ const OrdersStackNavigator = ({ route }) => {
 
         options={{
 
-          title: "Payment",
-          headerTitleStyle: { ...FONTS.h3 },
+          headerShown: null,
           unmountOnBlur: true,
-          headerLeft: () => (
-            <TouchableWithoutFeedback
-              onPress={() => navigation.goBack()}
-              style={{ marginLeft: 10 }}
-            >
-              <Ionicons
-                style={{ marginLeft: 10 }}
-                name="md-arrow-back"
-                color={COLORS.secondary}
-                size={30}
-              />
-            </TouchableWithoutFeedback>
-          ),
+
         }}
       />
     </OrdersStack.Navigator>

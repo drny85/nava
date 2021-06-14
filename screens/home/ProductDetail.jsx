@@ -235,6 +235,9 @@ const ProductDetail = ({ route, navigation }) => {
                   flexDirection: "row",
                   justifyContent: "space-evenly",
                   alignItems: "center",
+                  width: '100%',
+
+
                 }}
               >
                 {item.sizes.map((size, i) => {
@@ -242,12 +245,11 @@ const ProductDetail = ({ route, navigation }) => {
                     <CheckBox
                       key={i}
                       center
-                      textStyle={{ textTransform: "capitalize" }}
                       checkedColor={COLORS.secondary}
-                      containerStyle={{ backgroundColor: COLORS.primary }}
+                      containerStyle={{ backgroundColor: COLORS.primary, paddingVertical: 10, marginHorizontal: 10, }}
                       checkedIcon="dot-circle-o"
                       uncheckedIcon="circle-o"
-                      title={size}
+                      title={<Text style={{ ...FONTS.body4, textTransform: 'capitalize' }}>{size}</Text>}
                       onPress={() => handleCheck(size)}
                       checked={checked === size}
                     />

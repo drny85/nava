@@ -8,7 +8,7 @@ import { WebView } from "react-native-webview";
 import { stripeCheckoutRedirectHTML } from "../StripeCheckout";
 import Signin from "../profiles/Signin";
 import cartContext from "../../context/cart/cartContext";
-import { COLORS, FONTS } from "../../config";
+import { COLORS, FONTS, SIZES } from "../../config";
 import { CommonActions, StackActions, useFocusEffect } from '@react-navigation/native';
 
 import Spinner from '../../components/Spinner'
@@ -65,6 +65,9 @@ const OrderVerification = ({ navigation, route }) => {
   const onCanceledHandler = () => {
     /* TODO: do something */
 
+    setBaseUrl('https://robertdev.net')
+
+
     navigation.navigate("CartTab", {
       screen: "OrderSummary",
       // params: {
@@ -83,14 +86,20 @@ const OrderVerification = ({ navigation, route }) => {
       const { url } = newState;
 
       if (newState.canGoBack) {
-        webRef.current.goBack()
+        if (url.includes('/cancel')) {
+
+          webRef.current.goBack()
+        }
+
       }
       if (url.includes("/success")) {
         webRef.current.stopLoading();
         //resetCartNavigation();
         //maybe close this view?
       } else if (url.includes('/cancel')) {
+
         setBaseUrl('https://robertdev.net')
+
       }
 
     } catch (error) {
@@ -130,16 +139,22 @@ const OrderVerification = ({ navigation, route }) => {
     }
   }, [newOrder, navigation])
 
-
   if (processing) return <Spinner />
-
   return (
     <WebView
+      enableApplePay={true}
+      cacheEnabled={false}
+      cacheMode='LOAD_NO_CACHE'
+      startInLoadingState={true}
+      incognito={true}
+      contentMode='mobile'
+      style={{ marginTop: SIZES.statusBarHeight }}
       ref={webRef}
       originWhitelist={["*"]}
       source={{ html: stripeCheckoutRedirectHTML(newOrder, newOrder.items, public_key, cardFee), baseUrl: baseUrl }}
       onLoadStart={onLoadStart}
       onNavigationStateChange={handleChange}
+      renderLoading={() => <Spinner />}
     />
   );
 };
