@@ -12,6 +12,8 @@ import ProfileStackNavigator from "./ProfileStackNavigator";
 import OrdersStackNavigator from "./OrdersStackNavigator";
 import authContext from "../context/auth/authContext";
 
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+
 import * as Notifications from "expo-notifications";
 import { COLORS, FONTS } from "../config";
 
@@ -50,6 +52,7 @@ const AppNavigator = () => {
         },
         inactiveTintColor: COLORS.secondary,
         activeTintColor: COLORS.ascent,
+
       }}
     >
       <BottomTabs.Screen
@@ -67,13 +70,20 @@ const AppNavigator = () => {
 
           name="Orders"
           component={OrdersStackNavigator}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Fontisto name="shopping-package" size={30} color={color} />
-            ),
+          options={({ route }) => {
+            const routeName = getFocusedRouteNameFromRoute(route)
+
+            return {
+              tabBarIcon: ({ color, size }) => (
+                <Fontisto name="shopping-package" size={30} color={color} />
+              ),
+
+              tabBarVisible: routeName !== 'OrderInTheMaking',
+            }
 
 
           }}
+
         />
       )}
 

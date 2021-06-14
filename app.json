@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "My Antojito",
 		"slug": "nava70",
-		"version": "1.0.19",
+		"version": "1.0.20",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -16,8 +16,8 @@
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": false,
-			"bundleIdentifier": "net.robertdev.melendez-antojito10",
-			"buildNumber": "1.0.14"
+			"bundleIdentifier": "net.robertdev.melendez-antojito11",
+			"buildNumber": "1.0.15"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"

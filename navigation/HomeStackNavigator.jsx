@@ -12,7 +12,7 @@ import Home from "../screens/home/Home";
 import ProductDetail from "../screens/home/ProductDetail";
 import Restaurants from "../screens/home/Restaurants";
 import { COLORS, FONTS, SIZES } from "../config";
-import { Image } from "react-native";
+
 enableScreens()
 
 const HomeStack = createSharedElementStackNavigator();

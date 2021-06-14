@@ -29,7 +29,6 @@ import { COLORS, FONTS, SIZES } from "../../config";
 import Animated from "react-native-reanimated";
 import { StatusBar } from "expo-status-bar";
 
-const heigth = Dimensions.get("screen").height;
 const fadeIn = {
   from: {
     opacity: 0,
