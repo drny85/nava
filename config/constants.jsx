@@ -17,6 +17,7 @@ export const COLORS = {
   ascent: "#607d8b",
   card: "#F9F8F8",
   background: "FFFFFF",
+  danger: "#E86363",
   tile: "#ecf0f1",
   white: "#f7f7f7",
   text: "#555B5D",

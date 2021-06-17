@@ -19,7 +19,9 @@ app.use(express.json());
 app.post('/payment', async (req, res) => {
 	try {
 		const { items, email, customer, cardFee } = req.body;
+
 		const restaurantKey = items[0].storeId.toLowerCase();
+
 		const stripe = Stripe(secrets[restaurantKey]);
 
 		const newItems = items.map((item) => {
@@ -44,7 +46,6 @@ app.post('/payment', async (req, res) => {
 			);
 			const percent = +((total + 0.3) / (1 - 0.029));
 			const fee = +(total - percent).toFixed(2) * 100;
-			console.log(Math.abs(fee));
 
 			newItems.push({
 				description: 'Convinience fee',
@@ -61,12 +62,12 @@ app.post('/payment', async (req, res) => {
 
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ['card'],
-			customer_email: email.toLowerCase(),
+			customer_email: email,
 			line_items: newItems,
 			mode: 'payment',
 			metadata: customer,
-			success_url: 'https://example.com/success',
-			cancel_url: 'https://example.com/cancel',
+			success_url: 'http://localhost:3000/payment/success',
+			cancel_url: 'http://localhost:3000/payment/failed',
 		});
 
 		return res.status(200).send({

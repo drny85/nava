@@ -47,7 +47,6 @@ const Checkout = ({ route, navigation }) => {
   const [deliveryAddress, setDeliveryAddress] = useState(null);
 
 
-
   const handlePickup = (pickupInfo) => {
     if (paymentOption === "cash") {
       Alert.alert("Payment", "Please select a payment method", [
@@ -61,7 +60,7 @@ const Checkout = ({ route, navigation }) => {
       params: {
         deliveryMethod: deliveryOption,
         paymentMethod: paymentOption,
-        customer: { name: user?.name, lastName: user?.lastName, email: user?.email, phone: user?.phone, address: null }
+        customer: { name: user?.name, lastName: user?.lastName, email: user.email, phone: user?.phone, address: null }
       },
     });
   };

@@ -23,6 +23,7 @@ const OrdersState = (props) => {
 
   const placeOrder = async (orderInfo) => {
     try {
+      console.log(orderInfo)
       setLoading();
       const restId = orderInfo.restaurant.id;
       const tem = [];
@@ -50,7 +51,7 @@ const OrdersState = (props) => {
             phone: orderInfo.customer.phone,
             name: orderInfo.customer.name,
             lastName: orderInfo.customer.lastName,
-            email: null,
+            email: orderInfo.customer.email.toLowerCase().trim(),
           },
           isPaid: orderInfo.isPaid,
           coupon: orderInfo.coupon,
@@ -80,7 +81,7 @@ const OrdersState = (props) => {
             phone: orderInfo.customer.phone,
             name: orderInfo.customer.name,
             lastName: orderInfo.customer.lastName,
-            email: orderInfo.customer.email,
+            email: orderInfo.customer.email.toLowerCase().trim(),
           },
           isPaid: orderInfo.isPaid,
           coupon: orderInfo.coupon,

@@ -47,11 +47,11 @@ const OrderInTheMaking = ({ navigation, route }) => {
 			</View>
 			<View style={styles.top}>
 				<Animatable.View style={{ alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-					<Animatable.Text animation='bounceInDown' duration={5000} style={{ ...FONTS.h2, marginVertical: SIZES.padding * 0.5 }}>{(order.status === 'delivered' || order.status === 'pickup') ? 'Awesome' : 'Great'} News!</Animatable.Text>
+					<Animatable.Text animation='bounceInDown' duration={5000} style={{ ...FONTS.h2, marginVertical: SIZES.padding * 0.5 }}>{(order.status === 'delivered' || order.status === 'pickup') ? 'Awesome' : order.status === 'canceled' ? 'Sad' : 'Great'} News!</Animatable.Text>
 					{order.status === 'new' && (<Animatable.Text animation='fadeIn' delay={2000} style={{ ...FONTS.body3, paddingHorizontal: 10 }}> {capitalize(name)} received your order {moment(order.orderPlaced).fromNow()}</Animatable.Text>)}
 					{order.status === 'in progress' && (<Animatable.Text animation='fadeIn' delay={2000} style={{ ...FONTS.body3, padding: 10, }}> {capitalize(name)} started preparing your order {order.processingOn && moment(order.processingOn).fromNow()}</Animatable.Text>)}
 					<Animatable.Text animation="fadeIn" delay={2000} style={{ marginVertical: SIZES.padding * 0.8, ...FONTS.body3, paddingHorizontal: 10, }}>
-						{order.status === 'new' ? 'We will start preparing your order shortly' : order.status === 'in progress' ? 'Your order will be delivered shortly' : order.status === 'delivered' ? `Your order was marked as delivered on ${moment(order.deliveredOn).format('LLL')}` : `Your order was picked up on ${moment(order.pickedOn).format('LLL')}`}</Animatable.Text>
+						{order.status === 'new' ? 'We will start preparing your order shortly' : order.status === 'in progress' ? 'Your order will be delivered shortly' : order.status === 'delivered' ? `Your order was marked as delivered on ${moment(order.deliveredOn).format('LLL')}` : order.status === 'canceled' ? `We are sorry.` : `Your order was picked up on ${moment(order.pickedOn).format('LLL')}`}</Animatable.Text>
 					{order.status === 'delivered' && (<>
 						<Animatable.View animation='fadeInUp' delay={3000} style={{ flexDirection: 'row' }}>
 							<FontAwesome name="bicycle" size={24} color="black" />
@@ -65,6 +65,8 @@ const OrderInTheMaking = ({ navigation, route }) => {
 					</>)}
 
 					{order.status === 'pickup' && (<Animatable.Text animation='fadeInUp' delay={2000} style={{ ...FONTS.body3, marginTop: SIZES.padding }}>We hope to see you soon!. </Animatable.Text>)}
+					{order.status === 'canceled' && (<Animatable.Text animation='fadeInUp' delay={2000} style={{ ...FONTS.body3, marginTop: SIZES.padding }}>We have to cancel your order. </Animatable.Text>)}
+					{order.status === 'canceled' && (<Animatable.Text animation='fadeInUp' delay={2000} style={{ ...FONTS.body3, marginTop: SIZES.padding }}>-- {order?.cancelReason}. </Animatable.Text>)}
 				</Animatable.View>
 				<View>
 
@@ -92,6 +94,11 @@ const OrderInTheMaking = ({ navigation, route }) => {
 
 				{(order.status === 'pickup') && (order.orderType === 'pickup') && (
 					<LottieView autoPlay autoSize loop resizeMode='cover' source={require('../../assets/animations/picked.json')} style={[styles.making, { marginBottom: 80, }]} />
+
+
+				)}
+				{(order.status === 'canceled') && (order.orderType === 'pickup') && (
+					<LottieView autoPlay autoSize loop resizeMode='cover' source={require('../../assets/animations/cancel.json')} style={[styles.making, { marginBottom: 80, }]} />
 
 
 				)}

@@ -84,9 +84,9 @@ const OrderVerification = ({ navigation, route }) => {
 
     try {
       const { url } = newState;
-
+      console.log(url)
       if (newState.canGoBack) {
-        if (url.includes('/cancel')) {
+        if (url.includes('/failed')) {
 
           webRef.current.goBack()
         }
@@ -96,7 +96,7 @@ const OrderVerification = ({ navigation, route }) => {
         webRef.current.stopLoading();
         //resetCartNavigation();
         //maybe close this view?
-      } else if (url.includes('/cancel')) {
+      } else if (url.includes('/failed')) {
 
         setBaseUrl('https://robertdev.net')
 

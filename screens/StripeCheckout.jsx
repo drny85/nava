@@ -55,8 +55,8 @@ export function stripeCheckoutRedirectHTML(order, items, public_key, cardFee) {
                      
                       amount: "${order.totalAmount}",
                       items: ${products},
-                      email: "${order.customer.email}",
-                      phone: "${order.customer.phone}",
+                      email: "${customer.email}",
+                      phone: "${customer.phone}",
                       customer: ${data},
                       cardFee: "${cardFee}"
                   } ),

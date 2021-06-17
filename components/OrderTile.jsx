@@ -69,7 +69,7 @@ const OrderTile = ({ order, onPress }) => {
 
         style={{
           backgroundColor:
-            order.status === "new" ? COLORS.lightGray : order.status === 'in progress' ? COLORS.ascent : COLORS.secondary,
+            order.status === "new" ? COLORS.lightGray : order.status === 'in progress' ? COLORS.ascent : order.status === 'canceled' ? COLORS.danger : COLORS.secondary,
           borderRadius: 30,
           alignItems: "center",
           justifyContent: "center",

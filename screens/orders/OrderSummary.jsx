@@ -61,6 +61,7 @@ const OrderSummary = ({ navigation, route }) => {
 
   const { deliveryMethod, customer, paymentMethod } = route.params;
 
+
   const generateItemDiscounted = items => {
     return items.map(item => {
       return {
@@ -189,8 +190,7 @@ const OrderSummary = ({ navigation, route }) => {
             clearCart();
             navigation.navigate("Orders", {
               screen: "OrderConfirmation",
-
-              params: { order: data, paymentMethod },
+              params: { order: newOrder, paymentMethod },
             });
           }
 
