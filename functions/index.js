@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.post('/payment', async (req, res) => {
 	try {
-		const { items, email, customer, cardFee } = req.body;
+		const { items, email, customer, cardFee, orderId } = req.body;
 
 		const restaurantKey = items[0].storeId.toLowerCase();
 
@@ -46,6 +46,8 @@ app.post('/payment', async (req, res) => {
 			);
 			const percent = +((total + 0.3) / (1 - 0.029));
 			const fee = +(total - percent).toFixed(2) * 100;
+			const finalFee = Math.round(Math.abs(fee));
+			console.log('Fee', Math.round(Math.abs(fee)), total);
 
 			newItems.push({
 				description: 'Convinience fee',
@@ -54,7 +56,7 @@ app.post('/payment', async (req, res) => {
 					product_data: {
 						name: 'Fee',
 					},
-					unit_amount: Math.abs(fee),
+					unit_amount: finalFee,
 				},
 				quantity: 1,
 			});
@@ -66,8 +68,12 @@ app.post('/payment', async (req, res) => {
 			line_items: newItems,
 			mode: 'payment',
 			metadata: customer,
-			success_url: 'http://localhost:3000/payment/success',
-			cancel_url: 'http://localhost:3000/payment/failed',
+			success_url: orderId
+				? `http://localhost:3000/payment/success/${orderId}`
+				: 'http://localhost:3000/payment/success',
+			cancel_url: orderId
+				? `http://localhost:3000/payment/failed/${orderId}`
+				: 'http://localhost:3000/payment/failed',
 		});
 
 		return res.status(200).send({

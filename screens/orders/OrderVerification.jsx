@@ -84,7 +84,7 @@ const OrderVerification = ({ navigation, route }) => {
 
     try {
       const { url } = newState;
-      console.log(url)
+
       if (newState.canGoBack) {
         if (url.includes('/failed')) {
 

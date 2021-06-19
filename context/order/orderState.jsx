@@ -23,7 +23,7 @@ const OrdersState = (props) => {
 
   const placeOrder = async (orderInfo) => {
     try {
-      console.log(orderInfo)
+
       setLoading();
       const restId = orderInfo.restaurant.id;
       const tem = [];
