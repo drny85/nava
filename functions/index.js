@@ -5,6 +5,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 const Stripe = require('stripe');
@@ -14,7 +15,10 @@ const secrets = config.secret;
 const public = config.public;
 
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
 
 app.post('/payment', async (req, res) => {
 	try {
@@ -82,6 +86,66 @@ app.post('/payment', async (req, res) => {
 	} catch (error) {
 		console.log('ERROR', error.message);
 		return res.status(500).send(error.message);
+	}
+});
+
+app.post('/mobile', async (req, res) => {
+	// Use an existing Customer ID if this is a returning customer.
+	try {
+		const {
+			email,
+			phone,
+			name,
+			metadata,
+			amount,
+			cardFee,
+			items,
+			restaurantKey,
+		} = req.body;
+
+		console.log('KEY', restaurantKey);
+		if (!restaurantKey) return res.status(400).send('No Key provided');
+
+		const stripe = Stripe(secrets[restaurantKey.toLowerCase()]);
+
+		let finalAmount = amount;
+
+		if (cardFee) {
+			const percent = +((amount + 0.3) / (1 - 0.029));
+			const fee = +(amount - percent).toFixed(2) * 100;
+			const finalFee = Math.round(Math.abs(fee)) / 100;
+
+			finalAmount += finalFee;
+		}
+
+		const customer = await stripe.customers.create({
+			email,
+			phone,
+			name,
+		});
+		const ephemeralKey = await stripe.ephemeralKeys.create(
+			{ customer: customer.id },
+			{ apiVersion: '2020-08-27' }
+		);
+		const paymentIntent = await stripe.paymentIntents.create({
+			amount: Math.round(finalAmount * 100),
+			payment_method_types: ['card'],
+			currency: 'usd',
+			customer: customer.id,
+			receipt_email: email,
+			metadata: {
+				...metadata,
+				items: JSON.stringify(items),
+			},
+		});
+
+		return res.status(200).json({
+			paymentIntent: paymentIntent.client_secret,
+			ephemeralKey: ephemeralKey.secret,
+			customer: customer.id,
+		});
+	} catch (error) {
+		return res.status(400).send('Error', error.message);
 	}
 });
 

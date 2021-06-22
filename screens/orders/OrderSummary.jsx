@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -10,6 +10,9 @@ import {
   ScrollView,
   Keyboard,
   KeyboardAvoidingView,
+  TouchableOpacity,
+  Modal,
+  TextInput,
   Button
 } from "react-native";
 
@@ -28,22 +31,23 @@ import ordersContext from "../../context/order/orderContext";
 import AppButton from "../../components/AppButton";
 import CardSummaryItem from "../../components/CardSummaryItem";
 import NetInfo from '@react-native-community/netinfo';
-
-import { TextInput } from "react-native-gesture-handler";
 import storesContext from "../../context/stores/storesContext";
 import Divider from "../../components/Divider";
 import { COLORS, FONTS, SIZES } from "../../config";
 import Loader from "../../components/Loader";
 import Axios from "axios";
-import { Modal } from "react-native";
 import FloatingButton from "../../components/FloatingButton";
 import { db } from '../../services/database'
-import { TouchableOpacity } from "react-native";
+import { useStripe, StripeProvider } from '@stripe/stripe-react-native'
+
 
 
 
 const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
+  const { initPaymentSheet, presentPaymentSheet } = useStripe()
+  const [processing, setProcessing] = useState(false);
+  const [public_key, setPublicKey] = useState(null)
   const { placeOrder } = useContext(ordersContext);
   const [connected, setConnected] = useState(false)
   const [discountedPrice, setDiscountedPrice] = useState(null)
@@ -60,7 +64,8 @@ const OrderSummary = ({ navigation, route }) => {
   const [instruction, setInstrction] = useState(null)
 
   const { deliveryMethod, customer, paymentMethod } = route.params;
-
+  const person = customer
+  const res = restaurant
 
   const generateItemDiscounted = items => {
     return items.map(item => {
@@ -123,8 +128,6 @@ const OrderSummary = ({ navigation, route }) => {
 
       navigation.dispatch(state => {
         // Remove the home route from the stack
-
-
         return CommonActions.reset({
           index: 0,
           routes: [{ name: 'CartTab' }]
@@ -160,26 +163,13 @@ const OrderSummary = ({ navigation, route }) => {
 
 
       if (cartItems.length > 0) {
-        //handle payment with credit
+
 
         if (paymentMethod === "credit") {
-          const res = await Axios.get(`${STRIPE.PUBLIC_KEY_URL}/${restaurant.id}`)
 
-          if (res.status === 200) {
-            navigation.navigate("Orders", {
-              screen: "OrderVerification",
-
-              params: { newOrder, paymentMethod, public_key: res.data, cardFee: restaurant?.chargeCardFee },
-            });
-          } else {
-            alert('This store is not taking cards payment at the moment. \n Please change payment method')
-            navigation.goBack()
-            return
-          }
+          await openPaymentSheet(newOrder)
 
         } else {
-          //handle payment with cash
-
 
           const { data, error } = await placeOrder(newOrder);
           if (error) {
@@ -193,7 +183,6 @@ const OrderSummary = ({ navigation, route }) => {
               params: { order: newOrder, paymentMethod },
             });
           }
-
 
         }
       } else {
@@ -211,21 +200,156 @@ const OrderSummary = ({ navigation, route }) => {
   };
 
 
+  const initializePaymentSheet = async (person, res) => {
+    try {
+      const {
+        paymentIntent,
+        ephemeralKey,
+        customer,
+      } = await fetchPaymentSheetParams(person, res);
+
+
+      const { error } = await initPaymentSheet({
+        customerId: customer,
+        customerEphemeralKeySecret: ephemeralKey,
+        paymentIntentClientSecret: paymentIntent
+
+
+      });
+      if (!error) {
+        setProcessing(true);
+
+      }
+    } catch (error) {
+      console.log('Error @initialPayment', error.message)
+    }
+
+  };
+
+  const openPaymentSheet = async (order) => {
+    try {
+
+      const { error } = await presentPaymentSheet({ clientSecret: public_key });
+
+
+      if (error) {
+        Alert.alert(`${error.code}`, error.message);
+        return;
+      } else {
+        order.isPaid = true;
+        const { data, error } = await placeOrder(order)
+        if (error) {
+          console.log('Error at Order Summary', error)
+          return;
+        }
+        if (data) {
+          clearCart();
+          navigation.navigate("Orders", {
+            screen: "OrderConfirmation",
+            params: { order, paymentMethod },
+          });
+        }
+
+      }
+    } catch (error) {
+      console.log('Error @openPaymentSheet'.error.message)
+    }
+
+  };
+
+  const generateStripeItems = () => {
+
+    const allItems = promoDetails ? itemsCopy : cartItems;
+    const items = allItems.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.quantity }))
+    return items
+
+  }
+
+  const checkIfPayingWithCredit = async () => {
+    try {
+      const res = await Axios.get(`${STRIPE.PUBLIC_KEY_URL}/${restaurant.id}`)
+      if (res.status === 200) {
+        setPublicKey(res.data)
+      }
+    } catch (error) {
+      console.log("error paying with credit".error)
+    }
+  }
+
+
+  const fetchPaymentSheetParams = async (person, res) => {
+    try {
+      const newItems = [...cartItems]
+      const itemsCopy = generateItemDiscounted(newItems)
+
+      const totalAmount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
+      const response = await Axios.post(`${STRIPE.MOBILE_URL}`, {
+        name: person.name + ' ' + person.lastName, phone: person.phone, email: person.email,
+        items: generateStripeItems(),
+        amount: totalAmount, cardFee: res.chargeCardFee, restaurantKey: res.id, metadata: { address: JSON.stringify(person.address) }
+
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if (response.status === 200) {
+        const { paymentIntent, ephemeralKey, customer } = await response.data;
+
+        return {
+          paymentIntent,
+          ephemeralKey,
+          customer,
+        };
+      } else return false;
+
+
+    } catch (error) {
+      console.log('Error @fectPAyment', error.message)
+    }
+
+  };
+
+
+
+  const calculateServiceFee = () => {
+
+    const amount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
+    const percent = +((amount + 0.3) / (1 - 0.029));
+    const fee = +(amount - percent).toFixed(2) * 100;
+    const finalFee = Math.round(Math.abs(fee)) / 100;
+
+    return finalFee
+  }
+
+  const calculateGrandTotal = () => {
+    const amount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
+    const total = amount + calculateServiceFee()
+
+    return total;
+  }
+
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(netInfo => {
       const { isConnected, isInternetReachable } = netInfo
 
       if (isConnected && isInternetReachable) {
+        checkIfPayingWithCredit()
         setConnected(true)
+        if (person && res) {
+          initializePaymentSheet(person, res)
+        }
+
       }
     })
 
     return () => {
       setCouponModal(false)
-      // setPromoDetails(null)
+      setPublicKey(null)
+      setPromoDetails(null)
       unsubscribe && unsubscribe()
     }
-  }, [connected])
+  }, [connected, customer, restaurant])
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -244,179 +368,187 @@ const OrderSummary = ({ navigation, route }) => {
 
 
 
-  if (loading) return <Loader />
+  if (loading || !public_key) return <Loader />
 
   return (
-    <Screen >
-      <View style={{ flex: 1, height: SIZES.height * 0.9 }}>
+    <StripeProvider publishableKey={public_key}>
+      <Screen >
+        <View style={{ flex: 1, height: SIZES.height * 0.9 }}>
 
-        {!connected && (
-          <View style={{ alignContent: 'center', justifyContent: 'center', width: '100%', height: 60, backgroundColor: COLORS.ascent }}>
-            <Text style={{ ...FONTS.h3, textAlign: 'center' }}>No Internet Connection</Text>
-          </View>
-        )}
-        <View style={[styles.listView]}>
-          <View style={styles.storeInfo}>
-            {restaurant && (
-              <>
-                <Text style={styles.textTitle}>Store Details</Text>
-                <Text style={styles.text}>{restaurant.name}</Text>
-                <Text style={styles.text}>{restaurant.street}, {restaurant.city} {restaurant.zipcode}</Text>
-              </>
-            )}
-          </View>
-          <FlatList
-            data={promoDetails ? generateItemDiscounted(cartItems) : cartItems}
-            keyExtractor={(item, index) => item.id + index.toString()}
-            renderItem={({ item }) => (
-              <ListItem
-                sizes={item.sizes}
-                name={item.name}
-                imageUrl={item.imageUrl}
-                qty={item.quantity}
-                size={item.size}
-                price={item.price}
-
-              />
-            )}
-          />
-        </View>
-        {/* //add coupon view */}
-        <View style={{ height: promoDetails ? 60 : 35, alignItems: 'flex-start', marginLeft: SIZES.padding * 0.5 }}>
-          <Button disabled={promoDetails !== null} title='Add Coupon' onPress={() => setCouponModal(true)} />
-          {promoDetails && (
-            <View style={{ width: SIZES.width, height: 25, flexDirection: 'row', alignItems: 'center', marginLeft: SIZES.padding * 0.3, }}>
-              <Text style={{ color: 'green', ...FONTS.body5 }}>Promo code {promoDetails?.code.toUpperCase()} was applied - {promoDetails?.value}%</Text>
-              <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => {
-                setPromoCode('')
-                setCouponModal(false)
-                setDiscountedPrice(null)
-                setPromoDetails(null)
-
-              }} >
-                <Text style={{ color: 'red', marginLeft: 10, fontSize: 20, textAlign: 'center' }}>x</Text>
-              </TouchableOpacity>
+          {!connected && (
+            <View style={{ alignContent: 'center', justifyContent: 'center', width: '100%', height: 60, backgroundColor: COLORS.ascent }}>
+              <Text style={{ ...FONTS.h3, textAlign: 'center' }}>No Internet Connection</Text>
             </View>
           )}
-        </View>
-        <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={100} behavior='padding'>
-          <ScrollView bounces={true} style={styles.details}>
-            {deliveryMethod === "pickup" ? (
-              <>
-                <Text
-                  style={{
-                    ...FONTS.h4,
-                    marginBottom: 20,
-                  }}
-                >
-                  Important information about your order {customer.name}
-                </Text>
-                <Text style={{ ...FONTS.body5 }}>
-                  You will be picking up this order at the restaurant
-            </Text>
-              </>
-            ) : (
+          <View style={[styles.listView]}>
+            <View style={styles.storeInfo}>
+              {restaurant && (
                 <>
-                  <View>
-                    <CardSummaryItem
-                      onPress={() => navigation.goBack()}
-                      title="Your order will be delivered to:"
-                      subtitle={`${customer.address.street} ${customer.address.apt && customer.address.apt
-                        }`}
-                      misc={`${customer.address.city}, ${customer.address.zipcode}`}
-                    />
-                    <CardSummaryItem
-                      onPress={() => navigation.goBack()}
-                      title="You might be contacted at:"
-                      subtitle={`Phone: ${customer.phone}`}
-                      misc={`Email: ${customer.email}`}
-                    />
-                  </View>
-                  <Divider />
-                  <View style={styles.deliveryInstruction}>
-                    <Text style={{ fontFamily: 'montserrat', fontSize: 16, paddingVertical: 5, }}>Delivery Instructions</Text>
-                    <TextInput onChangeText={text => setInstrction(text)} numberOfLines={2} value={instruction} style={styles.input} placeholder='Ex. Ring the bell' />
-                  </View>
+                  <Text style={styles.textTitle}>Store Details</Text>
+                  <Text style={styles.text}>{restaurant.name}</Text>
+                  <Text style={styles.text}>{restaurant.street}, {restaurant.city} {restaurant.zipcode}</Text>
                 </>
               )}
+            </View>
+            <FlatList
+              data={promoDetails ? generateItemDiscounted(cartItems) : cartItems}
+              keyExtractor={(item, index) => item.id + index.toString()}
+              renderItem={({ item }) => (
+                <ListItem
+                  sizes={item.sizes}
+                  name={item.name}
+                  imageUrl={item.imageUrl}
+                  qty={item.quantity}
+                  size={item.size}
+                  price={item.price}
 
-            {paymentMethod === "cash" && deliveryMethod === "pickup" && (
-              <Text>Handle cash pickup</Text>
-            )}
-            {paymentMethod === "credit" && deliveryMethod === "pickup" && (
-              <View>
-                <Text style={{ ...FONTS.body5 }}>
-                  You will pay with debit or credit card, please have it ready.
-            </Text>
-                <Divider />
-                <Text style={[styles.text]}>
-                  Just click Pay Now at the bottom to enter your card information.
-            </Text>
+                />
+              )}
+            />
+          </View>
+          {/* //add coupon view */}
+          {restaurant?.chargeCardFee && (
+            <View style={{ justifyContent: 'center', alignItems: 'flex-end', marginRight: 12 }}>
+              <Text style={{ ...FONTS.body5, fontSize: 11 }}>Service Fee: ${calculateServiceFee()} </Text>
+              <Text style={{ ...FONTS.h4 }}>Total: ${calculateGrandTotal()}</Text>
+            </View>
+          )}
+          <View style={{ height: promoDetails ? 60 : 35, alignItems: 'flex-start', marginLeft: SIZES.padding * 0.5 }}>
+            <Button disabled={promoDetails !== null} title='Add Coupon' onPress={() => setCouponModal(true)} />
+            {promoDetails && (
+              <View style={{ width: SIZES.width, height: 25, flexDirection: 'row', alignItems: 'center', marginLeft: SIZES.padding * 0.3, }}>
+                <Text style={{ color: 'green', ...FONTS.body5 }}>Promo code {promoDetails?.code.toUpperCase()} was applied - {promoDetails?.value}%</Text>
+                <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => {
+                  setPromoCode('')
+                  setCouponModal(false)
+                  setDiscountedPrice(null)
+                  setPromoDetails(null)
+
+                }} >
+                  <Text style={{ color: 'red', marginLeft: 10, fontSize: 20, textAlign: 'center' }}>x</Text>
+                </TouchableOpacity>
               </View>
             )}
-            {paymentMethod === "in store" && deliveryMethod === "pickup" && (
-              <View style={[styles.pickup, { alignItems: 'center', justifyContent: 'center' }]}>
-                <Text style={{ ...FONTS.body5 }}>
-                  You will pay for this order at the store
+          </View>
+          <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={100} behavior='padding'>
+            <ScrollView bounces={true} style={styles.details}>
+              {deliveryMethod === "pickup" ? (
+                <>
+                  <Text
+                    style={{
+                      ...FONTS.h4,
+                      marginBottom: 20,
+                    }}
+                  >
+                    Important information about your order {customer.name}
+                  </Text>
+                  <Text style={{ ...FONTS.body5 }}>
+                    You will be picking up this order at the restaurant
             </Text>
-                <Text style={{ ...FONTS.body5 }}>
-                  You can pay with cash or credit / debit card
-            </Text>
-                <View style={styles.totalView}>
-                  <Text style={[styles.title, { paddingBottom: 10 }]}>Order Total</Text>
-                  <View style={{ flexDirection: 'row', justifyContent: promoDetails ? 'space-evenly' : 'center', width: SIZES.width }}>
-                    <Text style={{ fontWeight: "bold", fontSize: 34, textDecorationLine: promoDetails ? 'line-through' : 'none', textDecorationColor: 'red', color: promoDetails ? 'red' : COLORS.secondary, textDecorationStyle: 'solid', opacity: promoDetails ? 0.6 : 1 }}>
-                      ${cartTotal.toFixed(2)}
-                    </Text>
-                    {promoDetails && (<Text style={{ fontWeight: "bold", fontSize: 34 }}>${discountedPrice?.toFixed(2)}</Text>)}
-                  </View>
+                </>
+              ) : (
+                  <>
+                    <View>
+                      <CardSummaryItem
+                        onPress={() => navigation.goBack()}
+                        title="Your order will be delivered to:"
+                        subtitle={`${customer.address.street} ${customer.address.apt && customer.address.apt
+                          }`}
+                        misc={`${customer.address.city}, ${customer.address.zipcode}`}
+                      />
+                      <CardSummaryItem
+                        onPress={() => navigation.goBack()}
+                        title="You might be contacted at:"
+                        subtitle={`Phone: ${customer.phone}`}
+                        misc={`Email: ${customer.email}`}
+                      />
+                    </View>
+                    <Divider />
+                    <View style={styles.deliveryInstruction}>
+                      <Text style={{ fontFamily: 'montserrat', fontSize: 16, paddingVertical: 5, }}>Delivery Instructions</Text>
+                      <TextInput onChangeText={text => setInstrction(text)} numberOfLines={2} value={instruction} style={styles.input} placeholder='Ex. Ring the bell' />
+                    </View>
+                  </>
+                )}
 
+              {paymentMethod === "cash" && deliveryMethod === "pickup" && (
+                <Text>Handle cash pickup</Text>
+              )}
+              {paymentMethod === "credit" && deliveryMethod === "pickup" && (
+                <View>
+                  <Text style={{ ...FONTS.body5 }}>
+                    You will pay with debit or credit card, please have it ready.
+            </Text>
+                  <Divider />
+                  <Text style={[styles.text]}>
+                    Just click Pay Now at the bottom to enter your card information.
+            </Text>
                 </View>
-              </View>
-            )}
-            {paymentMethod === "cash" && deliveryMethod === "delivery" && (
-              <View style={styles.infoView}>
-                <Text style={styles.infotext}>
-                  Your order total is ${promoDetails ? parseFloat(discountedPrice).toFixed(2) : cartTotal.toFixed(2)}, please have this
+              )}
+              {paymentMethod === "in store" && deliveryMethod === "pickup" && (
+                <View style={[styles.pickup, { alignItems: 'center', justifyContent: 'center' }]}>
+                  <Text style={{ ...FONTS.body5 }}>
+                    You will pay for this order at the store
+            </Text>
+                  <Text style={{ ...FONTS.body5 }}>
+                    You can pay with cash or credit / debit card
+            </Text>
+                  <View style={styles.totalView}>
+                    <Text style={[styles.title, { paddingBottom: 10 }]}>Order Total</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: promoDetails ? 'space-evenly' : 'center', width: SIZES.width }}>
+                      <Text style={{ fontWeight: "bold", fontSize: 34, textDecorationLine: promoDetails ? 'line-through' : 'none', textDecorationColor: 'red', color: promoDetails ? 'red' : COLORS.secondary, textDecorationStyle: 'solid', opacity: promoDetails ? 0.6 : 1 }}>
+                        ${cartTotal.toFixed(2)}
+                      </Text>
+                      {promoDetails && (<Text style={{ fontWeight: "bold", fontSize: 34 }}>${discountedPrice?.toFixed(2)}</Text>)}
+                    </View>
+
+                  </View>
+                </View>
+              )}
+              {paymentMethod === "cash" && deliveryMethod === "delivery" && (
+                <View style={styles.infoView}>
+                  <Text style={styles.infotext}>
+                    Your order total is ${promoDetails ? parseFloat(discountedPrice).toFixed(2) : cartTotal.toFixed(2)}, please have this
               amount available in cash. Always be generous and tip the delivery
               guy.
             </Text>
-              </View>
-            )}
+                </View>
+              )}
 
 
-          </ScrollView>
-        </KeyboardAvoidingView>
+            </ScrollView>
+          </KeyboardAvoidingView>
 
-        <Modal onDismiss={() => setPromoCode('')} visible={couponModal} animationType='slide' style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: SIZES.height, width: SIZES.width }}>
-          <View style={{ position: 'absolute', top: 60, left: 20, zIndex: 99 }}>
-            <FloatingButton iconName="x" onPress={() => setCouponModal(false)} />
-          </View>
-          <View style={{ flex: 1, height: SIZES.height * 0.9, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ ...FONTS.body2, paddingBottom: 25 }}>Coupon Code</Text>
-            <TextInput style={{
-              width: '90%', backgroundColor: COLORS.ascent, padding: SIZES.padding * 0.7,
-              borderRadius: SIZES.padding * 0.7 * 2, color: COLORS.white, marginBottom: SIZES.padding * 0.7
-            }} autoCapitalize={'characters'} placeholderTextColor={COLORS.secondary}
-              onChangeText={text => setPromoCode(text.toUpperCase())} value={promoCode} placeholder="Enter Promo Code" />
-            {promoDetails && (<Text style={{ ...FONTS.body5, color: 'green' }}>{`${promoDetails.code.toUpperCase()} was applied. ${promoDetails.value}% off`}</Text>)}
-            <Button title={promoDetails ? 'Done' : 'Apply Coupon'} onPress={promoDetails ? () => setCouponModal(false) : handleCouponCode} />
-          </View>
+          <Modal onDismiss={() => setPromoCode('')} visible={couponModal} animationType='slide' style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: SIZES.height, width: SIZES.width }}>
+            <View style={{ position: 'absolute', top: 60, left: 20, zIndex: 99 }}>
+              <FloatingButton iconName="x" onPress={() => setCouponModal(false)} />
+            </View>
+            <View style={{ flex: 1, height: SIZES.height * 0.9, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ ...FONTS.body2, paddingBottom: 25 }}>Coupon Code</Text>
+              <TextInput style={{
+                width: '90%', backgroundColor: COLORS.ascent, padding: SIZES.padding * 0.7,
+                borderRadius: SIZES.padding * 0.7 * 2, color: COLORS.white, marginBottom: SIZES.padding * 0.7
+              }} autoCapitalize={'characters'} placeholderTextColor={COLORS.secondary}
+                onChangeText={text => setPromoCode(text.toUpperCase())} value={promoCode} placeholder="Enter Promo Code" />
+              {promoDetails && (<Text style={{ ...FONTS.body5, color: 'green' }}>{`${promoDetails.code.toUpperCase()} was applied. ${promoDetails.value}% off`}</Text>)}
+              <Button title={promoDetails ? 'Done' : 'Apply Coupon'} onPress={promoDetails ? () => setCouponModal(false) : handleCouponCode} />
+            </View>
 
 
-        </Modal>
+          </Modal>
 
-      </View>
-      <View style={{ bottom: 8, width: "100%", height: SIZES.height * 0.08 }}>
-        <AppButton
-          disabled={!connected}
-          style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 5 }}
-          title={paymentMethod === "credit" ? `Pay $${promoDetails ? parseFloat(discountedPrice).toFixed(2) : cartTotal.toFixed(2)}` : "Place Order"}
-          onPress={handlePayment}
-        />
+        </View>
+        <View style={{ bottom: 8, width: "100%", height: SIZES.height * 0.08 }}>
+          <AppButton
+            disabled={!connected || processing}
+            style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 5 }}
+            title={paymentMethod === "credit" ? `Pay $${calculateGrandTotal()}` : "Place Order"}
+            onPress={handlePayment}
+          />
 
-      </View>
-    </Screen>
+        </View>
+      </Screen>
+    </StripeProvider>
   );
 };
 
