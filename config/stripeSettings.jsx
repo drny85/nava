@@ -7,5 +7,6 @@ export const STRIPE = {
 	PUBLIC_KEY_URL: "https://us-central1-grocery-409ef.cloudfunctions.net/makePayment/stripeKey",
 	DB_URL:
 		"https://us-central1-grocery-409ef.cloudfunctions.net/makePayment/payment",
-	MOBILE_URL: "https://us-central1-grocery-409ef.cloudfunctions.net/makePayment/mobile"
+	MOBILE_URL: "https://us-central1-grocery-409ef.cloudfunctions.net/makePayment/mobile",
+	CREATE_CUSTOMER: "https://us-central1-grocery-409ef.cloudfunctions.net/makePayment/create_stripe_customer"
 };

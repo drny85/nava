@@ -10,7 +10,8 @@ class Order {
 		instruction,
 		restaurant,
 		isPaid = false,
-		coupon
+		coupon,
+		serviceFee = null
 
 	) {
 		(this.userId = userId),
@@ -23,7 +24,8 @@ class Order {
 			(this.instruction = instruction),
 			(this.restaurant = restaurant),
 			(this.isPaid = isPaid),
-			(this.coupon = coupon)
+			(this.coupon = coupon),
+			(this.serviceFee = serviceFee)
 
 	}
 

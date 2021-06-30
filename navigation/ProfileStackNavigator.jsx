@@ -17,20 +17,22 @@ import { color } from "react-native-reanimated";
 import MyOrders from "../screens/orders/MyOrders";
 import BusinessAccount from "../screens/profiles/BusinessAccount";
 import ApplicationDetails from "../screens/profiles/ApplicationDetails";
+import Loader from "../components/Loader";
 
 const ProfileStack = createStackNavigator();
 
 const ProfileStackNavigator = ({ navigation }) => {
-  const { logout, user } = React.useContext(authContext);
+  const { logout, user, loading } = React.useContext(authContext);
   const { clearSettings } = React.useContext(settingsContext);
 
   const clearAll = () => {
-    logout();
     clearSettings();
+    logout();
+
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: "Profile" }],
+        routes: [{ name: "Restaurants" }],
       })
     );
   };
@@ -41,6 +43,8 @@ const ProfileStackNavigator = ({ navigation }) => {
       { text: "No", style: "cancel" },
     ]);
   };
+
+  if (loading) return <Loader />
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen
@@ -72,7 +76,7 @@ const ProfileStackNavigator = ({ navigation }) => {
         options={{ title: "My Addresses", headerBackTitle: "Profile", headerBackTitleStyle: { color: COLORS.secondary } }}
       />
       <ProfileStack.Screen name="Favorites" component={MyFavorites} options={{ headerBackTitleStyle: { color: COLORS.secondary } }} />
-      <ProfileStack.Screen name="Signin" component={Signin} options={{ headerBackTitleStyle: { color: COLORS.lightGray, } }} />
+      <ProfileStack.Screen name="Signin" component={Signin} options={{ headerBackTitleStyle: { color: COLORS.secondary, } }} />
       <ProfileStack.Screen name="MyOrders" component={MyOrders} options={{ title: 'My Orders', headerBackTitleStyle: { color: COLORS.secondary }, headerBackTitle: null }} />
       <ProfileStack.Screen name="Signup" component={Signup} />
       <ProfileStack.Screen name="Business" component={BusinessAccount} />

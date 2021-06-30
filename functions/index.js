@@ -101,9 +101,9 @@ app.post('/mobile', async (req, res) => {
 			cardFee,
 			items,
 			restaurantKey,
+			customerId,
 		} = req.body;
 
-		console.log('KEY', restaurantKey);
 		if (!restaurantKey) return res.status(400).send('No Key provided');
 
 		const stripe = Stripe(secrets[restaurantKey.toLowerCase()]);
@@ -118,11 +118,7 @@ app.post('/mobile', async (req, res) => {
 			finalAmount += finalFee;
 		}
 
-		const customer = await stripe.customers.create({
-			email,
-			phone,
-			name,
-		});
+		const customer = await stripe.customers.retrieve(customerId);
 		const ephemeralKey = await stripe.ephemeralKeys.create(
 			{ customer: customer.id },
 			{ apiVersion: '2020-08-27' }
@@ -163,12 +159,44 @@ app.get('/stripeKey/:id', async (req, res) => {
 	}
 });
 
+app.post('/create_stripe_customer', async (req, res) => {
+	try {
+		const { email, userId, restaurantId } = req.body;
+		console.log('BODY', req.body);
+		if (!userId) return res.status(400).json({ message: 'No user ID' });
+		const stripe = Stripe(secrets[restaurantId.toLowerCase()]);
+		const payment = await admin
+			.firestore()
+			.collection('stripe_customers')
+			.doc(userId)
+			.get();
+		if (payment.exists) {
+			return res.json(payment.data());
+		} else {
+			const customer = await stripe.customers.create({
+				email,
+			});
+			await admin
+				.firestore()
+				.collection('stripe_customers')
+				.doc(userId)
+				.set({ customer_id: customer.id });
+
+			return res.json({ customer_id: customer.id });
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(400).json({ message: 'error creating customer' });
+	}
+});
+
 exports.makePayment = functions.https.onRequest(app);
 
 exports.updateUnitSold = functions.firestore
 	.document('/orders/{orderId}')
 	.onCreate(async (snap, contex) => {
 		const items = snap.data().items;
+
 		items.forEach(async (item) => {
 			try {
 				const i = await admin
@@ -184,9 +212,7 @@ exports.updateUnitSold = functions.firestore
 					.doc(item.storeId)
 					.collection('items')
 					.doc(item.id);
-				console.log(
-					`From ${i.data().unitSold} to ${i.data().unitSold + item.quantity}`
-				);
+
 				return res.update({
 					unitSold: parseInt(i.data().unitSold + item.quantity),
 				});

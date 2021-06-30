@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import { COLORS } from "../config";
+import { COLORS, FONTS } from "../config";
 
 
 const ListItem = ({ name, imageUrl, price, qty, size }) => {
@@ -68,18 +68,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   name: {
-    fontSize: 16,
+
     textTransform: "capitalize",
-    paddingBottom: 10,
-    fontFamily: "montserrat",
+    ...FONTS.body5
   },
   price: {
-    fontWeight: "700",
-    fontFamily: "montserrat",
+    ...FONTS.h4
   },
   qty: {
-    fontFamily: "montserrat",
-    fontSize: 12,
+    ...FONTS.body5
   },
 });
 

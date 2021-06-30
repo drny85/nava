@@ -169,7 +169,7 @@ const MyAddress = ({ navigation, route }) => {
                 />
 
                 <AppSubmitButton
-                  style={{ backgroundColor: COLORS.secondary, marginTop: 20 }}
+                  style={{ marginTop: 20 }}
                   title="Save Address"
                 />
               </AppForm>

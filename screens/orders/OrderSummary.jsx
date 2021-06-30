@@ -39,6 +39,7 @@ import Axios from "axios";
 import FloatingButton from "../../components/FloatingButton";
 import { db } from '../../services/database'
 import { useStripe, StripeProvider } from '@stripe/stripe-react-native'
+import { diffClamp } from "react-native-reanimated";
 
 
 
@@ -47,6 +48,7 @@ const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
   const { initPaymentSheet, presentPaymentSheet } = useStripe()
   const [processing, setProcessing] = useState(false);
+  const [customerId, setCustomerId] = useState(null);
   const [public_key, setPublicKey] = useState(null)
   const { placeOrder } = useContext(ordersContext);
   const [connected, setConnected] = useState(false)
@@ -158,7 +160,9 @@ const OrderSummary = ({ navigation, route }) => {
         instruction,
         restaurant,
         isPaid = false,
-        promoDetails ? { ...promoDetails, originalPrice: cartTotal } : null
+        promoDetails ? { ...promoDetails, originalPrice: cartTotal } : null,
+        serviceFee = null
+
       );
 
 
@@ -200,13 +204,13 @@ const OrderSummary = ({ navigation, route }) => {
   };
 
 
-  const initializePaymentSheet = async (person, res) => {
+  const initializePaymentSheet = async (person, res, id) => {
     try {
       const {
         paymentIntent,
         ephemeralKey,
-        customer,
-      } = await fetchPaymentSheetParams(person, res);
+        customer
+      } = await fetchPaymentSheetParams(person, res, id);
 
 
       const { error } = await initPaymentSheet({
@@ -216,6 +220,7 @@ const OrderSummary = ({ navigation, route }) => {
 
 
       });
+
       if (!error) {
         setProcessing(true);
 
@@ -237,6 +242,7 @@ const OrderSummary = ({ navigation, route }) => {
         return;
       } else {
         order.isPaid = true;
+        order.serviceFee = restaurant.chargeCardFee ? calculateServiceFee() : null;
         const { data, error } = await placeOrder(order)
         if (error) {
           console.log('Error at Order Summary', error)
@@ -267,26 +273,46 @@ const OrderSummary = ({ navigation, route }) => {
 
   const checkIfPayingWithCredit = async () => {
     try {
-      const res = await Axios.get(`${STRIPE.PUBLIC_KEY_URL}/${restaurant.id}`)
+      const res = await Axios.get(`${STRIPE.PUBLIC_KEY_URL}/${restaurant?.id}`)
+
       if (res.status === 200) {
+
         setPublicKey(res.data)
+        //createStripeCustomer()
       }
     } catch (error) {
       console.log("error paying with credit".error)
     }
   }
 
-
-  const fetchPaymentSheetParams = async (person, res) => {
+  const createStripeCustomer = async () => {
     try {
+
+      const res = await Axios.post(`${STRIPE.CREATE_CUSTOMER}`, { userId: user.id, email: user.email, restaurantId: restaurant?.id })
+      if (res.status === 200) {
+        console.log('RES', res.status)
+        const { customer_id } = res.data
+        setCustomerId(customer_id)
+      }
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  const fetchPaymentSheetParams = async (person, res, id) => {
+    try {
+
       const newItems = [...cartItems]
-      const itemsCopy = generateItemDiscounted(newItems)
+      //const itemsCopy = generateItemDiscounted(newItems)
 
       const totalAmount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
       const response = await Axios.post(`${STRIPE.MOBILE_URL}`, {
         name: person.name + ' ' + person.lastName, phone: person.phone, email: person.email,
         items: generateStripeItems(),
-        amount: totalAmount, cardFee: res.chargeCardFee, restaurantKey: res.id, metadata: { address: JSON.stringify(person.address) }
+        amount: totalAmount, cardFee: res.chargeCardFee, customerId: id, restaurantKey: res.id, metadata: { address: JSON.stringify(person.address), userId: user.id }
 
       }, {
         headers: {
@@ -294,6 +320,7 @@ const OrderSummary = ({ navigation, route }) => {
         },
       })
       if (response.status === 200) {
+
         const { paymentIntent, ephemeralKey, customer } = await response.data;
 
         return {
@@ -329,16 +356,16 @@ const OrderSummary = ({ navigation, route }) => {
     return total;
   }
 
+
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(netInfo => {
       const { isConnected, isInternetReachable } = netInfo
-
+      createStripeCustomer()
       if (isConnected && isInternetReachable) {
+
         checkIfPayingWithCredit()
         setConnected(true)
-        if (person && res) {
-          initializePaymentSheet(person, res)
-        }
+
 
       }
     })
@@ -347,9 +374,21 @@ const OrderSummary = ({ navigation, route }) => {
       setCouponModal(false)
       setPublicKey(null)
       setPromoDetails(null)
+
       unsubscribe && unsubscribe()
     }
   }, [connected, customer, restaurant])
+
+  useEffect(() => {
+    if (person && res && customerId) {
+
+      initializePaymentSheet(person, res, customerId)
+    }
+    return () => {
+      //setCustomerId(null)
+    }
+  }, [customerId])
+  console.log(customerId)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -366,9 +405,10 @@ const OrderSummary = ({ navigation, route }) => {
     })
   }, [navigation, connected])
 
-
-
-  if (loading || !public_key) return <Loader />
+  console.log('Loading:', loading)
+  console.log('Key:', public_key)
+  console.log('Id:', customerId)
+  if (loading || !public_key, !customerId) return <Loader />
 
   return (
     <StripeProvider publishableKey={public_key}>
@@ -407,7 +447,7 @@ const OrderSummary = ({ navigation, route }) => {
             />
           </View>
           {/* //add coupon view */}
-          {restaurant?.chargeCardFee && (
+          {restaurant?.chargeCardFee && paymentMethod === 'credit' && (
             <View style={{ justifyContent: 'center', alignItems: 'flex-end', marginRight: 12 }}>
               <Text style={{ ...FONTS.body5, fontSize: 11 }}>Service Fee: ${calculateServiceFee()} </Text>
               <Text style={{ ...FONTS.h4 }}>Total: ${calculateGrandTotal()}</Text>
@@ -542,7 +582,7 @@ const OrderSummary = ({ navigation, route }) => {
           <AppButton
             disabled={!connected || processing}
             style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 5 }}
-            title={paymentMethod === "credit" ? `Pay $${calculateGrandTotal()}` : "Place Order"}
+            title={paymentMethod === "credit" ? `Pay $${calculateGrandTotal()}` : processing ? 'Processing..' : "Place Order"}
             onPress={handlePayment}
           />
 

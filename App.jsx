@@ -36,15 +36,10 @@ const App = () => {
 
   useEffect(() => {
 
-    const sub = auth.onAuthStateChanged(user => {
-      if (user) {
-        setUser(user.uid)
-      }
-    })
-
+    getCurrentUser()
     return () => {
 
-      sub && sub()
+      //sub && sub()
     }
 
   }, [])

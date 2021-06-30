@@ -11,7 +11,6 @@ import Screen from "../../components/Screen";
 import authContext from "../../context/auth/authContext";
 import Signin from "./Signin";
 import useNotifications from "../../hooks/useNotifications";
-import { Dimensions } from "react-native";
 import ProfileItem from "../../components/ProfileItem";
 import * as ImagePicker from "expo-image-picker";
 
@@ -19,13 +18,23 @@ import { Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { storage, db } from "../../services/database";
 import { Modal } from "react-native";
-import { COLORS } from "../../config";
+import { COLORS, FONTS, SIZES } from "../../config";
+import { TextInput } from "react-native";
+import { formatPhone } from "../../utils/formatPhone";
+import AppButton from "../../components/AppButton";
+import SuccessAlert from "../../components/SuccessAlert";
+import { isEmailValid } from "../../utils/isEmailValide";
 
 const Profile = ({ navigation }) => {
   const [image, setImage] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [show, setShow] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [editingProfile, setEdidingProfile] = useState(false);
   const [hasPermission, setHasPermission] = useState(false);
-  const { user, setUser } = useContext(authContext);
+  const { user, setUser, updateUserProfile } = useContext(authContext);
+
 
   if (!user) return <Signin />;
 
@@ -35,6 +44,30 @@ const Profile = ({ navigation }) => {
     setHasPermission(granted);
     await handleImagePicker();
   };
+
+  const handleProfileUpdate = async () => {
+    try {
+      let valid = isEmailValid(email)
+      if (!valid) {
+        alert('Invalid email')
+        return;
+      }
+      if (phone.length < 10) {
+        alert('Invalid Phone Number')
+        return
+      }
+
+      const sucess = await updateUserProfile({ phone, email })
+      if (sucess) {
+        //setEdidingProfile(false)
+        setSuccess(true)
+      }
+    } catch (error) {
+      console.log('Error at updating Profile', error)
+    }
+
+  }
+
 
   const saveOrChangeImageToDatabase = async (result) => {
     try {
@@ -111,6 +144,10 @@ const Profile = ({ navigation }) => {
     }
   };
 
+
+
+  if (success) return <SuccessAlert visible={success} onFinish={() => { setSuccess(false); setEdidingProfile(false) }} />
+
   return (
     <Screen style={styles.container}>
       <View style={styles.image_view}>
@@ -142,27 +179,83 @@ const Profile = ({ navigation }) => {
           }
         />
       </View>
-      <Modal visible={show} animationType="slide">
-        <View style={styles.modal}>
-          <TouchableWithoutFeedback onPress={() => setShow(false)}>
-            <View style={styles.back}>
-              <Feather
-                name="x"
-                style={{ fontWeight: "700" }}
-                size={24}
-                color="black"
-              />
+
+      <Modal visible={show} style={{ flex: 1 }} animationType="slide">
+        <View style={{ flex: 1 }}>
+          {editingProfile ? (<View style={styles.editView}>
+            <View style={styles.topView}>
+              <TouchableWithoutFeedback onPress={() => setEdidingProfile(false)}>
+                <View>
+                  <Feather
+                    name="x"
+                    style={{ fontWeight: "700" }}
+                    size={24}
+                    color={COLORS.black}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => null}>
+                <View>
+                  <Feather
+                    name="save"
+                    style={{ fontWeight: "700" }}
+                    size={24}
+                    color={COLORS.black}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+
             </View>
-          </TouchableWithoutFeedback>
-          <View>
-            <Text>
-              Name: {user.name} {user.lastName}
-            </Text>
-            <Text>Phone: {user.phone}</Text>
-            <Text>Email: {user.email}</Text>
-          </View>
+            <View>
+
+              <TextInput style={styles.textInput} placeholder='New Phone' maxLength={146666} placeholderTextColor={COLORS.text} value={phone} onChangeText={(text => setPhone(formatPhone(text)))} />
+              <TextInput style={styles.textInput} placeholder='New Email' value={email} onChangeText={(text => setEmail(text.trim().toLowerCase()))} />
+              <View style={{ width: SIZES.width * 0.8, alignSelf: 'center', marginVertical: 15, }}>
+                <AppButton title='Update' onPress={handleProfileUpdate} />
+              </View>
+              <Text style={{ ...FONTS.body5 }}>Note: By changing your email address, you are not changing your login information.</Text>
+            </View>
+          </View>) : (
+              <View style={styles.modal}>
+                <View style={styles.topView}>
+                  <TouchableWithoutFeedback onPress={() => setShow(false)}>
+                    <View>
+                      <Feather
+                        name="x"
+                        style={{ fontWeight: "700" }}
+                        size={24}
+                        color={COLORS.black}
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback onPress={() => setEdidingProfile(true)}>
+                    <View>
+                      <Feather
+                        name="edit"
+                        style={{ fontWeight: "700" }}
+                        size={24}
+                        color={COLORS.black}
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
+
+                </View>
+
+                <View>
+
+                  <Text style={styles.profileText}>
+                    Name: {user.name} {user.lastName}
+                  </Text>
+                  <Text style={styles.profileText}>Phone: {formatPhone(user.phone)}</Text>
+                  <Text style={styles.profileText}>Email: {user.email}</Text>
+                </View>
+              </View>
+            )}
         </View>
       </Modal>
+
+
+
     </Screen>
   );
 };
@@ -183,16 +276,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  editView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
   img: {
     width: "100%",
     height: "100%",
     resizeMode: "cover",
-    borderRadius: Dimensions.get("screen").height / 2,
+    borderRadius: SIZES.height / 2,
   },
   image_view: {
-    width: Dimensions.get("screen").height * 0.3,
-    height: Dimensions.get("screen").height * 0.3,
-    borderRadius: Dimensions.get("screen").height / 2,
+    width: SIZES.height * 0.3,
+    height: SIZES.height * 0.3,
+    borderRadius: SIZES.height / 2,
     marginVertical: 10,
   },
   modal: {
@@ -206,6 +305,25 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
   },
+
+  profileText: {
+    ...FONTS.body3,
+    marginBottom: 10,
+  },
+  topView: {
+    position: 'absolute',
+    top: SIZES.statusBarHeight + 15, left: 0, right: 0, justifyContent: 'space-between',
+    flexDirection: 'row', marginHorizontal: SIZES.padding,
+  },
+  textInput: {
+    width: SIZES.width * 0.9, paddingHorizontal: SIZES.padding * 0.4,
+    paddingVertical: SIZES.padding * 0.4, borderRadius: SIZES.radius,
+    backgroundColor: COLORS.tile,
+    ...FONTS.body4,
+    overflow: 'hidden',
+    borderBottomColor: COLORS.lightGray, borderBottomWidth: 0.5,
+    marginBottom: SIZES.padding,
+  }
 });
 
 export default Profile;

@@ -23,12 +23,13 @@ import useNotifications from "../../hooks/useNotifications";
 import settingsContext from "../../context/settings/settingsContext";
 import { COLORS, FONTS } from "../../config";
 import AppButton from "../../components/AppButton";
+import { formatPhone } from "../../utils/formatPhone";
 
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(3).label("First Name"),
   lastName: Yup.string().required().min(3).label("Last Name"),
-  phone: Yup.string().required().min(9).label("Phone"),
+  // phone: Yup.string().required().min(9).label("Phone"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(6).label("Password"),
 });
@@ -36,6 +37,7 @@ const validationSchema = Yup.object().shape({
 const Signup = ({ route }) => {
   const navigation = useNavigation();
   const [business, setBusiness] = useState(false)
+  const [phone, setPhone] = useState('')
   const { signup, createUser } = useContext(authContext);
   const { restaurant } = route.params
 
@@ -44,10 +46,15 @@ const Signup = ({ route }) => {
 
   const handleSignup = async (values) => {
     try {
+      if (phone.length < 10) {
+        alert('Phone is invalid')
+        return;
+      }
       const data = await signup(values.email.trim(), values.password.trim());
       if (!data) return;
 
       // setUser({ id: data.user.uid, email: data.user.email });
+
       await createUser(
         data.user.uid,
         values.name,
@@ -58,9 +65,10 @@ const Signup = ({ route }) => {
       );
 
       // await saveToken(pushToken);
+      console.log(previewRoute)
       if (previewRoute) {
         navigation.navigate(previewRoute, { restaurant });
-        clearSettings();
+        //clearSettings();
 
         return;
       }
@@ -79,7 +87,8 @@ const Signup = ({ route }) => {
 
   useEffect(() => {
     return () => {
-      setBusiness(null)
+      setBusiness(false)
+      clearSettings()
     };
   }, []);
 
@@ -106,7 +115,7 @@ const Signup = ({ route }) => {
               initialValues={{
                 name: "",
                 lastName: "",
-                phone: "",
+                phone: phone,
                 email: "",
                 password: "",
               }}
@@ -130,7 +139,13 @@ const Signup = ({ route }) => {
                 placeholder="Phone"
                 iconName="phone"
                 name="phone"
+                value={phone}
                 maxLength={10}
+                onChangeText={text => {
+                  setPhone(
+                    formatPhone(text))
+
+                }}
                 keyboardType="phone-pad"
                 autoCorrect={false}
               />

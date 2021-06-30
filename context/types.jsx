@@ -22,8 +22,7 @@ export const CLEAR_CURRENT_ITEM = "CLEAR_CURRENT_ITEM";
 export const UPDATE_ITEM = "UPDATE_ITEM";
 export const DELETE_ITEM = "DELETE_ITEM";
 export const CHANGE_AVAILABLE = "CHANGE_AVAILABLE";
-export const SET_ALERT = "SET_ALERT";
-export const REMOVE_ALERT = "REMOVE_ALERT";
+
 export const LOGIN = "LOGIN";
 export const SIGNUP = "SIGNUP";
 export const PLACE_ORDER = "PLACE_ORDER";

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
 	StyleSheet,
 	KeyboardAvoidingView,
@@ -12,7 +12,7 @@ import {
 	TouchableWithoutFeedback,
 	TextInput
 } from "react-native";
-import { useNavigation, useNavigationState } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 import * as Yup from "yup";
 import Screen from "../../components/Screen";
@@ -31,6 +31,9 @@ import { Modal } from "react-native";
 import AppInput from "../../components/AppInput";
 import AppButton from "../../components/AppButton";
 import FloatingButton from "../../components/FloatingButton";
+import Loader from "../../components/Loader";
+import { auth } from "../../services/database";
+import { isEmailValid } from "../../utils/isEmailValide";
 
 const validationSchema = Yup.object().shape({
 	email: Yup.string().required().email().label("Email"),
@@ -39,7 +42,9 @@ const validationSchema = Yup.object().shape({
 
 const Signin = () => {
 	const navigation = useNavigation()
-	const { user, login, setUser, updateLastLogin, resetPassword } = useContext(authContext);
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
+	const { login, setUser, updateLastLogin, resetPassword, loading } = useContext(authContext);
 	const { previewRoute, clearSettings } = useContext(settingsContext);
 	const [modalReset, setModalReset] = useState(false)
 	const [success, setSuccess] = useState(false)
@@ -58,7 +63,7 @@ const Signin = () => {
 			return
 		}
 
-		if (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(resetEmail)) {
+		if (isEmailValid(resetEmail)) {
 
 			resetPassword(resetEmail)
 			setSuccess(true)
@@ -72,13 +77,21 @@ const Signin = () => {
 		}
 	}
 
-	const handleSignin = async ({ email, password }) => {
+	const handleSignin = async () => {
 		try {
-			const data = await login(email.trim(), password.trim());
-
-			if (data.user.uid) {
-				if (previewRoute) { navigation.navigate('CartTab', { screen: previewRoute, params: restaurant }) }
-				else {
+			if (email === '' || password.length < 6) {
+				alert('Botth fields are required')
+				return;
+			} else if (!isEmailValid(email.trim())) {
+				alert('Invalid Email')
+				return
+			}
+			const { user } = await auth.signInWithEmailAndPassword(email.trim(), password.trim())
+			if (user) {
+				setUser(user.uid)
+				if (previewRoute) {
+					navigation.navigate('CartTab', { screen: previewRoute, params: restaurant })
+				} else {
 					navigation.navigate('Profile')
 				}
 			}
@@ -91,11 +104,34 @@ const Signin = () => {
 				{ cancelable: false }
 			);
 		}
-	};
+	}
+
+	// const handleSignin = async ({ email, password }) => {
+	// 	try {
+	// 		const { user } = await login(email.trim(), password.trim());
+
+	// 		console.log('P', previewRoute)
+	// 		if (user.uid) {
+	// 			setUser(user.uid)
+	// 			if (previewRoute) { navigation.navigate('CartTab', { screen: previewRoute, params: restaurant }) }
+	// 			else {
+	// 				navigation.navigate('Profile')
+	// 			}
+	// 		}
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 		Alert.alert(
+	// 			"Error",
+	// 			error.message,
+	// 			[{ text: "OK", onPress: () => console.log("OK Pressed") }],
+	// 			{ cancelable: false }
+	// 		);
+	// 	}
+	// };
 
 
 
-
+	if (loading) return <Loader />
 	return (
 		<Screen>
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -104,33 +140,40 @@ const Signin = () => {
 					style={styles.container}
 					behavior={Platform.OS === 'ios' ? 'padding' : null} enabled
 				>
-					<AppForm
+					{/* <AppForm
 						initialValues={{ email: "", password: "" }}
 						onSubmit={handleSignin}
 						validationSchema={validationSchema}
-					>
-						<AppFormField
-							autoFocus={true}
-							placeholder="Email"
-							keyboardType="email-address"
-							icon="email"
-							name="email"
-							autoCorrect={false}
-							autoCapitalize="none"
-							textContentType="emailAddress"
-						/>
+					> */}
+					<TextInput
+						autoFocus={true}
+						placeholder="Email"
+						keyboardType="email-address"
+						icon="email"
+						name="email"
+						style={styles.input}
+						placeholderTextColor={COLORS.lightGray}
+						value={email}
+						onChangeText={text => setEmail(text.trim())}
+						autoCorrect={false}
+						autoCapitalize="none"
+						textContentType="emailAddress"
+					/>
 
-						<AppFormField
-							placeholder="Password"
-							name="password"
-							secureTextEntry={true}
-							autoCorrect={false}
-							icon="lock-open"
-							textContentType="password"
-						/>
+					<TextInput
+						placeholder="Password"
+						name="password"
+						value={password}
+						style={styles.input}
+						onChangeText={text => setPassword(text.trim())}
+						secureTextEntry={true}
+						autoCorrect={false}
 
-						<AppSubmitButton style={{ width: '90%', marginTop: 20 }} title="Login" />
-					</AppForm>
+						textContentType="password"
+					/>
+
+					<AppButton title="Login" style={{ marginTop: 15, borderBottomWidth: 0.5, borderColor: COLORS.light }} onPress={handleSignin} />
+					{/* </AppForm> */}
 					<View style={styles.account}>
 						<Text style={{ ...FONTS.body6 }}>Don't have an account?</Text>
 
@@ -145,7 +188,7 @@ const Signin = () => {
 						<Button title='Reset' onPress={() => setModalReset(true)} />
 
 					</View>
-					{modalReset && (
+					{/* {modalReset && (
 						<Screen style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 							<Modal style={{ backgroundColor: COLORS.ascent }} animationType='slide' visible={modalReset}>
 								<FloatingButton
@@ -182,7 +225,7 @@ const Signin = () => {
 
 							</Modal>
 						</Screen>
-					)}
+					)} */}
 				</KeyboardAvoidingView>
 			</TouchableWithoutFeedback>
 		</Screen >
@@ -215,6 +258,20 @@ const styles = StyleSheet.create({
 		color: "blue",
 		marginLeft: 10,
 	},
+	input: {
+		width: "100%",
+		paddingVertical: SIZES.padding * 0.5,
+		paddingHorizontal: SIZES.padding * 0.5,
+		marginVertical: SIZES.padding * 0.5,
+		padding: 8,
+		borderRadius: 25,
+		alignItems: "center",
+		backgroundColor: COLORS.tile,
+		flexDirection: "row",
+		borderBottomWidth: 1,
+		borderBottomColor: COLORS.light,
+		...FONTS.body3
+	}
 });
 
 export default Signin;

@@ -224,6 +224,20 @@ const AuthState = (props) => {
 
 	}
 
+	const updateUserProfile = async info => {
+		try {
+			const user = await db.collection('appUser').doc(auth.currentUser.uid).get()
+			if (user.id) {
+				user.ref.update({ phone: info.phone, email: info.email })
+
+			} else return;
+			setUser(user.id)
+			return true
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
 	const setLoading = () => dispatch({ type: SET_LOADING });
 
 	return (
@@ -244,6 +258,7 @@ const AuthState = (props) => {
 				resetPassword,
 				updateLastLogin,
 				isFavorite,
+				updateUserProfile,
 			}}
 		>
 			{props.children}

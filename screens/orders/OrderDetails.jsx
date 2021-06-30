@@ -7,14 +7,13 @@ import Screen from "../../components/Screen";
 import { Ionicons } from '@expo/vector-icons';
 import ListItem from "../../components/ListItem";
 import { useNavigation } from "@react-navigation/native";
-import { COLORS, FONTS } from "../../config";
+import { COLORS, FONTS, SIZES } from "../../config";
+import { color } from "react-native-reanimated";
 
 
 const OrderDetails = ({ route }) => {
   const { order } = route.params;
   const navigation = useNavigation()
-
-
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -36,25 +35,23 @@ const OrderDetails = ({ route }) => {
     <Screen style={styles.container}>
       <View style={styles.orderInfo}>
         <Text style={styles.text}>
-          Date: {moment(order.orderPlaced).format("LL")}{" "}
+          <Text style={{ ...FONTS.h4 }}>Order Date: </Text>{moment(order.orderPlaced).format("LL")}{" "}
         </Text>
-        <Text style={styles.text}>
-          Customer: {order.customer.name} {order.customer.lastName}
-        </Text>
-        <Text style={styles.text}>Order Type: {order.orderType}</Text>
-        <Text style={styles.text}>Payment Method: {order.paymentMethod}</Text>
-        <Text style={styles.text}>Restaurant: {order.restaurant.name}</Text>
+
+        <Text style={styles.text}><Text style={{ ...FONTS.h4 }}>Order Type:</Text> {order.orderType}</Text>
+        <Text style={styles.text}><Text style={{ ...FONTS.h4 }}>Payment Method:</Text> {order.paymentMethod}</Text>
+        <Text style={styles.text}><Text style={{ ...FONTS.h4 }}>Restaurant:</Text> {order.restaurant.name}</Text>
         <Text style={styles.text}>
           {order.orderType === "pickup" || order.type === "pickup" ? (
             `Person Picking Up: ${order.customer.name}`
           ) : (
               <Text numberOfLines={1} style={styles.text}>
-                Delivered to: {order.customer.address.street},{" "}
+                <Text style={{ ...FONTS.h4 }}>Delivered To: </Text> {order.customer.address.street},{" "}
                 {order.customer.address.city}
               </Text>
             )}
         </Text>
-        {order.coupon && (<Text style={{ ...FONTS.body4 }}>Coupon Used: {(order.coupon.code).toUpperCase()} - {order.coupon.value}%</Text>)}
+        {order.coupon && (<Text style={{ ...FONTS.body4 }}><Text style={{ ...FONTS.h4 }}>Coupon Used: </Text> {(order.coupon.code).toUpperCase()} - {order.coupon.value}%</Text>)}
         {order.cancelReason && (<Text style={[styles.text, { color: 'red', fontWeight: '700' }]}>Canceled: {order.cancelReason}</Text>)}
         {order.instruction && (<Text style={{ ...FONTS.body4 }}>Note: {order.instruction}</Text>)}
 
@@ -63,8 +60,9 @@ const OrderDetails = ({ route }) => {
         style={{
           flexDirection: "row",
           width: "100%",
-          justifyContent: "space-around",
+          justifyContent: 'space-between',
           marginVertical: 10,
+          paddingHorizontal: SIZES.padding,
           alignItems: "center",
         }}
       >
@@ -73,7 +71,7 @@ const OrderDetails = ({ route }) => {
             ...FONTS.h4
           }}
         >
-          Order #: {order.orderNumber}
+          Order #: {order?.orderNumber}
         </Text>
         <Text
           style={{
@@ -82,22 +80,11 @@ const OrderDetails = ({ route }) => {
         >
           Items: {order.items.length}
         </Text>
-        <View style={{ flexDirection: 'row', }}>
-          <Text style={{ ...FONTS.h4 }}>Amount: </Text>
-          {order.coupon && (<Text style={{ ...FONTS.h4, color: 'red', opacity: 0.4, textDecorationLine: 'line-through', marginRight: 8 }}>${order.coupon.originalPrice.toFixed(2)}</Text>)}
-          <Text
-            style={{
-              ...FONTS.h4
-            }}
-          >
-            ${parseFloat(order.totalAmount).toFixed(2)}
-          </Text>
 
-        </View>
 
       </View>
 
-      <View style={{ width: "100%", marginTop: 5, flex: 1 }}>
+      <View style={{ width: "100%", marginTop: 5, }}>
         <FlatList
           data={order.items}
           keyExtractor={(item, index) => item.id + index.toString()}
@@ -111,6 +98,37 @@ const OrderDetails = ({ route }) => {
             />
           )}
         />
+        {/* TOTAL */}
+        <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', paddingHorizontal: SIZES.padding * 0.5 }}>
+
+          {order.coupon && order.serviceFee && (
+            <>
+              <Text style={styles.sub}>Subtotal: ${order.coupon.originalPrice}</Text>
+              <Text style={styles.sub}>Discount: <Text style={styles.sub, { color: COLORS.danger }}>-${(order.coupon.originalPrice - order.totalAmount).toFixed(2)}</Text> </Text>
+              <Text style={styles.sub}>Service Fee: {order.serviceFee}</Text>
+              <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {order.totalAmount + order.serviceFee}</Text>
+            </>
+          )}
+
+          {order.serviceFee && !order.coupon && (<>
+            <Text style={styles.sub}>Subtotal: ${order.totalAmount}</Text>
+            <Text style={styles.sub}>Service Fee: {order.serviceFee}</Text>
+            <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {order.totalAmount + order.serviceFee}</Text>
+          </>)}
+          {!order.serviceFee && order.coupon && (<>
+            <Text style={styles.sub}>Subtotal: ${order.coupon.originalPrice}</Text>
+            <Text style={styles.sub}>Discount: <Text style={styles.sub, { color: COLORS.danger }}>-${(order.coupon.originalPrice - order.totalAmount).toFixed(2)}</Text> </Text>
+            <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {order.totalAmount}</Text>
+          </>)}
+          {!order.serviceFee && !order.coupon && (<>
+            <Text style={styles.sub}>Subtotal: ${order.totalAmount}</Text>
+            <Text style={styles.sub}>Discount: $0 </Text>
+            <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {order.totalAmount}</Text>
+          </>)}
+
+
+
+        </View>
       </View>
     </Screen>
   );
@@ -138,12 +156,14 @@ const styles = StyleSheet.create({
     fontFamily: "montserrat",
   },
   text: {
-    fontSize: 16,
-    fontWeight: "500",
-    paddingBottom: 8,
+
+    paddingBottom: 5,
     textTransform: "capitalize",
-    fontFamily: "montserrat",
+    ...FONTS.body4
   },
+  sub: {
+    ...FONTS.body5
+  }
 });
 
 export default OrderDetails;
