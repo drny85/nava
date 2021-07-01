@@ -161,7 +161,7 @@ app.get('/stripeKey/:id', async (req, res) => {
 
 app.post('/create_stripe_customer', async (req, res) => {
 	try {
-		const { email, userId, restaurantId } = req.body;
+		const { email, userId, restaurantId, name, metadata } = req.body;
 		console.log('BODY', req.body);
 		if (!userId) return res.status(400).json({ message: 'No user ID' });
 		const stripe = Stripe(secrets[restaurantId.toLowerCase()]);
@@ -175,6 +175,8 @@ app.post('/create_stripe_customer', async (req, res) => {
 		} else {
 			const customer = await stripe.customers.create({
 				email,
+				name,
+				metadata,
 			});
 			await admin
 				.firestore()

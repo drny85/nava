@@ -18,7 +18,7 @@ export default (state, action) => {
       return {
         ...state,
         ///send id with the payload
-        order: state.orders.find((order) => order.id === action.payload),
+        order: action.payload,
         loading: false,
       };
 

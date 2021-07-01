@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Modal } from "react-native";
 
 import { CommonActions } from "@react-navigation/native"
@@ -8,10 +8,13 @@ import Screen from "../../components/Screen";
 
 import LottieView from 'lottie-react-native'
 import { COLORS } from "../../config";
+import ordersContext from "../../context/order/orderContext";
+import Loader from "../../components/Loader";
 
 
 const OrderConfirmation = ({ navigation, route }) => {
-  const { order } = route.params;
+  const { orderId } = route.params;
+  const { order, getOrderById } = useContext(ordersContext)
 
   const [isVisible, setIsVisible] = useState(true);
 
@@ -50,7 +53,11 @@ const OrderConfirmation = ({ navigation, route }) => {
     return true;
   }
 
+  useEffect(() => {
+    getOrderById(orderId)
+  }, [orderId])
 
+  if (!order) return <Loader />
   return (
     <Screen style={styles.screen}>
       <Modal

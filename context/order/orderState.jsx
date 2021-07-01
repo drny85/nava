@@ -4,6 +4,7 @@ import OrderReducer from "./orderReducer";
 import OrderContex from "./orderContext";
 import { db } from "../../services/database";
 import {
+  GET_ORDER,
   GET_ORDERS,
   ORDER_LOADING,
   SET_LOADING,
@@ -100,10 +101,12 @@ const OrdersState = (props) => {
       }
 
       const result = await db.collection("orders").add(newOrder);
-      const res = (await result.get()).data();
+
+
 
       // updateUnitSold(result?.id, res?.restaurantId);
-      return { data: { id: result.id, ...res }, error: false };
+
+      return { data: { id: result.id }, error: false };
     } catch (error) {
       console.log('Error submitting Order', error);
       return { error: true, msg: error };
@@ -170,6 +173,16 @@ const OrdersState = (props) => {
     });
   };
 
+  const getOrderById = async id => {
+    try {
+      setLoading()
+      const response = await db.collection('orders').doc(id).get()
+      dispatch({ type: GET_ORDER, payload: { id: response.id, ...response.data() } })
+    } catch (error) {
+      console.log('Error @getOrderById - OrderState', error)
+    }
+  }
+
   const filterOrdersBy = (criteria) => {
     dispatch({ type: "FILTER_BY", payload: criteria });
   };
@@ -193,6 +206,7 @@ const OrdersState = (props) => {
         stopOrdersLoading,
         getOrders,
         placeOrder,
+        getOrderById,
         Unsubscribe,
         ordersSubscrition,
         filterOrdersBy,

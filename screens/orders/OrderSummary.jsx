@@ -51,6 +51,8 @@ const OrderSummary = ({ navigation, route }) => {
   const [customerId, setCustomerId] = useState(null);
   const [public_key, setPublicKey] = useState(null)
   const { placeOrder } = useContext(ordersContext);
+  const [isPaid, setIsPaid] = useState(false)
+  const [serviceFee, setServiceFee] = useState(null)
   const [connected, setConnected] = useState(false)
   const [discountedPrice, setDiscountedPrice] = useState(null)
   const [couponModal, setCouponModal] = useState(false)
@@ -159,18 +161,19 @@ const OrderSummary = ({ navigation, route }) => {
         status,
         instruction,
         restaurant,
-        isPaid = false,
+        isPaid,
         promoDetails ? { ...promoDetails, originalPrice: cartTotal } : null,
-        serviceFee = null
+        serviceFee
 
       );
+
 
 
       if (cartItems.length > 0) {
 
 
         if (paymentMethod === "credit") {
-
+          await initializePaymentSheet(person, res, customerId)
           await openPaymentSheet(newOrder)
 
         } else {
@@ -184,7 +187,7 @@ const OrderSummary = ({ navigation, route }) => {
             clearCart();
             navigation.navigate("Orders", {
               screen: "OrderConfirmation",
-              params: { order: newOrder, paymentMethod },
+              params: { orderId: data.id, paymentMethod },
             });
           }
 
@@ -242,6 +245,8 @@ const OrderSummary = ({ navigation, route }) => {
         return;
       } else {
         order.isPaid = true;
+        setIsPaid(true)
+        setServiceFee(restaurant.chargeCardFee ? calculateServiceFee() : null)
         order.serviceFee = restaurant.chargeCardFee ? calculateServiceFee() : null;
         const { data, error } = await placeOrder(order)
         if (error) {
@@ -249,10 +254,11 @@ const OrderSummary = ({ navigation, route }) => {
           return;
         }
         if (data) {
+
           clearCart();
           navigation.navigate("Orders", {
             screen: "OrderConfirmation",
-            params: { order, paymentMethod },
+            params: { orderId: data.id, paymentMethod },
           });
         }
 
@@ -265,6 +271,7 @@ const OrderSummary = ({ navigation, route }) => {
 
   const generateStripeItems = () => {
 
+    const itemsCopy = [...cartItems]
     const allItems = promoDetails ? itemsCopy : cartItems;
     const items = allItems.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.quantity }))
     return items
@@ -290,7 +297,7 @@ const OrderSummary = ({ navigation, route }) => {
 
       const res = await Axios.post(`${STRIPE.CREATE_CUSTOMER}`, { userId: user.id, email: user.email, restaurantId: restaurant?.id })
       if (res.status === 200) {
-        console.log('RES', res.status)
+
         const { customer_id } = res.data
         setCustomerId(customer_id)
       }
@@ -305,10 +312,10 @@ const OrderSummary = ({ navigation, route }) => {
   const fetchPaymentSheetParams = async (person, res, id) => {
     try {
 
-      const newItems = [...cartItems]
-      //const itemsCopy = generateItemDiscounted(newItems)
+
 
       const totalAmount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
+
       const response = await Axios.post(`${STRIPE.MOBILE_URL}`, {
         name: person.name + ' ' + person.lastName, phone: person.phone, email: person.email,
         items: generateStripeItems(),
@@ -362,11 +369,8 @@ const OrderSummary = ({ navigation, route }) => {
       const { isConnected, isInternetReachable } = netInfo
       createStripeCustomer()
       if (isConnected && isInternetReachable) {
-
         checkIfPayingWithCredit()
         setConnected(true)
-
-
       }
     })
 
@@ -374,7 +378,6 @@ const OrderSummary = ({ navigation, route }) => {
       setCouponModal(false)
       setPublicKey(null)
       setPromoDetails(null)
-
       unsubscribe && unsubscribe()
     }
   }, [connected, customer, restaurant])
@@ -388,7 +391,6 @@ const OrderSummary = ({ navigation, route }) => {
       //setCustomerId(null)
     }
   }, [customerId])
-  console.log(customerId)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -405,9 +407,7 @@ const OrderSummary = ({ navigation, route }) => {
     })
   }, [navigation, connected])
 
-  console.log('Loading:', loading)
-  console.log('Key:', public_key)
-  console.log('Id:', customerId)
+
   if (loading || !public_key, !customerId) return <Loader />
 
   return (

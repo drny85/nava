@@ -8,11 +8,11 @@ import { Ionicons } from '@expo/vector-icons';
 import ListItem from "../../components/ListItem";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS, FONTS, SIZES } from "../../config";
-import { color } from "react-native-reanimated";
 
 
 const OrderDetails = ({ route }) => {
   const { order } = route.params;
+
   const navigation = useNavigation()
 
   useLayoutEffect(() => {
@@ -29,6 +29,7 @@ const OrderDetails = ({ route }) => {
       }
     })
   }, [navigation])
+
 
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import LottieView from "lottie-react-native";
 import { COLORS, FONTS, SIZES } from "../../config";
@@ -8,6 +8,8 @@ import FloatingButton from "../../components/FloatingButton";
 import moment from 'moment'
 
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import ordersContext from "../../context/order/orderContext";
+import Loader from "../../components/Loader";
 
 
 
@@ -17,6 +19,7 @@ const OrderInTheMaking = ({ navigation, route }) => {
 	const { order } = route.params
 	const [estimated, setEstimated] = useState(0)
 	const { name } = order.restaurant
+
 
 	const capitalize = st => {
 		const n = st.toLowerCase()
@@ -38,6 +41,8 @@ const OrderInTheMaking = ({ navigation, route }) => {
 
 		}
 	}, [])
+
+	if (!order) return <Loader />
 
 	return (
 

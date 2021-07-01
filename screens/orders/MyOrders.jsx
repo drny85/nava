@@ -21,6 +21,7 @@ const MyOrders = ({ navigation, route }) => {
     navigation.navigate("OrderInTheMaking", { order });
   };
 
+
   useEffect(() => {
     getOrders(user.id);
 

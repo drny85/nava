@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import {
   View,
   StyleSheet,
@@ -9,19 +9,38 @@ import {
 } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { COLORS, FONTS, SIZES } from "../config";
-import cartContext from "../context/cart/cartContext";
 import { useNavigation } from "@react-navigation/native";
 
 import ordersContext from "../context/order/orderContext";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const OrderTile = ({ order, onPress }) => {
-  const { addToCart, cartItems, clearCart } = useContext(cartContext);
 
-  const { loadingOrders, stopOrdersLoading } = useContext(ordersContext);
   const navigation = useNavigation();
 
+  // const calculatedTotal = () => {
 
+  // }
+
+  // const calculateServiceFee = () => {
+
+  //   const amount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
+  //   const percent = +((amount + 0.3) / (1 - 0.029));
+  //   const fee = +(amount - percent).toFixed(2) * 100;
+  //   const finalFee = Math.round(Math.abs(fee)) / 100;
+
+  //   return finalFee
+  // }
+
+  const calculateGrandTotal = () => {
+
+    const amount = order.serviceFee ? +parseFloat(order.totalAmount + order.serviceFee) : +parseFloat(order.serviceFee)
+
+
+    return amount
+  }
+
+  console.log(order)
   return (
     <TouchableOpacity onPress={onPress} style={[styles.container]}>
       {/* restaurant image view */}
@@ -59,7 +78,7 @@ const OrderTile = ({ order, onPress }) => {
           {moment(order.orderPlaced).format("lll")}
         </Text> */}
         <Text style={{ ...FONTS.body6, paddingVertical: 6 }}>
-          Total: ${parseFloat(order.totalAmount).toFixed(2)}
+          Total:  ${calculateGrandTotal()}
         </Text>
       </View>
       {/* re-order button */}

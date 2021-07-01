@@ -9,7 +9,7 @@ class Order {
 		status = 'new',
 		instruction,
 		restaurant,
-		isPaid = false,
+		isPaid,
 		coupon,
 		serviceFee = null
 
