@@ -18,29 +18,11 @@ const OrderTile = ({ order, onPress }) => {
 
   const navigation = useNavigation();
 
-  // const calculatedTotal = () => {
-
-  // }
-
-  // const calculateServiceFee = () => {
-
-  //   const amount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
-  //   const percent = +((amount + 0.3) / (1 - 0.029));
-  //   const fee = +(amount - percent).toFixed(2) * 100;
-  //   const finalFee = Math.round(Math.abs(fee)) / 100;
-
-  //   return finalFee
-  // }
-
   const calculateGrandTotal = () => {
 
-    const amount = order.serviceFee ? +parseFloat(order.totalAmount + order.serviceFee) : +parseFloat(order.serviceFee)
-
-
-    return amount
+    return order.serviceFee ? +parseFloat(order.totalAmount + order.serviceFee) : +parseFloat(order.serviceFee)
   }
 
-  console.log(order)
   return (
     <TouchableOpacity onPress={onPress} style={[styles.container]}>
       {/* restaurant image view */}

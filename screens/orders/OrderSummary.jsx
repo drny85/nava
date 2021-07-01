@@ -312,8 +312,6 @@ const OrderSummary = ({ navigation, route }) => {
   const fetchPaymentSheetParams = async (person, res, id) => {
     try {
 
-
-
       const totalAmount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
 
       const response = await Axios.post(`${STRIPE.MOBILE_URL}`, {
@@ -371,6 +369,7 @@ const OrderSummary = ({ navigation, route }) => {
       if (isConnected && isInternetReachable) {
         checkIfPayingWithCredit()
         setConnected(true)
+        console.log('Cfirst useEffect ran')
       }
     })
 
@@ -380,11 +379,11 @@ const OrderSummary = ({ navigation, route }) => {
       setPromoDetails(null)
       unsubscribe && unsubscribe()
     }
-  }, [connected, customer, restaurant])
+  }, [connected])
 
   useEffect(() => {
     if (person && res && customerId) {
-
+      console.log('Second useEffect ran')
       initializePaymentSheet(person, res, customerId)
     }
     return () => {
