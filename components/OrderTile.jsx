@@ -9,18 +9,14 @@ import {
 } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { COLORS, FONTS, SIZES } from "../config";
-import { useNavigation } from "@react-navigation/native";
 
-import ordersContext from "../context/order/orderContext";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const OrderTile = ({ order, onPress }) => {
 
-  const navigation = useNavigation();
-
   const calculateGrandTotal = () => {
 
-    return order.serviceFee ? +parseFloat(order.totalAmount + order.serviceFee) : +parseFloat(order.serviceFee)
+    return order.serviceFee ? +parseFloat(order.totalAmount + order.serviceFee) : +parseFloat(order.totalAmount)
   }
 
   return (

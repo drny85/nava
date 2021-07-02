@@ -41,6 +41,7 @@ const OrderDetails = ({ route }) => {
 
         <Text style={styles.text}><Text style={{ ...FONTS.h4 }}>Order Type:</Text> {order.orderType}</Text>
         <Text style={styles.text}><Text style={{ ...FONTS.h4 }}>Payment Method:</Text> {order.paymentMethod}</Text>
+        <Text style={styles.text}><Text style={{ ...FONTS.h4 }}>Payment Status:</Text> {order.isPaid ? 'Paid' : 'Pending'}</Text>
         <Text style={styles.text}><Text style={{ ...FONTS.h4 }}>Restaurant:</Text> {order.restaurant.name}</Text>
         <Text style={styles.text}>
           {order.orderType === "pickup" || order.type === "pickup" ? (

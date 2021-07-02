@@ -218,6 +218,9 @@ const OrderSummary = ({ navigation, route }) => {
 
       const { error } = await initPaymentSheet({
         customerId: customer,
+        applePay: true,
+        merchantCountryCode: 'US',
+        googlePay: true,
         customerEphemeralKeySecret: ephemeralKey,
         paymentIntentClientSecret: paymentIntent
 
@@ -369,7 +372,7 @@ const OrderSummary = ({ navigation, route }) => {
       if (isConnected && isInternetReachable) {
         checkIfPayingWithCredit()
         setConnected(true)
-        console.log('Cfirst useEffect ran')
+
       }
     })
 
@@ -383,7 +386,7 @@ const OrderSummary = ({ navigation, route }) => {
 
   useEffect(() => {
     if (person && res && customerId) {
-      console.log('Second useEffect ran')
+
       initializePaymentSheet(person, res, customerId)
     }
     return () => {
@@ -410,7 +413,7 @@ const OrderSummary = ({ navigation, route }) => {
   if (loading || !public_key, !customerId) return <Loader />
 
   return (
-    <StripeProvider publishableKey={public_key}>
+    <StripeProvider publishableKey={public_key} merchantIdentifier='net.robertdev.melendez-antojito1'>
       <Screen >
         <View style={{ flex: 1, height: SIZES.height * 0.9 }}>
 

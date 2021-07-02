@@ -59,7 +59,7 @@ const Signup = ({ route }) => {
         data.user.uid,
         values.name,
         values.lastName,
-        values.phone,
+        values.phone = phone,
         values.email,
 
       );

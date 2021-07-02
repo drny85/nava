@@ -28,7 +28,7 @@ import storesContext from "../../context/stores/storesContext";
 
 import useNotifications from "../../hooks/useNotifications";
 
-const MINIMUM_DELIVERY = 10;
+const MINIMUM_DELIVERY = 5;
 
 const Checkout = ({ route, navigation }) => {
 

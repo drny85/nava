@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -16,7 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 
 import { Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { storage, db } from "../../services/database";
+import { storage, db, auth } from "../../services/database";
 import { Modal } from "react-native";
 import { COLORS, FONTS, SIZES } from "../../config";
 import { TextInput } from "react-native";
@@ -36,7 +36,12 @@ const Profile = ({ navigation }) => {
   const { user, setUser, updateUserProfile } = useContext(authContext);
 
 
-  if (!user) return <Signin />;
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email)
+      setPhone(user.phone)
+    }
+  }, [user])
 
   const requestPermission = async () => {
     const { granted } = await ImagePicker.requestCameraPermissionsAsync();
@@ -144,7 +149,7 @@ const Profile = ({ navigation }) => {
     }
   };
 
-
+  if (!user) return <Signin />;
 
   if (success) return <SuccessAlert visible={success} onFinish={() => { setSuccess(false); setEdidingProfile(false) }} />
 
@@ -208,7 +213,7 @@ const Profile = ({ navigation }) => {
             </View>
             <View>
 
-              <TextInput style={styles.textInput} placeholder='New Phone' maxLength={146666} placeholderTextColor={COLORS.text} value={phone} onChangeText={(text => setPhone(formatPhone(text)))} />
+              <TextInput style={styles.textInput} placeholder='New Phone' maxLength={14} placeholderTextColor={COLORS.text} value={phone} onChangeText={(text => setPhone(formatPhone(text)))} />
               <TextInput style={styles.textInput} placeholder='New Email' value={email} onChangeText={(text => setEmail(text.trim().toLowerCase()))} />
               <View style={{ width: SIZES.width * 0.8, alignSelf: 'center', marginVertical: 15, }}>
                 <AppButton title='Update' onPress={handleProfileUpdate} />

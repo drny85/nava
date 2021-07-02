@@ -1,8 +1,8 @@
 {
 	"expo": {
 		"name": "My Antojito",
-		"slug": "nava74",
-		"version": "1.1.0",
+		"slug": "nava77",
+		"version": "1.1.1",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -16,7 +16,7 @@
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": false,
-			"bundleIdentifier": "net.robertdev.melendez-antojito18",
+			"bundleIdentifier": "net.robertdev.melendez-deli1",
 			"buildNumber": "1.1.1"
 		},
 		"web": {
@@ -38,6 +38,6 @@
 		"android": {
 			"useNextNotificationsApi": true
 		},
-		"description": "change login screen"
+		"description": "Impelemented Apple Pay"
 	}
 }

@@ -15,14 +15,11 @@ import navigationTheme from "./navigation/navigationTheme";
 import StoresState from "./context/stores/storesState";
 
 import { useFonts } from '@expo-google-fonts/montserrat'
-import logger from './utils/logger'
-import { auth } from "./services/database";
-
 
 
 
 const App = () => {
-  const { getCurrentUser, user, setUser } = React.useContext(authContext);
+  const { getCurrentUser } = React.useContext(authContext);
   const [fontsLoaded, error] = useFonts({
     montserrat: require("./assets/fonts/Montserrat-Regular.ttf"),
     "montserrat-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
@@ -32,10 +29,10 @@ const App = () => {
 
   })
 
-  console.log('APP')
+  console.log('MAIN_APP')
 
   useEffect(() => {
-
+    console.log('MAIN_APP_USE_EFFECT')
     getCurrentUser()
     return () => {
 
