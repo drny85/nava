@@ -16,7 +16,7 @@ const OrderTile = ({ order, onPress }) => {
 
   const calculateGrandTotal = () => {
 
-    return order.serviceFee ? +parseFloat(order.totalAmount + order.serviceFee) : +parseFloat(order.totalAmount)
+    return order.serviceFee ? +parseFloat(order.totalAmount + order.serviceFee).toFixed(2) : +parseFloat(order.totalAmount).toFixed(2)
   }
 
   return (

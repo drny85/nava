@@ -10,7 +10,7 @@ const ListItem = ({ name, imageUrl, price, qty, size }) => {
         <Image style={styles.img} source={{ uri: imageUrl }} />
         <View style={styles.firstView}>
           <Text style={styles.name}>{name}</Text>
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", alignItems: 'center' }}>
             <Text style={styles.qty}>
               {qty} x {price}
             </Text>
