@@ -228,7 +228,7 @@ const OrderSummary = ({ navigation, route }) => {
       });
 
       if (!error) {
-        setProcessing(true);
+
 
       }
     } catch (error) {
@@ -239,7 +239,7 @@ const OrderSummary = ({ navigation, route }) => {
 
   const openPaymentSheet = async (order) => {
     try {
-
+      setProcessing(true)
       const { error } = await presentPaymentSheet({ clientSecret: public_key });
 
 
@@ -254,11 +254,13 @@ const OrderSummary = ({ navigation, route }) => {
         const { data, error } = await placeOrder(order)
         if (error) {
           console.log('Error at Order Summary', error)
+          setProcessing(false)
           return;
         }
         if (data) {
 
           clearCart();
+          setProcessing(false)
           navigation.navigate("Orders", {
             screen: "OrderConfirmation",
             params: { orderId: data.id, paymentMethod },
@@ -268,6 +270,8 @@ const OrderSummary = ({ navigation, route }) => {
       }
     } catch (error) {
       console.log('Error @openPaymentSheet'.error.message)
+    } finally {
+      setProcessing(false)
     }
 
   };
@@ -361,7 +365,7 @@ const OrderSummary = ({ navigation, route }) => {
     const amount = promoDetails ? +parseFloat(discountedPrice).toFixed(2) : cartTotal;
     const total = amount + calculateServiceFee()
 
-    return total;
+    return +total.toFixed(2);
   }
 
 
@@ -380,6 +384,7 @@ const OrderSummary = ({ navigation, route }) => {
       setCouponModal(false)
       setPublicKey(null)
       setPromoDetails(null)
+      setProcessing(false)
       unsubscribe && unsubscribe()
     }
   }, [connected])
@@ -391,6 +396,7 @@ const OrderSummary = ({ navigation, route }) => {
     }
     return () => {
       //setCustomerId(null)
+
     }
   }, [customerId])
 
@@ -409,7 +415,7 @@ const OrderSummary = ({ navigation, route }) => {
     })
   }, [navigation, connected])
 
-
+  console.log(processing)
   if (loading || !public_key, !customerId) return <Loader />
 
   return (

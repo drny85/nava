@@ -1,21 +1,16 @@
 // @ts-nocheck
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ScrollView } from "react-native";
 import { Modal } from "react-native";
 import { StyleSheet, FlatList, Text, View, TouchableOpacity, Animated, TextInput, Keyboard, TouchableWithoutFeedback } from "react-native";
-import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
+import { Entypo, EvilIcons, MaterialIcons, AntDesign } from '@expo/vector-icons'
 
 import Loader from "../../components/Loader";
 import RecentOrderCard from "../../components/RecentOrderCard";
 import Screen from "../../components/Screen";
-import SearchBar from "../../components/SearchBar";
 import StoreCard from "../../components/StoreCard";
 import { COLORS, FONTS, SIZES } from "../../config";
 import authContext from "../../context/auth/authContext";
 import ordersContext from "../../context/order/orderContext";
-import Animatable from 'react-native-animatable'
-
-//import { useLocation } from '../../hooks/useLocation'
 
 import storesContext from "../../context/stores/storesContext";
 import cartContext from "../../context/cart/cartContext";
@@ -25,7 +20,7 @@ import useLocation from "../../utils/useLocation";
 import { ActivityIndicator } from "react-native";
 import settingsContext from "../../context/settings/settingsContext";
 import { getFilteredStores } from "../../utils/getFiltetredStores";
-import { useFocusEffect } from "@react-navigation/native";
+
 
 
 
@@ -38,7 +33,7 @@ const Restaurants = ({ navigation }) => {
 
   const scrollY = useRef(new Animated.Value(0)).current
   const { stores, getStores, loading, storesSub, ordersSubscrition } = useContext(storesContext);
-  const { items, getItems, allItems, getAllStoresItems, loading: itemsLoading } = useContext(itemsContext);
+  const { allItems, getAllStoresItems, loading: itemsLoading } = useContext(itemsContext);
   const { user } = useContext(authContext);
   const { setDeliveryMethod } = useContext(settingsContext)
   const [onlyLocal, setOnlyLocal] = useState(true)
@@ -351,7 +346,7 @@ const Restaurants = ({ navigation }) => {
 
         }} style={{ marginRight: 10, }}>
           <AntDesign name="closecircleo" size={24} color="black" />
-        </TouchableOpacity>) : (<Entypo onPress={() => setOnlyLocal(preview => !preview)} style={{ width: '10%', marginHorizontal: 5 }} name="location-pin" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />)}
+        </TouchableOpacity>) : (<EvilIcons onPress={() => setOnlyLocal(preview => !preview)} style={{ width: '10%', marginHorizontal: 5 }} name="location" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />)}
 
       </View>
       <Text style={{ ...FONTS.body2 }}>No Stores Nearby</Text>
@@ -387,7 +382,7 @@ const Restaurants = ({ navigation }) => {
 
         }} style={{ marginRight: 10, }}>
           <AntDesign name="closecircleo" size={24} color="black" />
-        </TouchableOpacity>) : (<Entypo onPress={() => setOnlyLocal(preview => !preview)} style={{ width: '10%', marginHorizontal: 5 }} name="location-pin" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />)}
+        </TouchableOpacity>) : (<EvilIcons onPress={() => setOnlyLocal(preview => !preview)} style={{ width: '10%', marginHorizontal: 5 }} name="location" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />)}
 
       </View>
       {onlyLocal && (

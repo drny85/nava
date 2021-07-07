@@ -13,6 +13,7 @@ const config = require('./config');
 
 const secrets = config.secret;
 const public = config.public;
+const url = config.url;
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,11 +24,11 @@ app.use(express.json())
 
 app.post('/payment', async (req, res) => {
 	try {
-		const { items, email, customer, cardFee, orderId } = req.body;
+		const { items, customer, cardFee, orderId, customerId } = req.body;
 
 		const restaurantKey = items[0].storeId.toLowerCase();
 
-		const stripe = Stripe(secrets[restaurantKey]);
+		const stripe = Stripe(secrets[restaurantKey], { apiVersion: '2020-08-27' });
 
 		const newItems = items.map((item) => {
 			return {
@@ -52,7 +53,6 @@ app.post('/payment', async (req, res) => {
 			const percent = +((total + 0.3) / (1 - 0.029));
 			const fee = +(total - percent).toFixed(2) * 100;
 			const finalFee = Math.round(Math.abs(fee));
-			console.log('Fee', Math.round(Math.abs(fee)), total);
 
 			newItems.push({
 				description: 'Convinience fee',
@@ -66,19 +66,20 @@ app.post('/payment', async (req, res) => {
 				quantity: 1,
 			});
 		}
+		const cust = await stripe.customers.retrieve(customerId);
 
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ['card'],
-			customer_email: email,
 			line_items: newItems,
+			customer: cust && cust.id,
 			mode: 'payment',
 			metadata: customer,
 			success_url: orderId
-				? `http://localhost:3000/payment/success/${orderId}`
-				: 'http://localhost:3000/payment/success',
+				? `${url.url}/payment/success/${orderId}`
+				: `${url.url}/payment/success`,
 			cancel_url: orderId
-				? `http://localhost:3000/payment/failed/${orderId}`
-				: 'http://localhost:3000/payment/failed',
+				? `${url.url}/payment/failed/${orderId}`
+				: `${url.url}/payment/failed`,
 		});
 
 		return res.status(200).send({
@@ -107,7 +108,9 @@ app.post('/mobile', async (req, res) => {
 
 		if (!restaurantKey) return res.status(400).send('No Key provided');
 
-		const stripe = Stripe(secrets[restaurantKey.toLowerCase()]);
+		const stripe = Stripe(secrets[restaurantKey.toLowerCase()], {
+			apiVersion: '2020-08-27',
+		});
 
 		let finalAmount = amount;
 
@@ -165,7 +168,9 @@ app.post('/create_stripe_customer', async (req, res) => {
 		const { email, userId, restaurantId, name, metadata } = req.body;
 		console.log('BODY', req.body);
 		if (!userId) return res.status(400).json({ message: 'No user ID' });
-		const stripe = Stripe(secrets[restaurantId.toLowerCase()]);
+		const stripe = Stripe(secrets[restaurantId.toLowerCase()], {
+			apiVersion: '2020-08-27',
+		});
 		const payment = await admin
 			.firestore()
 			.collection('stripe_customers')
@@ -177,7 +182,7 @@ app.post('/create_stripe_customer', async (req, res) => {
 			const customer = await stripe.customers.create({
 				email,
 				name,
-				metadata,
+				metadata: metadata && metadata,
 			});
 			await admin
 				.firestore()

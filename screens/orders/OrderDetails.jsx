@@ -108,24 +108,24 @@ const OrderDetails = ({ route }) => {
               <Text style={styles.sub}>Subtotal: ${order.coupon.originalPrice}</Text>
               <Text style={styles.sub}>Discount: <Text style={styles.sub, { color: COLORS.danger }}>-${(order.coupon.originalPrice - order.totalAmount).toFixed(2)}</Text> </Text>
               <Text style={styles.sub}>Service Fee: {order.serviceFee}</Text>
-              <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {order.totalAmount + order.serviceFee}</Text>
+              <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {+(order.totalAmount + order.serviceFee).toFixed(2)}</Text>
             </>
           )}
 
           {order.serviceFee && !order.coupon && (<>
             <Text style={styles.sub}>Subtotal: ${order.totalAmount}</Text>
             <Text style={styles.sub}>Service Fee: {order.serviceFee}</Text>
-            <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {order.totalAmount + order.serviceFee}</Text>
+            <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {+(order.totalAmount + order.serviceFee).toFixed(2)}</Text>
           </>)}
           {!order.serviceFee && order.coupon && (<>
             <Text style={styles.sub}>Subtotal: ${order.coupon.originalPrice}</Text>
             <Text style={styles.sub}>Discount: <Text style={styles.sub, { color: COLORS.danger }}>-${(order.coupon.originalPrice - order.totalAmount).toFixed(2)}</Text> </Text>
-            <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {order.totalAmount}</Text>
+            <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {+(order.totalAmount).toFixed(2)}</Text>
           </>)}
           {!order.serviceFee && !order.coupon && (<>
             <Text style={styles.sub}>Subtotal: ${order.totalAmount}</Text>
             <Text style={styles.sub}>Discount: $0 </Text>
-            <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {order.totalAmount}</Text>
+            <Text style={styles.sub, { fontSize: 14, fontWeight: '700' }}>Grand Total: {+(order.totalAmount).toFixed(2)}</Text>
           </>)}
 
 
