@@ -1,0 +1,13 @@
+{
+    "secret": {
+        "nrajhpo2hzvish2kbkaq": "sk_test_51IK5fOLeHJQV7OD6ZmSgwFEcAHes76TierxH2CB8JzO04TtuHFEdxhznqu1dobKhNsECgcarABnjrlnFnm5z3Dsv00kBpZP1ZN",
+        "rzus22x3x9jatylr6s1m": "sk_test_3XShaHWNu48XiJcCo0OPgNls",
+        "8o7shxppiahkbgygdery": "sk_test_51IKEPmHuY1v2exolK2oRcsnI38sN5s625UJ1aeZvjBi3sk7biQDepBmKGtOIpkf1MY9dmDF721rtiFzTJs4sgtZN008f56tLPN"
+    },
+    "public": {
+        "nrajhpo2hzvish2kbkaq": "pk_test_51IK5fOLeHJQV7OD6xSLeZGPNNLXKThCPv4ZBG9dh34N6v5tP6cPdbsytaApGFEJU5sdSpqDzf6s2m6JGwgf1T8ET00jcETtEiB",
+        "rzus22x3x9jatylr6s1m": "pk_test_TiDXL9oIM686kqlByJgE4P5x",
+        "8o7shxppiahkbgygdery": "pk_test_51IKEPmHuY1v2exolVcoqhBgTiKAu4CkEZltgK4fTG5OrKSwdQ4AO6HDkNmq0TghxOnNRG0Rjf7VpsOPQYX3bNiWs00YKbVNU9X"
+    },
+    "url": "https://robertdev.net"
+}
