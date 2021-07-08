@@ -1,8 +1,8 @@
 {
 	"expo": {
-		"name": "My Antojo",
-		"slug": "GroceryAPP",
-		"version": "1.0.2",
+		"name": "Antojitos",
+		"slug": "Antojitos",
+		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -16,8 +16,8 @@
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": false,
-			"bundleIdentifier": "net.robertdev.melendez.myantojo2",
-			"buildNumber": "1.0.2"
+			"bundleIdentifier": "net.robertdev.melendez.apps",
+			"buildNumber": "1.0.0"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"

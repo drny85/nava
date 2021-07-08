@@ -45,6 +45,7 @@ const OrderDetails = ({ route }) => {
         <Text style={styles.text}><Text style={{ ...FONTS.h4 }}>Restaurant:</Text> {order.restaurant.name}</Text>
         <Text style={styles.text}>
           {order.orderType === "pickup" || order.type === "pickup" ? (
+
             `Person Picking Up: ${order.customer.name}`
           ) : (
               <Text numberOfLines={1} style={styles.text}>
