@@ -1,54 +1,8 @@
 {
-<<<<<<< HEAD
-  "expo": {
-    "name": "My Antojito",
-    "slug": "nava77",
-    "version": "1.1.1",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "net.robertdev.melendez-deli1",
-      "buildNumber": "1.1.1"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "apiKey": "AIzaSyBYxZ7c3saf5zHkXpDgXIkSzoIR6ogHbtg",
-      "authDomain": "grocery-409ef.firebaseapp.com",
-      "databaseURL": "https://grocery-409ef.firebaseio.com",
-      "projectId": "grocery-409ef",
-      "storageBucket": "grocery-409ef.appspot.com",
-      "messagingSenderId": "897113180247",
-      "appId": "1:897113180247:web:131d1ce3d7fddaeba13b12",
-      "measurementId": "G-FWR2GHNDSM",
-      "bugsnag": {
-        "apiKey": "8cc5d21c704443e3bf140192faa651b7"
-      }
-    },
-    "android": {
-      "useNextNotificationsApi": true,
-      "package": "net.robertdev.melendez.deli"
-    },
-    "description": "Impelemented Apple Pay"
-  }
-=======
 	"expo": {
 		"name": "My Antojo",
 		"slug": "GroceryAPP",
-		"version": "1.0.0",
+		"version": "1.0.2",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -62,8 +16,8 @@
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": false,
-			"bundleIdentifier": "net.robertdev.melendez.myantojo",
-			"buildNumber": "1.0.0"
+			"bundleIdentifier": "net.robertdev.melendez.myantojo2",
+			"buildNumber": "1.0.2"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"
@@ -86,5 +40,4 @@
 		},
 		"description": "Impelemented Apple Pay"
 	}
->>>>>>> 530181d31e9715508bb321df4f9ae2ff41ca0da9
 }

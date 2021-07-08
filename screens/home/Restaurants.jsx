@@ -78,39 +78,7 @@ const Restaurants = ({ navigation }) => {
 
   }
 
-  const currentStores = () => {
-    if (searching) {
-
-      const newStores = []
-      location && onlyLocal ? stores.filter(store => store.deliveryZip && store.deliveryZip.includes(location[0].postalCode)).forEach(s => {
-
-        allItems.filter(i => {
-          if (i.name.toLowerCase().includes(searchText.toLowerCase()) && s.id === i.storeId && s.hasItems) {
-            let index = newStores.indexOf(s)
-            if (index === -1) {
-              newStores.push(s)
-            }
-          }
-
-        })
-      }) : (
-          stores.forEach(s => {
-
-            allItems.filter(i => {
-              if (i.name.toLowerCase().includes(searchText.toLowerCase()) && s.id === i.storeId && s.hasItems) {
-                let index = newStores.indexOf(s)
-                if (index === -1) {
-                  newStores.push(s)
-                }
-              }
-            })
-          }))
-      return deliveryType === 'pickup' ? newStores.filter(store => store.deliveryType && store.deliveryType === 'pickupOnly') : newStores.filter(store => store.deliveryType && store.deliveryType !== 'pickupOnly')
-    }
-    return location && onlyLocal && deliveryType !== 'pickup' ? stores.filter(store => store.deliveryZip && store.deliveryZip.includes(location[0].postalCode)) : deliveryType !== 'pickup' && !onlyLocal ? stores.filter(store => store.deliveryType !== 'pickupOnly') : stores
-  }
-
-
+  
   //handle modal press
   const modalHandler = (order) => {
     setShowModal(true);

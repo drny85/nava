@@ -40,10 +40,11 @@ const App = () => {
     }
 
   }, [])
+  console.log(fontsLoaded)
 
   if (!fontsLoaded) {
     //getCurrentUser();
-    <AppLoading autoHideSplash={true} />
+   return <AppLoading autoHideSplash={true} />
   }
 
   return (

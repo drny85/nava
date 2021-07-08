@@ -1,31 +1,4 @@
 {
-<<<<<<< HEAD
-  "name": "functions",
-  "description": "Cloud Functions for Firebase",
-  "scripts": {
-    "serve": "firebase emulators:start --only functions",
-    "shell": "firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "npm run env && firebase deploy --only functions",
-    "env": "test -f env.json && firebase functions:config:unset env && firebase functions:config:set env=\"$(cat env.json)\" || echo \"Please add the file env.json before deploy.\"",
-    "logs": "firebase functions:log"
-  },
-  "engines": {
-    "node": "16"
-  },
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "firebase-admin": "^8.10.0",
-    "firebase-functions": "^3.14.1",
-    "stripe": "^8.149.0"
-  },
-  "devDependencies": {
-    "firebase-functions-test": "^0.2.3"
-  },
-  "private": true
-=======
 	"name": "functions",
 	"description": "Cloud Functions for Firebase",
 	"scripts": {
@@ -52,5 +25,4 @@
 		"firebase-functions-test": "^0.2.3"
 	},
 	"private": true
->>>>>>> 530181d31e9715508bb321df4f9ae2ff41ca0da9
 }
