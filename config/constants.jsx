@@ -5,6 +5,7 @@ import Constants from 'expo-constants'
 
 
 
+
 export const COLORS = {
   // colors
   black: "#1E1F20",
