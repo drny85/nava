@@ -1,7 +1,7 @@
 {
 	"expo": {
-		"name": "Antojitos",
-		"slug": "Antojitos",
+		"name": "My Antojito",
+		"slug": "My Antojito",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
