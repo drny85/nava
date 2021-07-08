@@ -20,7 +20,7 @@ import { useFonts } from '@expo-google-fonts/montserrat'
 
 const App = () => {
   const { getCurrentUser } = React.useContext(authContext);
-  const [fontsLoaded, error] = useFonts({
+  const [fontsLoaded] = useFonts({
     montserrat: require("./assets/fonts/Montserrat-Regular.ttf"),
     "montserrat-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
     "montserrat-bold-italic": require("./assets/fonts/Montserrat-BoldItalic.ttf"),
@@ -43,7 +43,7 @@ const App = () => {
 
   if (!fontsLoaded) {
     //getCurrentUser();
-    <AppLoading autoHideSplash={true} />
+    return <AppLoading autoHideSplash={true} />
   }
 
   return (
