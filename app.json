@@ -1,7 +1,7 @@
 {
 	"expo": {
 		"name": "My Antojito",
-		"slug": "My Antojito",
+		"slug": "MyAntojito",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
@@ -16,7 +16,7 @@
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": false,
-			"bundleIdentifier": "net.robertdev.melendez.apps",
+			"bundleIdentifier": "net.robertdev.melendez.devapps",
 			"buildNumber": "1.0.0"
 		},
 		"web": {
