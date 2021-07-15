@@ -2,8 +2,8 @@
   "builds": {
     "android": {
       "release": {
-        "workflow": "managed",
-        "releaseChannel": "production"
+        "workflow": "managed"
+       
       },
       "development": {
         "workflow": "managed",

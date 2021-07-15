@@ -304,7 +304,7 @@ const Restaurants = ({ navigation }) => {
           value={searchText}
           //onSubmitEditing={filterRestaurantBySearchItem}
           returnKeyType='search'
-          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3, }}
+          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3,borderColor:COLORS.lightGray, borderWidth:0.5 }}
           placeholderTextColor={COLORS.black} />
         {searching ? (<TouchableOpacity onPress={() => {
           setSearching(false)
@@ -340,7 +340,7 @@ const Restaurants = ({ navigation }) => {
           value={searchText}
           //onSubmitEditing={filterRestaurantBySearchItem}
           returnKeyType='search'
-          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3, }}
+          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3,borderColor:COLORS.lightGray, borderWidth:0.5 }}
           placeholderTextColor={COLORS.black} />
         {searching ? (<TouchableOpacity onPress={() => {
           setSearching(false)
@@ -558,7 +558,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.primary,
+    
   },
   modal: {
     position: "absolute",

@@ -349,7 +349,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: "space-between",
-    backgroundColor: COLORS.tile,
     height: "100%",
   },
   image: {

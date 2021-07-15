@@ -29,19 +29,15 @@ const App = () => {
 
   })
 
-  console.log('MAIN_APP')
+  
 
   useEffect(() => {
-    console.log('MAIN_APP_USE_EFFECT')
+    
     getCurrentUser()
-    return () => {
-
-      //sub && sub()
-    }
+    
 
   }, [])
-  console.log(fontsLoaded)
-
+  
   if (!fontsLoaded) {
     //getCurrentUser();
    return <AppLoading autoHideSplash={true} />

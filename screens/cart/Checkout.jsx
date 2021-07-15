@@ -27,6 +27,8 @@ import { COLORS, FONTS, SIZES } from "../../config";
 import storesContext from "../../context/stores/storesContext";
 
 import useNotifications from "../../hooks/useNotifications";
+import { STRIPE } from "../../config/stripeSettings";
+import axios from "axios";
 
 const MINIMUM_DELIVERY = 5;
 
@@ -34,10 +36,11 @@ const Checkout = ({ route, navigation }) => {
 
   useNotifications()
   //const [paymentOption, updatePaymentMethod] = useState("credit");
-  const { user, loading } = useContext(authContext);
+  const { user} = useContext(authContext);
   const [canContinue, setCanContinue] = useState(false);
   const { cartTotal, itemCounts, cartItems } = useContext(cartContext);
   const [error, setError] = useState(null);
+  const [card, setCard] = useState(false)
   const { deliveryMethod: deliveryOption, setDeliveryMethod, updatePaymentMethod, paymentOption } = useContext(settingsContext);
   const { stores } = useContext(storesContext)
   const restaurants = [...stores];
@@ -46,8 +49,24 @@ const Checkout = ({ route, navigation }) => {
   //const [deliveryOption, setDeliveryOption] = useState(deliveryMethod);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
 
+  const checkIfStoreIsTakingCards = async () => {
+    try {
+      const res = await axios.get(`${STRIPE.PUBLIC_KEY_URL}/${restaurant?.id}`)
+      if (res.data) {
+        setCard(true)
+      }
+
+       
+    } catch (error) {
+      setCard(false)
+      updatePaymentMethod('cash')
+      console.log(error.message)
+    }
+  }
+
 
   const handlePickup = (pickupInfo) => {
+    
     if (paymentOption === "cash") {
       Alert.alert("Payment", "Please select a payment method", [
         { text: "OK", style: "cancel" },
@@ -60,6 +79,7 @@ const Checkout = ({ route, navigation }) => {
       params: {
         deliveryMethod: deliveryOption,
         paymentMethod: paymentOption,
+        takingCard: card,
         customer: { name: user?.name, lastName: user?.lastName, email: user.email, phone: user?.phone, address: null }
       },
     });
@@ -111,6 +131,7 @@ const Checkout = ({ route, navigation }) => {
       screen: "OrderSummary",
       params: {
         deliveryMethod: deliveryOption,
+        takingCard: card,
         paymentMethod: paymentOption,
         customer: { name: user?.name, lastName: user?.lastName, email: user?.email, phone: user?.phone, address: { ...previous } },
       },
@@ -194,6 +215,7 @@ const Checkout = ({ route, navigation }) => {
   useEffect(() => {
 
     checkDeliveryAddress()
+    checkIfStoreIsTakingCards()
 
     return () => {
 
@@ -305,7 +327,13 @@ const Checkout = ({ route, navigation }) => {
                       color:
                         paymentOption === "credit" ? COLORS.white : COLORS.black
                     }}
-                    onPress={() => updatePaymentMethod("credit")}
+                    onPress={() => {
+                      if (card) {
+                        updatePaymentMethod("credit")
+                      } else {
+                        alert('This store is not taking cards payment.')
+                      }
+                    }}
                   />
                   <View style={styles.divider}></View>
                   <Pick
@@ -328,7 +356,13 @@ const Checkout = ({ route, navigation }) => {
                           paymentOption === "credit" ? COLORS.white : COLORS.black,
                       }}
                       type={paymentOption}
-                      onPress={() => updatePaymentMethod("credit")}
+                      onPress={() => {
+                        if (card) {
+                          updatePaymentMethod("credit")
+                        } else {
+                          alert('This store is not taking cards payment.')
+                        }
+                      }}
                     />
                     <View style={styles.divider}></View>
                     <Pick

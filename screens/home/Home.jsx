@@ -117,7 +117,7 @@ const Home = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    
   },
   headerText: {
     fontSize: 22,

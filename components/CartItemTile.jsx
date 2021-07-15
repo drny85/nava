@@ -23,7 +23,7 @@ const CartItemTile = ({ item, onAddMore, onRemove, isDisable }) => {
 				</View>
 				<View style={styles.details}>
 					<View>
-						<Text style={{ ...FONTS.h3, textTransform: 'capitalize', }}>{item.name}</Text>
+						<Text numberOfLines={1} ellipsizeMode='tail' style={{ ...FONTS.h4, textTransform: 'capitalize', }}>{item.name}</Text>
 						<View style={{ flexDirection: "row" }}>
 							<Text style={styles.qty}>
 								{item.quantity} x $
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
 	container: {
 		width: width * 0.95,
 		height: 120,
+		maxHeight:125,
 		backgroundColor: COLORS.secondary,
 		borderRadius: 5,
 		elevation: 10,

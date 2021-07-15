@@ -293,9 +293,11 @@ const OrderSummary = ({ navigation, route }) => {
 
         setPublicKey(res.data)
         //createStripeCustomer()
+      } else {
+        console.log(res.status)
       }
     } catch (error) {
-      console.log("error paying with credit".error)
+      console.log("error paying with credit",error)
     }
   }
 
@@ -416,9 +418,9 @@ const OrderSummary = ({ navigation, route }) => {
   }, [navigation, connected])
 
   console.log(processing)
-  if (loading || !public_key, !customerId) return <Loader />
+  if (loading || !customerId) return <Loader />
 
-  return (
+  if (public_key) return (
     <StripeProvider publishableKey={public_key} merchantIdentifier='net.robertdev.melendez-antojito1'>
       <Screen >
         <View style={{ flex: 1, height: SIZES.height * 0.9 }}>
@@ -597,7 +599,188 @@ const OrderSummary = ({ navigation, route }) => {
         </View>
       </Screen>
     </StripeProvider>
-  );
+  )
+
+  if (!public_key) return (
+    
+      <Screen >
+        <View style={{ flex: 1, height: SIZES.height * 0.9 }}>
+
+          {!connected && (
+            <View style={{ alignContent: 'center', justifyContent: 'center', width: '100%', height: 60, backgroundColor: COLORS.ascent }}>
+              <Text style={{ ...FONTS.h3, textAlign: 'center' }}>No Internet Connection</Text>
+            </View>
+          )}
+          <View style={[styles.listView]}>
+            <View style={styles.storeInfo}>
+              {restaurant && (
+                <>
+                  <Text style={styles.textTitle}>Store Details</Text>
+                  <Text style={styles.text}>{restaurant.name}</Text>
+                  <Text style={styles.text}>{restaurant.street}, {restaurant.city} {restaurant.zipcode}</Text>
+                </>
+              )}
+            </View>
+            <FlatList
+              data={promoDetails ? generateItemDiscounted(cartItems) : cartItems}
+              keyExtractor={(item, index) => item.id + index.toString()}
+              renderItem={({ item }) => (
+                <ListItem
+                  sizes={item.sizes}
+                  name={item.name}
+                  imageUrl={item.imageUrl}
+                  qty={item.quantity}
+                  size={item.size}
+                  price={item.price}
+
+                />
+              )}
+            />
+          </View>
+          {/* //add coupon view */}
+          {restaurant?.chargeCardFee && paymentMethod === 'credit' && (
+            <View style={{ justifyContent: 'center', alignItems: 'flex-end', marginRight: 12 }}>
+              <Text style={{ ...FONTS.body5, fontSize: 11 }}>Service Fee: ${calculateServiceFee()} </Text>
+              <Text style={{ ...FONTS.h4 }}>Total: ${calculateGrandTotal()}</Text>
+            </View>
+          )}
+          <View style={{ height: promoDetails ? 60 : 35, alignItems: 'flex-start', marginLeft: SIZES.padding * 0.5 }}>
+            <Button disabled={promoDetails !== null} title='Add Coupon' onPress={() => setCouponModal(true)} />
+            {promoDetails && (
+              <View style={{ width: SIZES.width, height: 25, flexDirection: 'row', alignItems: 'center', marginLeft: SIZES.padding * 0.3, }}>
+                <Text style={{ color: 'green', ...FONTS.body5 }}>Promo code {promoDetails?.code.toUpperCase()} was applied - {promoDetails?.value}%</Text>
+                <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => {
+                  setPromoCode('')
+                  setCouponModal(false)
+                  setDiscountedPrice(null)
+                  setPromoDetails(null)
+
+                }} >
+                  <Text style={{ color: 'red', marginLeft: 10, fontSize: 20, textAlign: 'center' }}>x</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+          <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={100} behavior='padding'>
+            <ScrollView bounces={true} style={styles.details}>
+              {deliveryMethod === "pickup" ? (
+                <>
+                  <Text
+                    style={{
+                      ...FONTS.h4,
+                      marginBottom: 20,
+                    }}
+                  >
+                    Important information about your order {customer.name}
+                  </Text>
+                  <Text style={{ ...FONTS.body5 }}>
+                    You will be picking up this order at the restaurant
+            </Text>
+                </>
+              ) : (
+                  <>
+                    <View>
+                      <CardSummaryItem
+                        onPress={() => navigation.goBack()}
+                        title="Your order will be delivered to:"
+                        subtitle={`${customer.address.street} ${customer.address.apt && customer.address.apt
+                          }`}
+                        misc={`${customer.address.city}, ${customer.address.zipcode}`}
+                      />
+                      <CardSummaryItem
+                        onPress={() => navigation.goBack()}
+                        title="You might be contacted at:"
+                        subtitle={`Phone: ${customer.phone}`}
+                        misc={`Email: ${customer.email}`}
+                      />
+                    </View>
+                    <Divider />
+                    <View style={styles.deliveryInstruction}>
+                      <Text style={{ fontFamily: 'montserrat', fontSize: 16, paddingVertical: 5, }}>Delivery Instructions</Text>
+                      <TextInput onChangeText={text => setInstrction(text)} numberOfLines={2} value={instruction} style={styles.input} placeholder='Ex. Ring the bell' />
+                    </View>
+                  </>
+                )}
+
+              {paymentMethod === "cash" && deliveryMethod === "pickup" && (
+                <Text>Handle cash pickup</Text>
+              )}
+              {paymentMethod === "credit" && deliveryMethod === "pickup" && (
+                <View>
+                  <Text style={{ ...FONTS.body5 }}>
+                    You will pay with debit or credit card, please have it ready.
+            </Text>
+                  <Divider />
+                  <Text style={[styles.text]}>
+                    Just click Pay Now at the bottom to enter your card information.
+            </Text>
+                </View>
+              )}
+              {paymentMethod === "in store" && deliveryMethod === "pickup" && (
+                <View style={[styles.pickup, { alignItems: 'center', justifyContent: 'center' }]}>
+                  <Text style={{ ...FONTS.body5 }}>
+                    You will pay for this order at the store
+            </Text>
+                  <Text style={{ ...FONTS.body5 }}>
+                    You can pay with cash or credit / debit card
+            </Text>
+                  <View style={styles.totalView}>
+                    <Text style={[styles.title, { paddingBottom: 10 }]}>Order Total</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: promoDetails ? 'space-evenly' : 'center', width: SIZES.width }}>
+                      <Text style={{ fontWeight: "bold", fontSize: 34, textDecorationLine: promoDetails ? 'line-through' : 'none', textDecorationColor: 'red', color: promoDetails ? 'red' : COLORS.secondary, textDecorationStyle: 'solid', opacity: promoDetails ? 0.6 : 1 }}>
+                        ${cartTotal.toFixed(2)}
+                      </Text>
+                      {promoDetails && (<Text style={{ fontWeight: "bold", fontSize: 34 }}>${discountedPrice?.toFixed(2)}</Text>)}
+                    </View>
+
+                  </View>
+                </View>
+              )}
+              {paymentMethod === "cash" && deliveryMethod === "delivery" && (
+                <View style={styles.infoView}>
+                  <Text style={styles.infotext}>
+                    Your order total is ${promoDetails ? parseFloat(discountedPrice).toFixed(2) : cartTotal.toFixed(2)}, please have this
+              amount available in cash. Always be generous and tip the delivery
+              guy.
+            </Text>
+                </View>
+              )}
+
+
+            </ScrollView>
+          </KeyboardAvoidingView>
+
+          <Modal onDismiss={() => setPromoCode('')} visible={couponModal} animationType='slide' style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: SIZES.height, width: SIZES.width }}>
+            <View style={{ position: 'absolute', top: 60, left: 20, zIndex: 99 }}>
+              <FloatingButton iconName="x" onPress={() => setCouponModal(false)} />
+            </View>
+            <View style={{ flex: 1, height: SIZES.height * 0.9, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ ...FONTS.body2, paddingBottom: 25 }}>Coupon Code</Text>
+              <TextInput style={{
+                width: '90%', backgroundColor: COLORS.ascent, padding: SIZES.padding * 0.7,
+                borderRadius: SIZES.padding * 0.7 * 2, color: COLORS.white, marginBottom: SIZES.padding * 0.7
+              }} autoCapitalize={'characters'} placeholderTextColor={COLORS.secondary}
+                onChangeText={text => setPromoCode(text.toUpperCase())} value={promoCode} placeholder="Enter Promo Code" />
+              {promoDetails && (<Text style={{ ...FONTS.body5, color: 'green' }}>{`${promoDetails.code.toUpperCase()} was applied. ${promoDetails.value}% off`}</Text>)}
+              <Button title={promoDetails ? 'Done' : 'Apply Coupon'} onPress={promoDetails ? () => setCouponModal(false) : handleCouponCode} />
+            </View>
+
+
+          </Modal>
+
+        </View>
+        <View style={{ bottom: 8, width: "100%", height: SIZES.height * 0.08 }}>
+          <AppButton
+            disabled={!connected || processing}
+            style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: 5 }}
+            title={paymentMethod === "credit" ? `Pay $${calculateGrandTotal()}` : processing ? 'Processing..' : "Place Order"}
+            onPress={handlePayment}
+          />
+
+        </View>
+      </Screen>
+    
+  )
 };
 
 const styles = StyleSheet.create({
