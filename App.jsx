@@ -29,18 +29,18 @@ const App = () => {
 
   })
 
-  
+
 
   useEffect(() => {
-    
+
     getCurrentUser()
-    
+
 
   }, [])
-  
+
   if (!fontsLoaded) {
     //getCurrentUser();
-   return <AppLoading autoHideSplash={true} />
+    return <AppLoading autoHideSplash={true} />
   }
 
   return (

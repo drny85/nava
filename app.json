@@ -16,7 +16,7 @@
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": false,
-			"bundleIdentifier": "net.robertdev.melendez.devapps",
+			"bundleIdentifier": "net.robertdev.melendez.apps",
 			"buildNumber": "1.0.0"
 		},
 		"web": {
