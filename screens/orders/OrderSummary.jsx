@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -16,7 +16,7 @@ import {
   Button
 } from "react-native";
 
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { STRIPE } from '../../config/stripeSettings'
 import authContext from "../../context/auth/authContext";
 import Screen from "../../components/Screen";
@@ -36,10 +36,10 @@ import Divider from "../../components/Divider";
 import { COLORS, FONTS, SIZES } from "../../config";
 import Loader from "../../components/Loader";
 import Axios from "axios";
+import call from "react-native-phone-call";
 import FloatingButton from "../../components/FloatingButton";
 import { db } from '../../services/database'
 import { useStripe, StripeProvider } from '@stripe/stripe-react-native'
-import { diffClamp } from "react-native-reanimated";
 
 
 
@@ -80,6 +80,14 @@ const OrderSummary = ({ navigation, route }) => {
       }
     })
   }
+
+  const makeCall = async () => {
+    try {
+      await call({ number: restaurant.phone, prompt: false });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleCouponCode = async () => {
     if (promoCode === '') {
@@ -420,7 +428,6 @@ const OrderSummary = ({ navigation, route }) => {
     })
   }, [navigation, connected])
 
-  console.log(processing)
   if (loading || !customerId) return <Loader />
 
   if (public_key) return (
@@ -437,7 +444,14 @@ const OrderSummary = ({ navigation, route }) => {
             <View style={styles.storeInfo}>
               {restaurant && (
                 <>
-                  <Text style={styles.textTitle}>Store Details</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <Text style={styles.textTitle}>Store Details</Text>
+
+                    <TouchableOpacity onPress={makeCall} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                      <MaterialCommunityIcons style={{ paddingRight: 5 }} name='phone-in-talk' color='#495EF3' />
+                      <Text style={{ ...FONTS.body4, color: '#495EF3' }}>{restaurant.phone}</Text>
+                    </TouchableOpacity>
+                  </View>
                   <Text style={styles.text}>{restaurant.name}</Text>
                   <Text style={styles.text}>{restaurant.street}, {restaurant.city} {restaurant.zipcode}</Text>
                 </>
@@ -618,7 +632,14 @@ const OrderSummary = ({ navigation, route }) => {
           <View style={styles.storeInfo}>
             {restaurant && (
               <>
-                <Text style={styles.textTitle}>Store Details</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                  <Text style={styles.textTitle}>Store Details</Text>
+
+                  <TouchableOpacity onPress={makeCall} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <MaterialCommunityIcons style={{ paddingRight: 5 }} name='phone-in-talk' color='#495EF3' />
+                    <Text style={{ ...FONTS.body4, color: '#495EF3' }}>{restaurant.phone}</Text>
+                  </TouchableOpacity>
+                </View>
                 <Text style={styles.text}>{restaurant.name}</Text>
                 <Text style={styles.text}>{restaurant.street}, {restaurant.city} {restaurant.zipcode}</Text>
               </>
@@ -720,7 +741,7 @@ const OrderSummary = ({ navigation, route }) => {
               </View>
             )}
             {paymentMethod === "in store" && deliveryMethod === "pickup" && (
-              <View style={[styles.pickup, { alignItems: 'center', justifyContent: 'center' }]}>
+              <View style={[styles.pickup,]}>
                 <Text style={{ ...FONTS.body5 }}>
                   You will pay for this order at the store
             </Text>
@@ -853,7 +874,7 @@ const styles = StyleSheet.create({
   },
   storeInfo: {
     width: '100%',
-    padding: 8,
+    padding: SIZES.padding * 0.5,
     alignItems: 'flex-start',
     justifyContent: 'center',
     flexDirection: 'column',

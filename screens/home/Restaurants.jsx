@@ -78,7 +78,7 @@ const Restaurants = ({ navigation }) => {
 
   }
 
-  
+
   //handle modal press
   const modalHandler = (order) => {
     setShowModal(true);
@@ -304,7 +304,7 @@ const Restaurants = ({ navigation }) => {
           value={searchText}
           //onSubmitEditing={filterRestaurantBySearchItem}
           returnKeyType='search'
-          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3,borderColor:COLORS.lightGray, borderWidth:0.5 }}
+          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3, borderColor: COLORS.lightGray, borderWidth: 0.5 }}
           placeholderTextColor={COLORS.black} />
         {searching ? (<TouchableOpacity onPress={() => {
           setSearching(false)
@@ -340,7 +340,7 @@ const Restaurants = ({ navigation }) => {
           value={searchText}
           //onSubmitEditing={filterRestaurantBySearchItem}
           returnKeyType='search'
-          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3,borderColor:COLORS.lightGray, borderWidth:0.5 }}
+          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3, borderColor: COLORS.lightGray, borderWidth: 0.5 }}
           placeholderTextColor={COLORS.black} />
         {searching ? (<TouchableOpacity onPress={() => {
           setSearching(false)
@@ -537,11 +537,11 @@ const Restaurants = ({ navigation }) => {
                 alignItems: "center",
                 justifyContent: "center",
                 borderRadius: SIZES.radius * 3,
-                borderColor: COLORS.lightGray,
+                borderColor: COLORS.light,
                 borderWidth: 2,
               }}
             >
-              <Text style={{ paddingVertical: 15, textAlign: "center" }}>
+              <Text style={{ paddingVertical: 15, textAlign: "center", ...FONTS.h4 }}>
                 Cancel
               </Text>
             </TouchableOpacity>
@@ -558,7 +558,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    
+
   },
   modal: {
     position: "absolute",
@@ -568,7 +568,7 @@ const styles = StyleSheet.create({
     right: 0,
     width: SIZES.width,
     height: "60%",
-    backgroundColor: COLORS.ascent,
+    backgroundColor: COLORS.lightGray,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
   },
