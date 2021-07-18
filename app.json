@@ -4,7 +4,7 @@
 		"slug": "RobertApps",
 		"version": "1.0.2",
 		"orientation": "portrait",
-		"icon": "./assets/antojito.png",
+		"icon": "./assets/icon.png",
 		"splash": {
 			"image": "./assets/splash.png",
 			"resizeMode": "cover",
@@ -21,7 +21,8 @@
 			"infoPlist": {
 				"NSLocationWhenInUseUsageDescription": "We need your location to show you nearby stores / restaurants",
 				"NSLocationAlwaysUsageDescription": "We need your location to show you nearby stores / restaurants",
-				"NSCameraUsageDescription": "We need to access your camara for you to change your profile picture"
+				"NSCameraUsageDescription": "We need to access your camara for you to change your profile picture",
+				"NSPhotoLibraryUsageDescription": "We need to access your photos library for you profile picture"
 			}
 		},
 		"web": {

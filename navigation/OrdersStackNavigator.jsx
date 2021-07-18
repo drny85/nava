@@ -1,12 +1,9 @@
 import React from "react";
-import { TouchableWithoutFeedback } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 import MyOrders from "../screens/orders/MyOrders";
 import OrderConfirmation from "../screens/orders/OrderConfirmation";
-import OrderSummary from "../screens/orders/OrderSummary";
-import OrderVerification from "../screens/orders/OrderVerification";
 import { useNavigation } from "@react-navigation/native";
 import OrderDetails from "../screens/orders/OrderDetails";
 import OrderInTheMaking from "../screens/orders/OrderInTheMaking";
@@ -53,17 +50,6 @@ const OrdersStackNavigator = ({ route }) => {
         options={{
           title: "Order Details",
           headerTitleStyle: { ...FONTS.h3 },
-        }}
-      />
-      <OrdersStack.Screen
-        name="OrderVerification"
-        component={OrderVerification}
-
-        options={{
-
-          headerShown: null,
-          unmountOnBlur: true,
-
         }}
       />
     </OrdersStack.Navigator>
