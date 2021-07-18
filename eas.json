@@ -2,7 +2,8 @@
 	"builds": {
 		"android": {
 			"release": {
-				"workflow": "managed"
+				"workflow": "managed",
+				"cache.key": {}
 			},
 			"development": {
 				"workflow": "managed",
@@ -13,13 +14,15 @@
 		"ios": {
 			"release": {
 				"workflow": "managed",
-				"releaseChannel": "production"
+				"releaseChannel": "production",
+				"cache.key": {}
 			},
 			"development": {
 				"workflow": "managed",
 				"buildType": "development-client",
 				"distribution": "internal",
-				"releaseChannel": "staging"
+				"releaseChannel": "staging",
+				"cache.key": {}
 			}
 		}
 	}
