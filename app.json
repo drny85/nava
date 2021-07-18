@@ -1,49 +1,51 @@
 {
-	"expo": {
-		"name": "My Antojito",
-		"slug": "RobertApps",
-		"version": "1.0.3",
-		"orientation": "portrait",
-		"icon": "./assets/icon.png",
-		"splash": {
-			"image": "./assets/splash.png",
-			"resizeMode": "cover",
-			"backgroundColor": "#ffffff"
-		},
-		"updates": {
-			"fallbackToCacheTimeout": 0
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": false,
-			"bundleIdentifier": "net.robertdev.melendez.dev",
-			"buildNumber": "1.0.3",
-			"infoPlist": {
-				"NSLocationWhenInUseUsageDescription": "We need your location to show you nearby stores / restaurants",
-				"NSLocationAlwaysUsageDescription": "We need your location to show you nearby stores / restaurants",
-				"NSCameraUsageDescription": "We need to access your camara for you to change your profile picture",
-				"NSPhotoLibraryUsageDescription": "We need to access your photos library for you profile picture"
-			}
-		},
-		"web": {
-			"favicon": "./assets/favicon.png"
-		},
-		"extra": {
-			"apiKey": "AIzaSyBYxZ7c3saf5zHkXpDgXIkSzoIR6ogHbtg",
-			"authDomain": "grocery-409ef.firebaseapp.com",
-			"databaseURL": "https://grocery-409ef.firebaseio.com",
-			"projectId": "grocery-409ef",
-			"storageBucket": "grocery-409ef.appspot.com",
-			"messagingSenderId": "897113180247",
-			"appId": "1:897113180247:web:131d1ce3d7fddaeba13b12",
-			"measurementId": "G-FWR2GHNDSM",
-			"bugsnag": {
-				"apiKey": "8cc5d21c704443e3bf140192faa651b7"
-			}
-		},
-		"android": {
-			"useNextNotificationsApi": true
-		},
-		"description": "Impelemented Apple Pay"
-	}
+  "expo": {
+    "name": "My Antojito",
+    "slug": "RobertApps",
+    "version": "1.0.3",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "net.robertdev.melendez.dev",
+      "buildNumber": "1.0.3",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We need your location to show you nearby stores / restaurants",
+        "NSLocationAlwaysUsageDescription": "We need your location to show you nearby stores / restaurants",
+        "NSCameraUsageDescription": "We need to access your camara for you to change your profile picture",
+        "NSPhotoLibraryUsageDescription": "We need to access your photos library for you profile picture"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "apiKey": "AIzaSyBYxZ7c3saf5zHkXpDgXIkSzoIR6ogHbtg",
+      "authDomain": "grocery-409ef.firebaseapp.com",
+      "databaseURL": "https://grocery-409ef.firebaseio.com",
+      "projectId": "grocery-409ef",
+      "storageBucket": "grocery-409ef.appspot.com",
+      "messagingSenderId": "897113180247",
+      "appId": "1:897113180247:web:131d1ce3d7fddaeba13b12",
+      "measurementId": "G-FWR2GHNDSM",
+      "bugsnag": {
+        "apiKey": "8cc5d21c704443e3bf140192faa651b7"
+      }
+    },
+    "android": {
+      "useNextNotificationsApi": true
+    },
+    "description": "changed App Icon"
+  }
 }
