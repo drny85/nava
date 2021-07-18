@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "My Antojito",
 		"slug": "RobertApps",
-		"version": "1.0.2",
+		"version": "1.0.3",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -17,7 +17,7 @@
 		"ios": {
 			"supportsTablet": false,
 			"bundleIdentifier": "net.robertdev.melendez.dev",
-			"buildNumber": "1.0.2",
+			"buildNumber": "1.0.3",
 			"infoPlist": {
 				"NSLocationWhenInUseUsageDescription": "We need your location to show you nearby stores / restaurants",
 				"NSLocationAlwaysUsageDescription": "We need your location to show you nearby stores / restaurants",
