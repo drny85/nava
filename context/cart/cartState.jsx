@@ -12,8 +12,7 @@ import {
 	GET_CART_ITEMS,
 	REMOVE_FROM_CART,
 } from "../types";
-import ShoppingCart from "../../models/ShoppingCart";
-import CarItem from "../../models/CartItem";
+
 
 const CartState = (props) => {
 	const initialState = {

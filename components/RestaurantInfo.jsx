@@ -94,9 +94,9 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
           <View style={styles.hours}>
             <Text
               style={{
-                ...FONTS.body3,
+                ...FONTS.h3,
                 textDecorationLine: "underline",
-                fontFamily: 'montserrat-bold',
+
                 textDecorationColor: COLORS.lightGray,
               }}
             >
@@ -127,9 +127,9 @@ const RestaurantInfo = ({ restaurant, onPress }) => {
         )}
 
         <TouchableOpacity style={styles.btn} onPress={makeCall}>
-          <Feather name="phone" size={24} color={COLORS.primary} />
+          <Feather name="phone" size={24} color={COLORS.black} />
           <Text
-            style={{ marginHorizontal: 8, fontSize: 18, color: COLORS.primary }}
+            style={{ marginHorizontal: 8, ...FONTS.h4, color: COLORS.black }}
           >
             Call Restaurant
           </Text>
@@ -146,10 +146,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
     marginVertical: 20,
     height: 50,
+    borderColor: COLORS.black,
+    borderWidth: 0.5,
     width: SIZES.width * 0.6,
+    borderRadius: SIZES.radius * 2,
   },
   container: {
     flex: 1,
@@ -195,9 +198,8 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
   },
   text: {
-    fontSize: 16,
-    fontFamily: "montserrat",
-    padding: 5,
+    ...FONTS.body3,
+    padding: 3,
     textTransform: "uppercase",
   },
 });

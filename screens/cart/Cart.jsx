@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: COLORS.background,
   },
   btn: {
     backgroundColor: COLORS.secondary,
