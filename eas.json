@@ -15,7 +15,7 @@
 			"release": {
 				"workflow": "managed",
 				"releaseChannel": "production",
-				"cache.key": {}
+				"cache": { "key": "" }
 			},
 			"development": {
 				"workflow": "managed",

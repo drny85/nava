@@ -1,8 +1,8 @@
 {
 	"expo": {
-		"name": "My Delicias",
+		"name": "My Antojito",
 		"slug": "RobertApps",
-		"version": "1.0.4",
+		"version": "1.0.3",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -16,8 +16,8 @@
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": false,
-			"bundleIdentifier": "net.robertdev.melendez.devapps",
-			"buildNumber": "1.0.4",
+			"bundleIdentifier": "net.robertdev.melendez.dev",
+			"buildNumber": "1.0.3",
 			"infoPlist": {
 				"NSLocationWhenInUseUsageDescription": "We need your location to show you nearby stores / restaurants",
 				"NSLocationAlwaysUsageDescription": "We need your location to show you nearby stores / restaurants",
@@ -44,6 +44,6 @@
 		"android": {
 			"useNextNotificationsApi": true
 		},
-		"description": "changed App Icon"
+		"description": "Impelemented Apple Pay"
 	}
 }
