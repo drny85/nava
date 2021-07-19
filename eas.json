@@ -3,7 +3,7 @@
 		"android": {
 			"release": {
 				"workflow": "managed",
-				"cache.key": {}
+				"cache": { "key": "cahes" }
 			},
 			"development": {
 				"workflow": "managed",
@@ -21,8 +21,7 @@
 				"workflow": "managed",
 				"buildType": "development-client",
 				"distribution": "internal",
-				"releaseChannel": "staging",
-				"cache.key": {}
+				"releaseChannel": "staging"
 			}
 		}
 	}
