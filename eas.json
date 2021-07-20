@@ -5,7 +5,6 @@
 				"workflow": "managed",
 				"cache": { "key": "cahes" },
 				"releaseChannel": "production",
-				"extends": "base",
 				"env": {
 					"ENVIRONMENT": "production"
 				},
