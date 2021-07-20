@@ -55,6 +55,7 @@
 		"react-native-web": "~0.13.12",
 		"react-navigation-shared-element": "^5.0.0-alpha1",
 		"stripe": "^8.163.0",
+		"unimodules-permissions-interface": "^6.1.0",
 		"yup": "^0.29.1"
 	},
 	"devDependencies": {
