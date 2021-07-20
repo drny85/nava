@@ -1,7 +1,7 @@
 import { Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
-import Constants from 'expo-constants'
+import { Constants } from 'react-native-unimodules'
 
 
 

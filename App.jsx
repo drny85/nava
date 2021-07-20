@@ -17,7 +17,6 @@ import StoresState from "./context/stores/storesState";
 import { useFonts } from '@expo-google-fonts/montserrat'
 
 
-
 const App = () => {
   const { getCurrentUser } = React.useContext(authContext);
   const [fontsLoaded] = useFonts({
