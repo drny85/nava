@@ -3,7 +3,13 @@
 		"android": {
 			"release": {
 				"workflow": "managed",
-				"cache": { "key": "cahes" }
+				"cache": { "key": "cahes" },
+				"releaseChannel": "production",
+				"extends": "base",
+				"env": {
+					"ENVIRONMENT": "production"
+				},
+				"buildType": "app-bundle"
 			},
 			"development": {
 				"workflow": "managed",
