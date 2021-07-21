@@ -781,9 +781,9 @@ const OrderSummary = ({ navigation, route }) => {
           <View style={{ flex: 1, height: SIZES.height * 0.9, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={{ ...FONTS.body2, paddingBottom: 25 }}>Coupon Code</Text>
             <TextInput style={{
-              width: '90%', backgroundColor: COLORS.ascent, padding: SIZES.padding * 0.7,
-              borderRadius: SIZES.padding * 0.7 * 2, color: COLORS.white, marginBottom: SIZES.padding * 0.7
-            }} autoCapitalize={'characters'} placeholderTextColor={COLORS.secondary}
+              width: '90%', backgroundColor: COLORS.light, padding: SIZES.padding * 0.7,
+              borderRadius: SIZES.padding * 0.7 * 2, color: COLORS.black, marginBottom: SIZES.padding * 0.7
+            }} autoCapitalize={'characters'} placeholderTextColor={COLORS.lightGray}
               onChangeText={text => setPromoCode(text.toUpperCase())} value={promoCode} placeholder="Enter Promo Code" />
             {promoDetails && (<Text style={{ ...FONTS.body5, color: 'green' }}>{`${promoDetails.code.toUpperCase()} was applied. ${promoDetails.value}% off`}</Text>)}
             <Button title={promoDetails ? 'Done' : 'Apply Coupon'} onPress={promoDetails ? () => setCouponModal(false) : handleCouponCode} />

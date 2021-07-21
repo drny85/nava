@@ -32,6 +32,7 @@ const validationSchema = Yup.object().shape({
   // phone: Yup.string().required().min(9).label("Phone"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(6).label("Password"),
+  confirm: Yup.string().required().min(6).label("Password confirmation"),
 });
 
 const Signup = ({ route }) => {
@@ -48,6 +49,11 @@ const Signup = ({ route }) => {
     try {
       if (phone.length < 10) {
         alert('Phone is invalid')
+        return;
+      }
+
+      if (values.password !== values.confirm) {
+        alert('Passwords must match')
         return;
       }
       const data = await signup(values.email.trim(), values.password.trim());
@@ -118,6 +124,7 @@ const Signup = ({ route }) => {
                 phone: phone,
                 email: "",
                 password: "",
+                confirm: ''
               }}
               onSubmit={handleSignup}
               validationSchema={validationSchema}
@@ -140,10 +147,15 @@ const Signup = ({ route }) => {
                 iconName="phone"
                 name="phone"
                 value={phone}
-                maxLength={10}
+                minLength={10}
+                maxLength={14}
                 onChangeText={text => {
-                  setPhone(
-                    formatPhone(text))
+                  setPhone(text)
+                  if (text.length >= 10) {
+                    setPhone(
+                      formatPhone(text))
+                  }
+
 
                 }}
                 keyboardType="phone-pad"
@@ -162,6 +174,14 @@ const Signup = ({ route }) => {
               <AppFormField
                 placeholder="Password"
                 name="password"
+                secureTextEntry={true}
+                autoCorrect={false}
+                iconName="lock-open"
+                textContentType="password"
+              />
+              <AppFormField
+                placeholder="Confirm Password"
+                name="confirm"
                 secureTextEntry={true}
                 autoCorrect={false}
                 iconName="lock-open"

@@ -76,9 +76,9 @@ const ProfileStackNavigator = ({ navigation }) => {
         options={{ title: "My Addresses", headerBackTitle: "Profile", headerBackTitleStyle: { color: COLORS.secondary } }}
       />
       <ProfileStack.Screen name="Favorites" component={MyFavorites} options={{ headerBackTitleStyle: { color: COLORS.black } }} />
-      <ProfileStack.Screen name="Signin" component={Signin} options={{ headerBackTitleStyle: { color: COLORS.secondary, } }} />
+      <ProfileStack.Screen name="Signin" component={Signin} options={{ headerBackTitleStyle: { color: COLORS.black, } }} />
       <ProfileStack.Screen name="MyOrders" component={MyOrders} options={{ title: 'My Orders', headerBackTitleStyle: { color: COLORS.black }, headerBackTitle: null }} />
-      <ProfileStack.Screen name="Signup" component={Signup} />
+      <ProfileStack.Screen name="Signup" component={Signup} options={{ headerBackTitleStyle: { color: COLORS.black, } }} />
       <ProfileStack.Screen name="Business" component={BusinessAccount} />
       <ProfileStack.Screen name="ApplicationDetails" component={ApplicationDetails} />
     </ProfileStack.Navigator>

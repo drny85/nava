@@ -5,7 +5,6 @@ import authContext from "../context/auth/authContext";
 import { Platform } from "react-native";
 import { auth } from "firebase";
 import Constant from "expo-constants";
-import { useNavigation } from "@react-navigation/native";
 
 
 Notifications.setNotificationHandler({
@@ -27,8 +26,13 @@ const useNotifications = (notificationListener) => {
 		// return () => notificationListener && notificationListener()
 	}, []);
 
-	const saveToken = async (token) => {
-		saveExpoPushToken(user.id, token);
+	const saveToken = async (id, token) => {
+		try {
+			saveExpoPushToken(id, token);
+		} catch (error) {
+			console.log('Error @saving token')
+		}
+
 	};
 
 	const registerForPushNotificationsAsync = async () => {
@@ -49,19 +53,20 @@ const useNotifications = (notificationListener) => {
 				const token = await Notifications.getExpoPushTokenAsync();
 				const id = auth().currentUser.uid;
 				if (!user?.pushToken) {
-					saveToken(token.data)
+					saveToken(id, token.data)
 				}
 
 			}
 
-			if (Platform.OS === "android") {
-				Notifications.createChannelAndroidAsync("default", {
-					name: "default",
-					sound: true,
-					priority: "max",
-					vibrate: [0, 250, 250, 250],
+			if (Platform.OS === 'android') {
+				Notifications.setNotificationChannelAsync('default', {
+					name: 'default',
+					importance: Notifications.AndroidImportance.MAX,
+					vibrationPattern: [0, 250, 250, 250],
+					lightColor: '#FF231F7C',
 				});
 			}
+
 		} catch (error) {
 			console.log("Error from expo hooks", error);
 		}
