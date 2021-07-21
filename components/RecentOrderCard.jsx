@@ -25,6 +25,8 @@ const RecentOrderCard = ({ order, onPress }) => {
         <LinearGradient colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.1)']} style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', }}>
 
           <Text
+            numberOfLines={1}
+            ellipsizeMode='tail'
             style={{
               textTransform: "capitalize",
               fontFamily: 'lobster',
@@ -35,10 +37,11 @@ const RecentOrderCard = ({ order, onPress }) => {
           >
             {order.restaurant.name}
           </Text>
-          <Text style={{
-            ...FONTS.body4,
-            color: COLORS.white
-          }}>
+          <Text numberOfLines={1}
+            ellipsizeMode='tail' style={{
+              ...FONTS.body4,
+              color: COLORS.white
+            }}>
             {order.items[0].name}
           </Text>
 

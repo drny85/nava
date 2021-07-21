@@ -14,7 +14,7 @@ import storesContext from "../../context/stores/storesContext";
 import { COLORS } from "../../config";
 
 
-const MINIMUM_DELIVERY = 10;
+const MINIMUM_DELIVERY = 5;
 
 const Cart = ({ navigation }) => {
   const [deleting, setDeleting] = useState(false);

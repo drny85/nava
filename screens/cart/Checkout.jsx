@@ -29,6 +29,7 @@ import storesContext from "../../context/stores/storesContext";
 import useNotifications from "../../hooks/useNotifications";
 import { STRIPE } from "../../config/stripeSettings";
 import axios from "axios";
+import Toogler from "../../components/Toogler";
 
 const MINIMUM_DELIVERY = 5;
 
@@ -36,7 +37,7 @@ const Checkout = ({ route, navigation }) => {
 
   useNotifications()
   //const [paymentOption, updatePaymentMethod] = useState("credit");
-  const { user} = useContext(authContext);
+  const { user } = useContext(authContext);
   const [canContinue, setCanContinue] = useState(false);
   const { cartTotal, itemCounts, cartItems } = useContext(cartContext);
   const [error, setError] = useState(null);
@@ -56,7 +57,7 @@ const Checkout = ({ route, navigation }) => {
         setCard(true)
       }
 
-       
+
     } catch (error) {
       setCard(false)
       updatePaymentMethod('cash')
@@ -66,7 +67,7 @@ const Checkout = ({ route, navigation }) => {
 
 
   const handlePickup = (pickupInfo) => {
-    
+
     if (paymentOption === "cash") {
       Alert.alert("Payment", "Please select a payment method", [
         { text: "OK", style: "cancel" },
@@ -223,6 +224,7 @@ const Checkout = ({ route, navigation }) => {
 
   }, [previous, route.params]);
 
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -244,139 +246,47 @@ const Checkout = ({ route, navigation }) => {
           </Animatable.View>
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <Text style={styles.title}>Delivery Option</Text>
-            <View style={styles.delivery}>
-              <TouchableOpacity
-
-                onPress={() => {
-                  handleDeliveryType("delivery")
-                  if (!deliveryAddress) {
-                    setCanContinue(false)
-                  } else {
-                    setCanContinue(true)
-                  }
-
-                }}
-                style={{
-                  height: "100%",
-
-                  backgroundColor:
-                    deliveryOption === "delivery" ? COLORS.secondary : COLORS.white,
-                  width: "50%",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "row",
-                }}
-              >
-                <View>
-                  <Text
-                    style={{
-
-                      ...FONTS.h2,
-                      color:
-                        deliveryOption === "delivery"
-                          ? COLORS.white
-                          : COLORS.black
-                    }}
-                  >
-                    Delivery
-                </Text>
-                </View>
-              </TouchableOpacity>
-              <View style={styles.divider}></View>
-              <TouchableOpacity
-
-                onPress={() => {
-                  handleDeliveryType("pickup")
+            <Toogler
+              width={SIZES.width * 0.9}
+              height={50}
+              condition={deliveryOption} leftCondition='delivery' rightCondition='pickup' onPressLeft={() => {
+                handleDeliveryType("delivery")
+                if (!deliveryAddress) {
+                  setCanContinue(false)
+                } else {
                   setCanContinue(true)
-                }}
-                style={{
-                  height: "100%",
-
-                  backgroundColor:
-                    deliveryOption === "pickup" ? COLORS.secondary : COLORS.white,
-                  width: "50%",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "row",
-                }}
-              >
-                <View>
-                  <Text
-                    style={{
-                      ...FONTS.h2,
-                      color:
-                        deliveryOption === "pickup" ? COLORS.white : COLORS.black,
-                    }}
-                  >
-                    Pick up
-                </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+                }
+              }} onPressRight={() => {
+                handleDeliveryType("pickup")
+                setCanContinue(true)
+              }} />
           </View>
-          <View style={{ alignItems: "center" }}>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.title}>Payment Option</Text>
-            <View style={styles.delivery}>
-              {deliveryOption === "delivery" ? (
-                <>
-                  <Pick
-                    title="credit"
-                    type={paymentOption}
-                    style={{
-                      ...FONTS.h2,
-                      color:
-                        paymentOption === "credit" ? COLORS.white : COLORS.black
-                    }}
-                    onPress={() => {
-                      if (card) {
-                        updatePaymentMethod("credit")
-                      } else {
-                        alert('This store is not taking cards payment.')
-                      }
-                    }}
-                  />
-                  <View style={styles.divider}></View>
-                  <Pick
-                    title="cash"
-                    style={{
-                      ...FONTS.h2,
-                      color:
-                        paymentOption === "cash" ? COLORS.white : COLORS.black,
-                    }}
-                    type={paymentOption}
-                    onPress={() => updatePaymentMethod("cash")}
-                  />
-                </>
-              ) : (
-                  <>
-                    <Pick
-                      title="credit"
-                      style={{
-                        color:
-                          paymentOption === "credit" ? COLORS.white : COLORS.black,
-                      }}
-                      type={paymentOption}
-                      onPress={() => {
-                        if (card) {
-                          updatePaymentMethod("credit")
-                        } else {
-                          alert('This store is not taking cards payment.')
-                        }
-                      }}
-                    />
-                    <View style={styles.divider}></View>
-                    <Pick
-                      title="in store"
-                      style={{
-                        color:
-                          paymentOption === "in store" ? COLORS.white : COLORS.black,
-                      }}
-                      type={paymentOption}
-                      onPress={() => updatePaymentMethod("in store")}
-                    />
-                  </>
-                )}
-            </View>
+            {deliveryOption === 'delivery' && (
+              <Toogler condition={paymentOption} leftCondition='credit' rightCondition='cash' width={SIZES.width * 0.9} height={50}
+                onPressLeft={() => {
+                  if (card) {
+                    updatePaymentMethod("credit")
+                  } else {
+                    alert('This store is not taking cards payment.')
+                  }
+                }}
+                onPressRight={() => {
+                  updatePaymentMethod('cash')
+                }}
+              />
+            )}
+            {deliveryOption === 'pickup' && (
+              <Toogler condition={paymentOption} leftCondition='credit' rightCondition='in store' onPressLeft={() => {
+                if (card) {
+                  updatePaymentMethod("credit")
+                } else {
+                  alert('This store is not taking cards payment.')
+                }
+              }} onPressRight={() => updatePaymentMethod('in store')} width={SIZES.width * 0.9} height={50} />
+            )}
+
             {deliveryOption === 'delivery' && (
               <View style={{ width: '100%', marginVertical: SIZES.padding * 0.5, alignItems: 'center', }}>
                 <TouchableOpacity onPress={() => navigation.navigate("MyAddress", { previous: "Checkout" })} style={{ alignSelf: 'center', backgroundColor: COLORS.light, paddingHorizontal: SIZES.padding * 0.8, paddingVertical: SIZES.padding * 0.4, borderRadius: SIZES.padding, }}>
@@ -384,9 +294,13 @@ const Checkout = ({ route, navigation }) => {
                     {deliveryAddress ? 'Change Address' : 'Select Address'}
                   </Text>
                 </TouchableOpacity>
-                <View style={{ marginVertical: SIZES.padding * 0.3, justifyContent: 'center', width: SIZES.width, }}>
+                <View style={{ marginVertical: SIZES.padding * 0.2, justifyContent: 'center', width: SIZES.width, }}>
                   {deliveryAddress ? (
                     <View style={{ ...SIZES.shadow, width: '96%', alignSelf: 'center', alignItems: 'flex-start', justifyContent: 'center' }}>
+                      <View style={{ width: '100%', position: 'absolute', top: 5 }}>
+                        <Text style={{ ...FONTS.h5, textAlign: 'center' }}>Delivery Address</Text>
+                      </View>
+
                       <Text style={styles.deliveryText}>
                         {deliveryAddress.street}{" "}
                         {deliveryAddress.apt
@@ -417,12 +331,12 @@ const Checkout = ({ route, navigation }) => {
         </View>
 
 
-      </ScrollView>
+      </ScrollView >
       <View style={{ width: "100%", position: 'absolute', left: 0, right: 0, bottom: 20, justifyContent: 'center', alignItems: 'center' }}>
         {/* <AppSubmitButton disabled={!canContinue} title="Check Out" /> */}
         <AppButton style={{ width: '90%' }} title='Check Out' onPress={deliveryOption === 'delivery' ? handleDelivery : handlePickup} />
       </View>
-    </View>
+    </View >
 
   );
 };
@@ -528,10 +442,9 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontWeight: "700",
+
     marginTop: 5,
-    fontFamily: "montserrat-bold",
-    fontSize: 16,
+    ...FONTS.h4
 
   },
 });

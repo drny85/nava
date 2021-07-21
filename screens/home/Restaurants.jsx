@@ -20,6 +20,7 @@ import useLocation from "../../utils/useLocation";
 import { ActivityIndicator } from "react-native";
 import settingsContext from "../../context/settings/settingsContext";
 import { getFilteredStores } from "../../utils/getFiltetredStores";
+import Toogler from "../../components/Toogler";
 
 
 
@@ -30,6 +31,7 @@ const ITEM_SIZE = (SIZES.height * 0.25) + SPACING * 2
 
 
 const Restaurants = ({ navigation }) => {
+  const delRef = useRef()
 
   const scrollY = useRef(new Animated.Value(0)).current
   const { stores, getStores, loading, storesSub, ordersSubscrition } = useContext(storesContext);
@@ -52,8 +54,6 @@ const Restaurants = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [searchText, setSearchText] = useState("");
 
-
-  // const { address, isloading } = useLocation()
 
   const fetchStores = (restaurant) => {
     if (!restaurant.open) {
@@ -230,6 +230,7 @@ const Restaurants = ({ navigation }) => {
           }
 
         }
+
         setDeliveryType('delivery')
         setDeliveryMethod('delivery')
 
@@ -237,6 +238,7 @@ const Restaurants = ({ navigation }) => {
 
 
       case 'pickup':
+
 
         if (cartItems.length > 0) {
           const storeId = cartItems[0].storeId
@@ -247,6 +249,7 @@ const Restaurants = ({ navigation }) => {
           }
 
         }
+
         setDeliveryType('pickup')
         setDeliveryMethod('pickup')
 
@@ -258,6 +261,7 @@ const Restaurants = ({ navigation }) => {
 
 
   useEffect(() => {
+
     if (stores?.length === 1) {
       navigation.navigate("Home", { restaurant: stores[0] });
     }
@@ -296,29 +300,31 @@ const Restaurants = ({ navigation }) => {
 
 
     return <Screen style={{ alignItems: 'center', justifyContent: 'center', flex: 1, height: SIZES.height }}>
-      <View style={{ flexDirection: 'row', width: SIZES.width * 0.95, justifyContent: 'space-between', alignItems: 'center', position: 'absolute', left: 0, right: 0, top: SIZES.statusBarHeight }}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={{ flexDirection: 'row', width: SIZES.width * 0.95, justifyContent: 'space-between', alignItems: 'center', position: 'absolute', left: 0, right: 0, top: SIZES.statusBarHeight }}>
 
-        <TextInput placeholder='What are you craving for?'
-          onChange={handleSearchText}
-          enablesReturnKeyAutomatically={true}
-          value={searchText}
-          //onSubmitEditing={filterRestaurantBySearchItem}
-          returnKeyType='search'
-          style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3, borderColor: COLORS.lightGray, borderWidth: 0.5 }}
-          placeholderTextColor={COLORS.black} />
-        {searching ? (<TouchableOpacity onPress={() => {
-          setSearching(false)
-          setSearchText('')
+          <TextInput placeholder='What are you craving for?'
+            onChange={handleSearchText}
+            enablesReturnKeyAutomatically={true}
+            value={searchText}
+            //onSubmitEditing={filterRestaurantBySearchItem}
+            returnKeyType='search'
+            style={{ backgroundColor: COLORS.white, paddingHorizontal: SIZES.padding, paddingVertical: SIZES.padding * 0.5, width: '90%', borderRadius: SIZES.padding, ...FONTS.body3, borderColor: COLORS.lightGray, borderWidth: 0.5 }}
+            placeholderTextColor={COLORS.black} />
+          {searching ? (<TouchableOpacity onPress={() => {
+            setSearching(false)
+            setSearchText('')
 
-          Keyboard.dismiss()
+            Keyboard.dismiss()
 
-        }} style={{ marginRight: 10, }}>
-          <AntDesign name="closecircleo" size={24} color="black" />
-        </TouchableOpacity>) : (<EvilIcons onPress={() => setOnlyLocal(preview => !preview)} style={{ width: '10%', marginHorizontal: 5 }} name="location" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />)}
+          }} style={{ marginRight: 10, }}>
+            <AntDesign name="closecircleo" size={24} color="black" />
+          </TouchableOpacity>) : (<EvilIcons onPress={() => setOnlyLocal(preview => !preview)} style={{ width: '10%', marginHorizontal: 5 }} name="location" size={30} color={onlyLocal ? 'green' : COLORS.secondary} />)}
 
-      </View>
-      <Text style={{ ...FONTS.body2 }}>No Stores Nearby</Text>
-      <Text style={{ marginTop: SIZES.padding, ...FONTS.body4 }}>Click Icon above to turn off location</Text>
+        </View>
+        <Text style={{ ...FONTS.body2 }}>No Stores Nearby</Text>
+        <Text style={{ marginTop: SIZES.padding, ...FONTS.body4 }}>Click Icon above to turn off location</Text>
+      </TouchableWithoutFeedback>
     </Screen>
   }
 
@@ -358,20 +364,8 @@ const Restaurants = ({ navigation }) => {
           <Text style={{ paddingVertical: 5, fontFamily: 'montserrat', fontSize: 12, }}>showing based on location...</Text>
         </View>
       )}
-      {/* //delivery Type View */}
-      <View style={{ flexDirection: 'row', width: SIZES.width * 0.6, alignItems: 'center', justifyContent: 'center', height: 40, marginVertical: 10, }}>
-        <TouchableOpacity onPress={() => handleDeliveryType('delivery')
 
-        } style={{ alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '50%', backgroundColor: deliveryType === 'delivery' ? COLORS.gray : COLORS.white, shadowColor: COLORS.gray, shadowOffset: { width: 4, height: 60 }, elevation: 8, height: '100%', shadowOpacity: 0.7, shadowRadius: 4, borderBottomLeftRadius: 25, borderTopLeftRadius: 25, }}>
-          <Text style={{ fontFamily: deliveryType === 'delivery' ? 'montserrat-bold' : 'montserrat' }}>Delivery</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleDeliveryType('pickup')
-
-        } style={{ alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '50%', backgroundColor: deliveryType === 'pickup' ? COLORS.gray : COLORS.white, shadowColor: COLORS.gray, shadowOffset: { width: 4, height: 60 }, elevation: 8, height: '100%', shadowOpacity: 0.7, shadowRadius: 4, borderBottomRightRadius: 25, borderTopRightRadius: 25, borderLeftWidth: 1, borderLeftColor: COLORS.gray }}>
-          <Text style={{ fontFamily: deliveryType === 'pickup' ? 'montserrat-bold' : 'montserrat' }}>Pick Up</Text>
-        </TouchableOpacity>
-
-      </View>
+      <Toogler leftCondition='delivery' rightCondition='pickup' condition={deliveryType} onPressLeft={() => handleDeliveryType('delivery')} onPressRight={() => handleDeliveryType('pickup')} />
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
         <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, }}>
           {user && orders.length > 0 && (
@@ -388,7 +382,7 @@ const Restaurants = ({ navigation }) => {
                   ...FONTS.body4, paddingLeft: SIZES.padding * 0.5, paddingBottom: SIZES.padding * 0.2,
                 }}
               >
-                Recent Orders
+                My Recent Orders
           </Text>
 
 

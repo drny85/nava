@@ -15,6 +15,11 @@ const OrderDetails = ({ route }) => {
 
   const navigation = useNavigation()
 
+  const itemsCount = () => {
+    const total = order.items.reduce((current, index) => (current + index.quantity), 0)
+    return total
+  }
+
   useLayoutEffect(() => {
     navigation.setOptions({
 
@@ -81,7 +86,7 @@ const OrderDetails = ({ route }) => {
             ...FONTS.h4
           }}
         >
-          Items: {order.items.length}
+          Items: {itemsCount()}
         </Text>
 
 
@@ -145,9 +150,8 @@ const styles = StyleSheet.create({
   },
 
   orderInfo: {
-    marginTop: 3,
-    padding: 10,
 
+    padding: 10,
     paddingVertical: 10,
     elevation: 10,
     backgroundColor: COLORS.tile,

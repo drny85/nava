@@ -48,17 +48,6 @@ const ProductDetail = ({ route, navigation }) => {
   const [checked, setChecked] = useState(false);
   const item = { ...product };
 
-  const priceRange = () => {
-    if (item.sizes) {
-      const index = item.sizes.length;
-      const last = item.price[item.sizes[index - 1]];
-      const first = item.price[item.sizes[0]];
-      return `${first} - $${last}`;
-    } else {
-      return item.price;
-    }
-  };
-
   const handleCheck = (item) => {
     //add size to the array just once;
     const found = sizes.find((i) => i === item);
