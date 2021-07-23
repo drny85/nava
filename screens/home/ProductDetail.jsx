@@ -23,7 +23,6 @@ import { SharedElement } from 'react-navigation-shared-element';
 
 
 import Loader from "../../components/Loader";
-import storesContext from "../../context/stores/storesContext";
 import Divider from "../../components/Divider";
 import { COLORS, FONTS, SIZES } from "../../config";
 import Animated from "react-native-reanimated";
@@ -153,11 +152,13 @@ const ProductDetail = ({ route, navigation }) => {
 
   return (
     <View style={styles.screen}>
+      <StatusBar style='auto' />
 
       <KeyboardAvoidingView
         style={{ flex: 1, justifyContent: "space-between" }}
-        behavior="position"
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 50}
+
       >
 
         <Animatable.View style={styles.imgView} animation='fadeIn'>
@@ -212,7 +213,7 @@ const ProductDetail = ({ route, navigation }) => {
                 animation={fadeIn}
                 duration={SIZES.padding * 100}
 
-                style={{ paddingLeft: 10, fontSize: 16, fontWeight: "600" }}
+                style={{ paddingLeft: 10, ...FONTS.h5 }}
               >
                 Pick a size
               </Animatable.Text>
@@ -249,7 +250,7 @@ const ProductDetail = ({ route, navigation }) => {
           )}
 
           <View style={{ padding: 10 }}>
-            <Text style={{ fontSize: 16, paddingLeft: 5, paddingBottom: 5 }}>
+            <Text style={{ ...FONTS.h5, paddingLeft: 5, paddingBottom: 5 }}>
               Special instructions
             </Text>
             <TextInput
@@ -266,12 +267,11 @@ const ProductDetail = ({ route, navigation }) => {
 
         <View style={styles.buttonView}>
           <AppButton
-
             title="add to cart"
             onPress={handleAddToCart}
           />
         </View>
-        <StatusBar style='auto' />
+
       </KeyboardAvoidingView>
     </View>
   );
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 50,
     zIndex: 3,
-    backgroundColor: "#eee",
+    backgroundColor: COLORS.white,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -298,26 +298,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 20,
   },
-  buttonText: {
-    fontSize: 20,
-    fontWeight: "600",
-    letterSpacing: 1.1,
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-    backgroundColor: COLORS.secondary,
 
-    marginRight: 20,
-    borderRadius: 30,
-  },
   descriptionView: {
-    // backgroundColor: colors.secondary,
     height: "auto",
     maxHeight: 80,
     padding: 10,
-    fontSize: 16,
+
     borderRadius: 10,
-    fontFamily: "montserrat",
+    ...FONTS.body4
   },
   imgView: {
     height: "40%",
@@ -327,7 +315,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.card,
     height: 80,
     padding: 10,
-    fontSize: 12,
+    ...FONTS.body5,
     borderRadius: SIZES.padding * 0.3,
   },
   scrollView: {
@@ -363,7 +351,7 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     fontFamily: 'lobster',
     lineHeight: 28,
-    color: "black",
+    color: COLORS.black
   },
   price: {
     fontSize: 20,

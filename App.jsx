@@ -28,8 +28,6 @@ const App = () => {
 
   })
 
-
-
   useEffect(() => {
 
     getCurrentUser()
