@@ -18,6 +18,7 @@
 			"supportsTablet": false,
 			"bundleIdentifier": "net.robertdev.melendez.dev",
 			"buildNumber": "1.0.5",
+			"merchantId": "merchant.dev.robertdev.melendez.dev",
 			"infoPlist": {
 				"NSLocationWhenInUseUsageDescription": "We need your location to show you nearby stores / restaurants",
 				"NSLocationAlwaysUsageDescription": "We need your location to show you nearby stores / restaurants",

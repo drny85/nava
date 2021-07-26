@@ -44,10 +44,12 @@ import { useStripe, StripeProvider } from '@stripe/stripe-react-native'
 
 
 
+
 const OrderSummary = ({ navigation, route }) => {
   const { user } = useContext(authContext);
   const { initPaymentSheet, presentPaymentSheet } = useStripe()
   const [processing, setProcessing] = useState(false);
+  const [showIntructions, setShowIntructions] = useState(false);
   const [customerId, setCustomerId] = useState(null);
   const [public_key, setPublicKey] = useState(null)
   const { placeOrder } = useContext(ordersContext);
@@ -65,7 +67,7 @@ const OrderSummary = ({ navigation, route }) => {
   const { stores } = useContext(storesContext)
   const restaurants = [...stores];
   const restaurant = restaurants.find(s => s.id === cartItems[0]?.storeId)
-  const [instruction, setInstrction] = useState(null)
+  const [instruction, setInstruction] = useState('')
 
   const { deliveryMethod, customer, paymentMethod } = route.params;
   const person = customer
@@ -167,7 +169,7 @@ const OrderSummary = ({ navigation, route }) => {
         totalAmount,
         paymentMethod,
         status,
-        instruction,
+        instruction === '' ? null : instruction,
         restaurant,
         isPaid,
         promoDetails ? { ...promoDetails, originalPrice: cartTotal } : null,
@@ -325,7 +327,6 @@ const OrderSummary = ({ navigation, route }) => {
     }
   }
 
-
   const fetchPaymentSheetParams = async (person, res, id) => {
     try {
 
@@ -397,6 +398,7 @@ const OrderSummary = ({ navigation, route }) => {
       setCouponModal(false)
       setPublicKey(null)
       setPromoDetails(null)
+      setInstruction('')
       setProcessing(false)
       unsubscribe && unsubscribe()
     }
@@ -497,94 +499,122 @@ const OrderSummary = ({ navigation, route }) => {
               </View>
             )}
           </View>
-          <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={100} behavior='padding'>
-            <ScrollView bounces={true} style={styles.details}>
-              {deliveryMethod === "pickup" ? (
-                <>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      marginBottom: 20,
-                    }}
-                  >
-                    Important information about your order {customer.name}
-                  </Text>
-                  <Text style={{ ...FONTS.body5 }}>
-                    You will be picking up this order at the restaurant
-            </Text>
-                </>
-              ) : (
-                  <>
-                    <View>
-                      <CardSummaryItem
-                        onPress={() => navigation.goBack()}
-                        title="Your order will be delivered to:"
-                        subtitle={`${customer.address.street} ${customer.address.apt && customer.address.apt
-                          }`}
-                        misc={`${customer.address.city}, ${customer.address.zipcode}`}
-                      />
-                      <CardSummaryItem
-                        onPress={() => navigation.goBack()}
-                        title="You might be contacted at:"
-                        subtitle={`Phone: ${customer.phone}`}
-                        misc={`Email: ${customer.email}`}
-                      />
-                    </View>
-                    <Divider />
-                    <View style={styles.deliveryInstruction}>
-                      <Text style={{ fontFamily: 'montserrat', fontSize: 16, paddingVertical: 5, }}>Delivery Instructions</Text>
-                      <TextInput onChangeText={text => setInstrction(text)} numberOfLines={2} value={instruction} style={styles.input} placeholder='Ex. Ring the bell' />
-                    </View>
-                  </>
-                )}
 
-              {paymentMethod === "cash" && deliveryMethod === "pickup" && (
-                <Text>Handle cash pickup</Text>
-              )}
-              {paymentMethod === "credit" && deliveryMethod === "pickup" && (
-                <View>
-                  <Text style={{ ...FONTS.body5 }}>
-                    You will pay with debit or credit card, please have it ready.
+          <ScrollView bounces={true} style={styles.details}>
+            {deliveryMethod === "pickup" ? (
+              <>
+                <Text
+                  style={{
+                    ...FONTS.h4,
+                    marginBottom: 20,
+                  }}
+                >
+                  Important information about your order {customer.name}
+                </Text>
+                <Text style={{ ...FONTS.body5 }}>
+                  You will be picking up this order at the restaurant
             </Text>
+              </>
+            ) : (
+                <>
+                  <View>
+                    <CardSummaryItem
+                      onPress={() => navigation.goBack()}
+                      title="Your order will be delivered to:"
+                      subtitle={`${customer.address.street} ${customer.address.apt && customer.address.apt
+                        }`}
+                      misc={`${customer.address.city}, ${customer.address.zipcode}`}
+                    />
+                    <CardSummaryItem
+                      onPress={() => navigation.goBack()}
+                      title="You might be contacted at:"
+                      subtitle={`Phone: ${customer.phone}`}
+                      misc={`Email: ${customer.email}`}
+                    />
+                  </View>
                   <Divider />
-                  <Text style={[styles.text]}>
-                    Just click Pay Now at the bottom to enter your card information.
-            </Text>
-                </View>
-              )}
-              {paymentMethod === "in store" && deliveryMethod === "pickup" && (
-                <View style={[styles.pickup, { alignItems: 'center', justifyContent: 'center' }]}>
-                  <Text style={{ ...FONTS.body5 }}>
-                    You will pay for this order at the store
-            </Text>
-                  <Text style={{ ...FONTS.body5 }}>
-                    You can pay with cash or credit / debit card
-            </Text>
-                  <View style={styles.totalView}>
-                    <Text style={[styles.title, { paddingBottom: 10 }]}>Order Total</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: promoDetails ? 'space-evenly' : 'center', width: SIZES.width }}>
-                      <Text style={{ fontWeight: "bold", fontSize: 34, textDecorationLine: promoDetails ? 'line-through' : 'none', textDecorationColor: 'red', color: promoDetails ? 'red' : COLORS.secondary, textDecorationStyle: 'solid', opacity: promoDetails ? 0.6 : 1 }}>
-                        ${cartTotal.toFixed(2)}
-                      </Text>
-                      {promoDetails && (<Text style={{ fontWeight: "bold", fontSize: 34 }}>${discountedPrice?.toFixed(2)}</Text>)}
-                    </View>
+                  <View style={styles.deliveryInstruction}>
+                    <TouchableOpacity onPress={() => setShowIntructions(true)} style={{ padding: 10, backgroundColor: COLORS.card, borderRadius: 10 }}>
+                      <Text style={{ ...FONTS.body4, color: 'blue' }}>{instruction === '' ? 'Add Delivery Instructions' : 'Update Delivery Instructions'}</Text>
+                      {instruction !== '' && (
+                        <Text style={{ ...FONTS.body5 }}>{instruction}</Text>
+                      )}
+                    </TouchableOpacity>
+                    <Modal transparent animationType='slide' visible={showIntructions}>
+                      <View style={{ position: 'absolute', height: SIZES.height / 3, top: SIZES.statusBarHeight + 100, left: 0, right: 0, backgroundColor: COLORS.ascent, justifyContent: 'center', alignItems: 'center', marginHorizontal: SIZES.padding * 0.5, borderRadius: SIZES.radius }}>
+                        <View style={{ width: '100%', paddingHorizontal: 10, }}>
+                          <Text style={{ ...FONTS.h4 }}>Enter instructions for the driver.</Text>
+                          <TextInput multiline value={instruction} autoCorrect={false} autoFocus onChangeText={text => setInstruction(text)} style={styles.input} placeholder='Ex. Ring the bell, Dial 123 at the door, etc' />
+                          <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
+                            <TouchableOpacity style={styles.btn} onPress={() => {
+                              setInstruction('')
+                              setShowIntructions(false)
+                            }}>
+                              <Text>Clear & Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.btn} onPress={() => setShowIntructions(false)}>
+                              <Text>Save & Close</Text>
+                            </TouchableOpacity>
+
+                          </View>
+
+                        </View>
+
+                      </View>
+                    </Modal>
+
 
                   </View>
-                </View>
+                </>
               )}
-              {paymentMethod === "cash" && deliveryMethod === "delivery" && (
-                <View style={styles.infoView}>
-                  <Text style={styles.infotext}>
-                    Your order total is ${promoDetails ? parseFloat(discountedPrice).toFixed(2) : cartTotal.toFixed(2)}, please have this
+
+            {paymentMethod === "cash" && deliveryMethod === "pickup" && (
+              <Text>Handle cash pickup</Text>
+            )}
+            {paymentMethod === "credit" && deliveryMethod === "pickup" && (
+              <View>
+                <Text style={{ ...FONTS.body5 }}>
+                  You will pay with debit or credit card, please have it ready.
+            </Text>
+                <Divider />
+                <Text style={[styles.text]}>
+                  Just click Pay Now at the bottom to enter your card information.
+            </Text>
+              </View>
+            )}
+            {paymentMethod === "in store" && deliveryMethod === "pickup" && (
+              <View style={[styles.pickup, { alignItems: 'center', justifyContent: 'center' }]}>
+                <Text style={{ ...FONTS.body5 }}>
+                  You will pay for this order at the store
+            </Text>
+                <Text style={{ ...FONTS.body5 }}>
+                  You can pay with cash or credit / debit card
+            </Text>
+                <View style={styles.totalView}>
+                  <Text style={[styles.title, { paddingBottom: 10 }]}>Order Total</Text>
+                  <View style={{ flexDirection: 'row', justifyContent: promoDetails ? 'space-evenly' : 'center', width: SIZES.width }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 34, textDecorationLine: promoDetails ? 'line-through' : 'none', textDecorationColor: 'red', color: promoDetails ? 'red' : COLORS.secondary, textDecorationStyle: 'solid', opacity: promoDetails ? 0.6 : 1 }}>
+                      ${cartTotal.toFixed(2)}
+                    </Text>
+                    {promoDetails && (<Text style={{ fontWeight: "bold", fontSize: 34 }}>${discountedPrice?.toFixed(2)}</Text>)}
+                  </View>
+
+                </View>
+              </View>
+            )}
+            {paymentMethod === "cash" && deliveryMethod === "delivery" && (
+              <View style={styles.infoView}>
+                <Text style={styles.infotext}>
+                  Your order total is ${promoDetails ? parseFloat(discountedPrice).toFixed(2) : cartTotal.toFixed(2)}, please have this
               amount available in cash. Always be generous and tip the delivery
               guy.
             </Text>
-                </View>
-              )}
+              </View>
+            )}
 
 
-            </ScrollView>
-          </KeyboardAvoidingView>
+          </ScrollView>
+
 
           <Modal onDismiss={() => setPromoCode('')} visible={couponModal} animationType='slide' style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: SIZES.height, width: SIZES.width }}>
             <View style={{ position: 'absolute', top: 60, left: 20, zIndex: 99 }}>
@@ -685,94 +715,122 @@ const OrderSummary = ({ navigation, route }) => {
             </View>
           )}
         </View>
-        <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={100} behavior='padding'>
-          <ScrollView bounces={true} style={styles.details}>
-            {deliveryMethod === "pickup" ? (
-              <>
-                <Text
-                  style={{
-                    ...FONTS.h4,
-                    marginBottom: 20,
-                  }}
-                >
-                  Important information about your order {customer.name}
-                </Text>
-                <Text style={{ ...FONTS.body5 }}>
-                  You will be picking up this order at the restaurant
-            </Text>
-              </>
-            ) : (
-                <>
-                  <View>
-                    <CardSummaryItem
-                      onPress={() => navigation.goBack()}
-                      title="Your order will be delivered to:"
-                      subtitle={`${customer.address.street} ${customer.address.apt && customer.address.apt
-                        }`}
-                      misc={`${customer.address.city}, ${customer.address.zipcode}`}
-                    />
-                    <CardSummaryItem
-                      onPress={() => navigation.goBack()}
-                      title="You might be contacted at:"
-                      subtitle={`Phone: ${customer.phone}`}
-                      misc={`Email: ${customer.email}`}
-                    />
-                  </View>
-                  <Divider />
-                  <View style={styles.deliveryInstruction}>
-                    <Text style={{ fontFamily: 'montserrat', fontSize: 16, paddingVertical: 5, }}>Delivery Instructions</Text>
-                    <TextInput onChangeText={text => setInstrction(text)} numberOfLines={2} value={instruction} style={styles.input} placeholder='Ex. Ring the bell' />
-                  </View>
-                </>
-              )}
 
-            {paymentMethod === "cash" && deliveryMethod === "pickup" && (
-              <Text>Handle cash pickup</Text>
-            )}
-            {paymentMethod === "credit" && deliveryMethod === "pickup" && (
-              <View>
-                <Text style={{ ...FONTS.body5 }}>
-                  You will pay with debit or credit card, please have it ready.
+        <ScrollView bounces={true} style={styles.details}>
+          {deliveryMethod === "pickup" ? (
+            <>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  marginBottom: 20,
+                }}
+              >
+                Important information about your order {customer.name}
+              </Text>
+              <Text style={{ ...FONTS.body5 }}>
+                You will be picking up this order at the restaurant
             </Text>
+            </>
+          ) : (
+              <>
+                <View>
+                  <CardSummaryItem
+                    onPress={() => navigation.goBack()}
+                    title="Your order will be delivered to:"
+                    subtitle={`${customer.address.street} ${customer.address.apt && customer.address.apt
+                      }`}
+                    misc={`${customer.address.city}, ${customer.address.zipcode}`}
+                  />
+                  <CardSummaryItem
+                    onPress={() => navigation.goBack()}
+                    title="You might be contacted at:"
+                    subtitle={`Phone: ${customer.phone}`}
+                    misc={`Email: ${customer.email}`}
+                  />
+                </View>
                 <Divider />
-                <Text style={[styles.text]}>
-                  Just click Pay Now at the bottom to enter your card information.
-            </Text>
-              </View>
-            )}
-            {paymentMethod === "in store" && deliveryMethod === "pickup" && (
-              <View style={[styles.pickup,]}>
-                <Text style={{ ...FONTS.body5 }}>
-                  You will pay for this order at the store
-            </Text>
-                <Text style={{ ...FONTS.body5 }}>
-                  You can pay with cash or credit / debit card
-            </Text>
-                <View style={styles.totalView}>
-                  <Text style={[styles.title, { paddingBottom: 10 }]}>Order Total</Text>
-                  <View style={{ flexDirection: 'row', justifyContent: promoDetails ? 'space-evenly' : 'center', width: SIZES.width }}>
-                    <Text style={{ fontWeight: "bold", fontSize: 34, textDecorationLine: promoDetails ? 'line-through' : 'none', textDecorationColor: 'red', color: promoDetails ? 'red' : COLORS.secondary, textDecorationStyle: 'solid', opacity: promoDetails ? 0.6 : 1 }}>
-                      ${cartTotal.toFixed(2)}
-                    </Text>
-                    {promoDetails && (<Text style={{ fontWeight: "bold", fontSize: 34 }}>${discountedPrice?.toFixed(2)}</Text>)}
-                  </View>
+                <View style={styles.deliveryInstruction}>
+                  <TouchableOpacity onPress={() => setShowIntructions(true)} style={{ padding: 10, backgroundColor: COLORS.card, borderRadius: 10 }}>
+                    <Text style={{ ...FONTS.body4, color: 'blue' }}>{instruction === '' ? 'Add Delivery Instructions' : 'Update Delivery Instructions'}</Text>
+                    {instruction !== '' && (
+                      <Text style={{ ...FONTS.body5 }}>{instruction}</Text>
+                    )}
+                  </TouchableOpacity>
+                  <Modal transparent animationType='slide' visible={showIntructions}>
+                    <View style={{ position: 'absolute', height: SIZES.height / 3, top: SIZES.statusBarHeight + 100, left: 0, right: 0, backgroundColor: COLORS.ascent, justifyContent: 'center', alignItems: 'center', marginHorizontal: SIZES.padding * 0.5, borderRadius: SIZES.radius }}>
+                      <View style={{ width: '100%', paddingHorizontal: 10, }}>
+                        <Text style={{ ...FONTS.h4 }}>Enter instructions for the driver.</Text>
+                        <TextInput multiline value={instruction} autoCorrect={false} autoFocus onChangeText={text => setInstruction(text)} style={styles.input} placeholder='Ex. Ring the bell, Dial 123 at the door, etc' />
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
+                          <TouchableOpacity style={styles.btn} onPress={() => {
+                            setInstruction('')
+                            setShowIntructions(false)
+                          }}>
+                            <Text>Clear & Cancel</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.btn} onPress={() => setShowIntructions(false)}>
+                            <Text>Save & Close</Text>
+                          </TouchableOpacity>
+
+                        </View>
+
+                      </View>
+
+                    </View>
+                  </Modal>
+
 
                 </View>
-              </View>
+              </>
             )}
-            {paymentMethod === "cash" && deliveryMethod === "delivery" && (
-              <View style={styles.infoView}>
-                <Text style={styles.infotext}>
-                  Your order total is ${promoDetails ? parseFloat(discountedPrice).toFixed(2) : cartTotal.toFixed(2)}, please have this
+
+          {paymentMethod === "cash" && deliveryMethod === "pickup" && (
+            <Text>Handle cash pickup</Text>
+          )}
+          {paymentMethod === "credit" && deliveryMethod === "pickup" && (
+            <View>
+              <Text style={{ ...FONTS.body5 }}>
+                You will pay with debit or credit card, please have it ready.
+            </Text>
+              <Divider />
+              <Text style={[styles.text]}>
+                Just click Pay Now at the bottom to enter your card information.
+            </Text>
+            </View>
+          )}
+          {paymentMethod === "in store" && deliveryMethod === "pickup" && (
+            <View style={[styles.pickup,]}>
+              <Text style={{ ...FONTS.body5 }}>
+                You will pay for this order at the store
+            </Text>
+              <Text style={{ ...FONTS.body5 }}>
+                You can pay with cash or credit / debit card
+            </Text>
+              <View style={styles.totalView}>
+                <Text style={[styles.title, { paddingBottom: 10 }]}>Order Total</Text>
+                <View style={{ flexDirection: 'row', justifyContent: promoDetails ? 'space-evenly' : 'center', width: SIZES.width }}>
+                  <Text style={{ fontWeight: "bold", fontSize: 34, textDecorationLine: promoDetails ? 'line-through' : 'none', textDecorationColor: 'red', color: promoDetails ? 'red' : COLORS.secondary, textDecorationStyle: 'solid', opacity: promoDetails ? 0.6 : 1 }}>
+                    ${cartTotal.toFixed(2)}
+                  </Text>
+                  {promoDetails && (<Text style={{ fontWeight: "bold", fontSize: 34 }}>${discountedPrice?.toFixed(2)}</Text>)}
+                </View>
+
+              </View>
+            </View>
+          )}
+          {paymentMethod === "cash" && deliveryMethod === "delivery" && (
+            <View style={styles.infoView}>
+              <Text style={styles.infotext}>
+                Your order total is ${promoDetails ? parseFloat(discountedPrice).toFixed(2) : cartTotal.toFixed(2)}, please have this
               amount available in cash. Always be generous and tip the delivery
               guy.
             </Text>
-              </View>
-            )}
+            </View>
+          )}
 
 
-          </ScrollView>
-        </KeyboardAvoidingView>
+        </ScrollView>
+
 
         <Modal onDismiss={() => setPromoCode('')} visible={couponModal} animationType='slide' style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: SIZES.height, width: SIZES.width }}>
           <View style={{ position: 'absolute', top: 60, left: 20, zIndex: 99 }}>
@@ -819,11 +877,13 @@ const styles = StyleSheet.create({
   details: {
     flex: 2,
     padding: 10,
+    marginHorizontal: 10,
 
   },
   deliveryInstruction: {
     width: '100%',
     marginVertical: 12,
+    marginBottom: 50,
 
   },
 
@@ -834,9 +894,15 @@ const styles = StyleSheet.create({
 
     borderRadius: 10,
     borderColor: 'grey',
-    borderWidth: 0.4,
+    borderWidth: 0.2,
     paddingVertical: 20,
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
+    width: '100%',
+    marginVertical: SIZES.padding * 0.5,
+    height: '60%',
+    backgroundColor: COLORS.card,
+
+
   },
 
   infoView: {
@@ -848,7 +914,7 @@ const styles = StyleSheet.create({
       height: 7,
     },
     shadowOpacity: 0.7,
-    shadowColor: "grey",
+    shadowColor: COLORS.gray,
     paddingTop: 5,
     elevation: 10,
     shadowRadius: 2,
@@ -890,8 +956,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
 
     paddingVertical: 2,
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
   },
+
+  btn: {
+    elevation: 10,
+    shadowColor: COLORS.light,
+    shadowOffset: { width: 6, height: 8 },
+    shadowOpacity: 0.7,
+    shadowRadius: 10,
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5
+  }
 });
 
 export default OrderSummary;
