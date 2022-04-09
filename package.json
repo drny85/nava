@@ -34,7 +34,7 @@
 		"formik": "^2.2.6",
 		"i": "^0.3.6",
 		"lottie-react-native": "4.0.2",
-		"moment": "^2.29.1",
+		"moment": "^2.29.2",
 		"npm": "^7.12.1",
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
